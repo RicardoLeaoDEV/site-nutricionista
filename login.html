@@ -61,16 +61,24 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
+            console.log("A tentar fazer login com:", email);
 
-            if (error) {
-                alert('Erro ao entrar: ' + error.message);
-            } else {
-                alert('Login efetuado com sucesso!');
-                window.location.href = 'dashboard.html';
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
+
+                if (error) {
+                    console.error("Erro do Supabase:", error.message);
+                    alert('Erro ao entrar: ' + error.message);
+                } else {
+                    console.log("Login com sucesso:", data);
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (err) {
+                console.error("Erro inesperado:", err);
+                alert('Erro inesperado: ' + err.message);
             }
         });
     </script>
