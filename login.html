@@ -4,56 +4,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NutriLife - Entrar na Conta</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS SDK -->
+    <title>NutriLife - Login</title>
+    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="h-full bg-slate-950 text-slate-100 flex items-center justify-center px-6">
-
     <div class="max-w-md w-full bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-xl">
-        <div class="text-center mb-8">
-            <a href="index.html" class="text-2xl font-black tracking-wider text-white">
-                NUTRI<span class="text-emerald-500">LIFE</span>
-            </a>
-            <p class="text-sm text-slate-400 mt-2">Aceda à sua área exclusiva de treinos e dietas</p>
-        </div>
+        <h2 class="text-2xl font-bold text-center mb-2">NUTRILIFE</h2>
+        <p class="text-center text-slate-400 mb-6 text-sm">Aceda à sua área exclusiva de treinos e dietas</p>
 
         <form id="login-form" class="space-y-6">
             <div>
-                <label class="block text-sm font-medium text-slate-300 mb-2">E-mail</label>
+                <label class="block text-sm font-medium mb-2">E-mail</label>
                 <input type="email" id="email" required
-                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                    class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-emerald-500"
                     placeholder="seu.email@exemplo.com">
             </div>
-
             <div>
-                <label class="block text-sm font-medium text-slate-300 mb-2">Palavra-passe</label>
+                <label class="block text-sm font-medium mb-2">Palavra-passe</label>
                 <input type="password" id="password" required
-                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                    class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-emerald-500"
                     placeholder="••••••••">
             </div>
-
             <button type="submit"
-                class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3.5 rounded-xl transition-all duration-300 shadow-lg shadow-emerald-500/20">
-                Entrar na Plataforma
-            </button>
+                class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3.5 rounded-xl transition-all duration-300 shadow-lg shadow-emerald-500/20">Entrar
+                na Plataforma</button>
         </form>
-
         <div class="text-center mt-6">
-            <a href="index.html" class="text-xs text-slate-500 hover:text-slate-400 transition-colors">← Voltar para a
+            <a href="index.html" class="text-sm text-slate-400 hover:text-slate-200 transition-colors">← Voltar para a
                 página inicial</a>
         </div>
     </div>
 
-    <!-- Script de Ligação ao Supabase -->
     <script>
         const SUPABASE_URL = 'https://dnlqkozlaqizhqxsexcei.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Nome único para evitar qualquer conflito de declaração
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -61,24 +52,16 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            console.log("A tentar fazer login com:", email);
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
 
-            try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password,
-                });
-
-                if (error) {
-                    console.error("Erro do Supabase:", error.message);
-                    alert('Erro ao entrar: ' + error.message);
-                } else {
-                    console.log("Login com sucesso:", data);
-                    window.location.href = 'dashboard.html';
-                }
-            } catch (err) {
-                console.error("Erro inesperado:", err);
-                alert('Erro inesperado: ' + err.message);
+            if (error) {
+                alert('Erro ao entrar: ' + error.message);
+            } else {
+                alert('Login efetuado com sucesso!');
+                window.location.href = 'dashboard.html';
             }
         });
     </script>
