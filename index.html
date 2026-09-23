@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriLife - Consultoria Nutricional e Dieta Personalizada</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-white">
+
+    <!-- Cabeçalho -->
+    <header class="fixed top-0 left-0 w-full bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80 z-50">
+        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="text-2xl font-black tracking-wider text-white">
+                NUTRI<span class="text-emerald-500">LIFE</span>
+            </a>
+
+            <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-300">
+                <a href="#metodo" class="hover:text-emerald-400 transition-colors">O Método</a>
+                <a href="#beneficios" class="hover:text-emerald-400 transition-colors">Área do Aluno</a>
+                <a href="#sobre" class="hover:text-emerald-400 transition-colors">Sobre mim</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <!-- Botão para a futura Página de Login -->
+                <a href="login.html" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+                    Entrar
+                </a>
+                <a href="https://wa.me/5581997969058" target="_blank"
+                    class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-5 py-2.5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/25">
+                    Marcar Consulta
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-36 pb-20 md:pt-44 md:pb-32 px-6 relative overflow-hidden">
+        <div
+            class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] md:w-[600px] h-[350px] md:h-[600px] bg-emerald-600/10 rounded-full blur-3xl pointer-events-none">
+        </div>
+
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <span
+                class="inline-block bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs md:text-sm font-semibold px-4 py-1.5 rounded-full mb-6 tracking-wide">
+                NUTRIÇÃO INTELIGENTE E SEM RESTRIÇÕES
+            </span>
+
+            <h1 class="text-3xl sm:text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight mb-6">
+                Alcance o seu objetivo com uma dieta <span
+                    class="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">feita para a sua
+                    rotina.</span>
+            </h1>
+
+            <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                Tenha acesso ao seu plano alimentar atualizado, metas e acompanhamento exclusivo diretamente na palma da
+                sua mão, através da nossa plataforma digital.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="https://wa.me/5581997969058" target="_blank"
+                    class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-emerald-500/25 text-center">
+                    Quero Mudar de Vida
+                </a>
+                <a href="login.html"
+                    class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 font-semibold px-8 py-4 rounded-xl transition-all duration-300 text-center">
+                    Aceder à Área do Aluno
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Secção de Diferencial (Área do Aluno) -->
+    <section id="beneficios" class="border-y border-slate-900 bg-slate-900/40 py-20 px-6">
+        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="p-6 bg-slate-900/80 border border-slate-800 rounded-2xl">
+                <div
+                    class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-400 font-bold text-xl mb-4">
+                    01</div>
+                <h3 class="text-xl font-bold text-white mb-2">Dieta Digital</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Consulte as suas refeições, horários e substituições
+                    alimentares atualizadas pelo nutricionista em tempo real.</p>
+            </div>
+            <div class="p-6 bg-slate-900/80 border border-slate-800 rounded-2xl">
+                <div
+                    class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-400 font-bold text-xl mb-4">
+                    02</div>
+                <h3 class="text-xl font-bold text-white mb-2">Acesso Exclusivo</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Login seguro com a sua palavra-passe para acompanhar a
+                    evolução dos seus resultados de forma privada.</p>
+            </div>
+            <div class="p-6 bg-slate-900/80 border border-slate-800 rounded-2xl">
+                <div
+                    class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-400 font-bold text-xl mb-4">
+                    03</div>
+                <h3 class="text-xl font-bold text-white mb-2">Painel do Nutri</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">O profissional gere fichas, altera planos e acompanha
+                    cada aluno com máxima eficiência e organização.</p>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>
