@@ -5,7 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriLife - Painel do Aluno</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body class="bg-slate-950 text-slate-100 min-h-screen">
@@ -17,8 +20,7 @@
                 class="text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 ml-2">Área
                 do Aluno</span>
         </div>
-        <button onclick="alert('Funcionalidade de saída')"
-            class="text-sm font-medium text-slate-400 hover:text-red-400 transition-colors">
+        <button id="btn-logout" class="text-sm font-medium text-slate-400 hover:text-red-400 transition-colors">
             Sair
         </button>
     </header>
@@ -26,42 +28,79 @@
     <!-- Conteúdo Principal -->
     <main class="max-w-4xl mx-auto p-6 md:p-10">
         <div class="mb-8">
-            <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">Olá, Aluno(a)! 👋</h1>
+            <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">Olá, <span id="nome-aluno">Aluno(a)</span>! 👋
+            </h1>
             <p class="text-slate-400">Aqui está o seu plano alimentar atualizado pelo seu nutricionista.</p>
         </div>
 
-        <!-- Bloco de Refeição (Exemplo dinâmico) -->
-        <div class="space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
-                    <h3 class="text-lg font-bold text-emerald-400">Café da Manhã</h3>
-                    <span
-                        class="text-xs text-slate-400 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">07:30
-                        - 08:00</span>
-                </div>
-                <ul class="space-y-2 text-slate-300 text-sm">
-                    <li>• 3 ovos mexidos inteiros</li>
-                    <li>• 2 fatias de pão integral tostado</li>
-                    <li>• 1 chávena de café sem açúcar</li>
-                </ul>
-            </div>
-
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
-                    <h3 class="text-lg font-bold text-emerald-400">Almoço</h3>
-                    <span
-                        class="text-xs text-slate-400 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">12:30
-                        - 13:00</span>
-                </div>
-                <ul class="space-y-2 text-slate-300 text-sm">
-                    <li>• 150g de peito de frango grelhado</li>
-                    <li>• 100g de arroz integral ou batata doce</li>
-                    <li>• Salada verde à vontade com azeite extra virgem</li>
-                </ul>
+        <!-- Bloco de Refeições Dinâmicas -->
+        <div id="container-dietas" class="space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center text-slate-400">
+                A carregar plano alimentar...
             </div>
         </div>
     </main>
 
+    <!-- Script de Verificação e Carregamento de Dados -->
+    <script>
+        const SUPABASE_URL = 'SUA_URL_DO_SUPABASE';
+        const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_DO_SUPABASE';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function verificarSessaoECarregarDieta() {
+            const { data: { session } } = await supabase.auth.getSession();
+
+            if (!session) {
+                // Se não estiver logado, redireciona para o login
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const userId = session.user.id;
+
+            // Busca os dados da dieta do aluno logado
+            const { data: dietas, error } = await supabase
+                .from('dietas')
+                .select('*')
+                .eq('aluno_id', userId);
+
+            const container = document.getElementById('container-dietas');
+
+            if (error) {
+                container.innerHTML = `<p class="text-red-400">Erro ao carregar a dieta: ${error.message}</p>`;
+                return;
+            }
+
+            if (!dietas || dietas.length === 0) {
+                container.innerHTML = `<div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center text-slate-400">Ainda não existem registos de dieta para o seu perfil. O seu nutricionista irá atualizar em breve!</div>`;
+                return;
+            }
+
+            // Renderiza as refeições dinamicamente na página
+            container.innerHTML = '';
+            dietas.forEach(item => {
+                container.innerHTML += `
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+                            <h3 class="text-lg font-bold text-emerald-400">${item.refeicao}</h3>
+                            <span class="text-xs text-slate-400 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">${item.horario}</span>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">${item.alimentos}</p>
+                    </div>
+                `;
+            });
+        }
+
+        // Botão de Sair (Logout)
+        document.getElementById('btn-logout').addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            window.location.href = 'login.html';
+        });
+
+        // Executa ao carregar a página
+        verificarSessaoECarregarDieta();
+    </script>
 </body>
 
 </html>
