@@ -81,12 +81,22 @@
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Validação simples de sessão
+        // Validação de sessão e permissão administrativa por UID
         async function verificarSessao() {
             const { data: { session } } = await supabaseClient.auth.getSession();
+
             if (!session) {
                 // Redireciona para o login se não estiver autenticado
                 window.location.href = 'login.html';
+                return;
+            }
+
+            // UID do utilizador Nutricionista/Admin
+            const ADMIN_UID = 'fb7c544a-8d60-466a-81d3-f32845bce706';
+
+            if (session.user.id !== ADMIN_UID) {
+                alert('Acesso negado. Esta área é restrita ao nutricionista.');
+                window.location.href = 'dashboard.html';
             }
         }
 
@@ -100,7 +110,7 @@
             const alimentos = document.getElementById('refeicao-alimentos').value.trim();
             const substituicoes = document.getElementById('refeicao-substituicoes').value.trim();
 
-            // Insere ou atualiza na tabela dietas
+            // Insere na tabela dietas
             const { error } = await supabaseClient
                 .from('dietas')
                 .insert([{
