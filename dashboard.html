@@ -131,14 +131,14 @@
                 .from('historico_peso')
                 .select('*')
                 .eq('aluno_id', userId)
-                .order('data_registo', { ascending: true });
+                .order('date_registo', { ascending: true });
 
             if (error) {
                 console.error("Erro ao carregar histórico de peso:", error);
                 return;
             }
 
-            const datas = historico.map(h => h.data_registo);
+            const datas = historico.map(h => h.date_registo);
             const pesos = historico.map(h => h.peso);
 
             const ctx = document.getElementById('graficoPeso').getContext('2d');
