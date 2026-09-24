@@ -1,684 +1,748 @@
-<!-- Topo da Aplicação / Barra de Navegação -->
-<header class="bg-slate-900/90 border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-md">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-18 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <a href="index.html" class="flex items-center gap-2 group" title="Ir para a página inicial">
-                <div
-                    class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
-                    <i data-lucide="leaf" class="w-5 h-5"></i>
-                </div>
-                <span class="text-xl font-extrabold tracking-tight text-white hidden sm:inline">
-                    NUTRI<span class="text-brand-400">LIFE</span>
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriLife - Painel do Aluno</title>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Chart.js para o Gráfico de Peso -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10b981;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-brand-500 selection:text-white flex flex-col justify-between">
+
+    <!-- Topo da Aplicação / Barra de Navegação -->
+    <header class="bg-slate-900/90 border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-18 py-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center gap-2 group" title="Ir para a página inicial">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                        <i data-lucide="leaf" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-xl font-extrabold tracking-tight text-white hidden sm:inline">
+                        NUTRI<span class="text-brand-400">LIFE</span>
+                    </span>
+                </a>
+                <span class="text-xs bg-brand-500/10 text-brand-400 px-3 py-1 rounded-full border border-brand-500/20 font-semibold flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>
+                    Portal do Aluno
                 </span>
-            </a>
-            <span
-                class="text-xs bg-brand-500/10 text-brand-400 px-3 py-1 rounded-full border border-brand-500/20 font-semibold flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>
-                Portal do Aluno
-            </span>
+            </div>
+
+            <!-- Ações do Cabeçalho -->
+            <div class="flex items-center gap-3">
+                <!-- Botão de Atalho Admin (Exibido para o nutricionista/admin) -->
+                <a id="link-admin" href="admin.html"
+                    class="hidden text-xs bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 px-3.5 py-2 rounded-xl border border-emerald-500/20 font-semibold transition-all flex items-center gap-1.5 shadow-sm">
+                    <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+                    <span>Painel Admin</span>
+                </a>
+
+                <a href="https://wa.me/5581997969058?text=Ol%C3%A1%20Nutri%2C%20tenho%20uma%20d%C3%BAvida%20sobre%20meu%20plano%20alimentar."
+                    target="_blank"
+                    class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-brand-400 hover:text-brand-300 text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    Dúvida com o Nutri
+                </a>
+
+                <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
+
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center font-bold text-xs"
+                        id="user-avatar">
+                        A
+                    </div>
+                    <button id="btn-logout" title="Terminar sessão"
+                        class="flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-rose-400 bg-slate-800/50 hover:bg-rose-500/10 px-3 py-2 rounded-xl border border-slate-800 transition-colors">
+                        <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Sair</span>
+                    </button>
+                </div>
+            </div>
         </div>
+    </header>
 
-        <!-- Ações do Cabeçalho -->
-        <div class="flex items-center gap-3">
-            <!-- Botão de Atalho Admin (Oculto para alunos comuns) -->
-            <a id="link-admin" href="admin.html"
-                class="hidden text-xs bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 px-3 py-2 rounded-xl border border-emerald-500/20 font-semibold transition-all flex items-center gap-1.5">
-                <i data-lucide="settings" class="w-3.5 h-3.5"></i>
-                <span>Painel Admin</span>
-            </a>
+    <!-- Conteúdo Principal -->
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1 w-full">
 
+        <!-- Boas-vindas e Data -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-900/90 to-brand-950/20 p-6 rounded-3xl border border-slate-800 shadow-xl">
+            <div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-brand-400 mb-1" id="data-hoje">--</div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                    <span id="saudacao">Olá</span>, <span id="nome-aluno" class="text-brand-400">Aluno(a)</span>! 👋
+                </h1>
+                <p class="text-sm text-slate-400 mt-1">
+                    Mantenha a consistência. Cada refeição saudável conta para a sua transformação.
+                </p>
+            </div>
+
+            <!-- Botão de suporte rápido mobile -->
             <a href="https://wa.me/5581997969058?text=Ol%C3%A1%20Nutri%2C%20tenho%20uma%20d%C3%BAvida%20sobre%20meu%20plano%20alimentar."
                 target="_blank"
-                class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-brand-400 hover:text-brand-300 text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all">
+                class="sm:hidden flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all">
                 <i data-lucide="message-circle" class="w-4 h-4"></i>
-                Dúvida com o Nutri
+                Falar com o Nutri no WhatsApp
             </a>
+        </div>
 
-            <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
-
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center font-bold text-xs"
-                    id="user-avatar">
-                    A
+        <!-- Cards de Métricas Principais (Quick Stats) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- 1. Peso Atual -->
+            <div class="glass-panel p-5 rounded-2xl border border-slate-800 flex items-center justify-between relative overflow-hidden">
+                <div>
+                    <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Último Peso</div>
+                    <div class="text-2xl font-extrabold text-white" id="stat-peso">-- kg</div>
+                    <div class="text-xs font-medium text-slate-400 mt-1" id="stat-peso-diff">Sem registo ainda</div>
                 </div>
-                <button id="btn-logout" title="Terminar sessão"
-                    class="flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-rose-400 bg-slate-800/50 hover:bg-rose-500/10 px-3 py-2 rounded-xl border border-slate-800 transition-colors">
-                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
-                    <span class="hidden sm:inline">Sair</span>
-                </button>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- Conteúdo Principal -->
-<main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1 w-full">
-
-    <!-- Boas-vindas e Data -->
-    <div
-        class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-900/90 to-brand-950/20 p-6 rounded-3xl border border-slate-800 shadow-xl">
-        <div>
-            <div class="text-xs font-semibold uppercase tracking-wider text-brand-400 mb-1" id="data-hoje">--</div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                <span id="saudacao">Olá</span>, <span id="nome-aluno" class="text-brand-400">Aluno(a)</span>! 👋
-            </h1>
-            <p class="text-sm text-slate-400 mt-1">
-                Mantenha a consistência. Cada refeição saudável conta para a sua transformação.
-            </p>
-        </div>
-
-        <!-- Botão de suporte rápido mobile -->
-        <a href="https://wa.me/5581997969058?text=Ol%C3%A1%20Nutri%2C%20tenho%20uma%20d%C3%BAvida%20sobre%20meu%20plano%20alimentar."
-            target="_blank"
-            class="sm:hidden flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all">
-            <i data-lucide="message-circle" class="w-4 h-4"></i>
-            Falar com o Nutri no WhatsApp
-        </a>
-    </div>
-
-    <!-- Cards de Métricas Principais (Quick Stats) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- 1. Peso Atual -->
-        <div
-            class="glass-panel p-5 rounded-2xl border border-slate-800 flex items-center justify-between relative overflow-hidden">
-            <div>
-                <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Último Peso</div>
-                <div class="text-2xl font-extrabold text-white" id="stat-peso">-- kg</div>
-                <div class="text-xs font-medium text-slate-400 mt-1" id="stat-peso-diff">Sem registo ainda</div>
-            </div>
-            <div
-                class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
-                <i data-lucide="scale" class="w-6 h-6"></i>
-            </div>
-        </div>
-
-        <!-- 2. Refeições Concluídas Hoje -->
-        <div
-            class="glass-panel p-5 rounded-2xl border border-slate-800 flex items-center justify-between relative overflow-hidden">
-            <div>
-                <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Refeições de Hoje</div>
-                <div class="text-2xl font-extrabold text-white" id="stat-refeicoes-contador">0 / 0</div>
-                <div class="text-xs font-medium text-emerald-400 mt-1" id="stat-refeicoes-status">Marque suas refeições
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
+                    <i data-lucide="scale" class="w-6 h-6"></i>
                 </div>
             </div>
-            <div
-                class="w-12 h-12 rounded-2xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center">
-                <i data-lucide="utensils" class="w-6 h-6"></i>
-            </div>
-        </div>
 
-        <!-- 3. Rastreador Interativo de Água -->
-        <div class="glass-panel p-5 rounded-2xl border border-slate-800 sm:col-span-2 flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-2">
-                <div class="flex items-center gap-2">
-                    <div class="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
-                        <i data-lucide="droplet" class="w-4 h-4"></i>
+            <!-- 2. Refeições Concluídas Hoje -->
+            <div class="glass-panel p-5 rounded-2xl border border-slate-800 flex items-center justify-between relative overflow-hidden">
+                <div>
+                    <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Refeições de Hoje</div>
+                    <div class="text-2xl font-extrabold text-white" id="stat-refeicoes-contador">0 / 0</div>
+                    <div class="text-xs font-medium text-emerald-400 mt-1" id="stat-refeicoes-status">Marque suas refeições</div>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center">
+                    <i data-lucide="utensils" class="w-6 h-6"></i>
+                </div>
+            </div>
+
+            <!-- 3. Rastreador Interativo de Água -->
+            <div class="glass-panel p-5 rounded-2xl border border-slate-800 sm:col-span-2 flex flex-col justify-between">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+                            <i data-lucide="droplet" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Meta de Água Diária</span>
                     </div>
-                    <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Meta de Água
-                        Diária</span>
+                    <span class="text-xs font-bold text-cyan-400" id="agua-contador-texto">0 / 8 copos (0.0L / 2.8L)</span>
                 </div>
-                <span class="text-xs font-bold text-cyan-400" id="agua-contador-texto">0 / 8 copos (0.0L / 2.8L)</span>
+
+                <!-- Copos Clicáveis -->
+                <div class="flex items-center justify-between gap-1.5 pt-2" id="copos-container">
+                    <!-- Gerados via JavaScript -->
+                </div>
+                <div class="text-[11px] text-slate-500 mt-2 flex justify-between">
+                    <span>Clique nos copos para marcar sua ingestão diária</span>
+                    <button id="btn-reset-agua" class="text-cyan-400 hover:text-cyan-300 transition-colors">Reiniciar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção do Gráfico de Evolução de Peso -->
+        <section class="glass-panel rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-xl">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 pb-4 border-b border-slate-800/80">
+                <div>
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="line-chart" class="w-5 h-5 text-brand-400"></i>
+                        Evolução do Peso Corporal
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Histórico temporal registrado nas suas pesagens</p>
+                </div>
+
+                <!-- Formulário para registar peso -->
+                <form id="form-peso" class="flex items-center gap-2 w-full sm:w-auto">
+                    <div class="relative flex-1 sm:flex-initial">
+                        <input type="number" step="0.1" id="novo-peso" placeholder="Ex: 75.8" required
+                            class="bg-slate-900 border border-slate-700 rounded-xl pl-3 pr-8 py-2.5 text-sm text-slate-100 w-full sm:w-36 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500">
+                        <span class="absolute right-3 top-2.5 text-xs text-slate-500 font-semibold">kg</span>
+                    </div>
+                    <button type="submit" id="btn-registrar-peso"
+                        class="bg-brand-600 hover:bg-brand-500 active:scale-95 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-brand-500/20 flex items-center gap-1.5 shrink-0">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                        <span>Registar</span>
+                    </button>
+                </form>
             </div>
 
-            <!-- Copos Clicáveis -->
-            <div class="flex items-center justify-between gap-1.5 pt-2" id="copos-container">
-                <!-- Gerados via JavaScript -->
+            <!-- Canvas do Gráfico -->
+            <div class="relative h-64 sm:h-72 w-full">
+                <canvas id="graficoPeso"></canvas>
             </div>
-            <div class="text-[11px] text-slate-500 mt-2 flex justify-between">
-                <span>Clique nos copos para marcar sua ingestão diária</span>
-                <button id="btn-reset-agua"
-                    class="text-cyan-400 hover:text-cyan-300 transition-colors">Reiniciar</button>
+        </section>
+
+        <!-- Bloco de Refeições e Substituições -->
+        <section class="space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i data-lucide="clipboard-list" class="w-5 h-5 text-brand-400"></i>
+                        O seu Plano Alimentar Prescrito
+                    </h2>
+                    <p class="text-xs text-slate-400">Consulte suas refeições diárias e marque quando concluir cada uma</p>
+                </div>
+                <div class="text-xs text-slate-400 flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-800">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-brand-400"></i>
+                    Prescrito e Supervisionado pelo seu Nutricionista
+                </div>
+            </div>
+
+            <div id="container-dietas" class="space-y-4">
+                <!-- Skeleton Loader durante o carregamento -->
+                <div class="animate-pulse space-y-4">
+                    <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
+                    <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
+                    <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé Discreto -->
+    <footer class="border-t border-slate-900 bg-slate-950/80 py-6 px-6 text-center text-xs text-slate-500">
+        NutriLife Digital Platform • Transformando rotinas através da nutrição consciente.
+    </footer>
+
+    <!-- Toast Notification Flutuante -->
+    <div id="toast"
+        class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 max-w-sm pointer-events-none">
+        <div class="glass-panel border rounded-2xl p-4 shadow-2xl flex items-center gap-3" id="toast-inner">
+            <div id="toast-icon-wrapper" class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0">
+                <i id="toast-icon" data-lucide="check" class="w-4 h-4"></i>
+            </div>
+            <div>
+                <div class="text-xs font-bold text-white" id="toast-title">Notificação</div>
+                <div class="text-xs text-slate-300" id="toast-message">Mensagem do sistema</div>
             </div>
         </div>
     </div>
 
-    <!-- Seção do Gráfico de Evolução de Peso -->
-    <section class="glass-panel rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-xl">
-        <div
-            class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 pb-4 border-b border-slate-800/80">
-            <div>
-                <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="line-chart" class="w-5 h-5 text-brand-400"></i>
-                    Evolução do Peso Corporal
-                </h2>
-                <p class="text-xs text-slate-400 mt-0.5">Histórico temporal registrado nas suas pesagens</p>
-            </div>
-
-            <!-- Formulário para registar peso -->
-            <form id="form-peso" class="flex items-center gap-2 w-full sm:w-auto">
-                <div class="relative flex-1 sm:flex-initial">
-                    <input type="number" step="0.1" id="novo-peso" placeholder="Ex: 75.8" required
-                        class="bg-slate-900 border border-slate-700 rounded-xl pl-3 pr-8 py-2.5 text-sm text-slate-100 w-full sm:w-36 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500">
-                    <span class="absolute right-3 top-2.5 text-xs text-slate-500 font-semibold">kg</span>
-                </div>
-                <button type="submit" id="btn-registrar-peso"
-                    class="bg-brand-600 hover:bg-brand-500 active:scale-95 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-brand-500/20 flex items-center gap-1.5 shrink-0">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                    <span>Registar</span>
-                </button>
-            </form>
-        </div>
-
-        <!-- Canvas do Gráfico -->
-        <div class="relative h-64 sm:h-72 w-full">
-            <canvas id="graficoPeso"></canvas>
-        </div>
-    </section>
-
-    <!-- Bloco de Refeições e Substituições -->
-    <section class="space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-                <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i data-lucide="clipboard-list" class="w-5 h-5 text-brand-400"></i>
-                    O seu Plano Alimentar Prescrito
-                </h2>
-                <p class="text-xs text-slate-400">Consulte suas refeições diárias e marque quando concluir cada uma</p>
-            </div>
-            <div
-                class="text-xs text-slate-400 flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-800">
-                <i data-lucide="shield-check" class="w-4 h-4 text-brand-400"></i>
-                Prescrito e Supervisionado pelo seu Nutricionista
-            </div>
-        </div>
-
-        <div id="container-dietas" class="space-y-4">
-            <!-- Skeleton Loader durante o carregamento -->
-            <div class="animate-pulse space-y-4">
-                <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
-                <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
-                <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
-            </div>
-        </div>
-    </section>
-</main>
-
-<!-- Rodapé Discreto -->
-<footer class="border-t border-slate-900 bg-slate-950/80 py-6 px-6 text-center text-xs text-slate-500">
-    NutriLife Digital Platform • Transformando rotinas através da nutrição consciente.
-</footer>
-
-<!-- Toast Notification Flutuante -->
-<div id="toast"
-    class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 max-w-sm pointer-events-none">
-    <div class="glass-panel border rounded-2xl p-4 shadow-2xl flex items-center gap-3" id="toast-inner">
-        <div id="toast-icon-wrapper" class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0">
-            <i id="toast-icon" data-lucide="check" class="w-4 h-4"></i>
-        </div>
-        <div>
-            <div class="text-xs font-bold text-white" id="toast-title">Notificação</div>
-            <div class="text-xs text-slate-300" id="toast-message">Mensagem do sistema</div>
-        </div>
-    </div>
-</div>
-
-<!-- Script da Aplicação -->
-<script>
-    lucide.createIcons();
-
-    const SUPABASE_URL = 'https://dnlqkozlaqizhqsexcei.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
-
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    let chartInstance = null;
-    let totalRefeicoesCount = 0;
-
-    // Verificar permissão de Administrador para exibir o atalho no topo
-    async function verificarPermissaoAdmin() {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (session && session.user.id === '04fb83ed-ec6b-4a56-9993-e99f32ededee') {
-            const linkAdmin = document.getElementById('link-admin');
-            if (linkAdmin) {
-                linkAdmin.classList.remove('hidden');
-            }
-        }
-    }
-
-    // Configuração de Toast Moderno (Substitui alerts primitivos)
-    function showToast(title, message, type = 'success') {
-        const toast = document.getElementById('toast');
-        const toastInner = document.getElementById('toast-inner');
-        const toastIconWrapper = document.getElementById('toast-icon-wrapper');
-        const toastIcon = document.getElementById('toast-icon');
-        const toastTitle = document.getElementById('toast-title');
-        const toastMsg = document.getElementById('toast-message');
-
-        toastTitle.textContent = title;
-        toastMsg.textContent = message;
-
-        if (type === 'success') {
-            toastInner.className = 'glass-panel border border-emerald-500/30 rounded-2xl p-4 shadow-2xl shadow-emerald-500/10 flex items-center gap-3 bg-slate-900/95';
-            toastIconWrapper.className = 'w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0';
-            toastIcon.setAttribute('data-lucide', 'check-circle-2');
-        } else if (type === 'error') {
-            toastInner.className = 'glass-panel border border-rose-500/30 rounded-2xl p-4 shadow-2xl shadow-rose-500/10 flex items-center gap-3 bg-slate-900/95';
-            toastIconWrapper.className = 'w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0';
-            toastIcon.setAttribute('data-lucide', 'alert-circle');
-        } else {
-            toastInner.className = 'glass-panel border border-cyan-500/30 rounded-2xl p-4 shadow-2xl shadow-cyan-500/10 flex items-center gap-3 bg-slate-900/95';
-            toastIconWrapper.className = 'w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0';
-            toastIcon.setAttribute('data-lucide', 'info');
-        }
+    <!-- Script da Aplicação -->
+    <script>
+        // Inicializa ícones do Lucide
         lucide.createIcons();
 
-        toast.classList.remove('translate-y-24', 'opacity-0');
-        toast.classList.add('translate-y-0', 'opacity-100');
+        const SUPABASE_URL = 'https://dnlqkozlaqizhqsexcei.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
 
-        setTimeout(() => {
-            toast.classList.add('translate-y-24', 'opacity-0');
-            toast.classList.remove('translate-y-0', 'opacity-100');
-        }, 3500);
-    }
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let chartInstance = null;
+        let totalRefeicoesCount = 0;
 
-    // Configuração de Data e Saudação Dinâmica
-    function setupGreetings(email) {
-        const agora = new Date();
-        const hora = agora.getHours();
-        let saudacao = 'Olá';
-        if (hora >= 5 && hora < 12) saudacao = 'Bom dia';
-        else if (hora >= 12 && hora < 18) saudacao = 'Boa tarde';
-        else saudacao = 'Boa noite';
-
-        document.getElementById('saudacao').textContent = saudacao;
-
-        // Formatação amigável de data
-        const opcoes = { weekday: 'long', day: 'numeric', month: 'long' };
-        const dataStr = agora.toLocaleDateString('pt-BR', opcoes);
-        document.getElementById('data-hoje').textContent = dataStr.charAt(0).toUpperCase() + dataStr.slice(1);
-
-        // Nome formatado a partir do email ou metadata
-        if (email) {
-            const username = email.split('@')[0];
-            const nomeFormatado = username.split(/[._-]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-            document.getElementById('nome-aluno').textContent = nomeFormatado;
-            document.getElementById('user-avatar').textContent = nomeFormatado.charAt(0);
-        }
-    }
-
-    // Gerenciador do Rastreador de Água com localStorage
-    function setupWaterTracker() {
-        const container = document.getElementById('copos-container');
-        const contadorTexto = document.getElementById('agua-contador-texto');
-        const totalCopos = 8; // 8 x 350ml = 2.8L
-        const hojeKey = 'nutrilife_water_' + new Date().toISOString().slice(0, 10);
-        let coposBebidos = parseInt(localStorage.getItem(hojeKey) || '0', 10);
-
-        function renderCopos() {
-            container.innerHTML = '';
-            for (let i = 1; i <= totalCopos; i++) {
-                const ativo = i <= coposBebidos;
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = `flex-1 h-9 rounded-xl flex items-center justify-center transition-all ${ativo
-                        ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/25 scale-105'
-                        : 'bg-slate-900 border border-slate-700/80 text-slate-600 hover:text-cyan-400 hover:border-cyan-500/40'
-                    }`;
-                btn.innerHTML = `<i data-lucide="droplet" class="w-4 h-4 ${ativo ? 'fill-current' : ''}"></i>`;
-                btn.onclick = () => {
-                    coposBebidos = (coposBebidos === i) ? i - 1 : i;
-                    localStorage.setItem(hojeKey, coposBebidos);
-                    renderCopos();
-                    if (coposBebidos === totalCopos) {
-                        showToast('Parabéns! 💧', 'Você atingiu sua meta diária de 2.8L de água!', 'success');
-                    }
-                };
-                container.appendChild(btn);
-            }
-            const litros = ((coposBebidos * 350) / 1000).toFixed(1);
-            contadorTexto.textContent = `${coposBebidos} / ${totalCopos} copos (${litros}L / 2.8L)`;
-            lucide.createIcons();
-        }
-
-        document.getElementById('btn-reset-agua').onclick = () => {
-            coposBebidos = 0;
-            localStorage.setItem(hojeKey, 0);
-            renderCopos();
-            showToast('Hidratação reiniciada', 'Contador de água zerado com sucesso.', 'info');
-        };
-
-        renderCopos();
-    }
-
-    // Gerenciador de Refeições Concluídas
-    function setupMealCheckbox(refeicaoId) {
-        const hojeKey = 'nutrilife_meals_' + new Date().toISOString().slice(0, 10);
-        let concluidas = JSON.parse(localStorage.getItem(hojeKey) || '[]');
-
-        const isConcluida = concluidas.includes(refeicaoId);
-        if (isConcluida) {
-            concluidas = concluidas.filter(id => id !== refeicaoId);
-        } else {
-            concluidas.push(refeicaoId);
-        }
-        localStorage.setItem(hojeKey, JSON.stringify(concluidas));
-        atualizarContadorRefeicoes(concluidas.length);
-        return !isConcluida;
-    }
-
-    function atualizarContadorRefeicoes(concluidasCount) {
-        const elContador = document.getElementById('stat-refeicoes-contador');
-        const elStatus = document.getElementById('stat-refeicoes-status');
-        elContador.textContent = `${concluidasCount} / ${totalRefeicoesCount}`;
-        if (totalRefeicoesCount > 0 && concluidasCount >= totalRefeicoesCount) {
-            elStatus.textContent = 'Todas concluídas hoje! 🔥';
-            elStatus.className = 'text-xs font-semibold text-emerald-400 mt-1';
-        } else {
-            elStatus.textContent = `${totalRefeicoesCount - concluidasCount} restantes hoje`;
-            elStatus.className = 'text-xs font-medium text-slate-400 mt-1';
-        }
-    }
-
-    // Ícone temático conforme o horário ou nome da refeição
-    function obterIconeRefeicao(nomeRefeicao) {
-        const nome = (nomeRefeicao || '').toLowerCase();
-        if (nome.includes('café') || nome.includes('manha') || nome.includes('manhã') || nome.includes('desjejum')) return 'sun';
-        if (nome.includes('almoço') || nome.includes('almoco')) return 'utensils-crossed';
-        if (nome.includes('lanche')) return 'apple';
-        if (nome.includes('jantar') || nome.includes('janta')) return 'soup';
-        if (nome.includes('ceia') || nome.includes('noite')) return 'moon';
-        if (nome.includes('pré-treino') || nome.includes('pre-treino') || nome.includes('pós-treino') || nome.includes('pos-treino')) return 'flame';
-        return 'utensils';
-    }
-
-    // Carregamento Geral dos Dados
-    async function carregarDados() {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) {
-            window.location.href = 'login.html';
-            return;
-        }
-
-        setupGreetings(session.user.email);
-        setupWaterTracker();
-        verificarPermissaoAdmin();
-
-        const userId = session.user.id;
-
-        // 1. Carregar Dietas
-        const { data: dietas, error: erroDieta } = await supabaseClient
-            .from('dietas')
-            .select('*')
-            .eq('aluno_id', userId);
-
-        const container = document.getElementById('container-dietas');
-
-        if (erroDieta) {
-            container.innerHTML = `
-                <div class="glass-panel border border-rose-500/30 rounded-2xl p-6 text-center text-rose-300">
-                    <i data-lucide="alert-triangle" class="w-8 h-8 text-rose-400 mx-auto mb-2"></i>
-                    <p class="font-bold">Não foi possível carregar seu plano alimentar.</p>
-                    <p class="text-xs text-rose-400/80 mt-1">${erroDieta.message}</p>
-                </div>
-            `;
-            lucide.createIcons();
-        } else if (!dietas || dietas.length === 0) {
-            container.innerHTML = `
-                <div class="glass-panel border border-slate-800 rounded-3xl p-10 text-center text-slate-400">
-                    <div class="w-16 h-16 rounded-3xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center mx-auto mb-4">
-                        <i data-lucide="sparkles" class="w-8 h-8"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Plano em Elaboração</h3>
-                    <p class="text-sm text-slate-400 max-w-md mx-auto mb-6">
-                        O seu nutricionista está calculando seus macronutrientes e montando um cardápio 100% individualizado.
-                    </p>
-                    <a href="https://wa.me/5581997969058?text=Ol%C3%A1%20Nutri%2C%20já%20tenho%20acesso%20ao%20portal%20e%20estou%20aguardando%20a%20liberação%20da%20minha%20dieta!" target="_blank"
-                        class="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-5 py-3 rounded-xl transition-all">
-                        <i data-lucide="message-circle" class="w-4 h-4"></i>
-                        Perguntar previsão ao Nutri
-                    </a>
-                </div>
-            `;
-            lucide.createIcons();
-        } else {
-            totalRefeicoesCount = dietas.length;
-            const hojeKey = 'nutrilife_meals_' + new Date().toISOString().slice(0, 10);
-            const concluidas = JSON.parse(localStorage.getItem(hojeKey) || '[]');
-            atualizarContadorRefeicoes(concluidas.length);
-
-            container.innerHTML = '';
-            dietas.forEach((item, index) => {
-                const itemRefeicaoId = item.id || `refeicao-${index}`;
-                const isConcluida = concluidas.includes(itemRefeicaoId);
-                const icone = obterIconeRefeicao(item.refeicao);
-
-                let blocoSubstituicao = '';
-                if (item.substituicoes) {
-                    blocoSubstituicao = `
-                        <div class="mt-4 pt-3.5 border-t border-slate-800/80 bg-slate-950/50 -mx-6 -mb-6 p-5 rounded-b-3xl">
-                            <div class="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">
-                                <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
-                                Opções de Substituição Prescritas:
-                            </div>
-                            <p class="text-xs text-slate-300 leading-relaxed">${item.substituicoes}</p>
-                        </div>
-                    `;
+        // Verificar permissão de Administrador para exibir o atalho no topo
+        async function verificarPermissaoAdmin() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session && session.user.id === '04fb83ed-ec6b-4a56-9993-e99f32ededee') {
+                const linkAdmin = document.getElementById('link-admin');
+                if (linkAdmin) {
+                    linkAdmin.classList.remove('hidden');
                 }
+            }
+        }
 
-                const msgWhatsApp = encodeURIComponent(`Olá Nutri, tenho uma dúvida sobre a refeição "${item.refeicao}" (${item.horario || ''}): `);
+        // Configuração de Toast Moderno (Substitui alerts primitivos)
+        function showToast(title, message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastInner = document.getElementById('toast-inner');
+            const toastIconWrapper = document.getElementById('toast-icon-wrapper');
+            const toastIcon = document.getElementById('toast-icon');
+            const toastTitle = document.getElementById('toast-title');
+            const toastMsg = document.getElementById('toast-message');
 
-                container.innerHTML += `
-                    <div class="glass-panel border rounded-3xl p-6 transition-all duration-300 relative overflow-hidden group ${isConcluida ? 'border-brand-500/40 bg-brand-950/10' : 'border-slate-800 hover:border-slate-700'
-                    }" id="card-${itemRefeicaoId}">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800/80 gap-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-2xl ${isConcluida ? 'bg-brand-500/20 text-brand-400' : 'bg-slate-800 text-slate-300'} flex items-center justify-center shrink-0">
-                                    <i data-lucide="${icone}" class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                                        ${item.refeicao}
-                                        ${isConcluida ? '<span class="text-[10px] bg-brand-500/20 text-brand-400 font-bold px-2 py-0.5 rounded-full border border-brand-500/30">Feito ✓</span>' : ''}
-                                    </h3>
-                                    <span class="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                                        <i data-lucide="clock" class="w-3 h-3 text-brand-400"></i> ${item.horario || 'Horário flexível'}
-                                    </span>
-                                </div>
-                            </div>
+            toastTitle.textContent = title;
+            toastMsg.textContent = message;
 
-                            <div class="flex items-center gap-2 self-end sm:self-center">
-                                <a href="https://wa.me/5581997969058?text=${msgWhatsApp}" target="_blank"
-                                    title="Dúvida nesta refeição"
-                                    class="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors border border-slate-700/60">
-                                    <i data-lucide="help-circle" class="w-4 h-4"></i>
-                                </a>
-                                <button onclick="toggleRefeicaoStatus('${itemRefeicaoId}')"
-                                    class="flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl transition-all ${isConcluida
-                        ? 'bg-brand-500/20 text-brand-400 border border-brand-500/40 hover:bg-brand-500/30'
-                        : 'bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700'
-                    }">
-                                    <i data-lucide="${isConcluida ? 'check-circle-2' : 'circle'}" class="w-4 h-4"></i>
-                                    <span>${isConcluida ? 'Concluída' : 'Marcar Feita'}</span>
-                                </button>
-                            </div>
-                        </div>
+            if (type === 'success') {
+                toastInner.className = 'glass-panel border border-emerald-500/30 rounded-2xl p-4 shadow-2xl shadow-emerald-500/10 flex items-center gap-3 bg-slate-900/95';
+                toastIconWrapper.className = 'w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0';
+                toastIcon.setAttribute('data-lucide', 'check-circle-2');
+            } else if (type === 'error') {
+                toastInner.className = 'glass-panel border border-rose-500/30 rounded-2xl p-4 shadow-2xl shadow-rose-500/10 flex items-center gap-3 bg-slate-900/95';
+                toastIconWrapper.className = 'w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0';
+                toastIcon.setAttribute('data-lucide', 'alert-circle');
+            } else {
+                toastInner.className = 'glass-panel border border-cyan-500/30 rounded-2xl p-4 shadow-2xl shadow-cyan-500/10 flex items-center gap-3 bg-slate-900/95';
+                toastIconWrapper.className = 'w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0';
+                toastIcon.setAttribute('data-lucide', 'info');
+            }
+            lucide.createIcons();
 
-                        <div class="py-4">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">Alimentos e Porções:</span>
-                            <p class="text-slate-200 text-sm leading-relaxed whitespace-pre-line">${item.alimentos}</p>
-                        </div>
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
 
-                        ${blocoSubstituicao}
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 3500);
+        }
+
+        // Configuração de Data e Saudação Dinâmica
+        function setupGreetings(email) {
+            const agora = new Date();
+            const hora = agora.getHours();
+            let saudacao = 'Olá';
+            if (hora >= 5 && hora < 12) saudacao = 'Bom dia';
+            else if (hora >= 12 && hora < 18) saudacao = 'Boa tarde';
+            else saudacao = 'Boa noite';
+
+            document.getElementById('saudacao').textContent = saudacao;
+
+            // Formatação amigável de data
+            const opcoes = { weekday: 'long', day: 'numeric', month: 'long' };
+            const dataStr = agora.toLocaleDateString('pt-BR', opcoes);
+            document.getElementById('data-hoje').textContent = dataStr.charAt(0).toUpperCase() + dataStr.slice(1);
+
+            // Nome formatado a partir do email ou metadata
+            if (email) {
+                const username = email.split('@')[0];
+                const nomeFormatado = username.split(/[._-]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                document.getElementById('nome-aluno').textContent = nomeFormatado;
+                document.getElementById('user-avatar').textContent = nomeFormatado.charAt(0);
+            }
+        }
+
+        // Gerenciador do Rastreador de Água com localStorage
+        function setupWaterTracker() {
+            const container = document.getElementById('copos-container');
+            const contadorTexto = document.getElementById('agua-contador-texto');
+            const totalCopos = 8; // 8 x 350ml = 2.8L
+            const hojeKey = 'nutrilife_water_' + new Date().toISOString().slice(0, 10);
+            let coposBebidos = parseInt(localStorage.getItem(hojeKey) || '0', 10);
+
+            function renderCopos() {
+                container.innerHTML = '';
+                for (let i = 1; i <= totalCopos; i++) {
+                    const ativo = i <= coposBebidos;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = `flex-1 h-9 rounded-xl flex items-center justify-center transition-all ${
+                        ativo
+                            ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/25 scale-105'
+                            : 'bg-slate-900 border border-slate-700/80 text-slate-600 hover:text-cyan-400 hover:border-cyan-500/40'
+                    }`;
+                    btn.innerHTML = `<i data-lucide="droplet" class="w-4 h-4 ${ativo ? 'fill-current' : ''}"></i>`;
+                    btn.onclick = () => {
+                        coposBebidos = (coposBebidos === i) ? i - 1 : i;
+                        localStorage.setItem(hojeKey, coposBebidos);
+                        renderCopos();
+                        if (coposBebidos === totalCopos) {
+                            showToast('Parabéns! 💧', 'Você atingiu sua meta diária de 2.8L de água!', 'success');
+                        }
+                    };
+                    container.appendChild(btn);
+                }
+                const litros = ((coposBebidos * 350) / 1000).toFixed(1);
+                contadorTexto.textContent = `${coposBebidos} / ${totalCopos} copos (${litros}L / 2.8L)`;
+                lucide.createIcons();
+            }
+
+            document.getElementById('btn-reset-agua').onclick = () => {
+                coposBebidos = 0;
+                localStorage.setItem(hojeKey, 0);
+                renderCopos();
+                showToast('Hidratação reiniciada', 'Contador de água zerado com sucesso.', 'info');
+            };
+
+            renderCopos();
+        }
+
+        // Gerenciador de Refeições Concluídas
+        function setupMealCheckbox(refeicaoId) {
+            const hojeKey = 'nutrilife_meals_' + new Date().toISOString().slice(0, 10);
+            let concluidas = JSON.parse(localStorage.getItem(hojeKey) || '[]');
+
+            const isConcluida = concluidas.includes(refeicaoId);
+            if (isConcluida) {
+                concluidas = concluidas.filter(id => id !== refeicaoId);
+            } else {
+                concluidas.push(refeicaoId);
+            }
+            localStorage.setItem(hojeKey, JSON.stringify(concluidas));
+            atualizarContadorRefeicoes(concluidas.length);
+            return !isConcluida;
+        }
+
+        function atualizarContadorRefeicoes(concluidasCount) {
+            const elContador = document.getElementById('stat-refeicoes-contador');
+            const elStatus = document.getElementById('stat-refeicoes-status');
+            elContador.textContent = `${concluidasCount} / ${totalRefeicoesCount}`;
+            if (totalRefeicoesCount > 0 && concluidasCount >= totalRefeicoesCount) {
+                elStatus.textContent = 'Todas concluídas hoje! 🔥';
+                elStatus.className = 'text-xs font-semibold text-emerald-400 mt-1';
+            } else {
+                elStatus.textContent = `${totalRefeicoesCount - concluidasCount} restantes hoje`;
+                elStatus.className = 'text-xs font-medium text-slate-400 mt-1';
+            }
+        }
+
+        // Ícone temático conforme o horário ou nome da refeição
+        function obterIconeRefeicao(nomeRefeicao) {
+            const nome = (nomeRefeicao || '').toLowerCase();
+            if (nome.includes('café') || nome.includes('manha') || nome.includes('manhã') || nome.includes('desjejum')) return 'sun';
+            if (nome.includes('almoço') || nome.includes('almoco')) return 'utensils-crossed';
+            if (nome.includes('lanche')) return 'apple';
+            if (nome.includes('jantar') || nome.includes('janta')) return 'soup';
+            if (nome.includes('ceia') || nome.includes('noite')) return 'moon';
+            if (nome.includes('pré-treino') || nome.includes('pre-treino') || nome.includes('pós-treino') || nome.includes('pos-treino')) return 'flame';
+            return 'utensils';
+        }
+
+        // Carregamento Geral dos Dados
+        async function carregarDados() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            setupGreetings(session.user.email);
+            setupWaterTracker();
+            verificarPermissaoAdmin();
+
+            const userId = session.user.id;
+
+            // 1. Carregar Dietas
+            const { data: dietas, error: erroDieta } = await supabaseClient
+                .from('dietas')
+                .select('*')
+                .eq('aluno_id', userId);
+
+            const container = document.getElementById('container-dietas');
+
+            if (erroDieta) {
+                container.innerHTML = `
+                    <div class="glass-panel border border-rose-500/30 rounded-2xl p-6 text-center text-rose-300">
+                        <i data-lucide="alert-triangle" class="w-8 h-8 text-rose-400 mx-auto mb-2"></i>
+                        <p class="font-bold">Não foi possível carregar seu plano alimentar.</p>
+                        <p class="text-xs text-rose-400/80 mt-1">${erroDieta.message}</p>
                     </div>
                 `;
-            });
-            lucide.createIcons();
-        }
-
-        // 2. Carregar Histórico de Peso
-        carregarGraficoPeso(userId);
-    }
-
-    // Alternar status de refeição
-    window.toggleRefeicaoStatus = function (refeicaoId) {
-        const agoraConcluida = setupMealCheckbox(refeicaoId);
-        if (agoraConcluida) {
-            showToast('Refeição registrada! 🥗', 'Parabéns por manter a disciplina no plano.', 'success');
-        }
-        carregarDados();
-    };
-
-    // Carregar Gráfico com Chart.js
-    async function carregarGraficoPeso(userId) {
-        const { data: historico, error } = await supabaseClient
-            .from('historico_peso')
-            .select('*')
-            .eq('aluno_id', userId)
-            .order('date_registro', { ascending: true });
-
-        if (error) {
-            console.error("Erro ao carregar histórico de peso:", error);
-            return;
-        }
-
-        const statPesoEl = document.getElementById('stat-peso');
-        const statDiffEl = document.getElementById('stat-peso-diff');
-
-        if (!historico || historico.length === 0) {
-            statPesoEl.textContent = '-- kg';
-            statDiffEl.textContent = 'Registe seu primeiro peso';
-            return;
-        }
-
-        // Atualiza Card de estatística com o peso mais recente
-        const ultimoRegistro = historico[historico.length - 1];
-        const primeiroRegistro = historico[0];
-        statPesoEl.textContent = `${ultimoRegistro.peso} kg`;
-
-        if (historico.length > 1) {
-            const diff = (ultimoRegistro.peso - primeiroRegistro.peso).toFixed(1);
-            if (diff < 0) {
-                statDiffEl.textContent = `${diff} kg desde o início 🎉`;
-                statDiffEl.className = 'text-xs font-semibold text-emerald-400 mt-1';
-            } else if (diff > 0) {
-                statDiffEl.textContent = `+${diff} kg desde o início 📈`;
-                statDiffEl.className = 'text-xs font-semibold text-teal-400 mt-1';
+                lucide.createIcons();
+            } else if (!dietas || dietas.length === 0) {
+                container.innerHTML = `
+                    <div class="glass-panel border border-slate-800 rounded-3xl p-10 text-center text-slate-400">
+                        <div class="w-16 h-16 rounded-3xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="sparkles" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Plano em Elaboração</h3>
+                        <p class="text-sm text-slate-400 max-w-md mx-auto mb-6">
+                            O seu nutricionista está calculando seus macronutrientes e montando um cardápio 100% individualizado.
+                        </p>
+                        <a href="https://wa.me/5581997969058?text=Ol%C3%A1%20Nutri%2C%20já%20tenho%20acesso%20ao%20portal%20e%20estou%20aguardando%20a%20liberação%20da%20minha%20dieta!" target="_blank"
+                            class="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-5 py-3 rounded-xl transition-all">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i>
+                            Perguntar previsão ao Nutri
+                        </a>
+                    </div>
+                `;
+                lucide.createIcons();
             } else {
-                statDiffEl.textContent = `Mesmo peso do início`;
-                statDiffEl.className = 'text-xs font-medium text-slate-400 mt-1';
+                totalRefeicoesCount = dietas.length;
+                const hojeKey = 'nutrilife_meals_' + new Date().toISOString().slice(0, 10);
+                const concluidas = JSON.parse(localStorage.getItem(hojeKey) || '[]');
+                atualizarContadorRefeicoes(concluidas.length);
+
+                container.innerHTML = '';
+                dietas.forEach((item, index) => {
+                    const itemRefeicaoId = item.id || `refeicao-${index}`;
+                    const isConcluida = concluidas.includes(itemRefeicaoId);
+                    const icone = obterIconeRefeicao(item.refeicao);
+
+                    let blocoSubstituicao = '';
+                    if (item.substituicoes) {
+                        blocoSubstituicao = `
+                            <div class="mt-4 pt-3.5 border-t border-slate-800/80 bg-slate-950/50 -mx-6 -mb-6 p-5 rounded-b-3xl">
+                                <div class="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">
+                                    <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                                    Opções de Substituição Prescritas:
+                                </div>
+                                <p class="text-xs text-slate-300 leading-relaxed">${item.substituicoes}</p>
+                            </div>
+                        `;
+                    }
+
+                    // Mensagem pré-formatada para o WhatsApp
+                    const msgWhatsApp = encodeURIComponent(`Olá Nutri, tenho uma dúvida sobre a refeição "${item.refeicao}" (${item.horario || ''}): `);
+
+                    container.innerHTML += `
+                        <div class="glass-panel border rounded-3xl p-6 transition-all duration-300 relative overflow-hidden group ${
+                            isConcluida ? 'border-brand-500/40 bg-brand-950/10' : 'border-slate-800 hover:border-slate-700'
+                        }" id="card-${itemRefeicaoId}">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800/80 gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-2xl ${isConcluida ? 'bg-brand-500/20 text-brand-400' : 'bg-slate-800 text-slate-300'} flex items-center justify-center shrink-0">
+                                        <i data-lucide="${icone}" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                                            ${item.refeicao}
+                                            ${isConcluida ? '<span class="text-[10px] bg-brand-500/20 text-brand-400 font-bold px-2 py-0.5 rounded-full border border-brand-500/30">Feito ✓</span>' : ''}
+                                        </h3>
+                                        <span class="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
+                                            <i data-lucide="clock" class="w-3 h-3 text-brand-400"></i> ${item.horario || 'Horário flexível'}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-2 self-end sm:self-center">
+                                    <a href="https://wa.me/5581997969058?text=${msgWhatsApp}" target="_blank"
+                                        title="Dúvida nesta refeição"
+                                        class="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors border border-slate-700/60">
+                                        <i data-lucide="help-circle" class="w-4 h-4"></i>
+                                    </a>
+                                    <button onclick="toggleRefeicaoStatus('${itemRefeicaoId}')"
+                                        class="flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl transition-all ${
+                                            isConcluida
+                                                ? 'bg-brand-500/20 text-brand-400 border border-brand-500/40 hover:bg-brand-500/30'
+                                                : 'bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700'
+                                        }">
+                                        <i data-lucide="${isConcluida ? 'check-circle-2' : 'circle'}" class="w-4 h-4"></i>
+                                        <span>${isConcluida ? 'Concluída' : 'Marcar Feita'}</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="py-4">
+                                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">Alimentos e Porções:</span>
+                                <p class="text-slate-200 text-sm leading-relaxed whitespace-pre-line">${item.alimentos}</p>
+                            </div>
+
+                            ${blocoSubstituicao}
+                        </div>
+                    `;
+                });
+                lucide.createIcons();
             }
-        } else {
-            statDiffEl.textContent = '1º registo feito';
+
+            // 2. Carregar Histórico de Peso
+            carregarGraficoPeso(userId);
         }
 
-        // Formatação de datas para o eixo X
-        const datas = historico.map(h => {
-            if (!h.date_registro) return '';
-            const d = new Date(h.date_registro);
-            return isNaN(d) ? h.date_registro : d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-        });
-        const pesos = historico.map(h => h.peso);
+        // Alternar status de refeição
+        window.toggleRefeicaoStatus = function (refeicaoId) {
+            const agoraConcluida = setupMealCheckbox(refeicaoId);
+            if (agoraConcluida) {
+                showToast('Refeição registrada! 🥗', 'Parabéns por manter a disciplina no plano.', 'success');
+            }
+            carregarDados();
+        };
 
-        const ctx = document.getElementById('graficoPeso').getContext('2d');
+        // Carregar Gráfico com Chart.js
+        async function carregarGraficoPeso(userId) {
+            const { data: historico, error } = await supabaseClient
+                .from('historico_peso')
+                .select('*')
+                .eq('aluno_id', userId)
+                .order('date_registro', { ascending: true });
 
-        if (chartInstance) {
-            chartInstance.destroy();
-        }
+            if (error) {
+                console.error("Erro ao carregar histórico de peso:", error);
+                return;
+            }
 
-        // Gradiente esmeralda sob o gráfico
-        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.25)');
-        gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+            const statPesoEl = document.getElementById('stat-peso');
+            const statDiffEl = document.getElementById('stat-peso-diff');
 
-        chartInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: datas,
-                datasets: [{
-                    label: 'Peso Corporal',
-                    data: pesos,
-                    borderColor: '#10b981',
-                    backgroundColor: gradient,
-                    borderWidth: 3,
-                    pointBackgroundColor: '#10b981',
-                    pointBorderColor: '#0f172a',
-                    pointBorderWidth: 2,
-                    pointRadius: 5,
-                    pointHoverRadius: 7,
-                    fill: true,
-                    tension: 0.35
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#0f172a',
-                        titleColor: '#f8fafc',
-                        bodyColor: '#34d399',
-                        borderColor: '#334155',
-                        borderWidth: 1,
-                        padding: 10,
-                        displayColors: false,
-                        callbacks: {
-                            label: function (context) {
-                                return context.parsed.y + ' kg';
+            if (!historico || historico.length === 0) {
+                statPesoEl.textContent = '-- kg';
+                statDiffEl.textContent = 'Registe seu primeiro peso';
+                return;
+            }
+
+            // Atualiza Card de estatística com o peso mais recente
+            const ultimoRegistro = historico[historico.length - 1];
+            const primeiroRegistro = historico[0];
+            statPesoEl.textContent = `${ultimoRegistro.peso} kg`;
+
+            if (historico.length > 1) {
+                const diff = (ultimoRegistro.peso - primeiroRegistro.peso).toFixed(1);
+                if (diff < 0) {
+                    statDiffEl.textContent = `${diff} kg desde o início 🎉`;
+                    statDiffEl.className = 'text-xs font-semibold text-emerald-400 mt-1';
+                } else if (diff > 0) {
+                    statDiffEl.textContent = `+${diff} kg desde o início 📈`;
+                    statDiffEl.className = 'text-xs font-semibold text-teal-400 mt-1';
+                } else {
+                    statDiffEl.textContent = `Mesmo peso do início`;
+                    statDiffEl.className = 'text-xs font-medium text-slate-400 mt-1';
+                }
+            } else {
+                statDiffEl.textContent = '1º registo feito';
+            }
+
+            // Formatação de datas para o eixo X
+            const datas = historico.map(h => {
+                if (!h.date_registro) return '';
+                const d = new Date(h.date_registro);
+                return isNaN(d) ? h.date_registro : d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+            });
+            const pesos = historico.map(h => h.peso);
+
+            const ctx = document.getElementById('graficoPeso').getContext('2d');
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            // Gradiente esmeralda sob o gráfico
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.25)');
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: datas,
+                    datasets: [{
+                        label: 'Peso Corporal',
+                        data: pesos,
+                        borderColor: '#10b981',
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#10b981',
+                        pointBorderColor: '#0f172a',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        fill: true,
+                        tension: 0.35
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#0f172a',
+                            titleColor: '#f8fafc',
+                            bodyColor: '#34d399',
+                            borderColor: '#334155',
+                            borderWidth: 1,
+                            padding: 10,
+                            displayColors: false,
+                            callbacks: {
+                                label: function (context) {
+                                    return context.parsed.y + ' kg';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(30, 41, 59, 0.6)' },
+                            ticks: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 11 } }
+                        },
+                        y: {
+                            grid: { color: 'rgba(30, 41, 59, 0.6)' },
+                            ticks: {
+                                color: '#94a3b8',
+                                font: { family: 'Plus Jakarta Sans', size: 11 },
+                                callback: function (value) { return value + ' kg'; }
                             }
                         }
                     }
-                },
-                scales: {
-                    x: {
-                        grid: { color: 'rgba(30, 41, 59, 0.6)' },
-                        ticks: { color: '#94a3b8', font: { family: 'Plus Jakarta Sans', size: 11 } }
-                    },
-                    y: {
-                        grid: { color: 'rgba(30, 41, 59, 0.6)' },
-                        ticks: {
-                            color: '#94a3b8',
-                            font: { family: 'Plus Jakarta Sans', size: 11 },
-                            callback: function (value) { return value + ' kg'; }
-                        }
-                    }
                 }
+            });
+        }
+
+        // Submissão do Registro de Peso
+        document.getElementById('form-peso').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) return;
+
+            const input = document.getElementById('novo-peso');
+            const btn = document.getElementById('btn-registrar-peso');
+            const novoPeso = parseFloat(input.value);
+
+            if (!novoPeso || novoPeso <= 0) {
+                showToast('Atenção', 'Insira um valor de peso válido.', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>`;
+
+            const { error } = await supabaseClient
+                .from('historico_peso')
+                .insert([{ aluno_id: session.user.id, peso: novoPeso }]);
+
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="plus" class="w-3.5 h-3.5"></i><span>Registar</span>`;
+            lucide.createIcons();
+
+            if (error) {
+                showToast('Erro ao registar', error.message, 'error');
+            } else {
+                input.value = '';
+                showToast('Peso Registado! ⚖️', `Novo registo de ${novoPeso} kg salvo com sucesso.`, 'success');
+                carregarGraficoPeso(session.user.id);
             }
         });
-    }
 
-    // Submissão do Registro de Peso
-    document.getElementById('form-peso').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) return;
+        // Botão de Sair com Limpeza
+        document.getElementById('btn-logout').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-logout');
+            btn.innerHTML = '<div class="w-3.5 h-3.5 border-2 border-slate-400 border-t-white rounded-full animate-spin"></div>';
+            await supabaseClient.auth.signOut();
+            window.location.href = 'login.html';
+        });
 
-        const input = document.getElementById('novo-peso');
-        const btn = document.getElementById('btn-registrar-peso');
-        const novoPeso = parseFloat(input.value);
+        // Inicia carregamento
+        carregarDados();
+    </script>
+</body>
 
-        if (!novoPeso || novoPeso <= 0) {
-            showToast('Atenção', 'Insira um valor de peso válido.', 'error');
-            return;
-        }
-
-        btn.disabled = true;
-        btn.innerHTML = `<div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>`;
-
-        const { error } = await supabaseClient
-            .from('historico_peso')
-            .insert([{ aluno_id: session.user.id, peso: novoPeso }]);
-
-        btn.disabled = false;
-        btn.innerHTML = `<i data-lucide="plus" class="w-3.5 h-3.5"></i><span>Registar</span>`;
-        lucide.createIcons();
-
-        if (error) {
-            showToast('Erro ao registar', error.message, 'error');
-        } else {
-            input.value = '';
-            showToast('Peso Registado! ⚖️', `Novo registo de ${novoPeso} kg salvo com sucesso.`, 'success');
-            carregarGraficoPeso(session.user.id);
-        }
-    });
-
-    // Botão de Sair com Limpeza
-    document.getElementById('btn-logout').addEventListener('click', async () => {
-        const btn = document.getElementById('btn-logout');
-        btn.innerHTML = '<div class="w-3.5 h-3.5 border-2 border-slate-400 border-t-white rounded-full animate-spin"></div>';
-        await supabaseClient.auth.signOut();
-        window.location.href = 'login.html';
-    });
-
-    // Inicia carregamento
-    carregarDados();
-</script>
+</html>
