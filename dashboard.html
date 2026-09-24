@@ -9,6 +9,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Chart.js para o Gráfico de Peso -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body class="bg-slate-950 text-slate-100 min-h-screen">
@@ -26,32 +28,55 @@
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-4xl mx-auto p-6 md:p-10">
-        <div class="mb-8">
+    <main class="max-w-4xl mx-auto p-6 md:p-10 space-y-10">
+        <div class="mb-2">
             <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">Olá, <span id="nome-aluno">Aluno(a)</span>! 👋
             </h1>
-            <p class="text-slate-400">Aqui está o seu plano alimentar atualizado pelo seu nutricionista.</p>
+            <p class="text-slate-400">Aqui está o seu plano alimentar atualizado e o seu progresso.</p>
         </div>
 
-        <!-- Bloco de Refeições Dinâmicas -->
-        <div id="container-dietas" class="space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center text-slate-400">
-                A carregar plano alimentar...
+        <!-- Secção do Gráfico de Evolução de Peso -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Evolução de Peso</h2>
+                    <p class="text-xs text-slate-400">Acompanhe o seu histórico de peso ao longo do tempo</p>
+                </div>
+                <!-- Formulário rápido para registar peso -->
+                <form id="form-peso" class="flex gap-2 w-full sm:w-auto">
+                    <input type="number" step="0.1" id="novo-peso" placeholder="Peso (kg)" required
+                        class="bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 w-28 focus:outline-none focus:border-emerald-500">
+                    <button type="submit"
+                        class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-all">Registar</button>
+                </form>
             </div>
-        </div>
+            <!-- Canvas do Gráfico -->
+            <div class="relative h-64 w-full">
+                <canvas id="graficoPeso"></canvas>
+            </div>
+        </section>
+
+        <!-- Bloco de Refeições e Substituições -->
+        <section>
+            <h2 class="text-xl font-bold text-white mb-4">O seu Plano Alimentar</h2>
+            <div id="container-dietas" class="space-y-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center text-slate-400">
+                    A carregar plano alimentar...
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- Script de Verificação e Carregamento de Dados -->
+    <!-- Script da Aplicação -->
     <script>
         const SUPABASE_URL = 'https://dnlqkozlaqizhqsexcei.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
 
-        // Nome único para evitar conflito de declaração
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let chartInstance = null;
 
-        async function verificarSessaoECarregarDieta() {
+        async function carregarDados() {
             const { data: { session } } = await supabaseClient.auth.getSession();
-
             if (!session) {
                 window.location.href = 'login.html';
                 return;
@@ -59,47 +84,124 @@
 
             const userId = session.user.id;
 
-            // Busca os dados da dieta do aluno logado
-            const { data: dietas, error } = await supabaseClient
+            // 1. Carregar Dietas e Substituições
+            const { data: dietas, error: erroDieta } = await supabaseClient
                 .from('dietas')
                 .select('*')
                 .eq('aluno_id', userId);
 
             const container = document.getElementById('container-dietas');
 
-            if (error) {
-                container.innerHTML = `<p class="text-red-400">Erro ao carregar a dieta: ${error.message}</p>`;
-                return;
-            }
+            if (erroDieta) {
+                container.innerHTML = `<p class="text-red-400">Erro ao carregar dieta: ${erroDieta.message}</p>`;
+            } else if (!dietas || dietas.length === 0) {
+                container.innerHTML = `<div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center text-slate-400">Ainda não existem registos de dieta para o seu perfil.</div>`;
+            } else {
+                container.innerHTML = '';
+                dietas.forEach(item => {
+                    let blocoSubstituicao = '';
+                    if (item.substituicoes) {
+                        blocoSubstituicao = `
+                            <div class="mt-4 pt-3 border-t border-slate-800/80 bg-slate-950/40 -mx-6 -mb-6 p-4 rounded-b-2xl">
+                                <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider block mb-1">💡 Opções de Substituição:</span>
+                                <p class="text-xs text-slate-300 leading-relaxed">${item.substituicoes}</p>
+                            </div>
+                        `;
+                    }
 
-            if (!dietas || dietas.length === 0) {
-                container.innerHTML = `<div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center text-slate-400">Ainda não existem registos de dieta para o seu perfil. O seu nutricionista irá atualizar em breve!</div>`;
-                return;
-            }
-
-            // Renderiza as refeições dinamicamente na página
-            container.innerHTML = '';
-            dietas.forEach(item => {
-                container.innerHTML += `
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
-                            <h3 class="text-lg font-bold text-emerald-400">${item.refeicao}</h3>
-                            <span class="text-xs text-slate-400 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">${item.horario}</span>
+                    container.innerHTML += `
+                        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
+                            <div class="flex items-center justify-between mb-3 pb-3 border-b border-slate-800">
+                                <h3 class="text-lg font-bold text-emerald-400">${item.refeicao}</h3>
+                                <span class="text-xs text-slate-400 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">${item.horario}</span>
+                            </div>
+                            <p class="text-slate-300 text-sm leading-relaxed mb-2">${item.alimentos}</p>
+                            ${blocoSubstituicao}
                         </div>
-                        <p class="text-slate-300 text-sm leading-relaxed">${item.alimentos}</p>
-                    </div>
-                `;
+                    `;
+                });
+            }
+
+            // 2. Carregar Histórico de Peso e Desenhar Gráfico
+            carregarGraficoPeso(userId);
+        }
+
+        async function carregarGraficoPeso(userId) {
+            const { data: historico, error } = await supabaseClient
+                .from('historico_peso')
+                .select('*')
+                .eq('aluno_id', userId)
+                .order('data_registo', { ascending: true });
+
+            if (error) {
+                console.error("Erro ao carregar histórico de peso:", error);
+                return;
+            }
+
+            const datas = historico.map(h => h.data_registo);
+            const pesos = historico.map(h => h.peso);
+
+            const ctx = document.getElementById('graficoPeso').getContext('2d');
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: datas,
+                    datasets: [{
+                        label: 'Peso (kg)',
+                        data: pesos,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+                        y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+                    }
+                }
             });
         }
 
-        // Botão de Sair (Logout)
+        // Registar novo peso
+        document.getElementById('form-peso').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) return;
+
+            const novoPeso = parseFloat(document.getElementById('novo-peso').value);
+
+            const { error } = await supabaseClient
+                .from('historico_peso')
+                .insert([{ aluno_id: session.user.id, peso: novoPeso }]);
+
+            if (error) {
+                alert('Erro ao registar peso: ' + error.message);
+            } else {
+                document.getElementById('novo-peso').value = '';
+                carregarGraficoPeso(session.user.id);
+            }
+        });
+
+        // Botão de Sair
         document.getElementById('btn-logout').addEventListener('click', async () => {
             await supabaseClient.auth.signOut();
             window.location.href = 'login.html';
         });
 
-        // Executa ao carregar a página
-        verificarSessaoECarregarDieta();
+        carregarDados();
     </script>
 </body>
 
