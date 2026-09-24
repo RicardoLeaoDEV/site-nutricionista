@@ -89,7 +89,6 @@
                 </span>
             </div>
 
-            <!-- Ações do Cabeçalho -->
             <div class="flex items-center gap-3">
                 <a href="dashboard.html"
                     class="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all">
@@ -110,18 +109,60 @@
 
     <!-- Conteúdo Principal -->
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1 w-full">
-        <!-- Cabeçalho da Página -->
         <div
             class="bg-gradient-to-r from-slate-900/90 to-brand-950/20 p-6 rounded-3xl border border-slate-800 shadow-xl">
             <span class="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1 inline-block">Área de
                 Prescrição</span>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                Gestão de Dietas dos Alunos 📋
+                Gestão de Alunos e Dietas 📋
             </h1>
             <p class="text-sm text-slate-400 mt-1">
-                Selecione o paciente na lista e prescreva refeições, horários e opções de substituição personalizadas.
+                Cadastre novos alunos ou prescreva refeições personalizadas diretamente para o portal deles.
             </p>
         </div>
+
+        <!-- NOVO: Formulário para Cadastrar Aluno -->
+        <section class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-6">
+                <div>
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="user-plus" class="w-5 h-5 text-emerald-400"></i>
+                        Cadastrar Novo Aluno
+                    </h2>
+                    <p class="text-xs text-slate-400">Cria o acesso para o aluno entrar no portal com senha temporária
+                    </p>
+                </div>
+            </div>
+
+            <form id="form-cadastrar-aluno" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Nome do
+                            Aluno</label>
+                        <input type="text" id="novo-aluno-nome" placeholder="Ex: Maria Silva" required
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">E-mail de
+                            Acesso</label>
+                        <input type="email" id="novo-aluno-email" placeholder="aluno@email.com" required
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Senha
+                            Inicial</label>
+                        <input type="text" id="novo-aluno-senha" placeholder="Mínimo 6 caracteres" required
+                            value="123456"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+                <button type="submit" id="btn-cadastrar-aluno"
+                    class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold py-3 rounded-xl transition-all border border-slate-700 flex items-center justify-center gap-2">
+                    <i data-lucide="user-check" class="w-4 h-4"></i>
+                    <span>Cadastrar Aluno no Sistema</span>
+                </button>
+            </form>
+        </section>
 
         <!-- Formulário para Adicionar/Atualizar Refeição -->
         <section class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
@@ -275,7 +316,6 @@
             }, 3500);
         }
 
-        // Validação de sessão e permissão administrativa por UID
         async function verificarSessao() {
             const { data: { session } } = await supabaseClient.auth.getSession();
 
@@ -292,11 +332,9 @@
                 return;
             }
 
-            // Carrega os alunos no menu de seleção
             carregarAlunosSelect();
         }
 
-        // Carregar alunos na lista suspensa do admin
         async function carregarAlunosSelect() {
             const selectEl = document.getElementById('aluno-select');
 
@@ -311,7 +349,7 @@
             }
 
             if (!alunos || alunos.length === 0) {
-                selectEl.innerHTML = `<option value="" disabled>Nenhum aluno encontrado na tabela 'alunos'</option>`;
+                selectEl.innerHTML = `<option value="" disabled>Nenhum aluno encontrado. Cadastre um acima!</option>`;
                 return;
             }
 
@@ -323,6 +361,55 @@
                 selectEl.appendChild(option);
             });
         }
+
+        // NOVO: Registar Novo Aluno via Painel Admin
+        document.getElementById('form-cadastrar-aluno').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nome = document.getElementById('novo-aluno-nome').value.trim();
+            const email = document.getElementById('novo-aluno-email').value.trim();
+            const password = document.getElementById('novo-aluno-senha').value.trim();
+
+            const btn = document.getElementById('btn-cadastrar-aluno');
+            btn.disabled = true;
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"></div> Cadastrando...`;
+
+            // 1. Cria o utilizador no Supabase Auth usando signUp
+            const { data, error: authError } = await supabaseClient.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: { nome: nome }
+                }
+            });
+
+            if (authError) {
+                showToast('Erro no cadastro', authError.message, 'error');
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="user-check" class="w-4 h-4"></i><span>Cadastrar Aluno no Sistema</span>`;
+                lucide.createIcons();
+                return;
+            }
+
+            // 2. Insere manualmente na tabela public.alunos para garantir sincronismo imediato
+            if (data && data.user) {
+                const { error: insertError } = await supabaseClient
+                    .from('alunos')
+                    .insert([{ id: data.user.id, nome: nome, email: email }]);
+
+                if (insertError && !insertError.message.includes('duplicate key')) {
+                    showToast('Aviso', 'Conta criada, mas houve erro ao gravar na tabela alunos: ' + insertError.message, 'error');
+                } else {
+                    showToast('Aluno Cadastrado! 🎉', `O aluno ${nome} foi criado com sucesso.`, 'success');
+                    document.getElementById('form-cadastrar-aluno').reset();
+                    document.getElementById('novo-aluno-senha').value = '123456';
+                    carregarAlunosSelect(); // Atualiza o menu suspenso
+                }
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="user-check" class="w-4 h-4"></i><span>Cadastrar Aluno no Sistema</span>`;
+            lucide.createIcons();
+        });
 
         // Submeter nova refeição / alteração
         document.getElementById('form-dieta').addEventListener('submit', async (e) => {
