@@ -46,13 +46,13 @@
         const SUPABASE_URL = 'https://dnlqkozlaqizhqsexcei.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Nome único para evitar conflito de declaração
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         async function verificarSessaoECarregarDieta() {
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data: { session } } = await supabaseClient.auth.getSession();
 
             if (!session) {
-                // Se não estiver logado, redireciona para o login
                 window.location.href = 'login.html';
                 return;
             }
@@ -60,7 +60,7 @@
             const userId = session.user.id;
 
             // Busca os dados da dieta do aluno logado
-            const { data: dietas, error } = await supabase
+            const { data: dietas, error } = await supabaseClient
                 .from('dietas')
                 .select('*')
                 .eq('aluno_id', userId);
@@ -94,7 +94,7 @@
 
         // Botão de Sair (Logout)
         document.getElementById('btn-logout').addEventListener('click', async () => {
-            await supabase.auth.signOut();
+            await supabaseClient.auth.signOut();
             window.location.href = 'login.html';
         });
 
