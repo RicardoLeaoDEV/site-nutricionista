@@ -4,53 +4,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NutriLife - Login</title>
+    <title>NutriLife - Acesso à Área do Aluno</title>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .radial-bg {
+            background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.12), transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(6, 78, 59, 0.2), transparent 50%);
+        }
+    </style>
 </head>
 
-<body class="h-full bg-slate-950 text-slate-100 flex items-center justify-center px-6">
-    <div class="max-w-md w-full bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-xl">
-        <h2 class="text-2xl font-bold text-center mb-2">NUTRILIFE</h2>
-        <p class="text-center text-slate-400 mb-6 text-sm">Aceda à sua área exclusiva de treinos e dietas</p>
+<body class="min-h-full bg-slate-950 text-slate-100 flex flex-col justify-center radial-bg font-sans selection:bg-brand-500 selection:text-white">
 
-        <form id="login-form" class="space-y-6">
-            <div>
-                <label class="block text-sm font-medium mb-2">E-mail</label>
-                <input type="email" id="email" required
-                    class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-emerald-500"
-                    placeholder="seu.email@exemplo.com">
+    <div class="w-full max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 bg-slate-900/80 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden backdrop-blur-xl">
+            
+            <!-- Coluna Visual / Branding (Esquerda - visível em lg) -->
+            <div class="hidden lg:flex lg:col-span-5 bg-gradient-to-br from-slate-900 via-slate-900 to-brand-950/40 p-10 flex-col justify-between border-r border-slate-800/80 relative overflow-hidden">
+                <div class="absolute -top-12 -left-12 w-48 h-48 bg-brand-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                <div>
+                    <a href="index.html" class="flex items-center gap-2 mb-10 group">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                            <i data-lucide="leaf" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-xl font-extrabold tracking-tight text-white">
+                            NUTRI<span class="text-brand-400">LIFE</span>
+                        </span>
+                    </a>
+
+                    <div class="inline-flex items-center gap-2 bg-brand-500/10 text-brand-400 border border-brand-500/20 text-xs font-semibold px-3 py-1 rounded-full mb-6">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                        Plataforma Exclusiva de Alunos
+                    </div>
+
+                    <h2 class="text-3xl font-extrabold text-white leading-tight mb-4">
+                        Seu foco diário gera <span class="text-brand-400">resultados duradouros.</span>
+                    </h2>
+                    <p class="text-sm text-slate-400 leading-relaxed">
+                        Acesse seu plano nutricional prescrito, registre suas pesagens periódicas e confira alternativas de substituição para qualquer imprevisto.
+                    </p>
+                </div>
+
+                <!-- Mini Destaque de Funcionalidades -->
+                <div class="space-y-3 pt-8 border-t border-slate-800/80">
+                    <div class="flex items-center gap-3 text-xs text-slate-300">
+                        <div class="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center text-brand-400">
+                            <i data-lucide="utensils" class="w-3.5 h-3.5"></i>
+                        </div>
+                        <span>Cardápio dinâmico com gramaturas exatas</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-300">
+                        <div class="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center text-teal-400">
+                            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+                        </div>
+                        <span>Gráfico de evolução do seu peso em tempo real</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-300">
+                        <div class="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center text-emerald-400">
+                            <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+                        </div>
+                        <span>Substituições inteligentes para não sair do plano</span>
+                    </div>
+                </div>
             </div>
-            <div>
-                <label class="block text-sm font-medium mb-2">Palavra-passe</label>
-                <input type="password" id="password" required
-                    class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-emerald-500"
-                    placeholder="••••••••">
+
+            <!-- Coluna do Formulário de Login (Direita) -->
+            <div class="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-center">
+                <!-- Cabeçalho Mobile -->
+                <div class="flex items-center justify-between mb-8 lg:hidden">
+                    <a href="index.html" class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white">
+                            <i data-lucide="leaf" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-lg font-bold text-white">NUTRI<span class="text-brand-400">LIFE</span></span>
+                    </a>
+                    <a href="index.html" class="text-xs text-slate-400 hover:text-white flex items-center gap-1">
+                        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Voltar
+                    </a>
+                </div>
+
+                <div class="max-w-md w-full mx-auto">
+                    <div class="mb-8">
+                        <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-2">Bem-vindo(a) de volta! 👋</h1>
+                        <p class="text-sm text-slate-400">Insira suas credenciais cadastradas pelo nutricionista para aceder.</p>
+                    </div>
+
+                    <!-- Mensagem de Feedback (Alerta inline moderno) -->
+                    <div id="alert-box" class="hidden mb-6 p-4 rounded-xl text-sm flex items-start gap-3">
+                        <i id="alert-icon" data-lucide="alert-circle" class="w-5 h-5 shrink-0 mt-0.5"></i>
+                        <span id="alert-text"></span>
+                    </div>
+
+                    <form id="login-form" class="space-y-5">
+                        <!-- Campo de E-mail -->
+                        <div>
+                            <label for="email" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+                                E-mail de Acesso
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                    <i data-lucide="mail" class="w-4 h-4"></i>
+                                </div>
+                                <input type="email" id="email" required autocomplete="email"
+                                    class="w-full bg-slate-800/90 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all"
+                                    placeholder="seu.email@exemplo.com">
+                            </div>
+                        </div>
+
+                        <!-- Campo de Senha -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <label for="password" class="block text-xs font-bold uppercase tracking-wider text-slate-300">
+                                    Palavra-passe
+                                </label>
+                                <a href="https://wa.me/5581997969058?text=Ol%C3%A1%2C%20esqueci%20minha%20senha%20de%20acesso%20ao%20portal%20do%20aluno." target="_blank"
+                                    class="text-xs text-brand-400 hover:text-brand-300 transition-colors">
+                                    Esqueceu a senha?
+                                </a>
+                            </div>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                    <i data-lucide="lock" class="w-4 h-4"></i>
+                                </div>
+                                <input type="password" id="password" required autocomplete="current-password"
+                                    class="w-full bg-slate-800/90 border border-slate-700 rounded-xl pl-10 pr-11 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all"
+                                    placeholder="••••••••">
+                                <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 hover:text-slate-300 focus:outline-none" aria-label="Mostrar ou ocultar senha">
+                                    <i data-lucide="eye" id="eye-icon" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Botão de Login -->
+                        <button type="submit" id="btn-submit"
+                            class="w-full bg-brand-600 hover:bg-brand-500 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl transition-all duration-200 shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2">
+                            <span id="btn-text">Entrar na Plataforma</span>
+                            <i data-lucide="arrow-right" id="btn-arrow" class="w-4 h-4"></i>
+                            <div id="btn-spinner" class="hidden w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        </button>
+                    </form>
+
+                    <!-- Dica / Suporte -->
+                    <div class="mt-8 pt-6 border-t border-slate-800 text-center">
+                        <p class="text-xs text-slate-400 mb-2">
+                            Ainda não é aluno da consultoria?
+                        </p>
+                        <a href="https://wa.me/5581997969058?text=Ol%C3%A1%2C%20gostaria%20de%20iniciar%20minha%20consultoria%20nutricional!" target="_blank"
+                            class="text-xs font-semibold text-brand-400 hover:text-brand-300 inline-flex items-center gap-1 transition-colors">
+                            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                            Solicitar plano nutricional no WhatsApp
+                        </a>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <a href="index.html" class="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-300 transition-colors">
+                            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                            Voltar para a página inicial
+                        </a>
+                    </div>
+                </div>
             </div>
-            <button type="submit"
-                class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3.5 rounded-xl transition-all duration-300 shadow-lg shadow-emerald-500/20">Entrar
-                na Plataforma</button>
-        </form>
-        <div class="text-center mt-6">
-            <a href="index.html" class="text-sm text-slate-400 hover:text-slate-200 transition-colors">← Voltar para a
-                página inicial</a>
         </div>
     </div>
 
     <script>
+        // Inicializa ícones do Lucide
+        lucide.createIcons();
+
         const SUPABASE_URL = 'https://dnlqkozlaqizhqsexcei.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
 
-        // Nome único para evitar qualquer conflito de declaração
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // Se o utilizador já tiver sessão ativa, redireciona de imediato
+        supabaseClient.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+
+        // Alternar visualização da senha
+        const passwordInput = document.getElementById('password');
+        const toggleBtn = document.getElementById('toggle-password');
+        const eyeIcon = document.getElementById('eye-icon');
+
+        toggleBtn.addEventListener('click', () => {
+            const isPassword = passwordInput.getAttribute('type') === 'password';
+            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+            eyeIcon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+            lucide.createIcons();
+        });
+
+        // Função para mostrar alertas inline
+        function showAlert(message, type = 'error') {
+            const box = document.getElementById('alert-box');
+            const text = document.getElementById('alert-text');
+            const icon = document.getElementById('alert-icon');
+
+            box.className = 'mb-6 p-4 rounded-xl text-sm flex items-start gap-3 transition-all duration-300 ' + 
+                (type === 'error' 
+                    ? 'bg-rose-500/10 border border-rose-500/30 text-rose-300' 
+                    : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300');
+
+            icon.setAttribute('data-lucide', type === 'error' ? 'alert-triangle' : 'check-circle-2');
+            lucide.createIcons();
+            text.textContent = message;
+            box.classList.remove('hidden');
+        }
+
+        // Submissão do formulário
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
+            const btnSubmit = document.getElementById('btn-submit');
+            const btnText = document.getElementById('btn-text');
+            const btnArrow = document.getElementById('btn-arrow');
+            const btnSpinner = document.getElementById('btn-spinner');
+
+            // Ativa estado de carregamento
+            btnSubmit.disabled = true;
+            btnText.textContent = 'A verificar dados...';
+            btnArrow.classList.add('hidden');
+            btnSpinner.classList.remove('hidden');
 
             const { data, error } = await supabaseClient.auth.signInWithPassword({
                 email: email,
@@ -58,10 +267,22 @@
             });
 
             if (error) {
-                alert('Erro ao entrar: ' + error.message);
+                let msg = 'Erro ao entrar: ' + error.message;
+                if (error.message.includes('Invalid login credentials')) {
+                    msg = 'E-mail ou senha incorretos. Por favor, verifique seus dados.';
+                }
+                showAlert(msg, 'error');
+
+                // Restaura botão
+                btnSubmit.disabled = false;
+                btnText.textContent = 'Entrar na Plataforma';
+                btnArrow.classList.remove('hidden');
+                btnSpinner.classList.add('hidden');
             } else {
-                alert('Login efetuado com sucesso!');
-                window.location.href = 'dashboard.html';
+                showAlert('Autenticado com sucesso! Redirecionando para o seu painel...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 800);
             }
         });
     </script>
