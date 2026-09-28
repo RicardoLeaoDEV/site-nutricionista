@@ -50,6 +50,20 @@
         }
     </script>
 
+    <script>
+        // Inicialização Imediata do Tema (Evita FOUC / Piscar de tela)
+        (function() {
+            try {
+                const temaSalvo = localStorage.getItem('nutrilife_theme');
+                if (temaSalvo === 'light') {
+                    document.documentElement.classList.add('light-mode');
+                } else if (!temaSalvo && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                    document.documentElement.classList.add('light-mode');
+                }
+            } catch (e) {}
+        })();
+    </script>
+
     <style>
         :root {
             --bg: #060911;
@@ -57,6 +71,10 @@
             --brand-glow: rgba(16, 185, 129, 0.25);
             --branco: rgba(255, 255, 255, 0.95);
             --branco-sub: rgba(255, 255, 255, 0.7);
+        }
+
+        html, body, header, .glass-card, .cardBordaInterna, .botao, footer, input {
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
         body {
@@ -69,6 +87,181 @@
         ::selection {
             background-color: #10b981;
             color: #060911;
+        }
+
+        /* ───────── MODO CLARO (LIGHT MODE) ACESSÍVEL ───────── */
+        html.light-mode {
+            --bg: #f8fafc;
+            --branco: #0f172a;
+            --branco-sub: #475569;
+        }
+
+        html.light-mode body {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        html.light-mode header {
+            background-color: rgba(255, 255, 255, 0.88) !important;
+            border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+        }
+
+        html.light-mode header nav a {
+            color: #334155 !important;
+        }
+
+        html.light-mode header nav a:hover {
+            color: #059669 !important;
+        }
+
+        html.light-mode .text-white {
+            color: #0f172a !important;
+        }
+
+        html.light-mode .text-slate-200 {
+            color: #1e293b !important;
+        }
+
+        html.light-mode .text-slate-300 {
+            color: #334155 !important;
+        }
+
+        html.light-mode .text-slate-400 {
+            color: #64748b !important;
+        }
+
+        html.light-mode .text-slate-500 {
+            color: #94a3b8 !important;
+        }
+
+        html.light-mode .bg-obsidian-950,
+        html.light-mode .bg-obsidian-950\/70,
+        html.light-mode .bg-obsidian-950\/80,
+        html.light-mode .bg-obsidian-950\/60 {
+            background-color: #f8fafc !important;
+        }
+
+        html.light-mode .bg-obsidian-900,
+        html.light-mode .bg-obsidian-900\/95,
+        html.light-mode .bg-obsidian-900\/80 {
+            background-color: #ffffff !important;
+        }
+
+        html.light-mode .border-white\/10 {
+            border-color: rgba(0, 0, 0, 0.08) !important;
+        }
+
+        html.light-mode .border-white\/5 {
+            border-color: rgba(0, 0, 0, 0.05) !important;
+        }
+
+        html.light-mode .border-white\/15 {
+            border-color: rgba(0, 0, 0, 0.12) !important;
+        }
+
+        html.light-mode .glass-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-color: rgba(0, 0, 0, 0.08) !important;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.06) !important;
+        }
+
+        html.light-mode .cardBordaInterna {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.92) 100%) !important;
+            border-color: rgba(0, 0, 0, 0.08) !important;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        html.light-mode .cardBordaInterna:hover {
+            border-color: rgba(16, 185, 129, 0.4) !important;
+            box-shadow: 0 30px 60px -15px rgba(16, 185, 129, 0.15) !important;
+        }
+
+        html.light-mode .cardBordaInterna .icone-corner {
+            background-color: #f8fafc !important;
+        }
+
+        html.light-mode .cardBordaInterna:before {
+            box-shadow: 10px -10px 0px #f8fafc !important;
+        }
+
+        html.light-mode .cardBordaInterna:after {
+            box-shadow: 10px -10px 0px #f8fafc !important;
+        }
+
+        html.light-mode .cardSubtitulo {
+            background: rgba(16, 185, 129, 0.1) !important;
+            border-color: rgba(16, 185, 129, 0.3) !important;
+            box-shadow:
+                -1px -1px 0 0 rgba(255, 255, 255, 0.9) inset,
+                1px 1px 0 0 rgba(255, 255, 255, 0.8) inset,
+                2px 2px 5px 0 rgba(0, 0, 0, 0.06) inset !important;
+        }
+
+        html.light-mode .cardSubtitulo h3 {
+            color: #047857 !important;
+        }
+
+        html.light-mode .botao {
+            background-color: #0f172a !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 20px 35px -5px rgba(16, 185, 129, 0.25) !important;
+        }
+
+        html.light-mode .botaoPrimario .divSeta {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+        }
+
+        html.light-mode .botaoPrimario:hover .divSeta {
+            background-color: #10b981 !important;
+            color: #ffffff !important;
+        }
+
+        html.light-mode .botaoSecundario {
+            background-color: rgba(15, 23, 42, 0.05) !important;
+            border-color: rgba(15, 23, 42, 0.12) !important;
+            color: #0f172a !important;
+        }
+
+        html.light-mode .botaoSecundario:hover {
+            background-color: rgba(15, 23, 42, 0.1) !important;
+            border-color: #10b981 !important;
+            color: #059669 !important;
+        }
+
+        html.light-mode .video-showcase-box {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(241, 245, 249, 0.95) 100%) !important;
+            border-color: rgba(0, 0, 0, 0.08) !important;
+            box-shadow: 0 35px 80px -20px rgba(0, 0, 0, 0.08), 0 0 50px -15px rgba(16, 185, 129, 0.15) !important;
+        }
+
+        html.light-mode input {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        html.light-mode input:focus {
+            border-color: #10b981 !important;
+        }
+
+        html.light-mode footer {
+            background-color: #f1f5f9 !important;
+            border-top-color: #e2e8f0 !important;
+        }
+
+        html.light-mode .theme-btn-toggle {
+            background-color: rgba(15, 23, 42, 0.06) !important;
+            border-color: rgba(15, 23, 42, 0.12) !important;
+            color: #0f172a !important;
+        }
+
+        html.light-mode .ambient-glow-green {
+            opacity: 0.25;
+        }
+
+        html.light-mode .ambient-glow-purple {
+            opacity: 0.18;
         }
 
         /* ───────── PRELOADER INTERATIVO ESTILO WEBHUB ───────── */
@@ -468,7 +661,13 @@
             </nav>
 
             <!-- Ações Desktop -->
-            <div class="hidden sm:flex items-center gap-4">
+            <div class="hidden sm:flex items-center gap-3.5">
+                <!-- Botão Alternador de Tema (Dark / Light Mode) -->
+                <button type="button" onclick="alternarTema()" class="theme-btn-toggle w-10 h-10 rounded-full border border-white/10 hover:border-brand-500/50 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center cursor-pointer shadow-sm group" title="Alternar Modo Claro / Escuro" aria-label="Alternar tema">
+                    <i data-lucide="sun" class="w-4 h-4 text-amber-400 hidden theme-icon-sun transition-transform group-hover:rotate-45"></i>
+                    <i data-lucide="moon" class="w-4 h-4 text-brand-400 theme-icon-moon transition-transform group-hover:-rotate-12"></i>
+                </button>
+
                 <a href="login.html" class="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-slate-300 hover:text-white px-4 py-2.5 rounded-full hover:bg-white/5 border border-transparent hover:border-white/10 transition-all">
                     <i data-lucide="user" class="w-4 h-4 text-brand-400"></i>
                     Área do Aluno
@@ -498,6 +697,13 @@
             <a href="#sobre" class="mobile-nav-link block text-sm font-bold uppercase tracking-wider text-slate-300 hover:text-brand-400 py-1">Sobre o Nutri</a>
             <a href="#faq" class="mobile-nav-link block text-sm font-bold uppercase tracking-wider text-slate-300 hover:text-brand-400 py-1">Dúvidas</a>
             <div class="pt-4 border-t border-white/10 flex flex-col gap-3">
+                <!-- Botão Alternador de Tema Mobile -->
+                <button type="button" onclick="alternarTema()" class="theme-btn-toggle flex items-center justify-center gap-2.5 w-full py-3 bg-white/5 border border-white/10 rounded-2xl text-slate-200 font-bold text-xs uppercase tracking-wider transition-all">
+                    <i data-lucide="sun" class="w-4 h-4 text-amber-400 hidden theme-icon-sun"></i>
+                    <i data-lucide="moon" class="w-4 h-4 text-brand-400 theme-icon-moon"></i>
+                    <span class="theme-text-label">Alternar para Modo Claro</span>
+                </button>
+
                 <a href="login.html" class="flex items-center justify-center gap-2 w-full py-3.5 text-center bg-white/5 border border-white/10 rounded-2xl text-slate-200 font-bold text-xs uppercase tracking-wider">
                     <i data-lucide="user" class="w-4 h-4 text-brand-400"></i>
                     Aceder à Área do Aluno
@@ -945,6 +1151,47 @@
     <!-- ───────── SCRIPTS INTERATIVOS & PRELOADER WEBHUB ───────── -->
     <script>
         lucide.createIcons();
+
+        // 0. Gerenciador de Tema (Modo Escuro / Modo Claro)
+        function atualizarIconesTema(isLight) {
+            document.querySelectorAll('.theme-icon-sun').forEach(el => {
+                if (isLight) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+            document.querySelectorAll('.theme-icon-moon').forEach(el => {
+                if (isLight) {
+                    el.classList.add('hidden');
+                } else {
+                    el.classList.remove('hidden');
+                }
+            });
+            document.querySelectorAll('.theme-text-label').forEach(el => {
+                el.textContent = isLight ? 'Alternar para Modo Escuro' : 'Alternar para Modo Claro';
+            });
+            document.querySelectorAll('.theme-btn-toggle').forEach(el => {
+                el.setAttribute('title', isLight ? 'Mudar para Modo Escuro' : 'Mudar para Modo Claro');
+                el.setAttribute('aria-label', isLight ? 'Mudar para Modo Escuro' : 'Mudar para Modo Claro');
+            });
+        }
+
+        function alternarTema() {
+            const isCurrentlyLight = document.documentElement.classList.contains('light-mode');
+            if (isCurrentlyLight) {
+                document.documentElement.classList.remove('light-mode');
+                localStorage.setItem('nutrilife_theme', 'dark');
+                atualizarIconesTema(false);
+            } else {
+                document.documentElement.classList.add('light-mode');
+                localStorage.setItem('nutrilife_theme', 'light');
+                atualizarIconesTema(true);
+            }
+        }
+
+        // Sincroniza ícones no carregamento inicial
+        atualizarIconesTema(document.documentElement.classList.contains('light-mode'));
 
         // 1. Simulação do Preloader Interativo WebHub (0% -> 100%)
         window.addEventListener('load', () => {
