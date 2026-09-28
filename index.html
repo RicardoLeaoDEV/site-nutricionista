@@ -5,14 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriLife | Nutrição Clínica & Alta Performance — Plataforma Digital</title>
-    <meta name="description" content="A plataforma mais completa de acompanhamento nutricional, dietas flexíveis calculadas e evolução corporal em tempo real. Transforme sua rotina sem restrições.">
+    <meta name="description"
+        content="A plataforma mais completa de acompanhamento nutricional, dietas flexíveis calculadas e evolução corporal em tempo real. Transforme sua rotina sem restrições.">
     <meta name="theme-color" content="#060911">
 
     <!-- Tipografia WebHub: Clash Display + Plus Jakarta Sans + Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@300,400,500,600,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -51,17 +54,17 @@
     </script>
 
     <script>
-        // Inicialização Imediata do Tema (Evita FOUC / Piscar de tela)
-        (function() {
-            try {
-                const temaSalvo = localStorage.getItem('nutrilife_theme');
-                if (temaSalvo === 'light') {
-                    document.documentElement.classList.add('light-mode');
-                } else if (!temaSalvo && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-                    document.documentElement.classList.add('light-mode');
-                }
-            } catch (e) {}
-        })();
+            // Inicialização Imediata do Tema (Evita FOUC / Piscar de tela)
+            (function () {
+                try {
+                    const temaSalvo = localStorage.getItem('nutrilife_theme');
+                    if (temaSalvo === 'light') {
+                        document.documentElement.classList.add('light-mode');
+                    } else if (!temaSalvo && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                        document.documentElement.classList.add('light-mode');
+                    }
+                } catch (e) { }
+            })();
     </script>
 
     <style>
@@ -73,7 +76,14 @@
             --branco-sub: rgba(255, 255, 255, 0.7);
         }
 
-        html, body, header, .glass-card, .cardBordaInterna, .botao, footer, input {
+        html,
+        body,
+        header,
+        .glass-card,
+        .cardBordaInterna,
+        .botao,
+        footer,
+        input {
             transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
@@ -528,6 +538,7 @@
             from {
                 transform: translateX(0);
             }
+
             to {
                 transform: translateX(-50%);
             }
@@ -633,7 +644,8 @@
                 <path d="M12 48L36 24" stroke="white" stroke-opacity="0.2" stroke-width="3" stroke-linecap="round" />
             </svg>
             <!-- Logo Folha NutriLife: Preenchimento dinâmico com clip-path -->
-            <svg class="preloader-logo-fill" id="preloader-fill" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="preloader-logo-fill" id="preloader-fill" viewBox="0 0 60 60" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 48C12 28 28 12 48 12C48 32 32 48 12 48Z" fill="url(#greenGradient)" />
                 <path d="M12 48L36 24" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
                 <defs>
@@ -653,11 +665,13 @@
     <div class="ambient-glow-purple top-[40%] -right-40"></div>
 
     <!-- ───────── HEADER FIXO COM BLUR E ESTILO WEBHUB ───────── -->
-    <header class="fixed top-0 left-0 w-full bg-obsidian-950/80 backdrop-blur-2xl border-b border-white/10 z-50 transition-all duration-300">
+    <header
+        class="fixed top-0 left-0 w-full bg-obsidian-950/80 backdrop-blur-2xl border-b border-white/10 z-50 transition-all duration-300">
         <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <!-- Brand Logo -->
             <a href="#" class="flex items-center gap-2.5 group shrink-0">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-brand-500/25 group-hover:scale-105 transition-transform">
+                <div
+                    class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-brand-500/25 group-hover:scale-105 transition-transform">
                     <i data-lucide="leaf" class="w-5 h-5"></i>
                 </div>
                 <div class="font-clash text-2xl font-bold tracking-tight text-white">
@@ -677,19 +691,24 @@
             <!-- Ações Desktop (lg+) -->
             <div class="hidden lg:flex items-center gap-3.5">
                 <!-- Botão Alternador de Tema (Dark / Light Mode) -->
-                <button type="button" onclick="alternarTema()" class="theme-btn-toggle w-10 h-10 rounded-full border border-white/10 hover:border-brand-500/50 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center cursor-pointer shadow-sm group" title="Alternar Modo Claro / Escuro" aria-label="Alternar tema">
-                    <i data-lucide="sun" class="w-4 h-4 text-amber-400 hidden theme-icon-sun transition-transform group-hover:rotate-45"></i>
-                    <i data-lucide="moon" class="w-4 h-4 text-brand-400 theme-icon-moon transition-transform group-hover:-rotate-12"></i>
+                <button type="button" onclick="alternarTema()"
+                    class="theme-btn-toggle w-10 h-10 rounded-full border border-white/10 hover:border-brand-500/50 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center cursor-pointer shadow-sm group"
+                    title="Alternar Modo Claro / Escuro" aria-label="Alternar tema">
+                    <i data-lucide="sun"
+                        class="w-4 h-4 text-amber-400 hidden theme-icon-sun transition-transform group-hover:rotate-45"></i>
+                    <i data-lucide="moon"
+                        class="w-4 h-4 text-brand-400 theme-icon-moon transition-transform group-hover:-rotate-12"></i>
                 </button>
 
-                <a href="login.html" class="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-slate-300 hover:text-white px-4 py-2.5 rounded-full hover:bg-white/5 border border-transparent hover:border-white/10 transition-all">
+                <a href="login.html"
+                    class="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-slate-300 hover:text-white px-4 py-2.5 rounded-full hover:bg-white/5 border border-transparent hover:border-white/10 transition-all">
                     <i data-lucide="user" class="w-4 h-4 text-brand-400"></i>
                     Área do Aluno
                 </a>
 
                 <!-- Botão Primário WebHub no Topo -->
-                <a href="https://wa.me/5581997969058?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta%20nutricional!" target="_blank"
-                    class="botao botaoPrimario !h-[48px] !text-xs !py-1 !pl-5 !pr-[58px]">
+                <a href="https://wa.me/5581997969058?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta%20nutricional!"
+                    target="_blank" class="botao botaoPrimario !h-[48px] !text-xs !py-1 !pl-5 !pr-[58px]">
                     <span>Agendar Consulta</span>
                     <div class="divSeta !w-[38px] !h-[38px] !right-1">
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
@@ -700,25 +719,34 @@
             <!-- Ações Mobile & Tablet (Abaixo de lg: Celulares e Tablets) -->
             <div class="flex lg:hidden items-center gap-2">
                 <!-- Botão Alternador de Tema Visível no Celular -->
-                <button type="button" onclick="alternarTema()" class="theme-btn-toggle w-10 h-10 rounded-xl border border-white/15 bg-white/10 text-slate-200 hover:text-white flex items-center justify-center cursor-pointer shadow-sm active:scale-95 transition-all" title="Alternar Modo Claro / Escuro" aria-label="Alternar tema">
+                <button type="button" onclick="alternarTema()"
+                    class="theme-btn-toggle w-10 h-10 rounded-xl border border-white/15 bg-white/10 text-slate-200 hover:text-white flex items-center justify-center cursor-pointer shadow-sm active:scale-95 transition-all"
+                    title="Alternar Modo Claro / Escuro" aria-label="Alternar tema">
                     <i data-lucide="sun" class="w-4 h-4 text-amber-400 hidden theme-icon-sun"></i>
                     <i data-lucide="moon" class="w-4 h-4 text-brand-400 theme-icon-moon"></i>
                 </button>
 
                 <!-- Botão Atalho Área do Aluno no Celular -->
-                <a href="login.html" class="flex items-center gap-1.5 h-10 px-3 rounded-xl bg-white/10 border border-white/15 text-xs font-bold text-slate-200 hover:text-white active:scale-95 transition-all" title="Área do Aluno">
+                <a href="login.html"
+                    class="flex items-center gap-1.5 h-10 px-3 rounded-xl bg-white/10 border border-white/15 text-xs font-bold text-slate-200 hover:text-white active:scale-95 transition-all"
+                    title="Área do Aluno">
                     <i data-lucide="user" class="w-4 h-4 text-brand-400"></i>
                     <span class="hidden sm:inline">Aluno</span>
                 </a>
 
                 <!-- Botão Menu Mobile com SVG Nativo & Efeito Glass de Alto Contraste -->
-                <button id="mobile-menu-btn" type="button" class="w-10 h-10 rounded-xl bg-brand-500/20 border border-brand-500/50 text-brand-400 hover:text-white hover:bg-brand-500/30 flex items-center justify-center cursor-pointer shadow-lg active:scale-95 transition-all" aria-label="Abrir Menu">
-                    <svg id="hamburger-svg" class="w-5 h-5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <button id="mobile-menu-btn" type="button"
+                    class="w-10 h-10 rounded-xl bg-brand-500/20 border border-brand-500/50 text-brand-400 hover:text-white hover:bg-brand-500/30 flex items-center justify-center cursor-pointer shadow-lg active:scale-95 transition-all"
+                    aria-label="Abrir Menu">
+                    <svg id="hamburger-svg" class="w-5 h-5 transition-transform" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="4" y1="6" x2="20" y2="6"></line>
                         <line x1="4" y1="12" x2="20" y2="12"></line>
                         <line x1="4" y1="18" x2="20" y2="18"></line>
                     </svg>
-                    <svg id="close-svg" class="w-5 h-5 hidden transition-transform text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg id="close-svg" class="w-5 h-5 hidden transition-transform text-white" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
@@ -727,30 +755,37 @@
         </div>
 
         <!-- Menu Mobile Drawer (Gaveta Completa com Todas as Opções) -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-obsidian-950/98 border-b border-white/10 px-5 py-6 space-y-4 backdrop-blur-2xl shadow-2xl transition-all">
-            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 pb-2 border-b border-white/10 flex items-center justify-between">
+        <div id="mobile-menu"
+            class="hidden lg:hidden bg-obsidian-950/98 border-b border-white/10 px-5 py-6 space-y-4 backdrop-blur-2xl shadow-2xl transition-all">
+            <div
+                class="text-[11px] font-bold uppercase tracking-wider text-slate-400 pb-2 border-b border-white/10 flex items-center justify-between">
                 <span>Navegação Rápida</span>
                 <span class="text-brand-400">NutriLife</span>
             </div>
 
             <div class="grid grid-cols-1 gap-1.5">
-                <a href="#metodo" class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
+                <a href="#metodo"
+                    class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
                     <i data-lucide="sparkles" class="w-4 h-4 text-brand-400"></i>
                     <span>O Método</span>
                 </a>
-                <a href="#showcase" class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
+                <a href="#showcase"
+                    class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
                     <i data-lucide="smartphone" class="w-4 h-4 text-brand-400"></i>
                     <span>A Plataforma</span>
                 </a>
-                <a href="#calculadora" class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
+                <a href="#calculadora"
+                    class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
                     <i data-lucide="calculator" class="w-4 h-4 text-brand-400"></i>
                     <span>Calculadora IMC</span>
                 </a>
-                <a href="#sobre" class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
+                <a href="#sobre"
+                    class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
                     <i data-lucide="user-check" class="w-4 h-4 text-brand-400"></i>
                     <span>Sobre o Nutri</span>
                 </a>
-                <a href="#faq" class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
+                <a href="#faq"
+                    class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
                     <i data-lucide="help-circle" class="w-4 h-4 text-brand-400"></i>
                     <span>Dúvidas Frequentes</span>
                 </a>
@@ -758,22 +793,25 @@
 
             <div class="pt-4 border-t border-white/10 flex flex-col gap-3">
                 <!-- Botão Alternador de Tema Dentro do Drawer -->
-                <button type="button" onclick="alternarTema()" class="theme-btn-toggle flex items-center justify-between w-full py-3.5 px-4 bg-white/5 border border-white/10 rounded-2xl text-slate-200 font-bold text-xs uppercase tracking-wider transition-all">
+                <button type="button" onclick="alternarTema()"
+                    class="theme-btn-toggle flex items-center justify-between w-full py-3.5 px-4 bg-white/5 border border-white/10 rounded-2xl text-slate-200 font-bold text-xs uppercase tracking-wider transition-all">
                     <span class="flex items-center gap-2.5">
                         <i data-lucide="sun" class="w-4 h-4 text-amber-400 hidden theme-icon-sun"></i>
                         <i data-lucide="moon" class="w-4 h-4 text-brand-400 theme-icon-moon"></i>
                         <span class="theme-text-label">Alternar para Modo Claro</span>
                     </span>
-                    <span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded-full border border-brand-500/30">Tema</span>
+                    <span
+                        class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded-full border border-brand-500/30">Tema</span>
                 </button>
 
-                <a href="login.html" class="flex items-center justify-center gap-2 w-full py-3.5 text-center bg-white/5 border border-white/10 hover:border-brand-500/40 rounded-2xl text-slate-200 font-bold text-xs uppercase tracking-wider transition-all">
+                <a href="login.html"
+                    class="flex items-center justify-center gap-2 w-full py-3.5 text-center bg-white/5 border border-white/10 hover:border-brand-500/40 rounded-2xl text-slate-200 font-bold text-xs uppercase tracking-wider transition-all">
                     <i data-lucide="user" class="w-4 h-4 text-brand-400"></i>
                     Aceder à Área do Aluno
                 </a>
 
-                <a href="https://wa.me/5581997969058?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta%20nutricional!" target="_blank"
-                    class="botao botaoPrimario w-full text-center">
+                <a href="https://wa.me/5581997969058?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta%20nutricional!"
+                    target="_blank" class="botao botaoPrimario w-full text-center">
                     <span>Marcar Consulta no WhatsApp</span>
                     <div class="divSeta">
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
@@ -785,7 +823,8 @@
 
     <!-- ───────── HERO SECTION (ESTILO WEBHUB) ───────── -->
     <main>
-        <section class="pt-32 pb-16 md:pt-44 md:pb-24 px-6 relative z-10">
+        <section class="pt-32 pb-20 md:pt-40 md:pb-28 px-6 relative overflow-hidden bg-cover bg-center"
+            style="background-image: linear-gradient(to right bottom, rgba(2, 6, 23, 0.95), rgba(2, 6, 23, 0.88)), url('https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=1920');">
             <div class="max-w-7xl mx-auto">
                 <!-- Ticker Topo da Hero -->
                 <div class="flex items-center justify-center mb-8">
@@ -796,18 +835,23 @@
                 </div>
 
                 <div class="max-w-4xl mx-auto text-center">
-                    <h1 class="font-clash text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.08] mb-6">
-                        A PLATAFORMA MAIS <span class="bg-gradient-to-r from-brand-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">COMPLETA DE NUTRIÇÃO</span> E RESULTADOS REAIS.
+                    <h1
+                        class="font-clash text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.08] mb-6">
+                        A PLATAFORMA MAIS <span
+                            class="bg-gradient-to-r from-brand-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">COMPLETA
+                            DE NUTRIÇÃO</span> E RESULTADOS REAIS.
                     </h1>
 
                     <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
-                        Nosso foco é transformar seu corpo e saúde com dietas personalizadas calculadas para sua rotina, substituições inteligentes e gráficos de evolução direto no seu celular. Sem passar fome ou abandonar sua vida social.
+                        Nosso foco é transformar seu corpo e saúde com dietas personalizadas calculadas para sua rotina,
+                        substituições inteligentes e gráficos de evolução direto no seu celular. Sem passar fome ou
+                        abandonar sua vida social.
                     </p>
 
                     <!-- Botões WebHub Primário e Secundário -->
                     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
-                        <a href="https://wa.me/5581997969058?text=Ol%C3%A1%2C%20quero%20come%C3%A7ar%20meu%20acompanhamento%20nutricional!" target="_blank"
-                            class="botao botaoPrimario w-full sm:w-auto">
+                        <a href="https://wa.me/5581997969058?text=Ol%C3%A1%2C%20quero%20come%C3%A7ar%20meu%20acompanhamento%20nutricional!"
+                            target="_blank" class="botao botaoPrimario w-full sm:w-auto">
                             <span>INSCREVER-SE AGORA</span>
                             <div class="divSeta">
                                 <i data-lucide="arrow-right" class="w-5 h-5"></i>
@@ -842,7 +886,8 @@
         <!-- ───────── MARQUEE INFINITO (FITA DE BENEFÍCIOS WEBHUB) ───────── -->
         <section class="py-6 border-y border-white/10 bg-obsidian-950 relative overflow-hidden">
             <div class="marquee-wrapper">
-                <div class="marquee-content font-clash text-lg sm:text-xl font-semibold tracking-wider text-slate-400 uppercase items-center">
+                <div
+                    class="marquee-content font-clash text-lg sm:text-xl font-semibold tracking-wider text-slate-400 uppercase items-center">
                     <span>✦ DIETA 100% PERSONALIZADA</span>
                     <span class="text-brand-400 font-bold">✦ PORTAL EXCLUSIVO DO ALUNO</span>
                     <span>✦ SEM DIETAS RESTRITIVAS</span>
@@ -876,36 +921,48 @@
                         UMA EXPERIÊNCIA DIGITAL QUE REVOLUCIONA SUA ADESÃO
                     </h2>
                     <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
-                        Chega de PDFs perdidos no WhatsApp. Veja como funciona nossa plataforma desenvolvida especificamente para facilitar o seu dia a dia.
+                        Chega de PDFs perdidos no WhatsApp. Veja como funciona nossa plataforma desenvolvida
+                        especificamente para facilitar o seu dia a dia.
                     </p>
                 </div>
 
                 <!-- Showcase Box Interativo -->
-                <div class="video-showcase-box relative p-4 sm:p-8 aspect-video max-h-[580px] flex items-center justify-center">
-                    <div class="absolute inset-0 bg-cover bg-center opacity-30" style="background-image: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=1600');"></div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/60 to-transparent"></div>
+                <div
+                    class="video-showcase-box relative p-4 sm:p-8 aspect-video max-h-[580px] flex items-center justify-center">
+                    <div class="absolute inset-0 bg-cover bg-center opacity-30"
+                        style="background-image: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=1600');">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/60 to-transparent">
+                    </div>
 
                     <!-- Overlay de Controle Play e Info -->
                     <div class="relative z-20 text-center flex flex-col items-center gap-6">
-                        <button onclick="abrirDemoInterativo()" class="play-btn-pulse group" title="Ver Demonstração Interativa">
-                            <i data-lucide="play" class="w-8 h-8 fill-current ml-1 group-hover:scale-110 transition-transform"></i>
+                        <button onclick="abrirDemoInterativo()" class="play-btn-pulse group"
+                            title="Ver Demonstração Interativa">
+                            <i data-lucide="play"
+                                class="w-8 h-8 fill-current ml-1 group-hover:scale-110 transition-transform"></i>
                         </button>
                         <div>
-                            <span class="text-xs uppercase tracking-widest text-brand-400 font-bold block mb-1">Tour Virtual</span>
-                            <h3 class="font-clash text-xl sm:text-3xl font-bold text-white">Conheça o Portal do Aluno por Dentro</h3>
+                            <span class="text-xs uppercase tracking-widest text-brand-400 font-bold block mb-1">Tour
+                                Virtual</span>
+                            <h3 class="font-clash text-xl sm:text-3xl font-bold text-white">Conheça o Portal do Aluno
+                                por Dentro</h3>
                             <p class="text-xs sm:text-sm text-slate-300 max-w-md mx-auto mt-2">
-                                Dietas interativas, galeria de evolução protegida por senha pessoal e canal direto de dúvidas.
+                                Dietas interativas, galeria de evolução protegida por senha pessoal e canal direto de
+                                dúvidas.
                             </p>
                         </div>
                     </div>
 
                     <!-- Badges flutuantes no Showcase -->
-                    <div class="absolute top-6 left-6 z-20 hidden sm:flex items-center gap-2 bg-obsidian-900/90 border border-white/10 px-3.5 py-1.5 rounded-full text-xs font-bold text-white backdrop-blur-md">
+                    <div
+                        class="absolute top-6 left-6 z-20 hidden sm:flex items-center gap-2 bg-obsidian-900/90 border border-white/10 px-3.5 py-1.5 rounded-full text-xs font-bold text-white backdrop-blur-md">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                         App Web em Tempo Real
                     </div>
 
-                    <div class="absolute bottom-6 right-6 z-20 hidden sm:flex items-center gap-2 bg-obsidian-900/90 border border-white/10 px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-300 backdrop-blur-md">
+                    <div
+                        class="absolute bottom-6 right-6 z-20 hidden sm:flex items-center gap-2 bg-obsidian-900/90 border border-white/10 px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-300 backdrop-blur-md">
                         <i data-lucide="shield-check" class="w-3.5 h-3.5 text-brand-400"></i>
                         100% Seguro & Criptografado
                     </div>
@@ -925,7 +982,8 @@
                         O MÉTODO NUTRILIFE: CIÊNCIA & PRATICIDADE
                     </h2>
                     <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
-                        Esqueça dietas genéricas de gaveta. Nosso método une avaliação clínica minuciosa, cálculo metabólico de alta precisão e suporte tecnológico contínuo.
+                        Esqueça dietas genéricas de gaveta. Nosso método une avaliação clínica minuciosa, cálculo
+                        metabólico de alta precisão e suporte tecnológico contínuo.
                     </p>
                 </div>
 
@@ -933,56 +991,64 @@
                     <!-- Card 1 com Canto Chanfrado Invertido WebHub -->
                     <div class="cardBordaInterna">
                         <div class="icone-corner">
-                            <div class="w-12 h-12 rounded-2xl bg-brand-500/15 text-brand-400 flex items-center justify-center border border-brand-500/25">
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-brand-500/15 text-brand-400 flex items-center justify-center border border-brand-500/25">
                                 <i data-lucide="clipboard-check" class="w-6 h-6"></i>
                             </div>
                         </div>
                         <div class="text-xs font-bold text-brand-400 uppercase tracking-wider mb-2">Passo 01</div>
                         <h3 class="font-clash text-xl font-bold text-white mb-3">Anamnese Profunda</h3>
                         <p class="text-sm text-slate-400 leading-relaxed">
-                            Mapeamos seus horários, histórico de exames, rotina de treino e preferências para criar uma estratégia sustentável.
+                            Mapeamos seus horários, histórico de exames, rotina de treino e preferências para criar uma
+                            estratégia sustentável.
                         </p>
                     </div>
 
                     <!-- Card 2 com Canto Chanfrado Invertido WebHub -->
                     <div class="cardBordaInterna">
                         <div class="icone-corner">
-                            <div class="w-12 h-12 rounded-2xl bg-teal-500/15 text-teal-400 flex items-center justify-center border border-teal-500/25">
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-teal-500/15 text-teal-400 flex items-center justify-center border border-teal-500/25">
                                 <i data-lucide="sliders" class="w-6 h-6"></i>
                             </div>
                         </div>
                         <div class="text-xs font-bold text-teal-400 uppercase tracking-wider mb-2">Passo 02</div>
                         <h3 class="font-clash text-xl font-bold text-white mb-3">Plano Sob Medida</h3>
                         <p class="text-sm text-slate-400 leading-relaxed">
-                            Cálculo exato de calorias e macronutrientes com alimentos acessíveis e prazerosos que você realmente consome.
+                            Cálculo exato de calorias e macronutrientes com alimentos acessíveis e prazerosos que você
+                            realmente consome.
                         </p>
                     </div>
 
                     <!-- Card 3 com Canto Chanfrado Invertido WebHub -->
                     <div class="cardBordaInterna">
                         <div class="icone-corner">
-                            <div class="w-12 h-12 rounded-2xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center border border-cyan-500/25">
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center border border-cyan-500/25">
                                 <i data-lucide="smartphone" class="w-6 h-6"></i>
                             </div>
                         </div>
                         <div class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2">Passo 03</div>
                         <h3 class="font-clash text-xl font-bold text-white mb-3">Acesso no Portal</h3>
                         <p class="text-sm text-slate-400 leading-relaxed">
-                            Suas refeições, opções de substituição e controle de água sincronizados em tempo real no seu smartphone.
+                            Suas refeições, opções de substituição e controle de água sincronizados em tempo real no seu
+                            smartphone.
                         </p>
                     </div>
 
                     <!-- Card 4 com Canto Chanfrado Invertido WebHub -->
                     <div class="cardBordaInterna">
                         <div class="icone-corner">
-                            <div class="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-400 flex items-center justify-center border border-purple-500/25">
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-400 flex items-center justify-center border border-purple-500/25">
                                 <i data-lucide="camera" class="w-6 h-6"></i>
                             </div>
                         </div>
                         <div class="text-xs font-bold text-purple-400 uppercase tracking-wider mb-2">Passo 04</div>
                         <h3 class="font-clash text-xl font-bold text-white mb-3">Evolução & Fotos</h3>
                         <p class="text-sm text-slate-400 leading-relaxed">
-                            Acompanhe gráficos de peso corporal e registre sua evolução física em fotos protegidas por senha clínica pessoal.
+                            Acompanhe gráficos de peso corporal e registre sua evolução física em fotos protegidas por
+                            senha clínica pessoal.
                         </p>
                     </div>
                 </div>
@@ -1001,19 +1067,22 @@
                         CALCULE SEU IMC E META DE ÁGUA
                     </h2>
                     <p class="text-slate-400 text-sm sm:text-base">
-                        Descubra seu Índice de Massa Corporal e receba a recomendação de hidratação ideal para o seu peso.
+                        Descubra seu Índice de Massa Corporal e receba a recomendação de hidratação ideal para o seu
+                        peso.
                     </p>
                 </div>
 
                 <div class="glass-card rounded-3xl p-6 sm:p-10 border border-white/10 shadow-2xl relative">
                     <form id="calc-form" class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Peso (kg)</label>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Peso
+                                (kg)</label>
                             <input type="number" id="calc-peso" placeholder="Ex: 75.5" step="0.1" required
                                 class="w-full bg-obsidian-950 border border-white/10 rounded-2xl px-4 py-3.5 text-white focus:outline-none focus:border-brand-500 text-sm transition-colors">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Altura (cm)</label>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Altura
+                                (cm)</label>
                             <input type="number" id="calc-altura" placeholder="Ex: 175" step="1" required
                                 class="w-full bg-obsidian-950 border border-white/10 rounded-2xl px-4 py-3.5 text-white focus:outline-none focus:border-brand-500 text-sm transition-colors">
                         </div>
@@ -1029,16 +1098,22 @@
                     </form>
 
                     <!-- Resultado do Cálculo -->
-                    <div id="calc-result" class="hidden pt-6 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div id="calc-result"
+                        class="hidden pt-6 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div class="bg-obsidian-950/80 rounded-2xl p-5 border border-white/5">
-                            <div class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Seu IMC Estimado</div>
+                            <div class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Seu IMC Estimado
+                            </div>
                             <div class="font-clash text-4xl font-extrabold text-white mb-2" id="imc-valor">--</div>
-                            <div class="inline-block text-xs font-bold px-3 py-1 rounded-full" id="imc-classificacao">--</div>
+                            <div class="inline-block text-xs font-bold px-3 py-1 rounded-full" id="imc-classificacao">--
+                            </div>
                         </div>
                         <div class="bg-obsidian-950/80 rounded-2xl p-5 border border-white/5">
-                            <div class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Ingestão Hídrica Recomendada</div>
-                            <div class="font-clash text-4xl font-extrabold text-cyan-400 mb-2" id="agua-valor">-- Litros</div>
-                            <div class="text-xs text-slate-400">Recomendação clínica baseada em 35ml a 40ml de água por kg de peso corporal.</div>
+                            <div class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Ingestão Hídrica
+                                Recomendada</div>
+                            <div class="font-clash text-4xl font-extrabold text-cyan-400 mb-2" id="agua-valor">-- Litros
+                            </div>
+                            <div class="text-xs text-slate-400">Recomendação clínica baseada em 35ml a 40ml de água por
+                                kg de peso corporal.</div>
                         </div>
                     </div>
                 </div>
@@ -1052,14 +1127,16 @@
                     <div class="lg:col-span-5 text-center lg:text-left">
                         <div class="relative inline-block">
                             <!-- Imagem representativa do nutricionista -->
-                            <div class="w-64 h-80 sm:w-80 sm:h-[420px] rounded-3xl overflow-hidden border-2 border-brand-500/30 shadow-2xl relative mx-auto bg-obsidian-900">
-                                <img src="https://images.unsplash.com/photo-1594824813571-638f02638491?auto=format&fit=crop&q=80&w=800" 
-                                    alt="Nutricionista Responsável" 
-                                    class="w-full h-full object-cover">
+                            <div
+                                class="w-64 h-80 sm:w-80 sm:h-[420px] rounded-3xl overflow-hidden border-2 border-brand-500/30 shadow-2xl relative mx-auto bg-obsidian-900">
+                                <img src="https://images.unsplash.com/photo-1594824813571-638f02638491?auto=format&fit=crop&q=80&w=800"
+                                    alt="Nutricionista Responsável" class="w-full h-full object-cover">
                             </div>
                             <!-- Selo Flutuante CRN -->
-                            <div class="absolute -bottom-5 -right-5 bg-obsidian-900 border border-white/10 rounded-2xl px-5 py-3 shadow-2xl flex items-center gap-3 backdrop-blur-xl">
-                                <div class="w-10 h-10 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold">
+                            <div
+                                class="absolute -bottom-5 -right-5 bg-obsidian-900 border border-white/10 rounded-2xl px-5 py-3 shadow-2xl flex items-center gap-3 backdrop-blur-xl">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold">
                                     <i data-lucide="award" class="w-5 h-5"></i>
                                 </div>
                                 <div class="text-left">
@@ -1075,33 +1152,41 @@
                             <i data-lucide="user" class="w-3.5 h-3.5 text-brand-400"></i>
                             <h3>SEU NUTRICIONISTA</h3>
                         </div>
-                        <h2 class="font-clash text-3xl sm:text-5xl font-bold text-white tracking-tight mb-5 leading-tight">
+                        <h2
+                            class="font-clash text-3xl sm:text-5xl font-bold text-white tracking-tight mb-5 leading-tight">
                             CIÊNCIA APLICADA SEM TERRORISMO NUTRICIONAL.
                         </h2>
                         <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-5 font-normal">
-                            Sou especialista em Nutrição Clínica e Esportiva, focado em emagrecimento definitivo, recomposição corporal e máxima performance cognitiva e atlética.
+                            Sou especialista em Nutrição Clínica e Esportiva, focado em emagrecimento definitivo,
+                            recomposição corporal e máxima performance cognitiva e atlética.
                         </p>
                         <p class="text-slate-400 text-sm leading-relaxed mb-8">
-                            Acredito que a melhor dieta do mundo é aquela que você consegue manter com prazer por meses e anos. Por isso, utilizo estratégias flexíveis apoiadas por tecnologia digital própria para garantir que você nunca fique sem rumo.
+                            Acredito que a melhor dieta do mundo é aquela que você consegue manter com prazer por meses
+                            e anos. Por isso, utilizo estratégias flexíveis apoiadas por tecnologia digital própria para
+                            garantir que você nunca fique sem rumo.
                         </p>
 
                         <div class="grid grid-cols-2 gap-4 mb-10">
                             <div class="flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-slate-200">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-400"></i> Atendimento Presencial & Online
+                                <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-400"></i> Atendimento
+                                Presencial & Online
                             </div>
                             <div class="flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-slate-200">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-400"></i> Prescrição de Fitoterápicos
+                                <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-400"></i> Prescrição de
+                                Fitoterápicos
                             </div>
                             <div class="flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-slate-200">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-400"></i> Chat Direto com o Nutri
+                                <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-400"></i> Chat Direto com o
+                                Nutri
                             </div>
                             <div class="flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-slate-200">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-400"></i> Acesso Ilimitado ao App
+                                <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-400"></i> Acesso Ilimitado ao
+                                App
                             </div>
                         </div>
 
-                        <a href="https://wa.me/5581997969058?text=Ol%C3%A1%20Nutri%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20acompanhamento!" target="_blank"
-                            class="botao botaoPrimario">
+                        <a href="https://wa.me/5581997969058?text=Ol%C3%A1%20Nutri%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20acompanhamento!"
+                            target="_blank" class="botao botaoPrimario">
                             <span>FALAR DIRETAMENTE COMIGO</span>
                             <div class="divSeta">
                                 <i data-lucide="message-circle" class="w-5 h-5"></i>
@@ -1130,53 +1215,68 @@
 
                 <div class="space-y-4" id="faq-container">
                     <!-- FAQ Item 1 -->
-                    <div class="glass-card rounded-2xl p-6 border border-white/10 cursor-pointer faq-item hover:border-brand-500/40 transition-all" onclick="toggleFaq(this)">
+                    <div class="glass-card rounded-2xl p-6 border border-white/10 cursor-pointer faq-item hover:border-brand-500/40 transition-all"
+                        onclick="toggleFaq(this)">
                         <div class="flex items-center justify-between">
                             <h3 class="text-base font-bold text-white">Como recebo o acesso à Área do Aluno?</h3>
                             <i data-lucide="chevron-down" class="w-5 h-5 text-brand-400 faq-icon"></i>
                         </div>
                         <div class="faq-answer">
                             <p class="pt-4 text-sm text-slate-400 leading-relaxed">
-                                Logo após a sua consulta (seja presencial ou por videochamada online), o nutricionista estrutura todo o seu plano alimentar personalizado no portal e envia seus dados de acesso exclusivos via WhatsApp e e-mail.
+                                Logo após a sua consulta (seja presencial ou por videochamada online), o nutricionista
+                                estrutura todo o seu plano alimentar personalizado no portal e envia seus dados de
+                                acesso exclusivos via WhatsApp e e-mail.
                             </p>
                         </div>
                     </div>
 
                     <!-- FAQ Item 2 -->
-                    <div class="glass-card rounded-2xl p-6 border border-white/10 cursor-pointer faq-item hover:border-brand-500/40 transition-all" onclick="toggleFaq(this)">
+                    <div class="glass-card rounded-2xl p-6 border border-white/10 cursor-pointer faq-item hover:border-brand-500/40 transition-all"
+                        onclick="toggleFaq(this)">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-base font-bold text-white">Vou precisar cortar tudo o que gosto de comer?</h3>
+                            <h3 class="text-base font-bold text-white">Vou precisar cortar tudo o que gosto de comer?
+                            </h3>
                             <i data-lucide="chevron-down" class="w-5 h-5 text-brand-400 faq-icon"></i>
                         </div>
                         <div class="faq-answer">
                             <p class="pt-4 text-sm text-slate-400 leading-relaxed">
-                                Absolutamente não! A metodologia NutriLife é estruturada com base na flexibilidade inteligente. Incorporamos seus alimentos favoritos de forma calculada para que você atinja seus objetivos com satisfação e sustentabilidade.
+                                Absolutamente não! A metodologia NutriLife é estruturada com base na flexibilidade
+                                inteligente. Incorporamos seus alimentos favoritos de forma calculada para que você
+                                atinja seus objetivos com satisfação e sustentabilidade.
                             </p>
                         </div>
                     </div>
 
                     <!-- FAQ Item 3 -->
-                    <div class="glass-card rounded-2xl p-6 border border-white/10 cursor-pointer faq-item hover:border-brand-500/40 transition-all" onclick="toggleFaq(this)">
+                    <div class="glass-card rounded-2xl p-6 border border-white/10 cursor-pointer faq-item hover:border-brand-500/40 transition-all"
+                        onclick="toggleFaq(this)">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-base font-bold text-white">Como funcionam as opções de substituição no portal?</h3>
+                            <h3 class="text-base font-bold text-white">Como funcionam as opções de substituição no
+                                portal?</h3>
                             <i data-lucide="chevron-down" class="w-5 h-5 text-brand-400 faq-icon"></i>
                         </div>
                         <div class="faq-answer">
                             <p class="pt-4 text-sm text-slate-400 leading-relaxed">
-                                Cada refeição cadastrada possui uma lista de alimentos alternativos nutricionalmente equivalentes. Se hoje você não quiser comer frango ou arroz, basta abrir a aba de substituição e escolher a opção recomendada pelo nutri.
+                                Cada refeição cadastrada possui uma lista de alimentos alternativos nutricionalmente
+                                equivalentes. Se hoje você não quiser comer frango ou arroz, basta abrir a aba de
+                                substituição e escolher a opção recomendada pelo nutri.
                             </p>
                         </div>
                     </div>
 
                     <!-- FAQ Item 4 -->
-                    <div class="glass-card rounded-2xl p-6 border border-white/10 cursor-pointer faq-item hover:border-brand-500/40 transition-all" onclick="toggleFaq(this)">
+                    <div class="glass-card rounded-2xl p-6 border border-white/10 cursor-pointer faq-item hover:border-brand-500/40 transition-all"
+                        onclick="toggleFaq(this)">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-base font-bold text-white">Minhas fotos corporais ficam seguras na galeria?</h3>
+                            <h3 class="text-base font-bold text-white">Minhas fotos corporais ficam seguras na galeria?
+                            </h3>
                             <i data-lucide="chevron-down" class="w-5 h-5 text-brand-400 faq-icon"></i>
                         </div>
                         <div class="faq-answer">
                             <p class="pt-4 text-sm text-slate-400 leading-relaxed">
-                                Sim, 100% seguras. A galeria de evolução possui bloqueio por senha pessoal criptografada e é visualizada exclusivamente por você e pelo nutricionista no painel administrativo para fins de comparação clínica.
+                                Sim, 100% seguras. A galeria de evolução possui bloqueio por senha pessoal criptografada
+                                e é visualizada exclusivamente por você e pelo nutricionista no painel administrativo
+                                para fins de comparação clínica.
                             </p>
                         </div>
                     </div>
@@ -1197,12 +1297,14 @@
                 </div>
             </div>
 
-            <div class="flex flex-wrap items-center justify-center gap-8 text-xs font-bold uppercase tracking-wider text-slate-400">
+            <div
+                class="flex flex-wrap items-center justify-center gap-8 text-xs font-bold uppercase tracking-wider text-slate-400">
                 <a href="#metodo" class="hover:text-brand-400 transition-colors">O Método</a>
                 <a href="#showcase" class="hover:text-brand-400 transition-colors">A Plataforma</a>
                 <a href="#calculadora" class="hover:text-brand-400 transition-colors">Calculadora IMC</a>
                 <a href="login.html" class="hover:text-brand-400 transition-colors">Área do Aluno</a>
-                <a href="https://wa.me/5581997969058" target="_blank" class="hover:text-brand-400 transition-colors">Suporte WhatsApp</a>
+                <a href="https://wa.me/5581997969058" target="_blank"
+                    class="hover:text-brand-400 transition-colors">Suporte WhatsApp</a>
             </div>
 
             <div class="text-xs text-slate-500 text-center md:text-right font-medium">
