@@ -41,11 +41,96 @@
         }
     </script>
     <style>
+        /* Modern Glassmorphism Profundo com Iluminação Especular e Sombras Multi-camadas */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.78) 0%, rgba(11, 17, 33, 0.88) 100%);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                0 20px 45px -15px rgba(0, 0, 0, 0.7),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.12),
+                inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        /* Ambient Glow Orbs para profundidade tridimensional */
+        .ambient-glow-1 {
+            position: fixed;
+            top: -10%;
+            left: 15%;
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(50px);
+        }
+
+        .ambient-glow-2 {
+            position: fixed;
+            top: 40%;
+            right: -5%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.09) 0%, rgba(99, 102, 241, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(60px);
+        }
+
+        .ambient-glow-3 {
+            position: fixed;
+            bottom: -10%;
+            left: 30%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, rgba(168, 85, 247, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(60px);
+        }
+
+        /* Símbolo de Notificação Pulsante (Vermelho e Branco) */
+        .badge-pulsante-vermelho {
+            position: relative;
+            animation: pulseBadgeRing 1.8s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        }
+
+        .badge-pulsante-vermelho::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 9999px;
+            border: 2px solid rgba(239, 68, 68, 0.9);
+            animation: radarPingEffect 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulseBadgeRing {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7), 0 0 14px rgba(239, 68, 68, 0.5);
+            }
+            50% {
+                transform: scale(1.08);
+                box-shadow: 0 0 0 5px rgba(220, 38, 38, 0), 0 0 20px rgba(239, 68, 68, 0.9);
+            }
+        }
+
+        @keyframes radarPingEffect {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.9;
+            }
+            70%, 100% {
+                transform: scale(1.7);
+                opacity: 0;
+            }
         }
 
         /* Custom scrollbar */
@@ -98,7 +183,12 @@
 </head>
 
 <body
-    class="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-brand-500 selection:text-white flex flex-col justify-between">
+    class="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-brand-500 selection:text-white flex flex-col justify-between relative overflow-x-hidden">
+
+    <!-- Efeitos de iluminação de profundidade (Glassmorphism orbs) -->
+    <div class="ambient-glow-1" aria-hidden="true"></div>
+    <div class="ambient-glow-2" aria-hidden="true"></div>
+    <div class="ambient-glow-3" aria-hidden="true"></div>
 
     <!-- Topo da Aplicação / Barra de Navegação -->
     <header class="bg-slate-900/90 border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-md">
@@ -1420,9 +1510,9 @@
     <button id="chat-toggle-btn"
         class="fixed bottom-6 right-6 bg-brand-500 hover:bg-brand-400 text-slate-950 p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-50 group hover:scale-105">
         <i data-lucide="message-square" class="w-6 h-6"></i>
-        <!-- Símbolo de notificação em vermelho e branco -->
+        <!-- Símbolo de notificação pulsante em vermelho e branco -->
         <span id="chat-badge"
-            class="hidden absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1 bg-red-600 text-white rounded-full text-[10px] font-black border-2 border-white flex items-center justify-center shadow-lg shadow-red-600/50 animate-pulse">1</span>
+            class="hidden absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1 bg-red-600 text-white rounded-full text-[10px] font-black border-2 border-white flex items-center justify-center shadow-lg shadow-red-600/50 badge-pulsante-vermelho">1</span>
     </button>
 
     <!-- Janela Deslizante do Chat -->

@@ -68,21 +68,33 @@
         .galeria-thumb {
             transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
         }
+
         .galeria-thumb:hover {
             transform: scale(1.025);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
+
         .galeria-tipo-badge {
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
         }
+
         #admin-lightbox {
             animation: fadeInLightbox 0.2s ease;
         }
+
         @keyframes fadeInLightbox {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
+
         .secao-destaque {
             box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.6), 0 0 25px rgba(168, 85, 247, 0.25) !important;
             transition: all 0.4s ease;
@@ -181,7 +193,8 @@
                 Gestão de Alunos e Dietas 📋
             </h1>
             <p class="text-sm text-slate-400 mt-1">
-                Cadastre novos alunos, prescreva refeições personalizadas, tire dúvidas no chat e avalie as fotos de evolução corporal de cada aluno.
+                Cadastre novos alunos, prescreva refeições personalizadas, tire dúvidas no chat e avalie as fotos de
+                evolução corporal de cada aluno.
             </p>
         </div>
 
@@ -191,15 +204,19 @@
             <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
                 class="glass-panel p-4 rounded-2xl border border-slate-800 hover:border-emerald-500/50 hover:bg-slate-900/90 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg">
                 <div class="flex items-center justify-between w-full mb-3">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                         <i data-lucide="user-plus" class="w-5 h-5"></i>
                     </div>
-                    <span class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-emerald-400 transition-colors">Atalho</span>
+                    <span
+                        class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-emerald-400 transition-colors">Atalho</span>
                 </div>
                 <div>
-                    <h3 class="text-xs sm:text-sm font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-1">
+                    <h3
+                        class="text-xs sm:text-sm font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-1">
                         Cadastrar Aluno
-                        <i data-lucide="arrow-down-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                        <i data-lucide="arrow-down-right"
+                            class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
                     </h3>
                     <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Novo login & senha</p>
                 </div>
@@ -209,15 +226,19 @@
             <button onclick="navegarParaSecao('secao-cadastrar-refeicao')"
                 class="glass-panel p-4 rounded-2xl border border-slate-800 hover:border-brand-500/50 hover:bg-slate-900/90 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg">
                 <div class="flex items-center justify-between w-full mb-3">
-                    <div class="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                         <i data-lucide="utensils" class="w-5 h-5"></i>
                     </div>
-                    <span class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-brand-400 transition-colors">Atalho</span>
+                    <span
+                        class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-brand-400 transition-colors">Atalho</span>
                 </div>
                 <div>
-                    <h3 class="text-xs sm:text-sm font-bold text-white group-hover:text-brand-400 transition-colors flex items-center gap-1">
+                    <h3
+                        class="text-xs sm:text-sm font-bold text-white group-hover:text-brand-400 transition-colors flex items-center gap-1">
                         Cadastrar Refeição
-                        <i data-lucide="arrow-down-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                        <i data-lucide="arrow-down-right"
+                            class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
                     </h3>
                     <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Plano alimentar</p>
                 </div>
@@ -227,17 +248,21 @@
             <button onclick="navegarParaSecao('canal-duvidas')"
                 class="glass-panel p-4 rounded-2xl border border-slate-800 hover:border-red-500/50 hover:bg-slate-900/90 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg relative">
                 <div class="flex items-center justify-between w-full mb-3">
-                    <div class="relative w-10 h-10 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div
+                        class="relative w-10 h-10 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                         <i data-lucide="message-square" class="w-5 h-5"></i>
                         <span id="badge-atalho-chat"
                             class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-black rounded-full border-2 border-white flex items-center justify-center shadow-lg shadow-red-600/50 animate-pulse">0</span>
                     </div>
-                    <span id="badge-atalho-novas-pill" class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-red-400 transition-colors">Atalho</span>
+                    <span id="badge-atalho-novas-pill"
+                        class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-red-400 transition-colors">Atalho</span>
                 </div>
                 <div>
-                    <h3 class="text-xs sm:text-sm font-bold text-white group-hover:text-red-400 transition-colors flex items-center gap-1">
+                    <h3
+                        class="text-xs sm:text-sm font-bold text-white group-hover:text-red-400 transition-colors flex items-center gap-1">
                         Canal de Dúvidas
-                        <i data-lucide="arrow-down-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                        <i data-lucide="arrow-down-right"
+                            class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
                     </h3>
                     <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Chat com alunos</p>
                 </div>
@@ -247,15 +272,19 @@
             <button onclick="navegarParaSecao('secao-fotos-alunos')"
                 class="glass-panel p-4 rounded-2xl border border-purple-500/30 hover:border-purple-500 hover:bg-purple-950/20 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg shadow-purple-950/20 relative">
                 <div class="flex items-center justify-between w-full mb-3">
-                    <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
                         <i data-lucide="camera" class="w-5 h-5"></i>
                     </div>
-                    <span class="text-[9px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-1.5 py-0.5 rounded-full font-bold">Admin</span>
+                    <span
+                        class="text-[9px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-1.5 py-0.5 rounded-full font-bold">Admin</span>
                 </div>
                 <div>
-                    <h3 class="text-xs sm:text-sm font-bold text-white group-hover:text-purple-300 transition-colors flex items-center gap-1">
-                        Fotos de Evolução
-                        <i data-lucide="arrow-down-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    <h3
+                        class="text-xs sm:text-sm font-bold text-white group-hover:text-purple-300 transition-colors flex items-center gap-1">
+                        Fotos de Evolução0
+                        <i data-lucide="arrow-down-right"
+                            class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
                     </h3>
                     <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Galeria corporal</p>
                 </div>
@@ -263,7 +292,8 @@
         </div>
 
         <!-- SEÇÃO: Formulário para Cadastrar Aluno -->
-        <section id="secao-cadastrar-aluno" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+        <section id="secao-cadastrar-aluno"
+            class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
             <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-6">
                 <div>
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
@@ -306,7 +336,8 @@
         </section>
 
         <!-- Formulário para Adicionar/Atualizar Refeição -->
-        <section id="secao-cadastrar-refeicao" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+        <section id="secao-cadastrar-refeicao"
+            class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
             <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-6">
                 <div>
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
@@ -409,7 +440,8 @@
                             <span id="badge-section-novas-texto">0 novas mensagens</span>
                         </span>
                     </div>
-                    <p class="text-xs text-slate-400 mt-1">Selecione um aluno para visualizar o histórico de mensagens e responder diretamente.</p>
+                    <p class="text-xs text-slate-400 mt-1">Selecione um aluno para visualizar o histórico de mensagens e
+                        responder diretamente.</p>
                 </div>
             </div>
 
@@ -421,7 +453,8 @@
                 </div>
 
                 <!-- Janela de Conversa Ativa -->
-                <div class="md:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col h-80 overflow-hidden">
+                <div
+                    class="md:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col h-80 overflow-hidden">
                     <div id="admin-chat-header"
                         class="bg-slate-800/80 p-3 border-b border-slate-700 text-xs font-bold text-white flex items-center gap-2">
                         <span>Selecione um aluno ao lado para iniciar</span>
@@ -429,7 +462,8 @@
                     <div id="admin-chat-messages" class="flex-1 p-3 overflow-y-auto space-y-2 text-xs">
                         <div class="text-center text-slate-500 mt-20">Nenhuma conversa selecionada.</div>
                     </div>
-                    <form id="admin-chat-form" class="p-2.5 bg-slate-800/50 border-t border-slate-700 flex gap-2 hidden">
+                    <form id="admin-chat-form"
+                        class="p-2.5 bg-slate-800/50 border-t border-slate-700 flex gap-2 hidden">
                         <input type="text" id="admin-chat-input" placeholder="Digite sua resposta..." required
                             class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
                         <button type="submit"
@@ -441,20 +475,23 @@
 
         <!-- SEÇÃO: Fotos de Evolução Corporal dos Alunos (Exclusivo Admin) -->
         <section id="secao-fotos-alunos" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-slate-800/80 mb-6 gap-4">
+            <div
+                class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-slate-800/80 mb-6 gap-4">
                 <div>
                     <div class="flex items-center gap-2.5 flex-wrap">
                         <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
                             <i data-lucide="camera" class="w-5 h-5 text-purple-400"></i>
                             <span>Fotos de Evolução dos Alunos</span>
                         </h2>
-                        <span class="text-xs bg-purple-500/10 text-purple-300 px-3 py-1 rounded-full border border-purple-500/30 font-semibold flex items-center gap-1.5">
+                        <span
+                            class="text-xs bg-purple-500/10 text-purple-300 px-3 py-1 rounded-full border border-purple-500/30 font-semibold flex items-center gap-1.5">
                             <i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-400"></i>
                             Exclusivo do Admin
                         </span>
                     </div>
                     <p class="text-xs text-slate-400 mt-1">
-                        Selecione um aluno para acompanhar sua linha do tempo de evolução física (Frente, Perfil e Costas).
+                        Selecione um aluno para acompanhar sua linha do tempo de evolução física (Frente, Perfil e
+                        Costas).
                     </p>
                 </div>
 
@@ -470,12 +507,14 @@
             <div class="bg-slate-900/70 border border-slate-800 p-4 sm:p-5 rounded-2xl mb-6 space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                     <div class="md:col-span-7">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
+                        <label
+                            class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
                             <i data-lucide="user-check" class="w-3.5 h-3.5 text-purple-400"></i>
                             Selecionar Aluno para Ver Fotos
                         </label>
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                                 <i data-lucide="user" class="w-4 h-4"></i>
                             </div>
                             <select id="fotos-aluno-select" onchange="carregarFotosAlunoSelecionado()"
@@ -488,7 +527,8 @@
                     <div class="md:col-span-5 flex items-end gap-2">
                         <!-- Filtro por Posição/Ângulo -->
                         <div class="w-full">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Filtrar Ângulo</label>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Filtrar
+                                Ângulo</label>
                             <select id="filtro-angulo-fotos" onchange="filtrarFotosExibidas()"
                                 class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-3 text-sm text-slate-100 focus:outline-none focus:border-purple-500 transition-all">
                                 <option value="todos">Todos os Ângulos</option>
@@ -501,16 +541,19 @@
                 </div>
 
                 <!-- Card de Resumo do Aluno e Atalhos Rápidos -->
-                <div id="fotos-aluno-resumo" class="hidden pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+                <div id="fotos-aluno-resumo"
+                    class="hidden pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center justify-center font-bold text-xs" id="fotos-aluno-avatar">A</div>
+                        <div class="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center justify-center font-bold text-xs"
+                            id="fotos-aluno-avatar">A</div>
                         <div>
                             <span class="font-bold text-white text-sm" id="fotos-aluno-nome">-</span>
                             <span class="text-slate-400 ml-2" id="fotos-aluno-email">-</span>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span id="fotos-contador-badge" class="bg-purple-500/10 text-purple-300 border border-purple-500/30 px-3 py-1 rounded-full font-bold text-xs">
+                        <span id="fotos-contador-badge"
+                            class="bg-purple-500/10 text-purple-300 border border-purple-500/30 px-3 py-1 rounded-full font-bold text-xs">
                             0 fotos encontradas
                         </span>
                         <button onclick="irParaChatComAlunoAtual()" title="Abrir conversa com este aluno no chat"
@@ -530,12 +573,14 @@
             <!-- Área de Exibição das Fotos (Timeline) -->
             <div id="fotos-timeline-container" class="space-y-6 min-h-[160px]">
                 <div class="text-center py-12 bg-slate-900/40 rounded-2xl border border-slate-800/80">
-                    <div class="w-14 h-14 mx-auto rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-3 text-purple-400">
+                    <div
+                        class="w-14 h-14 mx-auto rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-3 text-purple-400">
                         <i data-lucide="images" class="w-7 h-7"></i>
                     </div>
                     <h3 class="text-sm font-bold text-white mb-1">Selecione um Aluno</h3>
                     <p class="text-xs text-slate-400 max-w-sm mx-auto">
-                        Escolha um aluno no menu acima para carregar o histórico de fotos corporais (Frente, Perfil e Costas).
+                        Escolha um aluno no menu acima para carregar o histórico de fotos corporais (Frente, Perfil e
+                        Costas).
                     </p>
                 </div>
             </div>
@@ -613,7 +658,7 @@
                     const req = idx.getAll(userId);
                     req.onsuccess = () => resolve(req.result || []);
                     req.onerror = () => resolve([]);
-                } catch(e) {
+                } catch (e) {
                     resolve([]);
                 }
             });
@@ -645,7 +690,7 @@
                 const s = obterLidasLocais();
                 s.add(id);
                 localStorage.setItem('nutrilife_admin_mensagens_lidas', JSON.stringify([...s]));
-            } catch (e) {}
+            } catch (e) { }
         }
 
         function salvarVariasLidasLocais(ids) {
@@ -653,7 +698,7 @@
                 const s = obterLidasLocais();
                 ids.forEach(id => s.add(id));
                 localStorage.setItem('nutrilife_admin_mensagens_lidas', JSON.stringify([...s]));
-            } catch (e) {}
+            } catch (e) { }
         }
 
         // Som de Alerta Sonoro usando Web Audio API
@@ -944,13 +989,12 @@
                 const btn = document.createElement('button');
                 btn.type = 'button';
                 btn.id = `chat-aluno-btn-${aluno.id}`;
-                btn.className = `w-full text-left p-3 rounded-xl transition-all border flex items-center justify-between group ${
-                    isSelecionado
-                        ? 'bg-slate-800 border-brand-500/50 shadow-md ring-1 ring-brand-500/30'
-                        : unread > 0
-                            ? 'bg-red-950/20 hover:bg-red-950/30 border-red-500/40 shadow-sm'
-                            : 'bg-slate-950/40 hover:bg-slate-800 border-slate-800/80'
-                }`;
+                btn.className = `w-full text-left p-3 rounded-xl transition-all border flex items-center justify-between group ${isSelecionado
+                    ? 'bg-slate-800 border-brand-500/50 shadow-md ring-1 ring-brand-500/30'
+                    : unread > 0
+                        ? 'bg-red-950/20 hover:bg-red-950/30 border-red-500/40 shadow-sm'
+                        : 'bg-slate-950/40 hover:bg-slate-800 border-slate-800/80'
+                    }`;
 
                 btn.innerHTML = `
                 <div class="flex items-center gap-3">
@@ -1460,13 +1504,17 @@
     </script>
 
     <!-- Lightbox de Fotos do Admin (Alta Resolução com Download Clínico) -->
-    <div id="admin-lightbox" class="hidden fixed inset-0 z-[70] bg-black/95 flex items-center justify-center p-4 backdrop-blur-md" onclick="fecharAdminLightbox(event)">
-        <button onclick="fecharAdminLightbox()" class="absolute top-4 right-4 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 w-11 h-11 rounded-full flex items-center justify-center transition-colors z-20">
+    <div id="admin-lightbox"
+        class="hidden fixed inset-0 z-[70] bg-black/95 flex items-center justify-center p-4 backdrop-blur-md"
+        onclick="fecharAdminLightbox(event)">
+        <button onclick="fecharAdminLightbox()"
+            class="absolute top-4 right-4 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 w-11 h-11 rounded-full flex items-center justify-center transition-colors z-20">
             <i data-lucide="x" class="w-6 h-6"></i>
         </button>
 
         <div class="absolute top-4 left-4 z-20 flex items-center gap-3">
-            <span class="text-xs bg-purple-500/20 text-purple-300 border border-purple-500/30 px-3 py-1 rounded-full font-bold flex items-center gap-1.5">
+            <span
+                class="text-xs bg-purple-500/20 text-purple-300 border border-purple-500/30 px-3 py-1 rounded-full font-bold flex items-center gap-1.5">
                 <i data-lucide="shield" class="w-3.5 h-3.5"></i>
                 Visualização Exclusiva do Admin
             </span>
@@ -1478,7 +1526,9 @@
         </div>
 
         <div class="relative max-w-4xl max-h-[82vh] flex items-center justify-center">
-            <img id="admin-lightbox-img" class="max-w-full max-h-[82vh] rounded-2xl shadow-2xl object-contain border border-slate-800" src="" alt="Foto de evolução clínica">
+            <img id="admin-lightbox-img"
+                class="max-w-full max-h-[82vh] rounded-2xl shadow-2xl object-contain border border-slate-800" src=""
+                alt="Foto de evolução clínica">
         </div>
 
         <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 z-20">
@@ -1487,7 +1537,8 @@
                 <i data-lucide="download" class="w-4 h-4"></i>
                 <span>Baixar Imagem</span>
             </a>
-            <button onclick="fecharAdminLightbox()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all border border-slate-700">
+            <button onclick="fecharAdminLightbox()"
+                class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all border border-slate-700">
                 Fechar
             </button>
         </div>
