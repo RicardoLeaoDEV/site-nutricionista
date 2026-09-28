@@ -66,6 +66,34 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #10b981;
         }
+
+        /* Galeria de Evolução */
+        .galeria-dropzone {
+            border: 2px dashed rgba(168, 85, 247, 0.3);
+            transition: all 0.3s ease;
+        }
+        .galeria-dropzone.drag-over {
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.08);
+        }
+        .galeria-thumb {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .galeria-thumb:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        }
+        #galeria-lightbox {
+            animation: fadeInLightbox 0.25s ease;
+        }
+        @keyframes fadeInLightbox {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .galeria-tipo-badge {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
     </style>
 </head>
 
@@ -241,6 +269,154 @@
                 <canvas id="graficoPeso"></canvas>
             </div>
         </section>
+
+        <!-- ========================================== -->
+        <!-- Galeria de Fotos de Evolução Corporal -->
+        <!-- ========================================== -->
+        <section id="secao-galeria" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
+            <!-- Cabeçalho da Galeria -->
+            <div class="p-6 sm:p-7 pb-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-800/80">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="camera" class="w-5 h-5 text-purple-400"></i>
+                            Galeria de Evolução Corporal
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Compare seu progresso físico ao longo do tempo — protegido por senha pessoal</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="btn-bloquear-galeria" onclick="bloquearGaleria()" class="hidden text-xs bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 px-3 py-1.5 rounded-lg border border-purple-500/20 font-semibold transition-all flex items-center gap-1.5">
+                            <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                            Bloquear
+                        </button>
+                        <span id="galeria-status-badge" class="text-xs text-slate-500 flex items-center gap-1.5 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
+                            <i data-lucide="shield" class="w-3.5 h-3.5 text-purple-400"></i>
+                            <span id="galeria-status-text">Protegida por Senha</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overlay de Bloqueio por Senha -->
+            <div id="galeria-lock" class="px-6 sm:px-7 pb-8 pt-2">
+                <div class="flex flex-col items-center justify-center py-10 space-y-5">
+                    <div class="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                        <i data-lucide="lock" class="w-8 h-8 text-purple-400"></i>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-base font-bold text-white" id="galeria-lock-titulo">Galeria Protegida</h3>
+                        <p class="text-xs text-slate-400 mt-1 max-w-xs" id="galeria-lock-desc">Defina uma senha pessoal para proteger suas fotos de evolução corporal.</p>
+                    </div>
+                    <div class="flex flex-col items-center gap-3 w-full max-w-xs">
+                        <div class="relative w-full">
+                            <input type="password" id="galeria-senha-input" placeholder="Digite sua senha" maxlength="32"
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-center text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 tracking-widest">
+                            <button type="button" onclick="toggleGaleriaSenhaVisibilidade()" class="absolute right-3 top-3 text-slate-500 hover:text-slate-300 transition-colors">
+                                <i data-lucide="eye" class="w-4 h-4" id="galeria-senha-eye"></i>
+                            </button>
+                        </div>
+                        <input type="password" id="galeria-senha-confirmar" placeholder="Confirme a senha" maxlength="32"
+                            class="hidden w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-center text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 tracking-widest">
+                        <button id="btn-galeria-desbloquear" onclick="acaoSenhaGaleria()"
+                            class="w-full bg-purple-600 hover:bg-purple-500 active:scale-[0.98] text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2">
+                            <i data-lucide="unlock" class="w-4 h-4"></i>
+                            <span id="btn-galeria-senha-texto">Definir Senha e Abrir</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conteúdo da Galeria (visível apenas quando desbloqueada) -->
+            <div id="galeria-conteudo" class="hidden px-6 sm:px-7 pb-6 pt-2 space-y-6">
+
+                <!-- Formulário de Upload -->
+                <div class="bg-slate-900/60 rounded-2xl border border-slate-800 p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i data-lucide="upload" class="w-4 h-4 text-purple-400"></i>
+                            Enviar Novas Fotos
+                        </h3>
+                        <input type="date" id="galeria-data" class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-purple-500">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <!-- Frente -->
+                        <label id="drop-frente" class="galeria-dropzone rounded-xl p-4 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-purple-500/5 min-h-[120px]">
+                            <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center">
+                                <i data-lucide="user" class="w-5 h-5"></i>
+                            </div>
+                            <span class="text-xs font-bold text-slate-300">Frente</span>
+                            <span class="text-[10px] text-slate-500">Clique ou arraste</span>
+                            <input type="file" accept="image/*" class="hidden" id="input-foto-frente" onchange="handleFotoSelecionada(this, 'frente')">
+                            <div id="preview-frente" class="hidden w-full mt-2"></div>
+                        </label>
+
+                        <!-- Perfil / Lateral -->
+                        <label id="drop-perfil" class="galeria-dropzone rounded-xl p-4 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-purple-500/5 min-h-[120px]">
+                            <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center">
+                                <i data-lucide="user" class="w-5 h-5" style="transform: rotate(90deg)"></i>
+                            </div>
+                            <span class="text-xs font-bold text-slate-300">Perfil</span>
+                            <span class="text-[10px] text-slate-500">Clique ou arraste</span>
+                            <input type="file" accept="image/*" class="hidden" id="input-foto-perfil" onchange="handleFotoSelecionada(this, 'perfil')">
+                            <div id="preview-perfil" class="hidden w-full mt-2"></div>
+                        </label>
+
+                        <!-- Costas -->
+                        <label id="drop-costas" class="galeria-dropzone rounded-xl p-4 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-purple-500/5 min-h-[120px]">
+                            <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center">
+                                <i data-lucide="user" class="w-5 h-5" style="transform: scaleX(-1)"></i>
+                            </div>
+                            <span class="text-xs font-bold text-slate-300">Costas</span>
+                            <span class="text-[10px] text-slate-500">Clique ou arraste</span>
+                            <input type="file" accept="image/*" class="hidden" id="input-foto-costas" onchange="handleFotoSelecionada(this, 'costas')">
+                            <div id="preview-costas" class="hidden w-full mt-2"></div>
+                        </label>
+                    </div>
+
+                    <button id="btn-salvar-fotos" onclick="salvarFotosGaleria()" disabled
+                        class="mt-4 w-full bg-purple-600 hover:bg-purple-500 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-purple-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        Salvar Registro de Evolução
+                    </button>
+                </div>
+
+                <!-- Timeline da Galeria -->
+                <div>
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2 mb-4">
+                        <i data-lucide="calendar" class="w-4 h-4 text-purple-400"></i>
+                        Linha do Tempo
+                        <span id="galeria-total" class="text-[10px] text-slate-500 bg-slate-900 px-2 py-0.5 rounded-full border border-slate-800">0 registros</span>
+                    </h3>
+                    <div id="galeria-timeline" class="space-y-6">
+                        <div class="text-center py-10">
+                            <div class="w-14 h-14 mx-auto rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-3">
+                                <i data-lucide="image" class="w-7 h-7 text-slate-700"></i>
+                            </div>
+                            <p class="text-xs text-slate-500">Nenhum registro de evolução ainda.</p>
+                            <p class="text-[10px] text-slate-600 mt-1">Envie suas primeiras fotos acima para começar a acompanhar sua transformação!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lightbox / Modal de Foto Ampliada -->
+        <div id="galeria-lightbox" class="hidden fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-4" onclick="fecharLightbox(event)">
+            <button onclick="fecharLightbox()" class="absolute top-4 right-4 text-white/60 hover:text-white bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full flex items-center justify-center transition-colors z-10">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="absolute top-4 left-4 text-xs text-white/50 z-10">
+                <span id="lightbox-info"></span>
+            </div>
+            <img id="lightbox-img" class="max-w-full max-h-[85vh] rounded-2xl shadow-2xl object-contain" src="" alt="Foto ampliada">
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                <button id="btn-lightbox-excluir" onclick="excluirFotoLightbox()" class="bg-rose-600/80 hover:bg-rose-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all flex items-center gap-1.5">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    Excluir Foto
+                </button>
+            </div>
+        </div>
 
         <!-- Bloco de Refeições e Substituições -->
         <section class="space-y-4">
@@ -761,6 +937,456 @@
 
         // Inicia carregamento
         carregarDados();
+    </script>
+
+    <!-- Script da Galeria de Evolução Corporal -->
+    <script>
+    (function() {
+        // ===== CONFIGURAÇÃO DO INDEXEDDB =====
+        const DB_NAME = 'nutrilife_galeria';
+        const DB_VERSION = 1;
+        const STORE_NAME = 'fotos';
+        let galeriaDB = null;
+        let galeriaDesbloqueada = false;
+        let fotosParaUpload = { frente: null, perfil: null, costas: null };
+        let lightboxFotoIdAtual = null;
+        let galeriaUserId = null;
+
+        function abrirDB() {
+            return new Promise((resolve, reject) => {
+                const req = indexedDB.open(DB_NAME, DB_VERSION);
+                req.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+                        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+                        store.createIndex('userId', 'userId', { unique: false });
+                        store.createIndex('data', 'data', { unique: false });
+                    }
+                };
+                req.onsuccess = (e) => { galeriaDB = e.target.result; resolve(galeriaDB); };
+                req.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        function dbAdd(foto) {
+            return new Promise((resolve, reject) => {
+                const tx = galeriaDB.transaction(STORE_NAME, 'readwrite');
+                const store = tx.objectStore(STORE_NAME);
+                const req = store.add(foto);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        function dbGetAll(userId) {
+            return new Promise((resolve, reject) => {
+                const tx = galeriaDB.transaction(STORE_NAME, 'readonly');
+                const store = tx.objectStore(STORE_NAME);
+                const idx = store.index('userId');
+                const req = idx.getAll(userId);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        function dbDelete(id) {
+            return new Promise((resolve, reject) => {
+                const tx = galeriaDB.transaction(STORE_NAME, 'readwrite');
+                const store = tx.objectStore(STORE_NAME);
+                const req = store.delete(id);
+                req.onsuccess = () => resolve();
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        // ===== HASH SHA-256 PARA SENHA =====
+        async function hashSenha(senha) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(senha + '_nutrilife_evolucao_salt');
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // ===== COMPRESSÃO E REDIMENSIONAMENTO DE IMAGEM =====
+        function comprimirImagem(file, maxWidth = 1200, quality = 0.7) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let w = img.width, h = img.height;
+                        if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ===== INICIALIZAÇÃO DA GALERIA =====
+        window.initGaleria = async function() {
+            try {
+                await abrirDB();
+            } catch(e) {
+                console.error('Erro ao abrir IndexedDB para galeria:', e);
+            }
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) return;
+            galeriaUserId = session.user.id;
+
+            // Definir data padrão como hoje
+            const hoje = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('galeria-data');
+            if (dateInput) dateInput.value = hoje;
+
+            // Verificar se já tem senha definida
+            const hashGuardado = localStorage.getItem('nutrilife_galeria_hash_' + galeriaUserId);
+            if (hashGuardado) {
+                // Já tem senha — mostrar modo "desbloquear"
+                document.getElementById('galeria-lock-titulo').textContent = 'Digite sua Senha';
+                document.getElementById('galeria-lock-desc').textContent = 'Insira a senha que definiu para acessar suas fotos de evolução.';
+                document.getElementById('btn-galeria-senha-texto').textContent = 'Desbloquear Galeria';
+                document.getElementById('galeria-senha-confirmar').classList.add('hidden');
+            } else {
+                // Primeira vez — modo "criar senha"
+                document.getElementById('galeria-senha-confirmar').classList.remove('hidden');
+            }
+
+            configurarDragDrop();
+            lucide.createIcons();
+        };
+
+        // ===== AÇÃO DE SENHA (DEFINIR OU DESBLOQUEAR) =====
+        window.acaoSenhaGaleria = async function() {
+            const input = document.getElementById('galeria-senha-input');
+            const confirmar = document.getElementById('galeria-senha-confirmar');
+            const senha = input.value.trim();
+            const hashGuardado = localStorage.getItem('nutrilife_galeria_hash_' + galeriaUserId);
+
+            if (!senha || senha.length < 4) {
+                showToast('Senha Inválida', 'A senha deve ter pelo menos 4 caracteres.', 'error');
+                input.focus();
+                return;
+            }
+
+            if (!hashGuardado) {
+                // Modo: criar senha
+                const senhaConfirmada = confirmar.value.trim();
+                if (senha !== senhaConfirmada) {
+                    showToast('Senhas Diferentes', 'A confirmação não corresponde à senha digitada.', 'error');
+                    confirmar.focus();
+                    return;
+                }
+                const hash = await hashSenha(senha);
+                localStorage.setItem('nutrilife_galeria_hash_' + galeriaUserId, hash);
+                showToast('Senha Definida! 🔒', 'Sua galeria de evolução está protegida.', 'success');
+            } else {
+                // Modo: verificar senha
+                const hash = await hashSenha(senha);
+                if (hash !== hashGuardado) {
+                    showToast('Senha Incorreta', 'A senha digitada não está correta.', 'error');
+                    input.value = '';
+                    input.focus();
+                    return;
+                }
+            }
+
+            // Desbloquear
+            galeriaDesbloqueada = true;
+            document.getElementById('galeria-lock').classList.add('hidden');
+            document.getElementById('galeria-conteudo').classList.remove('hidden');
+            document.getElementById('btn-bloquear-galeria').classList.remove('hidden');
+            document.getElementById('galeria-status-text').textContent = 'Desbloqueada';
+            input.value = '';
+            confirmar.value = '';
+
+            await renderizarGaleria();
+            lucide.createIcons();
+        };
+
+        // ===== BLOQUEAR GALERIA =====
+        window.bloquearGaleria = function() {
+            galeriaDesbloqueada = false;
+            document.getElementById('galeria-lock').classList.remove('hidden');
+            document.getElementById('galeria-conteudo').classList.add('hidden');
+            document.getElementById('btn-bloquear-galeria').classList.add('hidden');
+            document.getElementById('galeria-status-text').textContent = 'Protegida por Senha';
+
+            // Limpar previews
+            fotosParaUpload = { frente: null, perfil: null, costas: null };
+            ['frente', 'perfil', 'costas'].forEach(t => {
+                const prev = document.getElementById('preview-' + t);
+                if (prev) { prev.innerHTML = ''; prev.classList.add('hidden'); }
+                const inp = document.getElementById('input-foto-' + t);
+                if (inp) inp.value = '';
+            });
+            document.getElementById('btn-salvar-fotos').disabled = true;
+        };
+
+        // ===== TOGGLE VISIBILIDADE DA SENHA =====
+        window.toggleGaleriaSenhaVisibilidade = function() {
+            const inp = document.getElementById('galeria-senha-input');
+            const eye = document.getElementById('galeria-senha-eye');
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                eye.setAttribute('data-lucide', 'eye-off');
+            } else {
+                inp.type = 'password';
+                eye.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        };
+
+        // ===== DRAG & DROP =====
+        function configurarDragDrop() {
+            ['frente', 'perfil', 'costas'].forEach(tipo => {
+                const zone = document.getElementById('drop-' + tipo);
+                if (!zone) return;
+                zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+                zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.classList.remove('drag-over');
+                    const file = e.dataTransfer.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        processarFotoParaUpload(file, tipo);
+                    }
+                });
+            });
+        }
+
+        // ===== HANDLER DE FOTO SELECIONADA =====
+        window.handleFotoSelecionada = function(input, tipo) {
+            const file = input.files[0];
+            if (file) processarFotoParaUpload(file, tipo);
+        };
+
+        async function processarFotoParaUpload(file, tipo) {
+            try {
+                const dataUrl = await comprimirImagem(file);
+                fotosParaUpload[tipo] = dataUrl;
+
+                // Mostrar preview
+                const prevContainer = document.getElementById('preview-' + tipo);
+                prevContainer.innerHTML = `
+                    <div class="relative rounded-lg overflow-hidden">
+                        <img src="${dataUrl}" class="w-full h-20 object-cover rounded-lg border border-purple-500/30">
+                        <button onclick="event.preventDefault(); event.stopPropagation(); removerPreview('${tipo}')" class="absolute top-1 right-1 w-5 h-5 bg-rose-600 text-white rounded-full flex items-center justify-center text-xs hover:bg-rose-500">&times;</button>
+                        <span class="absolute bottom-1 left-1 text-[9px] bg-black/60 text-white px-1.5 py-0.5 rounded galeria-tipo-badge">${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</span>
+                    </div>
+                `;
+                prevContainer.classList.remove('hidden');
+
+                // Habilitar botão se pelo menos 1 foto
+                const tem = Object.values(fotosParaUpload).some(v => v !== null);
+                document.getElementById('btn-salvar-fotos').disabled = !tem;
+            } catch(err) {
+                showToast('Erro na Foto', 'Não foi possível processar a imagem.', 'error');
+            }
+        }
+
+        window.removerPreview = function(tipo) {
+            fotosParaUpload[tipo] = null;
+            const prev = document.getElementById('preview-' + tipo);
+            if (prev) { prev.innerHTML = ''; prev.classList.add('hidden'); }
+            const inp = document.getElementById('input-foto-' + tipo);
+            if (inp) inp.value = '';
+            const tem = Object.values(fotosParaUpload).some(v => v !== null);
+            document.getElementById('btn-salvar-fotos').disabled = !tem;
+        };
+
+        // ===== SALVAR FOTOS NO INDEXEDDB =====
+        window.salvarFotosGaleria = async function() {
+            if (!galeriaDB || !galeriaUserId) return;
+
+            const data = document.getElementById('galeria-data').value;
+            if (!data) {
+                showToast('Data Obrigatória', 'Selecione uma data para o registro.', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('btn-salvar-fotos');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Salvando...';
+
+            let salvos = 0;
+            for (const tipo of ['frente', 'perfil', 'costas']) {
+                if (fotosParaUpload[tipo]) {
+                    await dbAdd({
+                        userId: galeriaUserId,
+                        data: data,
+                        tipo: tipo,
+                        imagem: fotosParaUpload[tipo],
+                        criadoEm: new Date().toISOString()
+                    });
+                    salvos++;
+                }
+            }
+
+            // Limpar previews
+            fotosParaUpload = { frente: null, perfil: null, costas: null };
+            ['frente', 'perfil', 'costas'].forEach(t => {
+                const prev = document.getElementById('preview-' + t);
+                if (prev) { prev.innerHTML = ''; prev.classList.add('hidden'); }
+                const inp = document.getElementById('input-foto-' + t);
+                if (inp) inp.value = '';
+            });
+
+            btn.disabled = true;
+            btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Salvar Registro de Evolução';
+            lucide.createIcons();
+
+            showToast('Registro Salvo! 📸', `${salvos} foto${salvos > 1 ? 's' : ''} de evolução ${salvos > 1 ? 'foram salvas' : 'foi salva'} com sucesso.`, 'success');
+            await renderizarGaleria();
+        };
+
+        // ===== RENDERIZAR GALERIA (TIMELINE) =====
+        async function renderizarGaleria() {
+            if (!galeriaDB || !galeriaUserId) return;
+            const fotos = await dbGetAll(galeriaUserId);
+            const timeline = document.getElementById('galeria-timeline');
+            const totalEl = document.getElementById('galeria-total');
+
+            if (!fotos || fotos.length === 0) {
+                totalEl.textContent = '0 registros';
+                timeline.innerHTML = `
+                    <div class="text-center py-10">
+                        <div class="w-14 h-14 mx-auto rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-3">
+                            <i data-lucide="image" class="w-7 h-7 text-slate-700"></i>
+                        </div>
+                        <p class="text-xs text-slate-500">Nenhum registro de evolução ainda.</p>
+                        <p class="text-[10px] text-slate-600 mt-1">Envie suas primeiras fotos acima!</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            // Agrupar por data
+            const grupos = {};
+            fotos.forEach(f => {
+                if (!grupos[f.data]) grupos[f.data] = [];
+                grupos[f.data].push(f);
+            });
+
+            // Ordenar datas (mais recentes primeiro)
+            const datasOrdenadas = Object.keys(grupos).sort((a, b) => b.localeCompare(a));
+            const totalDatas = datasOrdenadas.length;
+            const totalFotos = fotos.length;
+            totalEl.textContent = `${totalDatas} data${totalDatas > 1 ? 's' : ''} • ${totalFotos} foto${totalFotos > 1 ? 's' : ''}`;
+
+            let html = '';
+            datasOrdenadas.forEach((data, idx) => {
+                const fotosData = grupos[data];
+                const dataObj = new Date(data + 'T12:00:00');
+                const dataFormatada = dataObj.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
+
+                const isFirst = idx === 0;
+                const isLast = idx === datasOrdenadas.length - 1;
+
+                html += `
+                <div class="relative">
+                    <!-- Marcador da Timeline -->
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-8 h-8 rounded-full ${isFirst ? 'bg-purple-600 text-white' : 'bg-slate-800 text-slate-400'} flex items-center justify-center text-xs font-bold border ${isFirst ? 'border-purple-500' : 'border-slate-700'} shrink-0">
+                            ${dataObj.getDate()}
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-xs font-bold ${isFirst ? 'text-purple-300' : 'text-slate-300'}">${dataFormatada}</div>
+                            <div class="text-[10px] text-slate-500">${fotosData.length} foto${fotosData.length > 1 ? 's' : ''}</div>
+                        </div>
+                        ${isFirst ? '<span class="text-[10px] bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full border border-purple-500/30 font-bold">Mais Recente</span>' : ''}
+                        ${isLast && totalDatas > 1 ? '<span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full border border-slate-700 font-bold">Início</span>' : ''}
+                    </div>
+
+                    <!-- Grid de Fotos -->
+                    <div class="grid grid-cols-3 gap-2 ml-11">
+                `;
+
+                // Ordenar: frente, perfil, costas
+                const ordem = { 'frente': 0, 'perfil': 1, 'costas': 2 };
+                fotosData.sort((a, b) => (ordem[a.tipo] || 0) - (ordem[b.tipo] || 0));
+
+                fotosData.forEach(foto => {
+                    const tipoLabel = foto.tipo.charAt(0).toUpperCase() + foto.tipo.slice(1);
+                    html += `
+                        <div class="galeria-thumb relative rounded-xl overflow-hidden cursor-pointer group border border-slate-800 hover:border-purple-500/50" onclick="abrirLightbox(${foto.id}, '${tipoLabel}', '${dataFormatada}')">
+                            <img src="${foto.imagem}" alt="${tipoLabel}" class="w-full h-28 sm:h-36 object-cover" loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <span class="absolute bottom-1.5 left-1.5 text-[9px] bg-black/60 text-white px-1.5 py-0.5 rounded galeria-tipo-badge font-semibold">${tipoLabel}</span>
+                            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                    <i data-lucide="maximize-2" class="w-4 h-4 text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                    </div>
+                </div>
+                `;
+            });
+
+            timeline.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        // ===== LIGHTBOX =====
+        window.abrirLightbox = async function(id, tipo, dataStr) {
+            if (!galeriaDB) return;
+            lightboxFotoIdAtual = id;
+
+            // Buscar a foto do IndexedDB
+            const fotos = await dbGetAll(galeriaUserId);
+            const foto = fotos.find(f => f.id === id);
+            if (!foto) return;
+
+            document.getElementById('lightbox-img').src = foto.imagem;
+            document.getElementById('lightbox-info').textContent = `${tipo} — ${dataStr}`;
+            document.getElementById('galeria-lightbox').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        };
+
+        window.fecharLightbox = function(e) {
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('galeria-lightbox').classList.add('hidden');
+            document.body.style.overflow = '';
+            lightboxFotoIdAtual = null;
+        };
+
+        window.excluirFotoLightbox = async function() {
+            if (lightboxFotoIdAtual === null || !galeriaDB) return;
+            if (!confirm('Tem certeza que deseja excluir esta foto? Esta ação não pode ser desfeita.')) return;
+
+            await dbDelete(lightboxFotoIdAtual);
+            fecharLightbox();
+            showToast('Foto Excluída', 'A foto foi removida da sua galeria.', 'success');
+            await renderizarGaleria();
+        };
+
+        // Fechar lightbox com Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !document.getElementById('galeria-lightbox').classList.contains('hidden')) {
+                fecharLightbox();
+            }
+        });
+
+        // Iniciar galeria quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => { if (typeof initGaleria === 'function') initGaleria(); }, 1500);
+        });
+    })();
     </script>
 
     <!-- Botão Flutuante do Chat no Dashboard do Aluno -->
