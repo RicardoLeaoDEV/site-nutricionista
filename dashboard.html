@@ -8,7 +8,8 @@
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Supabase JS SDK -->
@@ -46,39 +47,46 @@
             -webkit-backdrop-filter: blur(14px);
             border: 1px solid rgba(255, 255, 255, 0.07);
         }
+
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
+
         ::-webkit-scrollbar-track {
             background: #090d16;
         }
+
         ::-webkit-scrollbar-thumb {
             background: #1e293b;
             border-radius: 4px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: #10b981;
         }
     </style>
 </head>
 
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-brand-500 selection:text-white flex flex-col justify-between">
+<body
+    class="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-brand-500 selection:text-white flex flex-col justify-between">
 
     <!-- Topo da Aplicação / Barra de Navegação -->
     <header class="bg-slate-900/90 border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-md">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 h-18 py-3.5 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <a href="index.html" class="flex items-center gap-2 group" title="Ir para a página inicial">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
                         <i data-lucide="leaf" class="w-5 h-5"></i>
                     </div>
                     <span class="text-xl font-extrabold tracking-tight text-white hidden sm:inline">
                         NUTRI<span class="text-brand-400">LIFE</span>
                     </span>
                 </a>
-                <span class="text-xs bg-brand-500/10 text-brand-400 px-3 py-1 rounded-full border border-brand-500/20 font-semibold flex items-center gap-1.5">
+                <span
+                    class="text-xs bg-brand-500/10 text-brand-400 px-3 py-1 rounded-full border border-brand-500/20 font-semibold flex items-center gap-1.5">
                     <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>
                     Portal do Aluno
                 </span>
@@ -121,7 +129,8 @@
     <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1 w-full">
 
         <!-- Boas-vindas e Data -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-900/90 to-brand-950/20 p-6 rounded-3xl border border-slate-800 shadow-xl">
+        <div
+            class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-900/90 to-brand-950/20 p-6 rounded-3xl border border-slate-800 shadow-xl">
             <div>
                 <div class="text-xs font-semibold uppercase tracking-wider text-brand-400 mb-1" id="data-hoje">--</div>
                 <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
@@ -144,39 +153,48 @@
         <!-- Cards de Métricas Principais (Quick Stats) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- 1. Peso Atual -->
-            <div class="glass-panel p-5 rounded-2xl border border-slate-800 flex items-center justify-between relative overflow-hidden">
+            <div
+                class="glass-panel p-5 rounded-2xl border border-slate-800 flex items-center justify-between relative overflow-hidden">
                 <div>
                     <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Último Peso</div>
                     <div class="text-2xl font-extrabold text-white" id="stat-peso">-- kg</div>
                     <div class="text-xs font-medium text-slate-400 mt-1" id="stat-peso-diff">Sem registo ainda</div>
                 </div>
-                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
                     <i data-lucide="scale" class="w-6 h-6"></i>
                 </div>
             </div>
 
             <!-- 2. Refeições Concluídas Hoje -->
-            <div class="glass-panel p-5 rounded-2xl border border-slate-800 flex items-center justify-between relative overflow-hidden">
+            <div
+                class="glass-panel p-5 rounded-2xl border border-slate-800 flex items-center justify-between relative overflow-hidden">
                 <div>
-                    <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Refeições de Hoje</div>
+                    <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Refeições de Hoje
+                    </div>
                     <div class="text-2xl font-extrabold text-white" id="stat-refeicoes-contador">0 / 0</div>
-                    <div class="text-xs font-medium text-emerald-400 mt-1" id="stat-refeicoes-status">Marque suas refeições</div>
+                    <div class="text-xs font-medium text-emerald-400 mt-1" id="stat-refeicoes-status">Marque suas
+                        refeições</div>
                 </div>
-                <div class="w-12 h-12 rounded-2xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center">
                     <i data-lucide="utensils" class="w-6 h-6"></i>
                 </div>
             </div>
 
             <!-- 3. Rastreador Interativo de Água -->
-            <div class="glass-panel p-5 rounded-2xl border border-slate-800 sm:col-span-2 flex flex-col justify-between">
+            <div
+                class="glass-panel p-5 rounded-2xl border border-slate-800 sm:col-span-2 flex flex-col justify-between">
                 <div class="flex items-center justify-between mb-2">
                     <div class="flex items-center gap-2">
                         <div class="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
                             <i data-lucide="droplet" class="w-4 h-4"></i>
                         </div>
-                        <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Meta de Água Diária</span>
+                        <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Meta de Água
+                            Diária</span>
                     </div>
-                    <span class="text-xs font-bold text-cyan-400" id="agua-contador-texto">0 / 8 copos (0.0L / 2.8L)</span>
+                    <span class="text-xs font-bold text-cyan-400" id="agua-contador-texto">0 / 8 copos (0.0L /
+                        2.8L)</span>
                 </div>
 
                 <!-- Copos Clicáveis -->
@@ -185,14 +203,16 @@
                 </div>
                 <div class="text-[11px] text-slate-500 mt-2 flex justify-between">
                     <span>Clique nos copos para marcar sua ingestão diária</span>
-                    <button id="btn-reset-agua" class="text-cyan-400 hover:text-cyan-300 transition-colors">Reiniciar</button>
+                    <button id="btn-reset-agua"
+                        class="text-cyan-400 hover:text-cyan-300 transition-colors">Reiniciar</button>
                 </div>
             </div>
         </div>
 
         <!-- Seção do Gráfico de Evolução de Peso -->
         <section class="glass-panel rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-xl">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 pb-4 border-b border-slate-800/80">
+            <div
+                class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 pb-4 border-b border-slate-800/80">
                 <div>
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
                         <i data-lucide="line-chart" class="w-5 h-5 text-brand-400"></i>
@@ -230,9 +250,11 @@
                         <i data-lucide="clipboard-list" class="w-5 h-5 text-brand-400"></i>
                         O seu Plano Alimentar Prescrito
                     </h2>
-                    <p class="text-xs text-slate-400">Consulte suas refeições diárias e marque quando concluir cada uma</p>
+                    <p class="text-xs text-slate-400">Consulte suas refeições diárias e marque quando concluir cada uma
+                    </p>
                 </div>
-                <div class="text-xs text-slate-400 flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-800">
+                <div
+                    class="text-xs text-slate-400 flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-800">
                     <i data-lucide="shield-check" class="w-4 h-4 text-brand-400"></i>
                     Prescrito e Supervisionado pelo seu Nutricionista
                 </div>
@@ -366,11 +388,10 @@
                     const ativo = i <= coposBebidos;
                     const btn = document.createElement('button');
                     btn.type = 'button';
-                    btn.className = `flex-1 h-9 rounded-xl flex items-center justify-center transition-all ${
-                        ativo
+                    btn.className = `flex-1 h-9 rounded-xl flex items-center justify-center transition-all ${ativo
                             ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/25 scale-105'
                             : 'bg-slate-900 border border-slate-700/80 text-slate-600 hover:text-cyan-400 hover:border-cyan-500/40'
-                    }`;
+                        }`;
                     btn.innerHTML = `<i data-lucide="droplet" class="w-4 h-4 ${ativo ? 'fill-current' : ''}"></i>`;
                     btn.onclick = () => {
                         coposBebidos = (coposBebidos === i) ? i - 1 : i;
@@ -516,8 +537,7 @@
                     const msgWhatsApp = encodeURIComponent(`Olá Nutri, tenho uma dúvida sobre a refeição "${item.refeicao}" (${item.horario || ''}): `);
 
                     container.innerHTML += `
-                        <div class="glass-panel border rounded-3xl p-6 transition-all duration-300 relative overflow-hidden group ${
-                            isConcluida ? 'border-brand-500/40 bg-brand-950/10' : 'border-slate-800 hover:border-slate-700'
+                        <div class="glass-panel border rounded-3xl p-6 transition-all duration-300 relative overflow-hidden group ${isConcluida ? 'border-brand-500/40 bg-brand-950/10' : 'border-slate-800 hover:border-slate-700'
                         }" id="card-${itemRefeicaoId}">
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800/80 gap-3">
                                 <div class="flex items-center gap-3">
@@ -542,11 +562,10 @@
                                         <i data-lucide="help-circle" class="w-4 h-4"></i>
                                     </a>
                                     <button onclick="toggleRefeicaoStatus('${itemRefeicaoId}')"
-                                        class="flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl transition-all ${
-                                            isConcluida
-                                                ? 'bg-brand-500/20 text-brand-400 border border-brand-500/40 hover:bg-brand-500/30'
-                                                : 'bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700'
-                                        }">
+                                        class="flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl transition-all ${isConcluida
+                            ? 'bg-brand-500/20 text-brand-400 border border-brand-500/40 hover:bg-brand-500/30'
+                            : 'bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700'
+                        }">
                                         <i data-lucide="${isConcluida ? 'check-circle-2' : 'circle'}" class="w-4 h-4"></i>
                                         <span>${isConcluida ? 'Concluída' : 'Marcar Feita'}</span>
                                     </button>
@@ -743,6 +762,132 @@
         // Inicia carregamento
         carregarDados();
     </script>
+
+    <!-- Botão Flutuante do Chat no Dashboard do Aluno -->
+    <button id="chat-toggle-btn"
+        class="fixed bottom-6 right-6 bg-brand-500 hover:bg-brand-400 text-slate-950 p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-50 group hover:scale-105">
+        <i data-lucide="message-square" class="w-6 h-6"></i>
+        <span id="chat-badge"
+            class="hidden absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
+    </button>
+
+    <!-- Janela Deslizante do Chat -->
+    <div id="chat-window"
+        class="hidden fixed bottom-24 right-6 w-80 sm:w-96 h-[480px] glass-panel border border-slate-800 rounded-3xl shadow-2xl flex flex-col z-50 overflow-hidden">
+        <div class="bg-slate-900/90 p-4 flex justify-between items-center border-b border-slate-800">
+            <div class="flex items-center gap-2.5">
+                <div
+                    class="w-8 h-8 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold">
+                    N</div>
+                <div>
+                    <h3 class="text-xs font-bold text-white">Canal de Dúvidas com o Nutri</h3>
+                    <span class="text-[10px] text-emerald-400 flex items-center gap-1">● Online</span>
+                </div>
+            </div>
+            <button id="chat-close-btn"
+                class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <!-- Mensagens -->
+        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs bg-slate-950/40">
+            <div class="text-center text-slate-500 text-[11px] my-2">Envie sua dúvida sobre a dieta ou rotina. O nutri
+                responderá em breve!</div>
+        </div>
+
+        <!-- Input de Envio -->
+        <form id="chat-form" class="p-3 bg-slate-900/90 border-t border-slate-800 flex gap-2">
+            <input type="text" id="chat-input" placeholder="Digite sua dúvida..." required
+                class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500">
+            <button type="submit"
+                class="bg-brand-600 hover:bg-brand-500 text-white px-4 py-2.5 rounded-xl transition-all flex items-center justify-center">
+                <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Script de Gestão do Chat no Aluno
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('chat-toggle-btn');
+            const closeBtn = document.getElementById('chat-close-btn');
+            const chatWindow = document.getElementById('chat-window');
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
+            const chatMessages = document.getElementById('chat-messages');
+
+            toggleBtn.addEventListener('click', () => {
+                chatWindow.classList.toggle('hidden');
+                if (!chatWindow.classList.contains('hidden')) {
+                    carregarMensagensAluno();
+                }
+            });
+
+            closeBtn.addEventListener('click', () => {
+                chatWindow.classList.add('hidden');
+            });
+
+            async function carregarMensagensAluno() {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (!session) return;
+
+                const { data: mensagens, error } = await supabaseClient
+                    .from('mensagens')
+                    .select('*')
+                    .eq('aluno_id', session.user.id)
+                    .order('created_at', { ascending: true });
+
+                if (error) {
+                    console.error("Erro ao carregar chat:", error);
+                    return;
+                }
+
+                chatMessages.innerHTML = '';
+                if (!mensagens || mensagens.length === 0) {
+                    chatMessages.innerHTML = '<div class="text-center text-slate-500 text-[11px] my-4">Nenhuma mensagem ainda. Tire sua dúvida!</div>';
+                    return;
+                }
+
+                mensagens.forEach(m => {
+                    const isAluno = m.remetente === 'aluno';
+                    const div = document.createElement('div');
+                    div.className = `flex ${isAluno ? 'justify-end' : 'justify-start'}`;
+                    div.innerHTML = `
+                    <div class="max-w-[80%] p-3 rounded-2xl ${isAluno ? 'bg-brand-600 text-white rounded-br-none' : 'bg-slate-800 text-slate-200 rounded-bl-none border border-slate-700'}">
+                        <p class="leading-relaxed">${m.mensagem}</p>
+                        <span class="block text-[9px] mt-1 text-right ${isAluno ? 'text-emerald-200' : 'text-slate-400'}">
+                            ${new Date(m.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                    </div>
+                `;
+                    chatMessages.appendChild(div);
+                });
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            chatForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const texto = chatInput.value.trim();
+                if (!texto) return;
+
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (!session) return;
+
+                const { error } = await supabaseClient
+                    .from('mensagens')
+                    .insert([{ aluno_id: session.user.id, remetente: 'aluno', mensagem: texto }]);
+
+                if (error) {
+                    showToast('Erro ao enviar', error.message, 'error');
+                } else {
+                    chatInput.value = '';
+                    carregarMensagensAluno();
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

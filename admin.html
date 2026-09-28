@@ -473,6 +473,145 @@
 
         verificarSessao();
     </script>
+
+    <!-- NOVO: Seção de Canal de Dúvidas / Chat com Alunos no Admin -->
+    <section class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl mt-8">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-6">
+            <div>
+                <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i data-lucide="message-square" class="w-5 h-5 text-brand-400"></i>
+                    Canal de Dúvidas (Chat com Alunos)
+                </h2>
+                <p class="text-xs text-slate-400">Selecione um aluno para visualizar o histórico de mensagens e
+                    responder diretamente.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <!-- Lista de Alunos no Chat -->
+            <div class="md:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-3 h-80 overflow-y-auto space-y-2"
+                id="admin-chat-alunos-list">
+                <span class="text-xs text-slate-500 p-2 block">A carregar alunos...</span>
+            </div>
+
+            <!-- Janela de Conversa Ativa -->
+            <div
+                class="md:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col h-80 overflow-hidden">
+                <div id="admin-chat-header"
+                    class="bg-slate-800/80 p-3 border-b border-slate-700 text-xs font-bold text-white flex items-center gap-2">
+                    <span>Selecione um aluno ao lado para iniciar</span>
+                </div>
+                <div id="admin-chat-messages" class="flex-1 p-3 overflow-y-auto space-y-2 text-xs">
+                    <div class="text-center text-slate-500 mt-20">Nenhuma conversa selecionada.</div>
+                </div>
+                <form id="admin-chat-form" class="p-2.5 bg-slate-800/50 border-t border-slate-700 flex gap-2 hidden">
+                    <input type="text" id="admin-chat-input" placeholder="Digite sua resposta..." required
+                        class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+                    <button type="submit"
+                        class="bg-brand-600 hover:bg-brand-500 text-white px-3.5 py-2 rounded-xl text-xs font-bold">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let alunoChatAtivoId = null;
+
+        async function carregarListaAlunosChat() {
+            const listEl = document.getElementById('admin-chat-alunos-list');
+            const { data: alunos, error } = await supabaseClient
+                .from('alunos')
+                .select('id, nome, email')
+                .order('nome', { ascending: true });
+
+            if (error || !alunos || alunos.length === 0) {
+                listEl.innerHTML = '<span class="text-xs text-slate-500 p-2 block">Nenhum aluno cadastrado.</span>';
+                return;
+            }
+
+            listEl.innerHTML = '';
+            alunos.forEach(aluno => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'w-full text-left p-3 rounded-xl bg-slate-950/40 hover:bg-slate-800 transition-all border border-slate-800/80 flex items-center justify-between group';
+                btn.innerHTML = `
+                <div>
+                    <div class="text-xs font-bold text-white group-hover:text-brand-400">${aluno.nome || 'Sem Nome'}</div>
+                    <div class="text-[10px] text-slate-400">${aluno.email}</div>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-600"></i>
+            `;
+                btn.onclick = () => selecionarAlunoChat(aluno.id, aluno.nome);
+                listEl.appendChild(btn);
+            });
+            lucide.createIcons();
+        }
+
+        async function selecionarAlunoChat(id, nome) {
+            alunoChatAtivoId = id;
+            document.getElementById('admin-chat-header').innerHTML = `<i data-lucide="user" class="w-4 h-4 text-brand-400"></i> Conversando com: <span class="text-brand-400">${nome}</span>`;
+            document.getElementById('admin-chat-form').classList.remove('hidden');
+            lucide.createIcons();
+            carregarMensagensAdmin(id);
+        }
+
+        async function carregarMensagensAdmin(alunoId) {
+            const box = document.getElementById('admin-chat-messages');
+            const { data: msgs, error } = await supabaseClient
+                .from('mensagens')
+                .select('*')
+                .eq('aluno_id', alunoId)
+                .order('created_at', { ascending: true });
+
+            if (error) return;
+
+            box.innerHTML = '';
+            if (!msgs || msgs.length === 0) {
+                box.innerHTML = '<div class="text-center text-slate-500 mt-10">Nenhuma mensagem trocada com este aluno.</div>';
+                return;
+            }
+
+            msgs.forEach(m => {
+                const isAdmin = m.remetente === 'admin';
+                const div = document.createElement('div');
+                div.className = `flex ${isAdmin ? 'justify-end' : 'justify-start'}`;
+                div.innerHTML = `
+                <div class="max-w-[80%] p-2.5 rounded-xl ${isAdmin ? 'bg-brand-600 text-white rounded-br-none' : 'bg-slate-800 text-slate-200 rounded-bl-none border border-slate-700'}">
+                    <p class="leading-relaxed">${m.mensagem}</p>
+                    <span class="block text-[9px] mt-1 text-right opacity-75">
+                        ${new Date(m.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                </div>
+            `;
+                box.appendChild(div);
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        document.getElementById('admin-chat-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!alunoChatAtivoId) return;
+
+            const input = document.getElementById('admin-chat-input');
+            const texto = input.value.trim();
+            if (!texto) return;
+
+            const { error } = await supabaseClient
+                .from('mensagens')
+                .insert([{ aluno_id: alunoChatAtivoId, remetente: 'admin', mensagem: texto }]);
+
+            if (error) {
+                showToast('Erro ao responder', error.message, 'error');
+            } else {
+                input.value = '';
+                carregarMensagensAdmin(alunoChatAtivoId);
+            }
+        });
+
+        // Chamar carregamento da lista de chats ao iniciar o painel admin
+        setTimeout(carregarListaAlunosChat, 1000);
+    </script>
+
 </body>
 
 </html>
