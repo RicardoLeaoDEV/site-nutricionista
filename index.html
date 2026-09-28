@@ -264,6 +264,20 @@
             opacity: 0.18;
         }
 
+        html.light-mode #mobile-menu {
+            background-color: rgba(255, 255, 255, 0.98) !important;
+            border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+        }
+
+        html.light-mode .mobile-nav-link {
+            color: #1e293b !important;
+        }
+
+        html.light-mode .mobile-nav-link:hover {
+            color: #059669 !important;
+            background-color: rgba(16, 185, 129, 0.08) !important;
+        }
+
         /* ───────── PRELOADER INTERATIVO ESTILO WEBHUB ───────── */
         #preloader {
             position: fixed;
@@ -640,9 +654,9 @@
 
     <!-- ───────── HEADER FIXO COM BLUR E ESTILO WEBHUB ───────── -->
     <header class="fixed top-0 left-0 w-full bg-obsidian-950/80 backdrop-blur-2xl border-b border-white/10 z-50 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <!-- Brand Logo -->
-            <a href="#" class="flex items-center gap-2.5 group">
+            <a href="#" class="flex items-center gap-2.5 group shrink-0">
                 <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-brand-500/25 group-hover:scale-105 transition-transform">
                     <i data-lucide="leaf" class="w-5 h-5"></i>
                 </div>
@@ -651,7 +665,7 @@
                 </div>
             </a>
 
-            <!-- Navegação Desktop -->
+            <!-- Navegação Desktop (Telas Grandes: lg+) -->
             <nav class="hidden lg:flex items-center gap-7 text-xs uppercase tracking-wider font-bold text-slate-300">
                 <a href="#metodo" class="hover:text-brand-400 transition-colors">O Método</a>
                 <a href="#showcase" class="hover:text-brand-400 transition-colors">Plataforma</a>
@@ -660,8 +674,8 @@
                 <a href="#faq" class="hover:text-brand-400 transition-colors">Dúvidas</a>
             </nav>
 
-            <!-- Ações Desktop -->
-            <div class="hidden sm:flex items-center gap-3.5">
+            <!-- Ações Desktop (lg+) -->
+            <div class="hidden lg:flex items-center gap-3.5">
                 <!-- Botão Alternador de Tema (Dark / Light Mode) -->
                 <button type="button" onclick="alternarTema()" class="theme-btn-toggle w-10 h-10 rounded-full border border-white/10 hover:border-brand-500/50 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center cursor-pointer shadow-sm group" title="Alternar Modo Claro / Escuro" aria-label="Alternar tema">
                     <i data-lucide="sun" class="w-4 h-4 text-amber-400 hidden theme-icon-sun transition-transform group-hover:rotate-45"></i>
@@ -683,31 +697,81 @@
                 </a>
             </div>
 
-            <!-- Botão Menu Mobile -->
-            <button id="mobile-menu-btn" class="lg:hidden p-2 text-slate-300 hover:text-white rounded-lg focus:outline-none" aria-label="Abrir Menu">
-                <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
-            </button>
-        </div>
-
-        <!-- Menu Mobile Drawer -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-obsidian-950/95 border-b border-white/10 px-6 py-6 space-y-4 backdrop-blur-2xl">
-            <a href="#metodo" class="mobile-nav-link block text-sm font-bold uppercase tracking-wider text-slate-300 hover:text-brand-400 py-1">O Método</a>
-            <a href="#showcase" class="mobile-nav-link block text-sm font-bold uppercase tracking-wider text-slate-300 hover:text-brand-400 py-1">A Plataforma</a>
-            <a href="#calculadora" class="mobile-nav-link block text-sm font-bold uppercase tracking-wider text-slate-300 hover:text-brand-400 py-1">Calculadora IMC</a>
-            <a href="#sobre" class="mobile-nav-link block text-sm font-bold uppercase tracking-wider text-slate-300 hover:text-brand-400 py-1">Sobre o Nutri</a>
-            <a href="#faq" class="mobile-nav-link block text-sm font-bold uppercase tracking-wider text-slate-300 hover:text-brand-400 py-1">Dúvidas</a>
-            <div class="pt-4 border-t border-white/10 flex flex-col gap-3">
-                <!-- Botão Alternador de Tema Mobile -->
-                <button type="button" onclick="alternarTema()" class="theme-btn-toggle flex items-center justify-center gap-2.5 w-full py-3 bg-white/5 border border-white/10 rounded-2xl text-slate-200 font-bold text-xs uppercase tracking-wider transition-all">
+            <!-- Ações Mobile & Tablet (Abaixo de lg: Celulares e Tablets) -->
+            <div class="flex lg:hidden items-center gap-2">
+                <!-- Botão Alternador de Tema Visível no Celular -->
+                <button type="button" onclick="alternarTema()" class="theme-btn-toggle w-10 h-10 rounded-xl border border-white/15 bg-white/10 text-slate-200 hover:text-white flex items-center justify-center cursor-pointer shadow-sm active:scale-95 transition-all" title="Alternar Modo Claro / Escuro" aria-label="Alternar tema">
                     <i data-lucide="sun" class="w-4 h-4 text-amber-400 hidden theme-icon-sun"></i>
                     <i data-lucide="moon" class="w-4 h-4 text-brand-400 theme-icon-moon"></i>
-                    <span class="theme-text-label">Alternar para Modo Claro</span>
                 </button>
 
-                <a href="login.html" class="flex items-center justify-center gap-2 w-full py-3.5 text-center bg-white/5 border border-white/10 rounded-2xl text-slate-200 font-bold text-xs uppercase tracking-wider">
+                <!-- Botão Atalho Área do Aluno no Celular -->
+                <a href="login.html" class="flex items-center gap-1.5 h-10 px-3 rounded-xl bg-white/10 border border-white/15 text-xs font-bold text-slate-200 hover:text-white active:scale-95 transition-all" title="Área do Aluno">
+                    <i data-lucide="user" class="w-4 h-4 text-brand-400"></i>
+                    <span class="hidden sm:inline">Aluno</span>
+                </a>
+
+                <!-- Botão Menu Mobile com SVG Nativo & Efeito Glass de Alto Contraste -->
+                <button id="mobile-menu-btn" type="button" class="w-10 h-10 rounded-xl bg-brand-500/20 border border-brand-500/50 text-brand-400 hover:text-white hover:bg-brand-500/30 flex items-center justify-center cursor-pointer shadow-lg active:scale-95 transition-all" aria-label="Abrir Menu">
+                    <svg id="hamburger-svg" class="w-5 h-5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="4" y1="6" x2="20" y2="6"></line>
+                        <line x1="4" y1="12" x2="20" y2="12"></line>
+                        <line x1="4" y1="18" x2="20" y2="18"></line>
+                    </svg>
+                    <svg id="close-svg" class="w-5 h-5 hidden transition-transform text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Mobile Drawer (Gaveta Completa com Todas as Opções) -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-obsidian-950/98 border-b border-white/10 px-5 py-6 space-y-4 backdrop-blur-2xl shadow-2xl transition-all">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 pb-2 border-b border-white/10 flex items-center justify-between">
+                <span>Navegação Rápida</span>
+                <span class="text-brand-400">NutriLife</span>
+            </div>
+
+            <div class="grid grid-cols-1 gap-1.5">
+                <a href="#metodo" class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-brand-400"></i>
+                    <span>O Método</span>
+                </a>
+                <a href="#showcase" class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
+                    <i data-lucide="smartphone" class="w-4 h-4 text-brand-400"></i>
+                    <span>A Plataforma</span>
+                </a>
+                <a href="#calculadora" class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
+                    <i data-lucide="calculator" class="w-4 h-4 text-brand-400"></i>
+                    <span>Calculadora IMC</span>
+                </a>
+                <a href="#sobre" class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
+                    <i data-lucide="user-check" class="w-4 h-4 text-brand-400"></i>
+                    <span>Sobre o Nutri</span>
+                </a>
+                <a href="#faq" class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
+                    <i data-lucide="help-circle" class="w-4 h-4 text-brand-400"></i>
+                    <span>Dúvidas Frequentes</span>
+                </a>
+            </div>
+
+            <div class="pt-4 border-t border-white/10 flex flex-col gap-3">
+                <!-- Botão Alternador de Tema Dentro do Drawer -->
+                <button type="button" onclick="alternarTema()" class="theme-btn-toggle flex items-center justify-between w-full py-3.5 px-4 bg-white/5 border border-white/10 rounded-2xl text-slate-200 font-bold text-xs uppercase tracking-wider transition-all">
+                    <span class="flex items-center gap-2.5">
+                        <i data-lucide="sun" class="w-4 h-4 text-amber-400 hidden theme-icon-sun"></i>
+                        <i data-lucide="moon" class="w-4 h-4 text-brand-400 theme-icon-moon"></i>
+                        <span class="theme-text-label">Alternar para Modo Claro</span>
+                    </span>
+                    <span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded-full border border-brand-500/30">Tema</span>
+                </button>
+
+                <a href="login.html" class="flex items-center justify-center gap-2 w-full py-3.5 text-center bg-white/5 border border-white/10 hover:border-brand-500/40 rounded-2xl text-slate-200 font-bold text-xs uppercase tracking-wider transition-all">
                     <i data-lucide="user" class="w-4 h-4 text-brand-400"></i>
                     Aceder à Área do Aluno
                 </a>
+
                 <a href="https://wa.me/5581997969058?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta%20nutricional!" target="_blank"
                     class="botao botaoPrimario w-full text-center">
                     <span>Marcar Consulta no WhatsApp</span>
@@ -1223,16 +1287,31 @@
         const menuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const navLinks = document.querySelectorAll('.mobile-nav-link');
+        const hamburgerSvg = document.getElementById('hamburger-svg');
+        const closeSvg = document.getElementById('close-svg');
 
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                if (isHidden) {
+                    mobileMenu.classList.remove('hidden');
+                    if (hamburgerSvg) hamburgerSvg.classList.add('hidden');
+                    if (closeSvg) closeSvg.classList.remove('hidden');
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    if (hamburgerSvg) hamburgerSvg.classList.remove('hidden');
+                    if (closeSvg) closeSvg.classList.add('hidden');
+                }
             });
-        });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    if (hamburgerSvg) hamburgerSvg.classList.remove('hidden');
+                    if (closeSvg) closeSvg.classList.add('hidden');
+                });
+            });
+        }
 
         // 3. FAQ Accordion
         function toggleFaq(card) {
