@@ -1220,13 +1220,27 @@
             let salvos = 0;
             for (const tipo of ['frente', 'perfil', 'costas']) {
                 if (fotosParaUpload[tipo]) {
-                    await dbAdd({
+                    const fotoObj = {
                         userId: galeriaUserId,
                         data: data,
                         tipo: tipo,
                         imagem: fotosParaUpload[tipo],
                         criadoEm: new Date().toISOString()
-                    });
+                    };
+                    await dbAdd(fotoObj);
+
+                    // Sincroniza com Supabase fotos_evolucao (se configurado) para acesso remoto do admin
+                    try {
+                        await supabaseClient.from('fotos_evolucao').insert([{
+                            aluno_id: galeriaUserId,
+                            data: data,
+                            tipo: tipo,
+                            imagem: fotosParaUpload[tipo]
+                        }]);
+                    } catch (eSupa) {
+                        console.log("Supabase fotos_evolucao:", eSupa);
+                    }
+
                     salvos++;
                 }
             }
@@ -1369,7 +1383,20 @@
             if (lightboxFotoIdAtual === null || !galeriaDB) return;
             if (!confirm('Tem certeza que deseja excluir esta foto? Esta ação não pode ser desfeita.')) return;
 
+            const todas = await dbGetAll(galeriaUserId);
+            const fotoAlvo = todas.find(f => f.id === lightboxFotoIdAtual);
+
             await dbDelete(lightboxFotoIdAtual);
+
+            if (fotoAlvo) {
+                try {
+                    await supabaseClient
+                        .from('fotos_evolucao')
+                        .delete()
+                        .match({ aluno_id: galeriaUserId, data: fotoAlvo.data, tipo: fotoAlvo.tipo });
+                } catch(e) {}
+            }
+
             fecharLightbox();
             showToast('Foto Excluída', 'A foto foi removida da sua galeria.', 'success');
             await renderizarGaleria();

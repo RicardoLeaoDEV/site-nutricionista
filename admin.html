@@ -63,6 +63,30 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #10b981;
         }
+
+        /* Galeria de Fotos no Admin */
+        .galeria-thumb {
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .galeria-thumb:hover {
+            transform: scale(1.025);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .galeria-tipo-badge {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        #admin-lightbox {
+            animation: fadeInLightbox 0.2s ease;
+        }
+        @keyframes fadeInLightbox {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .secao-destaque {
+            box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.6), 0 0 25px rgba(168, 85, 247, 0.25) !important;
+            transition: all 0.4s ease;
+        }
     </style>
 </head>
 
@@ -89,9 +113,29 @@
                 </span>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
+                <!-- Atalhos de Navegação Rápida no Topo -->
+                <button onclick="navegarParaSecao('secao-cadastrar-aluno')" title="Cadastrar Novo Aluno"
+                    class="hidden md:flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-emerald-400 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-700/80 transition-all">
+                    <i data-lucide="user-plus" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    <span>+ Aluno</span>
+                </button>
+
+                <button onclick="navegarParaSecao('secao-cadastrar-refeicao')" title="Cadastrar Refeição"
+                    class="hidden md:flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-brand-300 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-700/80 transition-all">
+                    <i data-lucide="utensils" class="w-3.5 h-3.5 text-brand-400"></i>
+                    <span>+ Dieta</span>
+                </button>
+
+                <!-- Atalho Fotos Alunos (Exclusivo Admin) -->
+                <button onclick="navegarParaSecao('secao-fotos-alunos')" title="Ver Fotos de Evolução dos Alunos"
+                    class="flex items-center gap-1.5 bg-purple-950/40 hover:bg-purple-900/50 text-purple-300 hover:text-white text-xs font-semibold px-3 py-2 rounded-xl border border-purple-500/30 transition-all">
+                    <i data-lucide="camera" class="w-3.5 h-3.5 text-purple-400"></i>
+                    <span>Fotos Alunos</span>
+                </button>
+
                 <!-- Atalho & Notificação do Canal de Dúvidas -->
-                <button id="btn-header-duvidas" onclick="document.getElementById('canal-duvidas')?.scrollIntoView({ behavior: 'smooth' })"
+                <button id="btn-header-duvidas" onclick="navegarParaSecao('canal-duvidas')"
                     title="Canal de Dúvidas com Alunos"
                     class="relative flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all">
                     <div class="relative flex items-center justify-center">
@@ -111,9 +155,9 @@
                 </button>
 
                 <a href="dashboard.html"
-                    class="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all">
+                    class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all">
                     <i data-lucide="eye" class="w-4 h-4 text-brand-400"></i>
-                    <span class="hidden sm:inline">Ver como Aluno</span>
+                    <span class="hidden lg:inline">Ver como Aluno</span>
                 </a>
 
                 <div class="h-6 w-px bg-slate-800"></div>
@@ -137,12 +181,89 @@
                 Gestão de Alunos e Dietas 📋
             </h1>
             <p class="text-sm text-slate-400 mt-1">
-                Cadastre novos alunos ou prescreva refeições personalizadas diretamente para o portal deles.
+                Cadastre novos alunos, prescreva refeições personalizadas, tire dúvidas no chat e avalie as fotos de evolução corporal de cada aluno.
             </p>
         </div>
 
-        <!-- NOVO: Formulário para Cadastrar Aluno -->
-        <section class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+        <!-- PAINEL DE ATALHOS RÁPIDOS (Navegação Instantânea para as 4 Opções) -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <!-- Atalho 1: Cadastrar Novo Aluno -->
+            <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
+                class="glass-panel p-4 rounded-2xl border border-slate-800 hover:border-emerald-500/50 hover:bg-slate-900/90 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg">
+                <div class="flex items-center justify-between w-full mb-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <i data-lucide="user-plus" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-emerald-400 transition-colors">Atalho</span>
+                </div>
+                <div>
+                    <h3 class="text-xs sm:text-sm font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-1">
+                        Cadastrar Aluno
+                        <i data-lucide="arrow-down-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </h3>
+                    <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Novo login & senha</p>
+                </div>
+            </button>
+
+            <!-- Atalho 2: Cadastrar Refeição -->
+            <button onclick="navegarParaSecao('secao-cadastrar-refeicao')"
+                class="glass-panel p-4 rounded-2xl border border-slate-800 hover:border-brand-500/50 hover:bg-slate-900/90 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg">
+                <div class="flex items-center justify-between w-full mb-3">
+                    <div class="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <i data-lucide="utensils" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-brand-400 transition-colors">Atalho</span>
+                </div>
+                <div>
+                    <h3 class="text-xs sm:text-sm font-bold text-white group-hover:text-brand-400 transition-colors flex items-center gap-1">
+                        Cadastrar Refeição
+                        <i data-lucide="arrow-down-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </h3>
+                    <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Plano alimentar</p>
+                </div>
+            </button>
+
+            <!-- Atalho 3: Canal de Dúvidas -->
+            <button onclick="navegarParaSecao('canal-duvidas')"
+                class="glass-panel p-4 rounded-2xl border border-slate-800 hover:border-red-500/50 hover:bg-slate-900/90 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg relative">
+                <div class="flex items-center justify-between w-full mb-3">
+                    <div class="relative w-10 h-10 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <i data-lucide="message-square" class="w-5 h-5"></i>
+                        <span id="badge-atalho-chat"
+                            class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-black rounded-full border-2 border-white flex items-center justify-center shadow-lg shadow-red-600/50 animate-pulse">0</span>
+                    </div>
+                    <span id="badge-atalho-novas-pill" class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-red-400 transition-colors">Atalho</span>
+                </div>
+                <div>
+                    <h3 class="text-xs sm:text-sm font-bold text-white group-hover:text-red-400 transition-colors flex items-center gap-1">
+                        Canal de Dúvidas
+                        <i data-lucide="arrow-down-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </h3>
+                    <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Chat com alunos</p>
+                </div>
+            </button>
+
+            <!-- Atalho 4: Fotos dos Alunos (Nova Opção) -->
+            <button onclick="navegarParaSecao('secao-fotos-alunos')"
+                class="glass-panel p-4 rounded-2xl border border-purple-500/30 hover:border-purple-500 hover:bg-purple-950/20 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg shadow-purple-950/20 relative">
+                <div class="flex items-center justify-between w-full mb-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <i data-lucide="camera" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-[9px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-1.5 py-0.5 rounded-full font-bold">Admin</span>
+                </div>
+                <div>
+                    <h3 class="text-xs sm:text-sm font-bold text-white group-hover:text-purple-300 transition-colors flex items-center gap-1">
+                        Fotos de Evolução
+                        <i data-lucide="arrow-down-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </h3>
+                    <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Galeria corporal</p>
+                </div>
+            </button>
+        </div>
+
+        <!-- SEÇÃO: Formulário para Cadastrar Aluno -->
+        <section id="secao-cadastrar-aluno" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
             <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-6">
                 <div>
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
@@ -185,7 +306,7 @@
         </section>
 
         <!-- Formulário para Adicionar/Atualizar Refeição -->
-        <section class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+        <section id="secao-cadastrar-refeicao" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
             <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-6">
                 <div>
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
@@ -317,6 +438,108 @@
                 </div>
             </div>
         </section>
+
+        <!-- SEÇÃO: Fotos de Evolução Corporal dos Alunos (Exclusivo Admin) -->
+        <section id="secao-fotos-alunos" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-slate-800/80 mb-6 gap-4">
+                <div>
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                            <i data-lucide="camera" class="w-5 h-5 text-purple-400"></i>
+                            <span>Fotos de Evolução dos Alunos</span>
+                        </h2>
+                        <span class="text-xs bg-purple-500/10 text-purple-300 px-3 py-1 rounded-full border border-purple-500/30 font-semibold flex items-center gap-1.5">
+                            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-400"></i>
+                            Exclusivo do Admin
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Selecione um aluno para acompanhar sua linha do tempo de evolução física (Frente, Perfil e Costas).
+                    </p>
+                </div>
+
+                <!-- Botão de Atualizar Fotos -->
+                <button type="button" onclick="carregarFotosAlunoSelecionado()" title="Atualizar fotos deste aluno"
+                    class="self-start sm:self-center flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white px-3.5 py-2 rounded-xl text-xs font-semibold border border-slate-700 transition-all">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5" id="icone-refresh-fotos"></i>
+                    <span>Atualizar Registros</span>
+                </button>
+            </div>
+
+            <!-- Barra de Seleção do Aluno & Filtros -->
+            <div class="bg-slate-900/70 border border-slate-800 p-4 sm:p-5 rounded-2xl mb-6 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                    <div class="md:col-span-7">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="user-check" class="w-3.5 h-3.5 text-purple-400"></i>
+                            Selecionar Aluno para Ver Fotos
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                <i data-lucide="user" class="w-4 h-4"></i>
+                            </div>
+                            <select id="fotos-aluno-select" onchange="carregarFotosAlunoSelecionado()"
+                                class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all">
+                                <option value="" disabled selected>A carregar lista de alunos...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-5 flex items-end gap-2">
+                        <!-- Filtro por Posição/Ângulo -->
+                        <div class="w-full">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Filtrar Ângulo</label>
+                            <select id="filtro-angulo-fotos" onchange="filtrarFotosExibidas()"
+                                class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-3 text-sm text-slate-100 focus:outline-none focus:border-purple-500 transition-all">
+                                <option value="todos">Todos os Ângulos</option>
+                                <option value="frente">Apenas Frente</option>
+                                <option value="perfil">Apenas Perfil</option>
+                                <option value="costas">Apenas Costas</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card de Resumo do Aluno e Atalhos Rápidos -->
+                <div id="fotos-aluno-resumo" class="hidden pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center justify-center font-bold text-xs" id="fotos-aluno-avatar">A</div>
+                        <div>
+                            <span class="font-bold text-white text-sm" id="fotos-aluno-nome">-</span>
+                            <span class="text-slate-400 ml-2" id="fotos-aluno-email">-</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="fotos-contador-badge" class="bg-purple-500/10 text-purple-300 border border-purple-500/30 px-3 py-1 rounded-full font-bold text-xs">
+                            0 fotos encontradas
+                        </span>
+                        <button onclick="irParaChatComAlunoAtual()" title="Abrir conversa com este aluno no chat"
+                            class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl border border-slate-700 transition-colors flex items-center gap-1.5 font-medium">
+                            <i data-lucide="message-square" class="w-3.5 h-3.5 text-brand-400"></i>
+                            <span>Ir para Chat</span>
+                        </button>
+                        <button onclick="irParaDietaComAlunoAtual()" title="Prescrever dieta para este aluno"
+                            class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl border border-slate-700 transition-colors flex items-center gap-1.5 font-medium">
+                            <i data-lucide="utensils" class="w-3.5 h-3.5 text-brand-400"></i>
+                            <span>Prescrever Dieta</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Área de Exibição das Fotos (Timeline) -->
+            <div id="fotos-timeline-container" class="space-y-6 min-h-[160px]">
+                <div class="text-center py-12 bg-slate-900/40 rounded-2xl border border-slate-800/80">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-3 text-purple-400">
+                        <i data-lucide="images" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white mb-1">Selecione um Aluno</h3>
+                    <p class="text-xs text-slate-400 max-w-sm mx-auto">
+                        Escolha um aluno no menu acima para carregar o histórico de fotos corporais (Frente, Perfil e Costas).
+                    </p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Rodapé Discreto -->
@@ -346,6 +569,60 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Navegação Instantânea para Atalhos com Destaque Visual
+        function navegarParaSecao(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            el.classList.add('secao-destaque');
+            setTimeout(() => {
+                el.classList.remove('secao-destaque');
+            }, 1800);
+        }
+
+        // ===== CONFIGURAÇÃO DO INDEXEDDB (FOTOS DE EVOLUÇÃO) =====
+        const DB_NAME = 'nutrilife_galeria';
+        const DB_VERSION = 1;
+        const STORE_NAME = 'fotos';
+        let galeriaDB = null;
+
+        function abrirDB() {
+            return new Promise((resolve, reject) => {
+                const req = indexedDB.open(DB_NAME, DB_VERSION);
+                req.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+                        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+                        store.createIndex('userId', 'userId', { unique: false });
+                        store.createIndex('data', 'data', { unique: false });
+                    }
+                };
+                req.onsuccess = (e) => { galeriaDB = e.target.result; resolve(galeriaDB); };
+                req.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        function dbGetAllPorAluno(userId) {
+            return new Promise((resolve) => {
+                if (!galeriaDB) return resolve([]);
+                try {
+                    const tx = galeriaDB.transaction(STORE_NAME, 'readonly');
+                    const store = tx.objectStore(STORE_NAME);
+                    const idx = store.index('userId');
+                    const req = idx.getAll(userId);
+                    req.onsuccess = () => resolve(req.result || []);
+                    req.onerror = () => resolve([]);
+                } catch(e) {
+                    resolve([]);
+                }
+            });
+        }
+
+        // Estado das Fotos de Evolução no Admin
+        let fotosCacheAlunoAtual = [];
+        let alunoFotosSelecionadoId = null;
+        let alunoFotosSelecionadoNome = null;
 
         // Estado do Chat e Notificações
         let listaAlunosCache = [];
@@ -484,6 +761,7 @@
 
         async function carregarAlunosSelect() {
             const selectEl = document.getElementById('aluno-select');
+            const selectFotosEl = document.getElementById('fotos-aluno-select');
 
             const { data: alunos, error } = await supabaseClient
                 .from('alunos')
@@ -491,22 +769,40 @@
                 .order('nome', { ascending: true });
 
             if (error) {
-                selectEl.innerHTML = `<option value="" disabled>Erro ao carregar alunos: ${error.message}</option>`;
+                if (selectEl) selectEl.innerHTML = `<option value="" disabled>Erro ao carregar alunos: ${error.message}</option>`;
+                if (selectFotosEl) selectFotosEl.innerHTML = `<option value="" disabled>Erro ao carregar alunos: ${error.message}</option>`;
                 return;
             }
+
+            listaAlunosCache = alunos || [];
 
             if (!alunos || alunos.length === 0) {
-                selectEl.innerHTML = `<option value="" disabled>Nenhum aluno encontrado. Cadastre um acima!</option>`;
+                if (selectEl) selectEl.innerHTML = `<option value="" disabled>Nenhum aluno encontrado. Cadastre um acima!</option>`;
+                if (selectFotosEl) selectFotosEl.innerHTML = `<option value="" disabled>Nenhum aluno cadastrado ainda.</option>`;
                 return;
             }
 
-            selectEl.innerHTML = `<option value="" disabled selected>Selecione um aluno...</option>`;
-            alunos.forEach(aluno => {
-                const option = document.createElement('option');
-                option.value = aluno.id;
-                option.textContent = `${aluno.nome || 'Sem Nome'} (${aluno.email || 'Sem e-mail'})`;
-                selectEl.appendChild(option);
-            });
+            if (selectEl) {
+                selectEl.innerHTML = `<option value="" disabled selected>Selecione um aluno...</option>`;
+                alunos.forEach(aluno => {
+                    const option = document.createElement('option');
+                    option.value = aluno.id;
+                    option.textContent = `${aluno.nome || 'Sem Nome'} (${aluno.email || 'Sem e-mail'})`;
+                    selectEl.appendChild(option);
+                });
+            }
+
+            if (selectFotosEl) {
+                const valorAtual = selectFotosEl.value;
+                selectFotosEl.innerHTML = `<option value="" disabled ${!valorAtual ? 'selected' : ''}>Selecione um aluno para carregar suas fotos...</option>`;
+                alunos.forEach(aluno => {
+                    const option = document.createElement('option');
+                    option.value = aluno.id;
+                    option.textContent = `${aluno.nome || 'Sem Nome'} (${aluno.email || 'Sem e-mail'})`;
+                    if (valorAtual && valorAtual === aluno.id) option.selected = true;
+                    selectFotosEl.appendChild(option);
+                });
+            }
         }
 
         // Formulário de Cadastro de Novo Aluno
@@ -720,17 +1016,35 @@
             contagemPorAlunoGlobal = novaContagem;
             const totalNaoLidas = msgsNaoLidas.length;
 
-            // 1. Atualiza Badges no Cabeçalho (Vermelho e Branco)
+            // 1. Atualiza Badges no Cabeçalho e no Atalho Rápido (Vermelho e Branco)
             const headerCounter = document.getElementById('badge-header-counter');
             const headerPill = document.getElementById('badge-header-pill');
+            const atalhoBadge = document.getElementById('badge-atalho-chat');
+            const atalhoPill = document.getElementById('badge-atalho-novas-pill');
+
             if (totalNaoLidas > 0) {
-                headerCounter.textContent = totalNaoLidas > 99 ? '99+' : totalNaoLidas;
+                const textoContador = totalNaoLidas > 99 ? '99+' : totalNaoLidas;
+                headerCounter.textContent = textoContador;
                 headerCounter.classList.remove('hidden');
                 headerPill.textContent = `${totalNaoLidas} nova${totalNaoLidas > 1 ? 's' : ''}`;
                 headerPill.classList.remove('hidden');
+
+                if (atalhoBadge) {
+                    atalhoBadge.textContent = textoContador;
+                    atalhoBadge.classList.remove('hidden');
+                }
+                if (atalhoPill) {
+                    atalhoPill.textContent = `${totalNaoLidas} nova(s)`;
+                    atalhoPill.className = 'text-[10px] uppercase font-black text-red-400 animate-pulse';
+                }
             } else {
                 headerCounter.classList.add('hidden');
                 headerPill.classList.add('hidden');
+                if (atalhoBadge) atalhoBadge.classList.add('hidden');
+                if (atalhoPill) {
+                    atalhoPill.textContent = 'Atalho';
+                    atalhoPill.className = 'text-[10px] uppercase font-bold text-slate-500 group-hover:text-red-400 transition-colors';
+                }
             }
 
             // 2. Atualiza Badge na Seção de Chat (Vermelho e Branco)
@@ -891,8 +1205,293 @@
             }, 3500);
         }
 
+        // ==========================================
+        // GESTÃO DE FOTOS DE EVOLUÇÃO (EXCLUSIVO ADMIN)
+        // ==========================================
+
+        async function carregarFotosAlunoSelecionado() {
+            const selectEl = document.getElementById('fotos-aluno-select');
+            const alunoId = selectEl.value;
+            if (!alunoId) return;
+
+            alunoFotosSelecionadoId = alunoId;
+            const alunoObj = listaAlunosCache.find(a => a.id === alunoId);
+            alunoFotosSelecionadoNome = alunoObj ? (alunoObj.nome || 'Aluno') : 'Aluno';
+            const alunoEmail = alunoObj ? (alunoObj.email || '') : '';
+
+            // Atualiza resumo no card
+            document.getElementById('fotos-aluno-nome').textContent = alunoFotosSelecionadoNome;
+            document.getElementById('fotos-aluno-email').textContent = alunoEmail;
+            document.getElementById('fotos-aluno-avatar').textContent = (alunoFotosSelecionadoNome || 'A').charAt(0).toUpperCase();
+            document.getElementById('fotos-aluno-resumo').classList.remove('hidden');
+
+            const container = document.getElementById('fotos-timeline-container');
+            container.innerHTML = `
+                <div class="text-center py-12">
+                    <div class="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                    <p class="text-xs text-slate-400">Carregando fotos corporais do aluno...</p>
+                </div>
+            `;
+
+            const iconRefresh = document.getElementById('icone-refresh-fotos');
+            if (iconRefresh) iconRefresh.classList.add('animate-spin');
+
+            let fotos = [];
+
+            // 1. Tenta carregar do Supabase (Nuvem)
+            try {
+                const { data: supaFotos, error } = await supabaseClient
+                    .from('fotos_evolucao')
+                    .select('*')
+                    .eq('aluno_id', alunoId)
+                    .order('data', { ascending: false });
+
+                if (!error && supaFotos && supaFotos.length > 0) {
+                    supaFotos.forEach(f => {
+                        fotos.push({
+                            id: f.id,
+                            userId: f.aluno_id,
+                            data: f.data,
+                            tipo: (f.tipo || '').toLowerCase(),
+                            imagem: f.imagem,
+                            origem: 'nuvem'
+                        });
+                    });
+                }
+            } catch (err) {
+                console.log("Supabase fotos_evolucao:", err);
+            }
+
+            // 2. Busca também do IndexedDB local (mesmo navegador / ambiente compartilhado)
+            try {
+                if (!galeriaDB) await abrirDB();
+                const idbFotos = await dbGetAllPorAluno(alunoId);
+                if (idbFotos && idbFotos.length > 0) {
+                    idbFotos.forEach(idbF => {
+                        const jaExiste = fotos.some(f => f.data === idbF.data && f.tipo === idbF.tipo);
+                        if (!jaExiste) {
+                            fotos.push({
+                                id: idbF.id,
+                                userId: idbF.userId,
+                                data: idbF.data,
+                                tipo: (idbF.tipo || '').toLowerCase(),
+                                imagem: idbF.imagem,
+                                origem: 'local'
+                            });
+                        }
+                    });
+                }
+            } catch (errIdb) {
+                console.warn("IndexedDB consulta fotos:", errIdb);
+            }
+
+            fotosCacheAlunoAtual = fotos;
+            const badgeContador = document.getElementById('fotos-contador-badge');
+            if (badgeContador) {
+                badgeContador.textContent = `${fotos.length} foto${fotos.length === 1 ? '' : 's'} encontrada${fotos.length === 1 ? '' : 's'}`;
+            }
+
+            filtrarFotosExibidas();
+
+            if (iconRefresh) {
+                setTimeout(() => iconRefresh.classList.remove('animate-spin'), 400);
+            }
+        }
+
+        function filtrarFotosExibidas() {
+            const filtro = document.getElementById('filtro-angulo-fotos').value;
+            let filtradas = fotosCacheAlunoAtual;
+            if (filtro && filtro !== 'todos') {
+                filtradas = fotosCacheAlunoAtual.filter(f => f.tipo === filtro);
+            }
+            renderizarFotosAdmin(filtradas);
+        }
+
+        function renderizarFotosAdmin(fotos) {
+            const container = document.getElementById('fotos-timeline-container');
+
+            if (!fotos || fotos.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 bg-slate-900/40 rounded-2xl border border-slate-800/80">
+                        <div class="w-14 h-14 mx-auto rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-3">
+                            <i data-lucide="camera" class="w-7 h-7 text-purple-400"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-white mb-1">Nenhuma foto de evolução encontrada</h3>
+                        <p class="text-xs text-slate-400 max-w-sm mx-auto">
+                            O aluno <span class="text-purple-300 font-semibold">${alunoFotosSelecionadoNome || ''}</span> ainda não enviou registros de evolução corporal pelo portal ou nenhuma foto corresponde ao filtro atual.
+                        </p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            // Agrupa fotos por data
+            const grupos = {};
+            fotos.forEach(f => {
+                if (!grupos[f.data]) grupos[f.data] = [];
+                grupos[f.data].push(f);
+            });
+
+            const datasOrdenadas = Object.keys(grupos).sort((a, b) => b.localeCompare(a));
+            const totalDatas = datasOrdenadas.length;
+
+            let html = '';
+            datasOrdenadas.forEach((data, idx) => {
+                const fotosData = grupos[data];
+                const dataObj = new Date(data + 'T12:00:00');
+                const dataFormatada = dataObj.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+                const isFirst = idx === 0;
+                const isLast = idx === datasOrdenadas.length - 1;
+
+                html += `
+                <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-5 relative shadow-lg">
+                    <!-- Marcador da Timeline de Data -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-800/80">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-xl ${isFirst ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30' : 'bg-slate-800 text-slate-400'} flex items-center justify-center text-xs font-black border ${isFirst ? 'border-purple-400' : 'border-slate-700'} shrink-0">
+                                ${dataObj.getDate()}
+                            </div>
+                            <div>
+                                <h4 class="text-xs sm:text-sm font-bold ${isFirst ? 'text-purple-300' : 'text-white'} capitalize">
+                                    ${dataFormatada}
+                                </h4>
+                                <span class="text-[10px] text-slate-400">${fotosData.length} foto${fotosData.length > 1 ? 's' : ''} nesta data</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            ${isFirst ? '<span class="text-[10px] bg-purple-500/20 text-purple-300 px-2.5 py-0.5 rounded-full border border-purple-500/30 font-bold">Mais Recente</span>' : ''}
+                            ${isLast && totalDatas > 1 ? '<span class="text-[10px] bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full border border-slate-700 font-bold">Registro Inicial</span>' : ''}
+                        </div>
+                    </div>
+
+                    <!-- Grid de Fotos: Frente, Perfil, Costas -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                `;
+
+                const ordem = { 'frente': 0, 'perfil': 1, 'costas': 2 };
+                fotosData.sort((a, b) => (ordem[a.tipo] || 0) - (ordem[b.tipo] || 0));
+
+                fotosData.forEach(foto => {
+                    const tipoLabel = foto.tipo.charAt(0).toUpperCase() + foto.tipo.slice(1);
+                    const tagCor = foto.tipo === 'frente' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : (foto.tipo === 'perfil' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' : 'bg-purple-500/20 text-purple-300 border-purple-500/30');
+
+                    html += `
+                        <div class="galeria-thumb relative rounded-xl overflow-hidden cursor-pointer group border border-slate-800 hover:border-purple-500/70 bg-slate-950"
+                            onclick="abrirAdminLightbox('${foto.imagem.replace(/'/g, "\\'")}', '${tipoLabel}', '${dataFormatada}', '${(alunoFotosSelecionadoNome || 'Aluno').replace(/'/g, "\\'")}')">
+                            <img src="${foto.imagem}" alt="${tipoLabel}" class="w-full h-40 sm:h-48 object-cover" loading="lazy">
+                            
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity"></div>
+                            
+                            <div class="absolute top-2.5 left-2.5">
+                                <span class="text-[10px] px-2.5 py-0.5 rounded-md galeria-tipo-badge font-bold border ${tagCor}">
+                                    ${tipoLabel}
+                                </span>
+                            </div>
+
+                            <div class="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-[11px] text-white">
+                                <span class="text-[10px] text-slate-300 font-semibold flex items-center gap-1">
+                                    <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-purple-400"></i> Ampliar foto
+                                </span>
+                                <div class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <i data-lucide="maximize-2" class="w-3.5 h-3.5 text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                    </div>
+                </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function abrirAdminLightbox(imgUrl, tipo, dataStr, alunoNome) {
+            const modal = document.getElementById('admin-lightbox');
+            const img = document.getElementById('admin-lightbox-img');
+            const infoAluno = document.getElementById('admin-lightbox-aluno');
+            const infoDetalhe = document.getElementById('admin-lightbox-info');
+            const btnDownload = document.getElementById('admin-lightbox-download');
+
+            img.src = imgUrl;
+            infoAluno.textContent = alunoNome || 'Aluno';
+            infoDetalhe.textContent = `${tipo} • ${dataStr}`;
+            btnDownload.href = imgUrl;
+            btnDownload.download = `Evolucao_${(alunoNome || 'aluno').replace(/\s+/g, '_')}_${tipo}.jpg`;
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function fecharAdminLightbox(e) {
+            if (e && e.target !== e.currentTarget && !e.target.closest('button')) return;
+            const modal = document.getElementById('admin-lightbox');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !document.getElementById('admin-lightbox').classList.contains('hidden')) {
+                fecharAdminLightbox();
+            }
+        });
+
+        function irParaChatComAlunoAtual() {
+            if (!alunoFotosSelecionadoId) return;
+            selecionarAlunoChat(alunoFotosSelecionadoId, alunoFotosSelecionadoNome);
+            navegarParaSecao('canal-duvidas');
+        }
+
+        function irParaDietaComAlunoAtual() {
+            if (!alunoFotosSelecionadoId) return;
+            const sel = document.getElementById('aluno-select');
+            if (sel) sel.value = alunoFotosSelecionadoId;
+            navegarParaSecao('secao-cadastrar-refeicao');
+        }
+
         verificarSessao();
     </script>
+
+    <!-- Lightbox de Fotos do Admin (Alta Resolução com Download Clínico) -->
+    <div id="admin-lightbox" class="hidden fixed inset-0 z-[70] bg-black/95 flex items-center justify-center p-4 backdrop-blur-md" onclick="fecharAdminLightbox(event)">
+        <button onclick="fecharAdminLightbox()" class="absolute top-4 right-4 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 w-11 h-11 rounded-full flex items-center justify-center transition-colors z-20">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+
+        <div class="absolute top-4 left-4 z-20 flex items-center gap-3">
+            <span class="text-xs bg-purple-500/20 text-purple-300 border border-purple-500/30 px-3 py-1 rounded-full font-bold flex items-center gap-1.5">
+                <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+                Visualização Exclusiva do Admin
+            </span>
+            <div class="text-xs text-white/80 hidden sm:block">
+                <span id="admin-lightbox-aluno" class="font-bold text-white"></span>
+                <span class="mx-1 text-slate-500">•</span>
+                <span id="admin-lightbox-info" class="text-slate-300"></span>
+            </div>
+        </div>
+
+        <div class="relative max-w-4xl max-h-[82vh] flex items-center justify-center">
+            <img id="admin-lightbox-img" class="max-w-full max-h-[82vh] rounded-2xl shadow-2xl object-contain border border-slate-800" src="" alt="Foto de evolução clínica">
+        </div>
+
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 z-20">
+            <a id="admin-lightbox-download" href="#" download="evolucao-aluno.jpg"
+                class="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-lg shadow-purple-600/30 flex items-center gap-2">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>Baixar Imagem</span>
+            </a>
+            <button onclick="fecharAdminLightbox()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all border border-slate-700">
+                Fechar
+            </button>
+        </div>
+    </div>
 </body>
 
 </html>
