@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriLife - Acesso à Área do Aluno</title>
-    <!-- Google Fonts: Plus Jakarta Sans -->
+    <!-- Tipografia WebHub: Clash Display + Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -20,6 +21,7 @@
             theme: {
                 extend: {
                     fontFamily: {
+                        clash: ['"Clash Display"', '"Plus Jakarta Sans"', 'sans-serif'],
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     },
                     colors: {
@@ -39,8 +41,77 @@
     </script>
     <style>
         .radial-bg {
-            background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.12), transparent 50%),
-                        radial-gradient(circle at bottom left, rgba(6, 78, 59, 0.2), transparent 50%);
+            background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.14), transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(6, 78, 59, 0.25), transparent 50%);
+        }
+
+        /* Botão Interativo WebHub */
+        .botao {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            height: 56px;
+            text-decoration: none;
+            color: #060911;
+            background-color: #ffffff;
+            border: none;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 6px 6px 24px;
+            gap: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 20px 35px -5px rgba(16, 185, 129, 0.28), inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .botao:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.15), 0 25px 45px -5px rgba(16, 185, 129, 0.4), inset 0 1px 1px 0 rgba(255, 255, 255, 1);
+        }
+
+        .botaoPrimario {
+            position: relative;
+            padding-right: 66px;
+        }
+
+        .botaoPrimario .divSeta {
+            background-color: #060911;
+            color: #34d399;
+            border-radius: 9999px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+            right: 6px;
+        }
+
+        .botaoPrimario:hover .divSeta {
+            width: calc(100% - 12px);
+            background-color: #10b981;
+            color: #ffffff;
+        }
+
+        /* Badge Bisotado 3D WebHub */
+        .cardSubtitulo {
+            width: max-content;
+            display: inline-flex;
+            padding: 7px 16px;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            border-radius: 9999px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(52, 211, 153, 0.35);
+            box-shadow:
+                -1px -1px 0 0 rgba(255, 255, 255, 0.4) inset,
+                1px 1px 0 0 rgba(255, 255, 255, 0.2) inset,
+                3px 3px 6px 0 rgba(0, 0, 0, 0.35) inset,
+                -2px -2px 6px 0 rgba(16, 185, 129, 0.25) inset;
         }
     </style>
 </head>
@@ -64,13 +135,13 @@
                         </span>
                     </a>
 
-                    <div class="inline-flex items-center gap-2 bg-brand-500/10 text-brand-400 border border-brand-500/20 text-xs font-semibold px-3 py-1 rounded-full mb-6">
-                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-                        Plataforma Exclusiva de Alunos
+                    <div class="cardSubtitulo mb-6">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-brand-400"></i>
+                        <h3 class="!text-[10px]">PLATAFORMA EXCLUSIVA DE ALUNOS</h3>
                     </div>
 
-                    <h2 class="text-3xl font-extrabold text-white leading-tight mb-4">
-                        Seu foco diário gera <span class="text-brand-400">resultados duradouros.</span>
+                    <h2 class="font-clash text-3xl sm:text-4xl font-bold text-white leading-tight mb-4">
+                        Seu foco diário gera <span class="bg-gradient-to-r from-brand-400 to-teal-300 bg-clip-text text-transparent">resultados duradouros.</span>
                     </h2>
                     <p class="text-sm text-slate-400 leading-relaxed">
                         Acesse seu plano nutricional prescrito, registre suas pesagens periódicas e confira alternativas de substituição para qualquer imprevisto.
@@ -167,11 +238,13 @@
                             </div>
                         </div>
 
-                        <!-- Botão de Login -->
+                        <!-- Botão de Login WebHub -->
                         <button type="submit" id="btn-submit"
-                            class="w-full bg-brand-600 hover:bg-brand-500 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl transition-all duration-200 shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2">
-                            <span id="btn-text">Entrar na Plataforma</span>
-                            <i data-lucide="arrow-right" id="btn-arrow" class="w-4 h-4"></i>
+                            class="botao botaoPrimario w-full !h-[56px] text-center">
+                            <span id="btn-text">ENTRAR NA PLATAFORMA</span>
+                            <div class="divSeta">
+                                <i data-lucide="arrow-right" id="btn-arrow" class="w-4 h-4"></i>
+                            </div>
                             <div id="btn-spinner" class="hidden w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         </button>
                     </form>
