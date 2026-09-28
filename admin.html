@@ -16,6 +16,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- html2pdf.js para Exportação de PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -338,14 +340,21 @@
         <!-- Formulário para Adicionar/Atualizar Refeição -->
         <section id="secao-cadastrar-refeicao"
             class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800/80 mb-6 gap-3">
                 <div>
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
                         <i data-lucide="plus-circle" class="w-5 h-5 text-brand-400"></i>
                         Cadastrar Refeição no Plano do Aluno
                     </h2>
-                    <p class="text-xs text-slate-400">Os dados serão sincronizados instantaneamente no portal do aluno
-                    </p>
+                    <p class="text-xs text-slate-400">Os dados serão sincronizados instantaneamente no portal do aluno</p>
+                </div>
+                <div>
+                    <button type="button" onclick="gerarPdfAlunoAdmin()" id="btn-exportar-pdf-admin"
+                        class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-brand-400 hover:text-white border border-slate-700 hover:border-brand-500/50 text-xs font-bold px-3.5 py-2 rounded-xl transition-all cursor-pointer shadow-sm active:scale-95">
+                        <i data-lucide="file-down" class="w-4 h-4" id="btn-admin-pdf-icon"></i>
+                        <span id="btn-admin-pdf-text">Baixar PDF do Aluno</span>
+                        <div id="btn-admin-pdf-spinner" class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    </button>
                 </div>
             </div>
 
@@ -585,6 +594,9 @@
                 </div>
             </div>
         </section>
+
+        <!-- Template Oculto para Geração de PDF no Admin -->
+        <div id="area-impressao-pdf-admin" class="hidden"></div>
     </main>
 
     <!-- Rodapé Discreto -->
@@ -948,6 +960,199 @@
                 document.getElementById('refeicao-nome').focus();
             }
         });
+
+        // ───────────────── EXPORTAÇÃO DE PDF DO PLANO NO PAINEL ADMIN ─────────────────
+        async function gerarPdfAlunoAdmin() {
+            const selectEl = document.getElementById('aluno-select');
+            const alunoId = selectEl ? selectEl.value : null;
+
+            if (!alunoId) {
+                showToast('Selecione um Aluno', 'Por favor, selecione um aluno no campo abaixo para gerar o PDF.', 'error');
+                return;
+            }
+
+            const alunoObj = listaAlunosCache.find(a => a.id === alunoId);
+            const nomeAluno = alunoObj ? (alunoObj.nome || (alunoObj.email ? alunoObj.email.split('@')[0] : 'Aluno')) : 'Aluno';
+
+            const btnText = document.getElementById('btn-admin-pdf-text');
+            const btnIcon = document.getElementById('btn-admin-pdf-icon');
+            const btnSpinner = document.getElementById('btn-admin-pdf-spinner');
+            const btn = document.getElementById('btn-exportar-pdf-admin');
+
+            const textoOriginal = btnText ? btnText.textContent : 'Baixar PDF do Aluno';
+            if (btnText) btnText.textContent = 'Buscando dieta...';
+            if (btnIcon) btnIcon.classList.add('hidden');
+            if (btnSpinner) btnSpinner.classList.remove('hidden');
+            if (btn) btn.disabled = true;
+
+            const { data: dietas, error } = await supabaseClient
+                .from('dietas')
+                .select('*')
+                .eq('aluno_id', alunoId);
+
+            if (error || !dietas || dietas.length === 0) {
+                if (btnText) btnText.textContent = textoOriginal;
+                if (btnIcon) btnIcon.classList.remove('hidden');
+                if (btnSpinner) btnSpinner.classList.add('hidden');
+                if (btn) btn.disabled = false;
+                showToast('Sem Refeições', `O aluno ${nomeAluno} ainda não possui nenhuma refeição cadastrada no plano.`, 'error');
+                return;
+            }
+
+            if (btnText) btnText.textContent = 'Gerando PDF...';
+
+            const containerPdf = document.getElementById('area-impressao-pdf-admin');
+            const dataHojeFormatada = new Date().toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            let refeicoesCards = '';
+            dietas.forEach((d, idx) => {
+                const horarioStr = d.horario ? d.horario : 'Horário Flexível';
+                const alimentosFormatados = (d.alimentos || '')
+                    .split('\n')
+                    .map(linha => linha.trim())
+                    .filter(linha => linha.length > 0)
+                    .map(linha => `<li style="margin-bottom: 5px; color: #1e293b; font-size: 13px; line-height: 1.5;">${linha}</li>`)
+                    .join('');
+
+                let blocoSubstituicoes = '';
+                if (d.substituicoes && d.substituicoes.trim().length > 0) {
+                    blocoSubstituicoes = `
+                        <div style="margin-top: 10px; padding: 10px 14px; background-color: #f0fdf4; border-left: 3px solid #10b981; border-radius: 6px;">
+                            <div style="font-size: 11px; font-weight: 700; color: #047857; text-transform: uppercase; margin-bottom: 4px;">
+                                🔄 Opções de Substituição Equivalentes:
+                            </div>
+                            <div style="font-size: 12px; color: #166534; line-height: 1.4; white-space: pre-line;">
+                                ${d.substituicoes}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                refeicoesCards += `
+                    <div style="margin-bottom: 14px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; page-break-inside: avoid; break-inside: avoid; background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                        <div style="background-color: #f8fafc; padding: 9px 16px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="background-color: #10b981; color: #ffffff; font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 20px;">
+                                    ${idx + 1}
+                                </span>
+                                <span style="font-size: 13px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.03em;">
+                                    ${d.refeicao}
+                                </span>
+                            </div>
+                            <span style="font-size: 11px; font-weight: 700; color: #059669; background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 2px 9px; border-radius: 12px;">
+                                ⏰ ${horarioStr}
+                            </span>
+                        </div>
+                        <div style="padding: 12px 16px;">
+                            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em; margin-bottom: 6px;">
+                                Alimentos e Porções Prescritas:
+                            </div>
+                            <ul style="margin: 0; padding-left: 18px;">
+                                ${alimentosFormatados}
+                            </ul>
+                            ${blocoSubstituicoes}
+                        </div>
+                    </div>
+                `;
+            });
+
+            containerPdf.innerHTML = `
+                <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; color: #0f172a; max-width: 800px; margin: 0 auto; background: #ffffff; padding: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #10b981; padding-bottom: 14px; margin-bottom: 18px;">
+                        <div>
+                            <div style="font-size: 24px; font-weight: 900; letter-spacing: -0.02em; color: #0f172a;">
+                                NUTRI<span style="color: #10b981;">LIFE</span>
+                            </div>
+                            <div style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px;">
+                                Nutrição Clínica & Alta Performance
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 999px; display: inline-block; text-transform: uppercase;">
+                                Prescrição Nutricional Individualizada
+                            </div>
+                            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">
+                                Emissão: <strong>${dataHojeFormatada}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                        <div>
+                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 700;">Aluno / Paciente:</div>
+                            <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-top: 2px;">${nomeAluno}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 700;">Nutricionista Responsável:</div>
+                            <div style="font-size: 12px; font-weight: 700; color: #059669; margin-top: 2px;">Ricardo Leão (Nutri)</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 700;">Meta de Hidratação Diária:</div>
+                            <div style="font-size: 12px; font-weight: 700; color: #0284c7; margin-top: 2px;">💧 2.8 a 3.0 Litros / dia</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        ${refeicoesCards}
+                    </div>
+
+                    <div style="background-color: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 10px; color: #475569; line-height: 1.4;">
+                        <strong style="color: #0f172a;">Recomendações NutriLife:</strong>
+                        Mastigue devagar e mantenha a consistência. Beba água ao longo do dia e evite grandes volumes de líquidos junto às refeições principais. Em caso de dúvidas, utilize o canal de suporte com o nutricionista.
+                    </div>
+
+                    <div style="border-top: 1px solid #e2e8f0; padding-top: 10px; display: flex; justify-content: space-between; font-size: 9px; color: #94a3b8;">
+                        <span>NutriLife Digital Platform • Transformando rotinas através da nutrição consciente</span>
+                        <span>Documento emitido digitalmente para uso pessoal</span>
+                    </div>
+                </div>
+            `;
+
+            containerPdf.style.display = 'block';
+            containerPdf.style.position = 'fixed';
+            containerPdf.style.left = '-9999px';
+            containerPdf.style.top = '0';
+            containerPdf.style.width = '800px';
+            containerPdf.classList.remove('hidden');
+
+            const nomeArquivo = `Plano_Alimentar_${nomeAluno.replace(/[^a-zA-Z0-9]/g, '_')}_NutriLife.pdf`;
+
+            try {
+                if (typeof html2pdf !== 'undefined') {
+                    const opt = {
+                        margin: [8, 8, 8, 8],
+                        filename: nomeArquivo,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                    };
+                    await html2pdf().set(opt).from(containerPdf.firstElementChild).save();
+                    showToast('PDF Gerado! 📄', `Cardápio de ${nomeAluno} salvo em PDF.`, 'success');
+                } else {
+                    window.print();
+                }
+            } catch (err) {
+                console.error("Erro ao gerar PDF no admin:", err);
+                showToast('Aviso', 'Tentando impressão padrão do navegador...', 'warning');
+                window.print();
+            } finally {
+                if (btnText) btnText.textContent = textoOriginal;
+                if (btnIcon) btnIcon.classList.remove('hidden');
+                if (btnSpinner) btnSpinner.classList.add('hidden');
+                if (btn) btn.disabled = false;
+                containerPdf.classList.add('hidden');
+                containerPdf.style.display = '';
+                containerPdf.style.position = '';
+                containerPdf.style.left = '';
+                containerPdf.style.top = '';
+                containerPdf.style.width = '';
+            }
+        }
 
         document.getElementById('btn-logout').addEventListener('click', async () => {
             const btn = document.getElementById('btn-logout');
