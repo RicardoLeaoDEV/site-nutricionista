@@ -767,8 +767,9 @@
     <button id="chat-toggle-btn"
         class="fixed bottom-6 right-6 bg-brand-500 hover:bg-brand-400 text-slate-950 p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-50 group hover:scale-105">
         <i data-lucide="message-square" class="w-6 h-6"></i>
+        <!-- Símbolo de notificação em vermelho e branco -->
         <span id="chat-badge"
-            class="hidden absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
+            class="hidden absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1 bg-red-600 text-white rounded-full text-[10px] font-black border-2 border-white flex items-center justify-center shadow-lg shadow-red-600/50 animate-pulse">1</span>
     </button>
 
     <!-- Janela Deslizante do Chat -->
@@ -816,10 +817,12 @@
             const chatForm = document.getElementById('chat-form');
             const chatInput = document.getElementById('chat-input');
             const chatMessages = document.getElementById('chat-messages');
+            const chatBadge = document.getElementById('chat-badge');
 
             toggleBtn.addEventListener('click', () => {
                 chatWindow.classList.toggle('hidden');
                 if (!chatWindow.classList.contains('hidden')) {
+                    chatBadge.classList.add('hidden');
                     carregarMensagensAluno();
                 }
             });
@@ -876,7 +879,7 @@
 
                 const { error } = await supabaseClient
                     .from('mensagens')
-                    .insert([{ aluno_id: session.user.id, remetente: 'aluno', mensagem: texto }]);
+                    .insert([{ aluno_id: session.user.id, remetente: 'aluno', mensagem: texto, lida: false }]);
 
                 if (error) {
                     showToast('Erro ao enviar', error.message, 'error');
@@ -885,6 +888,30 @@
                     carregarMensagensAluno();
                 }
             });
+
+            // Verificar respostas do nutri para notificar aluno com badge vermelho e branco
+            async function checarNovasDoNutri() {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (!session) return;
+
+                const { data: msgs } = await supabaseClient
+                    .from('mensagens')
+                    .select('id, remetente, created_at')
+                    .eq('aluno_id', session.user.id)
+                    .eq('remetente', 'admin')
+                    .order('created_at', { ascending: false })
+                    .limit(1);
+
+                if (msgs && msgs.length > 0 && chatWindow.classList.contains('hidden')) {
+                    const lastRead = localStorage.getItem('nutrilife_aluno_last_msg');
+                    if (lastRead !== msgs[0].id) {
+                        chatBadge.textContent = '1';
+                        chatBadge.classList.remove('hidden');
+                    }
+                }
+            }
+
+            setInterval(checarNovasDoNutri, 5000);
         });
     </script>
 
