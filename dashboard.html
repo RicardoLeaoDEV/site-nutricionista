@@ -2172,7 +2172,6 @@
             btn.disabled = true;
             btn.innerHTML = `<div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Atualizando...`;
 
-            // Se o peso foi alterado, insere novo registro no histórico
             if (peso && peso !== perfilAlunoGlobal.peso) {
                 try {
                     await supabaseClient
@@ -2186,7 +2185,8 @@
             await sincronizarPerfilServidor({
                 altura: altura,
                 peso: peso,
-                idade: idade
+                idade: idade,
+                foto_perfil: perfilAlunoGlobal.foto_perfil || ''
             });
 
             btn.disabled = false;
