@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
@@ -152,13 +152,13 @@
                             <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
                                 class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800 transition-colors">
                                 <i data-lucide="user-plus" class="w-4 h-4 text-emerald-400"></i>
-                                <span>+ Aluno</span>
+                                <span>Cadastrar novo aluno</span>
                             </button>
 
                             <button onclick="navegarParaSecao('secao-cadastrar-refeicao')"
                                 class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-brand-300 hover:bg-slate-800 transition-colors">
                                 <i data-lucide="utensils" class="w-4 h-4 text-brand-400"></i>
-                                <span>+ Dieta</span>
+                                <span>Cadastrar de refeição</span>
                             </button>
 
                             <!-- 1. Chat com Alunos primeiro -->
@@ -324,20 +324,29 @@
 
                             <!-- Métricas: Altura, Peso, Idade, IMC -->
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 shrink-0">
-                                <div class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Altura</span>
+                                <div
+                                    class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
+                                    <span
+                                        class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Altura</span>
                                     <span class="text-xs font-extrabold text-white" id="clinico-altura">-- m</span>
                                 </div>
-                                <div class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Peso Atual</span>
+                                <div
+                                    class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
+                                    <span
+                                        class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Peso
+                                        Atual</span>
                                     <span class="text-xs font-extrabold text-emerald-400" id="clinico-peso">-- kg</span>
                                 </div>
-                                <div class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Idade</span>
+                                <div
+                                    class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
+                                    <span
+                                        class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Idade</span>
                                     <span class="text-xs font-extrabold text-white" id="clinico-idade">-- anos</span>
                                 </div>
-                                <div class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[75px]">
-                                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">IMC</span>
+                                <div
+                                    class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[75px]">
+                                    <span
+                                        class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">IMC</span>
                                     <span class="text-xs font-extrabold text-blue-400" id="clinico-imc">--</span>
                                 </div>
                             </div>
@@ -805,7 +814,7 @@
                         if (!perfisAlunosCache[m.aluno_id]) {
                             try {
                                 perfisAlunosCache[m.aluno_id] = JSON.parse(m.mensagem);
-                            } catch (e) {}
+                            } catch (e) { }
                         }
                     });
                 }
@@ -844,7 +853,7 @@
                 if (ultimosPesos && ultimosPesos.length > 0) {
                     perfil.peso = ultimosPesos[0].peso;
                 }
-            } catch (e) {}
+            } catch (e) { }
 
             cardEl.classList.remove('hidden');
             document.getElementById('clinico-nome').textContent = aluno.nome || 'Aluno';
@@ -1494,7 +1503,7 @@
             if (ultMsgPerfil) {
                 try {
                     perfisAlunosCache[alunoId] = JSON.parse(ultMsgPerfil.mensagem);
-                } catch(e) {}
+                } catch (e) { }
             }
 
             if (msgsChat.length === 0) {

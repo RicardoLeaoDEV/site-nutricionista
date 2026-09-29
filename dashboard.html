@@ -322,12 +322,12 @@
                     </div>
                 </div>
 
-                <a href="https://wa.me/5581997969058?text=Ol%C3%A1%20Nutri%2C%20tenho%20uma%20d%C3%BAvida%20sobre%20meu%20plano%20alimentar."
-                    target="_blank"
-                    class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-brand-400 hover:text-brand-300 text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all">
+                <button type="button"
+                    onclick="if(document.getElementById('chat-window').classList.contains('hidden')) document.getElementById('chat-toggle-btn').click();"
+                    class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-brand-400 hover:text-brand-300 text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all cursor-pointer">
                     <i data-lucide="message-circle" class="w-4 h-4"></i>
                     Dúvida com o Nutri
-                </a>
+                </button>
 
                 <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
 
@@ -370,12 +370,13 @@
             </div>
 
             <!-- Botão de suporte rápido mobile -->
-            <a href="https://wa.me/5581997969058?text=Ol%C3%A1%20Nutri%2C%20tenho%20uma%20d%C3%BAvida%20sobre%20meu%20plano%20alimentar."
-                target="_blank"
-                class="sm:hidden flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all">
+            <button type="button"
+                onclick="if(document.getElementById('chat-window').classList.contains('hidden')) document.getElementById('chat-toggle-btn').click();"
+                class="sm:hidden flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all cursor-pointer">
                 <i data-lucide="message-circle" class="w-4 h-4"></i>
                 <span>Suporte</span>
-            </a>
+            </button>
+
         </div> <!-- FECHAMENTO DA DIV QUE ESTAVA FALTANDO E QUEBROU O LAYOUT -->
 
         <!-- Cards de Métricas Principais (Quick Stats) -->
@@ -737,6 +738,9 @@
                 <canvas id="graficoPeso"></canvas>
             </div>
         </section>
+
+        <!-- Template Oculto para Geração de PDF e Impressão -->
+        <div id="area-impressao-pdf" class="hidden"></div>
 
     </main>
 
