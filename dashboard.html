@@ -1918,7 +1918,22 @@
             localStorage.setItem('nutrilife_perfil_' + userId, JSON.stringify(perfilAlunoGlobal));
             atualizarUIPerfil(perfilAlunoGlobal);
 
-            // 1. Grava como mensagem de sistema para sincronização segura com o painel do Admin
+            // 1. Atualiza diretamente na tabela alunos do banco de dados
+            try {
+                await supabaseClient
+                    .from('alunos')
+                    .update({
+                        foto_perfil: perfilAlunoGlobal.foto_perfil || null,
+                        altura: perfilAlunoGlobal.altura || null,
+                        peso: perfilAlunoGlobal.peso || null,
+                        idade: perfilAlunoGlobal.idade || null
+                    })
+                    .eq('id', userId);
+            } catch (e) {
+                console.error("Erro ao atualizar tabela alunos:", e);
+            }
+
+            // 2. Grava também no mensagens (fallback)
             try {
                 await supabaseClient
                     .from('mensagens')
@@ -1928,23 +1943,7 @@
                         mensagem: JSON.stringify(perfilAlunoGlobal),
                         lida: true
                     }]);
-            } catch (e) {
-                console.error("Falha ao gravar sistema_perfil:", e);
-            }
-
-            // 2. Atualiza user_metadata no Supabase Auth
-            try {
-                await supabaseClient.auth.updateUser({
-                    data: {
-                        foto_perfil: perfilAlunoGlobal.foto_perfil,
-                        altura: perfilAlunoGlobal.altura,
-                        peso: perfilAlunoGlobal.peso,
-                        idade: perfilAlunoGlobal.idade
-                    }
-                });
-            } catch (e) {
-                console.warn("Aviso ao atualizar user_metadata:", e);
-            }
+            } catch (e) { }
         }
 
         // ==============================================================

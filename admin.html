@@ -851,28 +851,40 @@
             const aluno = listaAlunosCache.find(a => a.id === alunoId);
             if (!aluno) return;
 
-            // Busca SEMPRE o registo mais recente directamente na base de dados
             let perfil = {};
-            try {
-                const { data: ultMsg } = await supabaseClient
-                    .from('mensagens')
-                    .select('mensagem')
-                    .eq('aluno_id', alunoId)
-                    .eq('remetente', 'sistema_perfil')
-                    .order('created_at', { ascending: false })
-                    .limit(1);
 
-                if (ultMsg && ultMsg.length > 0) {
-                    perfil = JSON.parse(ultMsg[0].mensagem);
-                    perfisAlunosCache[alunoId] = perfil;
-                } else {
-                    perfil = perfisAlunosCache[alunoId] || {};
+            // 1. Busca os dados cadastrados diretamente na tabela alunos
+            try {
+                const { data: alunoDb } = await supabaseClient
+                    .from('alunos')
+                    .select('foto_perfil, altura, peso, idade')
+                    .eq('id', alunoId)
+                    .single();
+
+                if (alunoDb) {
+                    perfil = alunoDb;
                 }
-            } catch (e) {
-                perfil = perfisAlunosCache[alunoId] || {};
+            } catch (e) { }
+
+            // 2. Se faltar algo, tenta recuperar de 'mensagens' (sistema_perfil)
+            if (!perfil.altura || !perfil.idade) {
+                try {
+                    const { data: ultMsg } = await supabaseClient
+                        .from('mensagens')
+                        .select('mensagem')
+                        .eq('aluno_id', alunoId)
+                        .eq('remetente', 'sistema_perfil')
+                        .order('created_at', { ascending: false })
+                        .limit(1);
+
+                    if (ultMsg && ultMsg.length > 0) {
+                        const dadosMsg = JSON.parse(ultMsg[0].mensagem);
+                        perfil = { ...perfil, ...dadosMsg };
+                    }
+                } catch (e) { }
             }
 
-            // Tenta obter o peso mais recente registrado no historico_peso
+            // 3. Busca o peso mais recente de historico_peso
             try {
                 const { data: ultimosPesos } = await supabaseClient
                     .from('historico_peso')
