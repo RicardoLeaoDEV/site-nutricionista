@@ -1097,8 +1097,9 @@
             }, 3500);
         }
 
-        // Configuração de Data e Saudação Dinâmica
-        function setupGreetings(email) {
+        // Substitua a função setup-Greetings por esta versão que busca o nome real na tabela alunos
+
+        async function setupGreetings(user) {
             const agora = new Date();
             const hora = agora.getHours();
             let saudacao = 'Olá';
@@ -1108,21 +1109,37 @@
 
             document.getElementById('saudacao').textContent = saudacao;
 
-            // Formatação amigável de data
             const opcoes = { weekday: 'long', day: 'numeric', month: 'long' };
             const dataStr = agora.toLocaleDateString('pt-BR', opcoes);
             document.getElementById('data-hoje').textContent = dataStr.charAt(0).toUpperCase() + dataStr.slice(1);
 
-            // Nome formatado a partir do email ou metadata
-            if (email) {
-                const username = email.split('@')[0];
-                const nomeFormatado = username.split(/[._-]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                document.getElementById('nome-aluno').textContent = nomeFormatado;
-                window.nomeAlunoAtual = nomeFormatado;
-                const avatarEl = document.getElementById('user-avatar');
-                if (avatarEl && !perfilAlunoGlobal.foto_perfil) {
-                    avatarEl.textContent = nomeFormatado.charAt(0);
+            // Busca o nome real do aluno diretamente na tabela 'alunos' do Supabase
+            let nomeExibicao = 'Aluno(a)';
+            try {
+                const { data: alunoDb } = await supabaseClient
+                    .from('alunos')
+                    .select('nome')
+                    .eq('id', user.id)
+                    .single();
+
+                if (alunoDb && alunoDb.nome) {
+                    nomeExibicao = alunoDb.nome;
+                } else if (user.user_metadata && user.user_metadata.nome) {
+                    nomeExibicao = user.user_metadata.nome;
+                } else if (user.email) {
+                    const username = user.email.split('@')[0];
+                    nomeExibicao = username.split(/[._-]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
                 }
+            } catch (e) {
+                nomeExibicao = user.email ? user.email.split('@')[0] : 'Aluno(a)';
+            }
+
+            document.getElementById('nome-aluno').textContent = nomeExibicao;
+            window.nomeAlunoAtual = nomeExibicao;
+
+            const avatarEl = document.getElementById('user-avatar');
+            if (avatarEl && !perfilAlunoGlobal.foto_perfil) {
+                avatarEl.textContent = nomeExibicao.charAt(0).toUpperCase();
             }
         }
 
