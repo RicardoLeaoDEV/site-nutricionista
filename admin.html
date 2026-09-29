@@ -803,6 +803,7 @@
 
         async function carregarPerfisAlunosAdmin() {
             try {
+                // 1. Tenta carregar mensagens de perfil enviadas pelo aluno
                 const { data: mensagens, error } = await supabaseClient
                     .from('mensagens')
                     .select('aluno_id, mensagem, created_at')
@@ -814,6 +815,36 @@
                         if (!perfisAlunosCache[m.aluno_id]) {
                             try {
                                 perfisAlunosCache[m.aluno_id] = JSON.parse(m.mensagem);
+                            } catch (e) { }
+                        }
+                    });
+                }
+
+                // 2. Consulta também fotos existentes na galeria de evolução (frente) caso não haja foto no perfil
+                const { data: fotosEvolucao } = await supabaseClient
+                    .from('fotos_evolucao')
+                    .select('aluno_id, imagem, data')
+                    .order('data', { ascending: false });
+
+                if (fotosEvolucao) {
+                    fotosEvolucao.forEach(f => {
+                        if (!perfisAlunosCache[f.aluno_id]) {
+                            perfisAlunosCache[f.aluno_id] = {};
+                        }
+                        if (!perfisAlunosCache[f.aluno_id].foto_perfil) {
+                            perfisAlunosCache[f.aluno_id].foto_perfil = f.imagem;
+                        }
+                    });
+                }
+
+                // 3. Fallback de cache local caso o teste tenha sido feito no mesmo computador/navegador
+                if (listaAlunosCache && listaAlunosCache.length > 0) {
+                    listaAlunosCache.forEach(a => {
+                        const localCache = localStorage.getItem('nutrilife_perfil_' + a.id);
+                        if (localCache) {
+                            try {
+                                const parsed = JSON.parse(localCache);
+                                perfisAlunosCache[a.id] = { ...(perfisAlunosCache[a.id] || {}), ...parsed };
                             } catch (e) { }
                         }
                     });
@@ -836,10 +867,16 @@
 
             // Busca perfil no cache ou recarrega se necessário
             let perfil = perfisAlunosCache[alunoId];
-            if (!perfil) {
-                await carregarPerfisAlunosAdmin();
-                perfil = perfisAlunosCache[alunoId] || {};
+            if (!perfil || !perfil.foto_perfil) {
+                const localData = localStorage.getItem('nutrilife_perfil_' + alunoId);
+                if (localData) {
+                    try {
+                        perfil = { ...(perfil || {}), ...JSON.parse(localData) };
+                        perfisAlunosCache[alunoId] = perfil;
+                    } catch (e) { }
+                }
             }
+            if (!perfil) perfil = {};
 
             // Tenta obter o peso mais recente registrado no historico_peso
             try {
