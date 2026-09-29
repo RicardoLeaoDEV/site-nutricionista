@@ -803,7 +803,21 @@
 
         async function carregarPerfisAlunosAdmin() {
             try {
-                // Lê sempre do servidor as mensagens mais recentes
+                // 1. Busca perfis diretamente da tabela 'alunos' (onde a foto é salva de forma segura)
+                const { data: alunosDb, error: errAlunos } = await supabaseClient
+                    .from('alunos')
+                    .select('id, foto_perfil');
+
+                if (!errAlunos && alunosDb) {
+                    alunosDb.forEach(a => {
+                        if (a.foto_perfil) {
+                            if (!perfisAlunosCache[a.id]) perfisAlunosCache[a.id] = {};
+                            perfisAlunosCache[a.id].foto_perfil = a.foto_perfil;
+                        }
+                    });
+                }
+
+                // 2. Busca também nas mensagens de sistema como fallback
                 const { data: mensagens, error } = await supabaseClient
                     .from('mensagens')
                     .select('aluno_id, mensagem, created_at')
@@ -812,14 +826,17 @@
 
                 if (!error && mensagens) {
                     mensagens.forEach(m => {
-                        if (!perfisAlunosCache[m.aluno_id]) {
-                            try {
-                                perfisAlunosCache[m.aluno_id] = JSON.parse(m.mensagem);
-                            } catch (e) { }
-                        }
+                        if (!perfisAlunosCache[m.aluno_id]) perfisAlunosCache[m.aluno_id] = {};
+                        try {
+                            const parsed = JSON.parse(m.mensagem);
+                            if (parsed.foto_perfil && !perfisAlunosCache[m.aluno_id].foto_perfil) {
+                                perfisAlunosCache[m.aluno_id].foto_perfil = parsed.foto_perfil;
+                            }
+                        } catch (e) { }
                     });
                 }
 
+                // 3. Busca fotos de evolução na tabela da nuvem para o cache geral
                 const { data: fotosEvolucao } = await supabaseClient
                     .from('fotos_evolucao')
                     .select('aluno_id, imagem, data')
@@ -827,9 +844,7 @@
 
                 if (fotosEvolucao) {
                     fotosEvolucao.forEach(f => {
-                        if (!perfisAlunosCache[f.aluno_id]) {
-                            perfisAlunosCache[f.aluno_id] = {};
-                        }
+                        if (!perfisAlunosCache[f.aluno_id]) perfisAlunosCache[f.aluno_id] = {};
                         if (!perfisAlunosCache[f.aluno_id].foto_perfil) {
                             perfisAlunosCache[f.aluno_id].foto_perfil = f.imagem;
                         }
@@ -907,7 +922,7 @@
 
             if (temFoto) {
                 avatarEl.innerHTML = `<img src="${perfil.foto_perfil}" alt="Perfil" class="w-full h-full object-cover">`;
-                avatarEl.className = 'w-12 h-12 rounded-2xl bg-brand-500/20 border border-brand-500/40 flex items-center justify-center overflow-hidden shrink-0 shadow-md';
+                avatarEl.className = 'w-12 h-12 rounded-2xl bg-brand-500/25 border border-brand-500/40 flex items-center justify-center overflow-hidden shrink-0 shadow-md';
             } else {
                 avatarEl.textContent = (aluno.nome || 'A').charAt(0).toUpperCase();
                 avatarEl.className = 'w-12 h-12 rounded-2xl bg-brand-500/20 text-brand-400 border border-brand-500/40 flex items-center justify-center font-bold text-sm overflow-hidden shrink-0 shadow-md';
@@ -1673,7 +1688,7 @@
 
             let fotos = [];
 
-            // 1. Tenta carregar do Supabase (Nuvem)
+            // 1. Carrega da tabela fotos_evolucao do Supabase (Nuvem)
             try {
                 const { data: supaFotos, error } = await supabaseClient
                     .from('fotos_evolucao')
@@ -1695,29 +1710,6 @@
                 }
             } catch (err) {
                 console.log("Supabase fotos_evolucao:", err);
-            }
-
-            // 2. Busca também do IndexedDB local (mesmo navegador / ambiente compartilhado)
-            try {
-                if (!galeriaDB) await abrirDB();
-                const idbFotos = await dbGetAllPorAluno(alunoId);
-                if (idbFotos && idbFotos.length > 0) {
-                    idbFotos.forEach(idbF => {
-                        const jaExiste = fotos.some(f => f.data === idbF.data && f.tipo === idbF.tipo);
-                        if (!jaExiste) {
-                            fotos.push({
-                                id: idbF.id,
-                                userId: idbF.userId,
-                                data: idbF.data,
-                                tipo: (idbF.tipo || '').toLowerCase(),
-                                imagem: idbF.imagem,
-                                origem: 'local'
-                            });
-                        }
-                    });
-                }
-            } catch (errIdb) {
-                console.warn("IndexedDB consulta fotos:", errIdb);
             }
 
             fotosCacheAlunoAtual = fotos;
