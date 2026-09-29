@@ -265,10 +265,17 @@
                 <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
 
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center font-bold text-xs"
-                        id="user-avatar">
-                        A
-                    </div>
+                    <button type="button" onclick="abrirModalFotoPerfil()"
+                        class="relative group cursor-pointer focus:outline-none" title="Alterar foto de perfil">
+                        <div class="w-9 h-9 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/40 flex items-center justify-center font-bold text-xs overflow-hidden shadow-sm group-hover:border-brand-400 group-hover:scale-105 transition-all"
+                            id="user-avatar">
+                            A
+                        </div>
+                        <div
+                            class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-brand-600 text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                            <i data-lucide="camera" class="w-2.5 h-2.5"></i>
+                        </div>
+                    </button>
                     <button id="btn-logout" title="Terminar sessão"
                         class="flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-rose-400 bg-slate-800/50 hover:bg-rose-500/10 px-3 py-2 rounded-xl border border-slate-800 transition-colors">
                         <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
@@ -300,106 +307,184 @@
                 target="_blank"
                 class="sm:hidden flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all">
                 <i data-lucide="message-circle" class="w-4 h-4"></i>
-                Falar com o Nutri no WhatsApp
-            </a>
-        </div>
-
-        <!-- Cards de Métricas Principais (Quick Stats) -->
+          <!-- Cards de Métricas Principais (Quick Stats) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <!-- 1. Peso Atual -->
+            <!-- 1. Peso Atual com Botão de Atualização Rápida -->
             <div
-                class="glass-panel p-5 rounded-2xl border border-slate-800 flex items-center justify-between relative overflow-hidden">
-                <div>
-                    <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Último Peso</div>
-                    <div class="text-2xl font-extrabold text-white" id="stat-peso">-- kg</div>
-                    <div class="text-xs font-medium text-slate-400 mt-1" id="stat-peso-diff">Sem registo ainda</div>
-                </div>
-                <div
-                    class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
-                    <i data-lucide="scale" class="w-6 h-6"></i>
-                </div>
-            </div>
-
-            <!-- 2. Refeições Concluídas Hoje -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-slate-800 flex items-center justify-between relative overflow-hidden">
-                <div>
-                    <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Refeições de Hoje
+                class="glass-panel p-5 rounded-2xl border border-slate-800 flex flex-col justify-between relative overflow-hidden group">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Último Peso</div>
+                        <div class="text-2xl font-extrabold text-white" id="stat-peso">-- kg</div>
                     </div>
-                    <div class="text-2xl font-extrabold text-white" id="stat-refeicoes-contador">0 / 0</div>
-                    <div class="text-xs font-medium text-emerald-400 mt-1" id="stat-refeicoes-status">Marque suas
-                        refeições</div>
+                    <div
+                        class="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
+                        <i data-lucide="scale" class="w-5 h-5"></i>
+                    </div>
                 </div>
-                <div
-                    class="w-12 h-12 rounded-2xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center">
-                    <i data-lucide="utensils" class="w-6 h-6"></i>
+                <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between">
+                    <span class="text-xs font-medium text-slate-400" id="stat-peso-diff">Sem registro ainda</span>
+                    <button type="button" onclick="abrirModalAtualizarPeso()"
+                        class="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 py-1 px-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 transition-all cursor-pointer">
+                        <i data-lucide="plus" class="w-3 h-3"></i>
+                        <span>Atualizar</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- 3. Rastreador Interativo de Água -->
+            <!-- 2. Perfil Físico (Altura, Idade e IMC) -->
             <div
-                class="glass-panel p-5 rounded-2xl border border-slate-800 sm:col-span-2 flex flex-col justify-between">
+                class="glass-panel p-5 rounded-2xl border border-slate-800 flex flex-col justify-between relative overflow-hidden group">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Perfil Físico</div>
+                        <div class="text-base font-extrabold text-white flex items-center gap-1.5" id="stat-altura-idade">
+                            <span id="stat-altura">-- m</span>
+                            <span class="text-slate-500">•</span>
+                            <span id="stat-idade">-- anos</span>
+                        </div>
+                    </div>
+                    <div
+                        class="w-11 h-11 rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center">
+                        <i data-lucide="activity" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between">
+                    <span id="stat-imc-badge"
+                        class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
+                        IMC: --
+                    </span>
+                    <button type="button" onclick="abrirModalEditarPerfil()"
+                        class="text-xs font-semibold text-blue-400 hover:text-blue-300 flex items-center gap-1 py-1 px-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 transition-all cursor-pointer">
+                        <i data-lucide="edit-3" class="w-3 h-3"></i>
+                        <span>Editar</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. Refeições Concluídas Hoje -->
+            <div
+                class="glass-panel p-5 rounded-2xl border border-slate-800 flex flex-col justify-between relative overflow-hidden">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Refeições de Hoje</div>
+                        <div class="text-2xl font-extrabold text-white" id="stat-refeicoes-contador">0 / 0</div>
+                    </div>
+                    <div
+                        class="w-11 h-11 rounded-2xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center">
+                        <i data-lucide="utensils" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between">
+                    <span class="text-xs font-medium text-emerald-400" id="stat-refeicoes-status">Marque suas refeições</span>
+                </div>
+            </div>
+
+            <!-- 4. Rastreador Interativo de Água -->
+            <div
+                class="glass-panel p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
                 <div class="flex items-center justify-between mb-2">
                     <div class="flex items-center gap-2">
                         <div class="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
                             <i data-lucide="droplet" class="w-4 h-4"></i>
                         </div>
-                        <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Meta de Água
-                            Diária</span>
+                        <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Meta de Água</span>
                     </div>
-                    <span class="text-xs font-bold text-cyan-400" id="agua-contador-texto">0 / 8 copos (0.0L /
-                        2.8L)</span>
+                    <span class="text-xs font-bold text-cyan-400" id="agua-contador-texto">0 / 8 copos</span>
                 </div>
 
                 <!-- Copos Clicáveis -->
-                <div class="flex items-center justify-between gap-1.5 pt-2" id="copos-container">
+                <div class="flex items-center justify-between gap-1 pt-1" id="copos-container">
                     <!-- Gerados via JavaScript -->
                 </div>
-                <div class="text-[11px] text-slate-500 mt-2 flex justify-between">
-                    <span>Clique nos copos para marcar sua ingestão diária</span>
+                <div class="text-[11px] text-slate-500 mt-2 flex justify-between items-center">
+                    <span>Clique nos copos</span>
                     <button id="btn-reset-agua"
-                        class="text-cyan-400 hover:text-cyan-300 transition-colors">Reiniciar</button>
+                        class="text-cyan-400 hover:text-cyan-300 text-xs font-medium transition-colors">Reiniciar</button>
                 </div>
             </div>
         </div>
 
-        <!-- Seção do Gráfico de Evolução de Peso -->
-        <section class="glass-panel rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-xl">
-            <div
-                class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 pb-4 border-b border-slate-800/80">
+        <!-- ============================================================== -->
+        <!-- BARRA SUPERIOR DE ATALHOS CLICÁVEIS (REORDENAÇÃO CONFORME 4)   -->
+        <!-- ============================================================== -->
+        <nav aria-label="Navegação rápida de seções"
+            class="sticky top-20 z-30 bg-slate-950/90 backdrop-blur-xl p-2 sm:p-2.5 rounded-2xl border border-slate-800/90 shadow-2xl">
+            <div class="flex items-center justify-between gap-2 overflow-x-auto no-scrollbar py-0.5">
+                <!-- Atalho 1: Plano Alimentar Prescrito -->
+                <a href="#secao-plano-alimentar" onclick="navegarSecaoDashboard(event, 'secao-plano-alimentar')"
+                    id="nav-btn-plano"
+                    class="dashboard-nav-tab flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-brand-500/20 border border-brand-500/40 hover:bg-brand-500/30 transition-all shrink-0 active:scale-95 group shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-brand-400 group-hover:scale-125 transition-transform"></span>
+                    <i data-lucide="clipboard-list" class="w-4 h-4 text-brand-400"></i>
+                    <span>1. Plano Alimentar</span>
+                </a>
+
+                <!-- Atalho 2: Galeria de Evolução Corporal -->
+                <a href="#secao-galeria" onclick="navegarSecaoDashboard(event, 'secao-galeria')"
+                    id="nav-btn-galeria"
+                    class="dashboard-nav-tab flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white bg-slate-900/80 hover:bg-purple-600/20 border border-slate-800 hover:border-purple-500/40 transition-all shrink-0 active:scale-95 group">
+                    <span class="w-2 h-2 rounded-full bg-purple-400 group-hover:scale-125 transition-transform"></span>
+                    <i data-lucide="camera" class="w-4 h-4 text-purple-400"></i>
+                    <span>2. Galeria de Fotos</span>
+                </a>
+
+                <!-- Atalho 3: Evolução do Peso Corporal (ÚLTIMO) -->
+                <a href="#secao-peso" onclick="navegarSecaoDashboard(event, 'secao-peso')"
+                    id="nav-btn-peso"
+                    class="dashboard-nav-tab flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white bg-slate-900/80 hover:bg-emerald-600/20 border border-slate-800 hover:border-emerald-500/40 transition-all shrink-0 active:scale-95 group">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 group-hover:scale-125 transition-transform"></span>
+                    <i data-lucide="line-chart" class="w-4 h-4 text-emerald-400"></i>
+                    <span>3. Evolução do Peso</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- ============================================================== -->
+        <!-- 1. SEÇÃO: O SEU PLANO ALIMENTAR PRESCRITO (PRIMEIRO)           -->
+        <!-- ============================================================== -->
+        <section id="secao-plano-alimentar" class="space-y-4 scroll-mt-36">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i data-lucide="line-chart" class="w-5 h-5 text-brand-400"></i>
-                        Evolução do Peso Corporal
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i data-lucide="clipboard-list" class="w-5 h-5 text-brand-400"></i>
+                        O seu Plano Alimentar Prescrito
                     </h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Histórico temporal registrado nas suas pesagens</p>
+                    <p class="text-xs text-slate-400">Consulte suas refeições diárias e marque quando concluir cada uma</p>
                 </div>
 
-                <!-- Formulário para registar peso -->
-                <form id="form-peso" class="flex items-center gap-2 w-full sm:w-auto">
-                    <div class="relative flex-1 sm:flex-initial">
-                        <input type="number" step="0.1" id="novo-peso" placeholder="Ex: 75.8" required
-                            class="bg-slate-900 border border-slate-700 rounded-xl pl-3 pr-8 py-2.5 text-sm text-slate-100 w-full sm:w-36 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500">
-                        <span class="absolute right-3 top-2.5 text-xs text-slate-500 font-semibold">kg</span>
-                    </div>
-                    <button type="submit" id="btn-registrar-peso"
-                        class="bg-brand-600 hover:bg-brand-500 active:scale-95 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-brand-500/20 flex items-center gap-1.5 shrink-0">
-                        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                        <span>Registar</span>
+                <div class="flex items-center gap-2.5 flex-wrap">
+                    <!-- Botão Geração Automática de PDF do Plano Alimentar -->
+                    <button type="button" onclick="gerarPdfPlanoAlimentar()" id="btn-exportar-pdf"
+                        class="flex items-center gap-2 bg-gradient-to-r from-brand-600 to-teal-500 hover:from-brand-500 hover:to-teal-400 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 transition-all duration-200 active:scale-95 cursor-pointer">
+                        <i data-lucide="file-down" class="w-4 h-4" id="btn-pdf-icon"></i>
+                        <span id="btn-pdf-text">Baixar Cardápio em PDF</span>
+                        <div id="btn-pdf-spinner" class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                     </button>
-                </form>
+
+                    <!-- Botão de Impressão Rápida / Salvar Nativo -->
+                    <button type="button" onclick="imprimirPlanoAlimentar()" id="btn-imprimir-pdf" title="Imprimir diretamente / Salvar como PDF nativo"
+                        class="flex items-center gap-1.5 p-2.5 sm:px-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-all active:scale-95 cursor-pointer">
+                        <i data-lucide="printer" class="w-4 h-4"></i>
+                        <span class="text-xs font-bold hidden md:inline">Imprimir</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Canvas do Gráfico -->
-            <div class="relative h-64 sm:h-72 w-full">
-                <canvas id="graficoPeso"></canvas>
+            <div id="container-dietas" class="space-y-4">
+                <!-- Skeleton Loader durante o carregamento -->
+                <div class="animate-pulse space-y-4">
+                    <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
+                    <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
+                    <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
+                </div>
             </div>
         </section>
 
-        <!-- ========================================== -->
-        <!-- Galeria de Fotos de Evolução Corporal -->
-        <!-- ========================================== -->
-        <section id="secao-galeria" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
+        <!-- ============================================================== -->
+        <!-- 2. SEÇÃO: GALERIA DE EVOLUÇÃO CORPORAL (SEGUNDO)               -->
+        <!-- ============================================================== -->
+        <section id="secao-galeria" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-36">
             <!-- Cabeçalho da Galeria -->
             <div class="p-6 sm:p-7 pb-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-800/80">
@@ -527,7 +612,7 @@
             </div>
         </section>
 
-        <!-- Lightbox / Modal de Foto Ampliada -->
+        <!-- Lightbox / Modal de Foto Ampliada da Galeria -->
         <div id="galeria-lightbox" class="hidden fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-4" onclick="fecharLightbox(event)">
             <button onclick="fecharLightbox()" class="absolute top-4 right-4 text-white/60 hover:text-white bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full flex items-center justify-center transition-colors z-10">
                 <i data-lucide="x" class="w-5 h-5"></i>
@@ -544,48 +629,281 @@
             </div>
         </div>
 
-        <!-- Bloco de Refeições e Substituições -->
-        <section class="space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <!-- ============================================================== -->
+        <!-- 3. SEÇÃO: EVOLUÇÃO DO PESO CORPORAL (ÚLTIMO CONFORME 4)        -->
+        <!-- ============================================================== -->
+        <section id="secao-peso" class="glass-panel rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-xl scroll-mt-36">
+            <div
+                class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 pb-4 border-b border-slate-800/80">
                 <div>
-                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i data-lucide="clipboard-list" class="w-5 h-5 text-brand-400"></i>
-                        O seu Plano Alimentar Prescrito
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="line-chart" class="w-5 h-5 text-emerald-400"></i>
+                        Evolução do Peso Corporal
                     </h2>
-                    <p class="text-xs text-slate-400">Consulte suas refeições diárias e marque quando concluir cada uma</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Histórico temporal registrado nas suas pesagens e metas alcançadas</p>
                 </div>
 
-                <div class="flex items-center gap-2.5 flex-wrap">
-                    <!-- Botão Geração Automática de PDF do Plano Alimentar -->
-                    <button type="button" onclick="gerarPdfPlanoAlimentar()" id="btn-exportar-pdf"
-                        class="flex items-center gap-2 bg-gradient-to-r from-brand-600 to-teal-500 hover:from-brand-500 hover:to-teal-400 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 transition-all duration-200 active:scale-95 cursor-pointer">
-                        <i data-lucide="file-down" class="w-4 h-4" id="btn-pdf-icon"></i>
-                        <span id="btn-pdf-text">Baixar Cardápio em PDF</span>
-                        <div id="btn-pdf-spinner" class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <!-- Formulário para registar peso -->
+                <form id="form-peso" class="flex items-center gap-2 w-full sm:w-auto">
+                    <div class="relative flex-1 sm:flex-initial">
+                        <input type="number" step="0.1" id="novo-peso" placeholder="Ex: 75.8" required
+                            class="bg-slate-900 border border-slate-700 rounded-xl pl-3 pr-8 py-2.5 text-sm text-slate-100 w-full sm:w-36 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500">
+                        <span class="absolute right-3 top-2.5 text-xs text-slate-500 font-semibold">kg</span>
+                    </div>
+                    <button type="submit" id="btn-registrar-peso"
+                        class="bg-brand-600 hover:bg-brand-500 active:scale-95 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-brand-500/20 flex items-center gap-1.5 shrink-0 cursor-pointer">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                        <span>Registar</span>
                     </button>
-
-                    <!-- Botão de Impressão Rápida / Salvar Nativo -->
-                    <button type="button" onclick="imprimirPlanoAlimentar()" id="btn-imprimir-pdf" title="Imprimir diretamente / Salvar como PDF nativo"
-                        class="flex items-center gap-1.5 p-2.5 sm:px-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-all active:scale-95 cursor-pointer">
-                        <i data-lucide="printer" class="w-4 h-4"></i>
-                        <span class="text-xs font-bold hidden md:inline">Imprimir</span>
-                    </button>
-                </div>
+                </form>
             </div>
 
-            <div id="container-dietas" class="space-y-4">
-                <!-- Skeleton Loader durante o carregamento -->
-                <div class="animate-pulse space-y-4">
-                    <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
-                    <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
-                    <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
-                </div>
+            <!-- Canvas do Gráfico -->
+            <div class="relative h-64 sm:h-72 w-full">
+                <canvas id="graficoPeso"></canvas>
             </div>
         </section>
 
-        <!-- Template Oculto para Geração de PDF e Impressão Limpa -->
-        <div id="area-impressao-pdf" class="hidden"></div>
     </main>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 1: FOTO DE PERFIL DO ALUNO                               -->
+    <!-- ============================================================== -->
+    <div id="modal-foto-perfil" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-panel bg-slate-900 border border-slate-700/80 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+            <button type="button" onclick="fecharModalFotoPerfil()"
+                class="absolute top-5 right-5 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center mx-auto mb-3">
+                    <i data-lucide="camera" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white">Sua Foto de Perfil</h3>
+                <p class="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
+                    Esta foto identifica você no portal e também aparecerá para seu nutricionista no chat de acompanhamento.
+                </p>
+            </div>
+
+            <!-- Preview da Foto Atual / Nova -->
+            <div class="flex flex-col items-center justify-center gap-3 mb-6">
+                <div class="relative group">
+                    <div id="modal-avatar-preview"
+                        class="w-28 h-28 rounded-full bg-slate-800 border-2 border-brand-500/50 flex items-center justify-center text-3xl font-extrabold text-brand-400 overflow-hidden shadow-xl shadow-brand-500/10">
+                        A
+                    </div>
+                    <label for="input-foto-perfil-arquivo"
+                        class="absolute bottom-0 right-0 w-9 h-9 rounded-full bg-brand-600 hover:bg-brand-500 text-white flex items-center justify-center shadow-lg cursor-pointer transition-transform hover:scale-110 active:scale-95 border-2 border-slate-900"
+                        title="Escolher foto">
+                        <i data-lucide="upload" class="w-4 h-4"></i>
+                    </label>
+                </div>
+                <input type="file" id="input-foto-perfil-arquivo" accept="image/*" class="hidden" onchange="handleFotoPerfilSelecionada(this)">
+                <span class="text-[11px] text-slate-400">Formatos aceitos: JPG, PNG ou WEBP (Otimizada automaticamente)</span>
+            </div>
+
+            <div class="space-y-2.5">
+                <button type="button" onclick="document.getElementById('input-foto-perfil-arquivo').click()"
+                    class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold py-2.5 rounded-xl border border-slate-700 transition-all flex items-center justify-center gap-2 text-xs cursor-pointer">
+                    <i data-lucide="image" class="w-4 h-4 text-brand-400"></i>
+                    <span>Escolher Foto da Galeria</span>
+                </button>
+
+                <div class="grid grid-cols-2 gap-2 pt-1">
+                    <button type="button" onclick="removerFotoPerfil()" id="btn-remover-foto"
+                        class="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-xs cursor-pointer">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        <span>Remover</span>
+                    </button>
+                    <button type="button" onclick="salvarFotoPerfilModal()" id="btn-salvar-foto-perfil"
+                        class="w-full bg-brand-600 hover:bg-brand-500 active:scale-[0.98] text-white font-bold py-2.5 rounded-xl transition-all shadow-lg shadow-brand-500/20 flex items-center justify-center gap-1.5 text-xs cursor-pointer">
+                        <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                        <span>Salvar Foto</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 2: ONBOARDING / PRIMEIRO ACESSO (ALTURA, PESO, IDADE)    -->
+    <!-- ============================================================== -->
+    <div id="modal-onboarding" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-panel bg-slate-900 border border-brand-500/30 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+            <div class="text-center mb-6">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20 text-[11px] font-bold uppercase tracking-wider mb-2">
+                    <i data-lucide="sparkles" class="w-3 h-3"></i> Primeiro Acesso ao NutriLife
+                </span>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-white">Bem-vindo(a) ao seu Portal! 🎉</h3>
+                <p class="text-xs sm:text-sm text-slate-400 mt-1.5 max-w-sm mx-auto">
+                    Para que seu nutricionista prescreva sua dieta com máxima precisão, informe seus dados corporais iniciais:
+                </p>
+            </div>
+
+            <!-- Upload Rápido de Foto no Onboarding -->
+            <div class="flex flex-col items-center justify-center gap-2 mb-6">
+                <div class="relative">
+                    <div id="onboarding-avatar-preview"
+                        class="w-20 h-20 rounded-full bg-slate-800 border-2 border-brand-500/50 flex items-center justify-center text-2xl font-bold text-brand-400 overflow-hidden shadow-lg">
+                        A
+                    </div>
+                    <label for="input-onboarding-foto"
+                        class="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-brand-600 hover:bg-brand-500 text-white flex items-center justify-center shadow cursor-pointer border-2 border-slate-900"
+                        title="Adicionar foto">
+                        <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                    </label>
+                </div>
+                <input type="file" id="input-onboarding-foto" accept="image/*" class="hidden" onchange="handleOnboardingFotoSelecionada(this)">
+                <span class="text-[11px] text-slate-400">Foto de Perfil (Opcional)</span>
+            </div>
+
+            <form id="form-onboarding" class="space-y-4" onsubmit="salvarOnboarding(event)">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <!-- Altura -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                            Altura <span class="text-rose-400">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="number" step="0.01" min="1.00" max="2.50" id="onboarding-altura" placeholder="Ex: 1.75" required
+                                class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-3 pr-8 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                            <span class="absolute right-3 top-2.5 text-xs text-slate-500 font-semibold">m</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500 mt-1 block">Ex: 1.75 ou 1.80</span>
+                    </div>
+
+                    <!-- Peso Inicial -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                            Peso Atual <span class="text-rose-400">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="number" step="0.1" min="30" max="300" id="onboarding-peso" placeholder="Ex: 75.5" required
+                                class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-3 pr-8 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                            <span class="absolute right-3 top-2.5 text-xs text-slate-500 font-semibold">kg</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500 mt-1 block">Pode atualizar depois</span>
+                    </div>
+
+                    <!-- Idade -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                            Idade <span class="text-rose-400">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="number" step="1" min="10" max="110" id="onboarding-idade" placeholder="Ex: 28" required
+                                class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-3 pr-8 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                            <span class="absolute right-3 top-2.5 text-xs text-slate-500 font-semibold">anos</span>
+                        </div>
+                        <span class="text-[10px] text-slate-500 mt-1 block">Anos completos</span>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" id="btn-onboarding-salvar"
+                        class="w-full bg-brand-600 hover:bg-brand-500 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2 text-sm cursor-pointer">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                        <span>Salvar e Acessar Meu Portal</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 3: ATUALIZAR PESO RÁPIDO                                 -->
+    <!-- ============================================================== -->
+    <div id="modal-atualizar-peso" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-panel bg-slate-900 border border-slate-700/80 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+            <button type="button" onclick="fecharModalAtualizarPeso()"
+                class="absolute top-5 right-5 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+
+            <div class="text-center mb-5">
+                <div class="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center mx-auto mb-2.5">
+                    <i data-lucide="scale" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-base font-bold text-white">Atualizar Peso Corporal</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Registre sua pesagem de hoje para atualizar seu histórico</p>
+            </div>
+
+            <form id="form-modal-peso" class="space-y-4" onsubmit="salvarPesoModal(event)">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">Novo Peso</label>
+                    <div class="relative">
+                        <input type="number" step="0.1" min="30" max="300" id="modal-novo-peso" placeholder="Ex: 75.8" required
+                            class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-3 pr-10 py-3 text-base font-bold text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                        <span class="absolute right-3.5 top-3.5 text-xs text-slate-500 font-bold">kg</span>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-modal-salvar-peso"
+                    class="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 text-xs cursor-pointer">
+                    <i data-lucide="check" class="w-4 h-4"></i>
+                    <span>Confirmar Pesagem</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 4: EDITAR DADOS CORPORAIS (ALTURA, PESO, IDADE)          -->
+    <!-- ============================================================== -->
+    <div id="modal-editar-perfil" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-panel bg-slate-900 border border-slate-700/80 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+            <button type="button" onclick="fecharModalEditarPerfil()"
+                class="absolute top-5 right-5 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+
+            <div class="text-center mb-5">
+                <div class="w-11 h-11 rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center mx-auto mb-2.5">
+                    <i data-lucide="activity" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-base font-bold text-white">Editar Dados Corporais</h3>
+                <p class="text-xs text-slate-400 mt-0.5">Mantenha suas informações sincronizadas com seu nutricionista</p>
+            </div>
+
+            <form id="form-editar-perfil" class="space-y-4" onsubmit="salvarPerfilModal(event)">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">Altura</label>
+                        <div class="relative">
+                            <input type="number" step="0.01" min="1.00" max="2.50" id="edit-altura" placeholder="1.75" required
+                                class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-3 pr-8 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <span class="absolute right-3 top-2.5 text-xs text-slate-500 font-semibold">m</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">Peso</label>
+                        <div class="relative">
+                            <input type="number" step="0.1" min="30" max="300" id="edit-peso" placeholder="75.0" required
+                                class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-3 pr-8 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <span class="absolute right-3 top-2.5 text-xs text-slate-500 font-semibold">kg</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">Idade</label>
+                        <div class="relative">
+                            <input type="number" step="1" min="10" max="110" id="edit-idade" placeholder="28" required
+                                class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-3 pr-8 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <span class="absolute right-3 top-2.5 text-xs text-slate-500 font-semibold">anos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" id="btn-salvar-perfil-edit"
+                        class="w-full bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 text-xs cursor-pointer">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                        <span>Atualizar Informações</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Rodapé Discreto -->
     <footer class="border-t border-slate-900 bg-slate-950/80 py-6 px-6 text-center text-xs text-slate-500">
@@ -617,6 +935,14 @@
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let chartInstance = null;
         let totalRefeicoesCount = 0;
+        let perfilAlunoGlobal = {
+            foto_perfil: '',
+            altura: null,
+            peso: null,
+            idade: null
+        };
+        let fotoTemporariaUpload = null;
+        let fotoOnboardingTemporaria = null;
 
         // Verificar permissão de Administrador para exibir o atalho no topo
         async function verificarPermissaoAdmin() {
@@ -686,8 +1012,11 @@
                 const username = email.split('@')[0];
                 const nomeFormatado = username.split(/[._-]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
                 document.getElementById('nome-aluno').textContent = nomeFormatado;
-                document.getElementById('user-avatar').textContent = nomeFormatado.charAt(0);
                 window.nomeAlunoAtual = nomeFormatado;
+                const avatarEl = document.getElementById('user-avatar');
+                if (avatarEl && !perfilAlunoGlobal.foto_perfil) {
+                    avatarEl.textContent = nomeFormatado.charAt(0);
+                }
             }
         }
 
@@ -787,6 +1116,7 @@
             setupGreetings(session.user.email);
             setupWaterTracker();
             verificarPermissaoAdmin();
+            await carregarPerfilAluno(session.user);
 
             const userId = session.user.id;
 
@@ -1145,6 +1475,8 @@
             const ultimoRegistro = historico[historico.length - 1];
             const primeiroRegistro = historico[0];
             statPesoEl.textContent = `${ultimoRegistro.peso} kg`;
+            perfilAlunoGlobal.peso = ultimoRegistro.peso;
+            atualizarUIPerfil(perfilAlunoGlobal);
 
             if (historico.length > 1) {
                 const diff = (ultimoRegistro.peso - primeiroRegistro.peso).toFixed(1);
@@ -1238,7 +1570,7 @@
             });
         }
 
-        // Submissão do Registro de Peso
+        // Submissão do Registro de Peso pela seção do gráfico
         document.getElementById('form-peso').addEventListener('submit', async (e) => {
             e.preventDefault();
             const { data: { session } } = await supabaseClient.auth.getSession();
@@ -1269,9 +1601,514 @@
             } else {
                 input.value = '';
                 showToast('Peso Registado! ⚖️', `Novo registo de ${novoPeso} kg salvo com sucesso.`, 'success');
+                // Sincroniza também no perfil do aluno para o admin ver
+                await sincronizarPerfilServidor({ peso: novoPeso });
                 carregarGraficoPeso(session.user.id);
             }
         });
+
+        // ==============================================================
+        // NAVEGAÇÃO DOS ATALHOS SUPERIORES (REORDENAÇÃO CONFORME 4)
+        // ==============================================================
+        window.navegarSecaoDashboard = function(e, secaoId) {
+            if (e) e.preventDefault();
+            const secao = document.getElementById(secaoId);
+            if (!secao) return;
+
+            // Atualiza destaque visual dos botões de atalho
+            const navTabs = document.querySelectorAll('.dashboard-nav-tab');
+            navTabs.forEach(tab => {
+                tab.classList.remove('bg-brand-500/20', 'border-brand-500/40', 'text-white');
+                tab.classList.add('bg-slate-900/80', 'border-slate-800', 'text-slate-300');
+            });
+
+            const activeMap = {
+                'secao-plano-alimentar': 'nav-btn-plano',
+                'secao-galeria': 'nav-btn-galeria',
+                'secao-peso': 'nav-btn-peso'
+            };
+            const activeBtn = document.getElementById(activeMap[secaoId]);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-brand-500/20', 'border-brand-500/40', 'text-white');
+                activeBtn.classList.remove('bg-slate-900/80', 'border-slate-800', 'text-slate-300');
+            }
+
+            secao.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            secao.classList.add('ring-2', 'ring-brand-500/60', 'transition-all');
+            setTimeout(() => {
+                secao.classList.remove('ring-2', 'ring-brand-500/60');
+            }, 1600);
+        };
+
+        // ==============================================================
+        // CÁLCULO DE IMC & ATUALIZAÇÃO DA UI DO PERFIL
+        // ==============================================================
+        function calcularIMC(peso, altura) {
+            if (!peso || !altura || altura <= 0) return null;
+            // Trata altura informada em cm (ex: 175) convertendo para metros (1.75)
+            let alturaMetros = altura > 3 ? altura / 100 : altura;
+            const imc = peso / (alturaMetros * alturaMetros);
+            let classificacao = 'Normal';
+            let corClasse = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+
+            if (imc < 18.5) {
+                classificacao = 'Abaixo do peso';
+                corClasse = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+            } else if (imc < 25) {
+                classificacao = 'Eutrofia (Normal)';
+                corClasse = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+            } else if (imc < 30) {
+                classificacao = 'Sobrepeso';
+                corClasse = 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30';
+            } else {
+                classificacao = 'Obesidade';
+                corClasse = 'bg-rose-500/10 text-rose-400 border-rose-500/30';
+            }
+
+            return {
+                valor: imc.toFixed(1),
+                classificacao,
+                corClasse
+            };
+        }
+
+        function atualizarUIPerfil(perfil) {
+            if (!perfil) return;
+
+            // 1. Atualiza foto no Avatar do Cabeçalho
+            const avatarEl = document.getElementById('user-avatar');
+            if (avatarEl) {
+                if (perfil.foto_perfil && perfil.foto_perfil.startsWith('data:image')) {
+                    avatarEl.innerHTML = `<img src="${perfil.foto_perfil}" alt="Perfil" class="w-full h-full object-cover">`;
+                } else if (window.nomeAlunoAtual) {
+                    avatarEl.textContent = window.nomeAlunoAtual.charAt(0);
+                }
+            }
+
+            // 2. Atualiza Modal Avatar Preview
+            const modalPreview = document.getElementById('modal-avatar-preview');
+            if (modalPreview) {
+                if (perfil.foto_perfil && perfil.foto_perfil.startsWith('data:image')) {
+                    modalPreview.innerHTML = `<img src="${perfil.foto_perfil}" alt="Preview" class="w-full h-full object-cover">`;
+                } else if (window.nomeAlunoAtual) {
+                    modalPreview.textContent = window.nomeAlunoAtual.charAt(0);
+                }
+            }
+
+            // 3. Atualiza Cards de Altura e Idade
+            const statAlturaEl = document.getElementById('stat-altura');
+            const statIdadeEl = document.getElementById('stat-idade');
+            if (statAlturaEl) {
+                statAlturaEl.textContent = perfil.altura ? `${parseFloat(perfil.altura).toFixed(2)} m` : '-- m';
+            }
+            if (statIdadeEl) {
+                statIdadeEl.textContent = perfil.idade ? `${perfil.idade} anos` : '-- anos';
+            }
+
+            // 4. Atualiza Card de IMC
+            const statImcBadge = document.getElementById('stat-imc-badge');
+            if (statImcBadge) {
+                const imcRes = calcularIMC(perfil.peso, perfil.altura);
+                if (imcRes) {
+                    statImcBadge.textContent = `IMC: ${imcRes.valor} • ${imcRes.classificacao}`;
+                    statImcBadge.className = `text-[11px] font-bold px-2 py-0.5 rounded-md border ${imcRes.corClasse}`;
+                } else {
+                    statImcBadge.textContent = 'IMC: --';
+                    statImcBadge.className = 'text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700';
+                }
+            }
+        }
+
+        // ==============================================================
+        // COMPRESSÃO LOCAL DE IMAGEM NO CANVAS (MÁX 256x256 ~12KB)
+        // ==============================================================
+        function comprimirImagemCanvas(file, maxWidth = 256, maxHeight = 256, quality = 0.78) {
+            return new Promise((resolve, reject) => {
+                if (!file) return reject(new Error('Nenhum arquivo fornecido'));
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > maxWidth) {
+                                height = Math.round((height * maxWidth) / width);
+                                width = maxWidth;
+                            }
+                        } else {
+                            if (height > maxHeight) {
+                                width = Math.round((width * maxHeight) / height);
+                                height = maxHeight;
+                            }
+                        }
+
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                        resolve(dataUrl);
+                    };
+                    img.onerror = () => reject(new Error('Erro ao carregar imagem'));
+                    img.src = e.target.result;
+                };
+                reader.onerror = () => reject(new Error('Erro ao ler arquivo'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ==============================================================
+        // CARREGAMENTO & SINCRONIZAÇÃO DO PERFIL DO ALUNO
+        // ==============================================================
+        async function carregarPerfilAluno(user) {
+            if (!user) return;
+            const cacheKey = 'nutrilife_perfil_' + user.id;
+
+            // 1. Carrega primeiro do localStorage para renderização instantânea
+            const cacheLocal = localStorage.getItem(cacheKey);
+            if (cacheLocal) {
+                try {
+                    const dados = JSON.parse(cacheLocal);
+                    perfilAlunoGlobal = { ...perfilAlunoGlobal, ...dados };
+                    atualizarUIPerfil(perfilAlunoGlobal);
+                } catch (e) {
+                    console.error("Erro ao ler cache do perfil:", e);
+                }
+            }
+
+            // 2. Mescla com user_metadata do Supabase Auth
+            if (user.user_metadata) {
+                const meta = user.user_metadata;
+                if (meta.foto_perfil) perfilAlunoGlobal.foto_perfil = meta.foto_perfil;
+                if (meta.altura) perfilAlunoGlobal.altura = parseFloat(meta.altura);
+                if (meta.peso) perfilAlunoGlobal.peso = parseFloat(meta.peso);
+                if (meta.idade) perfilAlunoGlobal.idade = parseInt(meta.idade, 10);
+            }
+
+            // 3. Busca o registro mais recente sincronizado em mensagens (sistema_perfil)
+            try {
+                const { data: ultimasMsgs } = await supabaseClient
+                    .from('mensagens')
+                    .select('mensagem, created_at')
+                    .eq('aluno_id', user.id)
+                    .eq('remetente', 'sistema_perfil')
+                    .order('created_at', { ascending: false })
+                    .limit(1);
+
+                if (ultimasMsgs && ultimasMsgs.length > 0) {
+                    const dadosServidor = JSON.parse(ultimasMsgs[0].mensagem);
+                    perfilAlunoGlobal = { ...perfilAlunoGlobal, ...dadosServidor };
+                }
+            } catch (err) {
+                console.warn("Aviso ao buscar perfil sincronizado:", err);
+            }
+
+            // Atualiza UI completa e salva cache
+            localStorage.setItem(cacheKey, JSON.stringify(perfilAlunoGlobal));
+            atualizarUIPerfil(perfilAlunoGlobal);
+
+            // 4. Verificação de Primeiro Acesso (Onboarding)
+            // Se altura, peso ou idade não foram preenchidos, aciona o modal de primeiro acesso automaticamente
+            const precisaOnboarding = !perfilAlunoGlobal.altura || !perfilAlunoGlobal.idade || !perfilAlunoGlobal.peso;
+            if (precisaOnboarding) {
+                setTimeout(() => {
+                    abrirModalOnboarding();
+                }, 800);
+            }
+        }
+
+        async function sincronizarPerfilServidor(novosDados) {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) return;
+            const userId = session.user.id;
+
+            perfilAlunoGlobal = { ...perfilAlunoGlobal, ...novosDados, updated_at: new Date().toISOString() };
+            localStorage.setItem('nutrilife_perfil_' + userId, JSON.stringify(perfilAlunoGlobal));
+            atualizarUIPerfil(perfilAlunoGlobal);
+
+            // 1. Grava como mensagem de sistema para sincronização segura com o painel do Admin
+            try {
+                await supabaseClient
+                    .from('mensagens')
+                    .insert([{
+                        aluno_id: userId,
+                        remetente: 'sistema_perfil',
+                        mensagem: JSON.stringify(perfilAlunoGlobal),
+                        lida: true
+                    }]);
+            } catch (e) {
+                console.error("Falha ao gravar sistema_perfil:", e);
+            }
+
+            // 2. Atualiza user_metadata no Supabase Auth
+            try {
+                await supabaseClient.auth.updateUser({
+                    data: {
+                        foto_perfil: perfilAlunoGlobal.foto_perfil,
+                        altura: perfilAlunoGlobal.altura,
+                        peso: perfilAlunoGlobal.peso,
+                        idade: perfilAlunoGlobal.idade
+                    }
+                });
+            } catch (e) {
+                console.warn("Aviso ao atualizar user_metadata:", e);
+            }
+        }
+
+        // ==============================================================
+        // MODAL 1: FOTO DE PERFIL DO ALUNO (CONTROLE EXCLUSIVO DO ALUNO)
+        // ==============================================================
+        window.abrirModalFotoPerfil = function() {
+            fotoTemporariaUpload = null;
+            const modal = document.getElementById('modal-foto-perfil');
+            const preview = document.getElementById('modal-avatar-preview');
+            if (perfilAlunoGlobal.foto_perfil) {
+                preview.innerHTML = `<img src="${perfilAlunoGlobal.foto_perfil}" alt="Preview" class="w-full h-full object-cover">`;
+            } else if (window.nomeAlunoAtual) {
+                preview.textContent = window.nomeAlunoAtual.charAt(0);
+            }
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.fecharModalFotoPerfil = function() {
+            document.getElementById('modal-foto-perfil').classList.add('hidden');
+            fotoTemporariaUpload = null;
+        };
+
+        window.handleFotoPerfilSelecionada = async function(input) {
+            if (!input.files || !input.files[0]) return;
+            try {
+                showToast('Processando foto...', 'Otimizando resolução da sua foto.', 'info');
+                const compressed = await comprimirImagemCanvas(input.files[0], 256, 256, 0.78);
+                fotoTemporariaUpload = compressed;
+                const preview = document.getElementById('modal-avatar-preview');
+                preview.innerHTML = `<img src="${compressed}" alt="Preview" class="w-full h-full object-cover">`;
+                showToast('Foto carregada!', 'Clique em Salvar Foto para confirmar.', 'success');
+            } catch (err) {
+                console.error("Erro ao comprimir imagem:", err);
+                showToast('Erro', 'Não foi possível carregar a imagem selecionada.', 'error');
+            }
+        };
+
+        window.removerFotoPerfil = async function() {
+            fotoTemporariaUpload = '';
+            const preview = document.getElementById('modal-avatar-preview');
+            preview.innerHTML = window.nomeAlunoAtual ? window.nomeAlunoAtual.charAt(0) : 'A';
+            await sincronizarPerfilServidor({ foto_perfil: '' });
+            fecharModalFotoPerfil();
+            showToast('Foto Removida', 'Sua foto de perfil foi removida com sucesso.', 'info');
+        };
+
+        window.salvarFotoPerfilModal = async function() {
+            const btn = document.getElementById('btn-salvar-foto-perfil');
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Salvando...`;
+
+            const fotoParaSalvar = fotoTemporariaUpload !== null ? fotoTemporariaUpload : perfilAlunoGlobal.foto_perfil;
+            await sincronizarPerfilServidor({ foto_perfil: fotoParaSalvar });
+
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+            fecharModalFotoPerfil();
+            showToast('Foto de Perfil Salva! 📸', 'Sua foto foi atualizada e já está visível para seu nutricionista.', 'success');
+        };
+
+        // ==============================================================
+        // MODAL 2: ONBOARDING / PRIMEIRO ACESSO (ALTURA, PESO, IDADE)
+        // ==============================================================
+        window.abrirModalOnboarding = function() {
+            const modal = document.getElementById('modal-onboarding');
+            if (!modal) return;
+
+            // Preenche campos se já houver algum dado parcial
+            if (perfilAlunoGlobal.altura) document.getElementById('onboarding-altura').value = perfilAlunoGlobal.altura;
+            if (perfilAlunoGlobal.peso) document.getElementById('onboarding-peso').value = perfilAlunoGlobal.peso;
+            if (perfilAlunoGlobal.idade) document.getElementById('onboarding-idade').value = perfilAlunoGlobal.idade;
+
+            const preview = document.getElementById('onboarding-avatar-preview');
+            if (perfilAlunoGlobal.foto_perfil) {
+                preview.innerHTML = `<img src="${perfilAlunoGlobal.foto_perfil}" alt="Preview" class="w-full h-full object-cover">`;
+            } else if (window.nomeAlunoAtual) {
+                preview.textContent = window.nomeAlunoAtual.charAt(0);
+            }
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.handleOnboardingFotoSelecionada = async function(input) {
+            if (!input.files || !input.files[0]) return;
+            try {
+                const compressed = await comprimirImagemCanvas(input.files[0], 256, 256, 0.78);
+                fotoOnboardingTemporaria = compressed;
+                const preview = document.getElementById('onboarding-avatar-preview');
+                preview.innerHTML = `<img src="${compressed}" alt="Preview" class="w-full h-full object-cover">`;
+            } catch (err) {
+                showToast('Erro', 'Não foi possível carregar a imagem.', 'error');
+            }
+        };
+
+        window.salvarOnboarding = async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-onboarding-salvar');
+            btn.disabled = true;
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Gravando dados...`;
+
+            let altura = parseFloat(document.getElementById('onboarding-altura').value);
+            const peso = parseFloat(document.getElementById('onboarding-peso').value);
+            const idade = parseInt(document.getElementById('onboarding-idade').value, 10);
+
+            if (altura > 3) altura = altura / 100; // se digitou em cm
+
+            const payload = {
+                altura: altura,
+                peso: peso,
+                idade: idade
+            };
+            if (fotoOnboardingTemporaria) {
+                payload.foto_perfil = fotoOnboardingTemporaria;
+            }
+
+            // Grava no historico_peso também
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session) {
+                try {
+                    await supabaseClient
+                        .from('historico_peso')
+                        .insert([{ aluno_id: session.user.id, peso: peso }]);
+                } catch (err) {
+                    console.warn("Aviso ao registrar peso inicial:", err);
+                }
+            }
+
+            await sincronizarPerfilServidor(payload);
+
+            document.getElementById('modal-onboarding').classList.add('hidden');
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4"></i><span>Salvar e Acessar Meu Portal</span>`;
+            lucide.createIcons();
+
+            showToast('Perfil Configurado! 🚀', 'Seus dados corporais foram enviados com sucesso ao nutricionista.', 'success');
+            if (session) {
+                carregarGraficoPeso(session.user.id);
+            }
+        };
+
+        // ==============================================================
+        // MODAL 3: ATUALIZAR PESO RÁPIDO (CARD DE MÉTRICA PRINCIPAL)
+        // ==============================================================
+        window.abrirModalAtualizarPeso = function() {
+            const modal = document.getElementById('modal-atualizar-peso');
+            const input = document.getElementById('modal-novo-peso');
+            if (perfilAlunoGlobal.peso) {
+                input.value = perfilAlunoGlobal.peso;
+            }
+            modal.classList.remove('hidden');
+            input.focus();
+            lucide.createIcons();
+        };
+
+        window.fecharModalAtualizarPeso = function() {
+            document.getElementById('modal-atualizar-peso').classList.add('hidden');
+        };
+
+        window.salvarPesoModal = async function(e) {
+            e.preventDefault();
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) return;
+
+            const input = document.getElementById('modal-novo-peso');
+            const novoPeso = parseFloat(input.value);
+            if (!novoPeso || novoPeso <= 0) {
+                showToast('Atenção', 'Informe um peso válido.', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('btn-modal-salvar-peso');
+            btn.disabled = true;
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Salvando...`;
+
+            // Grava na tabela de histórico de peso
+            const { error } = await supabaseClient
+                .from('historico_peso')
+                .insert([{ aluno_id: session.user.id, peso: novoPeso }]);
+
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Confirmar Pesagem</span>`;
+            lucide.createIcons();
+
+            if (error) {
+                showToast('Erro ao registar', error.message, 'error');
+            } else {
+                fecharModalAtualizarPeso();
+                showToast('Peso Atualizado! ⚖️', `Novo peso de ${novoPeso} kg registrado com sucesso.`, 'success');
+                await sincronizarPerfilServidor({ peso: novoPeso });
+                carregarGraficoPeso(session.user.id);
+            }
+        };
+
+        // ==============================================================
+        // MODAL 4: EDITAR DADOS CORPORAIS (ALTURA, PESO, IDADE)
+        // ==============================================================
+        window.abrirModalEditarPerfil = function() {
+            const modal = document.getElementById('modal-editar-perfil');
+            if (perfilAlunoGlobal.altura) document.getElementById('edit-altura').value = perfilAlunoGlobal.altura;
+            if (perfilAlunoGlobal.peso) document.getElementById('edit-peso').value = perfilAlunoGlobal.peso;
+            if (perfilAlunoGlobal.idade) document.getElementById('edit-idade').value = perfilAlunoGlobal.idade;
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.fecharModalEditarPerfil = function() {
+            document.getElementById('modal-editar-perfil').classList.add('hidden');
+        };
+
+        window.salvarPerfilModal = async function(e) {
+            e.preventDefault();
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) return;
+
+            let altura = parseFloat(document.getElementById('edit-altura').value);
+            const peso = parseFloat(document.getElementById('edit-peso').value);
+            const idade = parseInt(document.getElementById('edit-idade').value, 10);
+
+            if (altura > 3) altura = altura / 100;
+
+            const btn = document.getElementById('btn-salvar-perfil-edit');
+            btn.disabled = true;
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Atualizando...`;
+
+            // Se o peso foi alterado, insere novo registro no histórico
+            if (peso && peso !== perfilAlunoGlobal.peso) {
+                try {
+                    await supabaseClient
+                        .from('historico_peso')
+                        .insert([{ aluno_id: session.user.id, peso: peso }]);
+                } catch (err) {
+                    console.warn("Aviso ao registrar pesagem:", err);
+                }
+            }
+
+            await sincronizarPerfilServidor({
+                altura: altura,
+                peso: peso,
+                idade: idade
+            });
+
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Atualizar Informações</span>`;
+            fecharModalEditarPerfil();
+            lucide.createIcons();
+
+            showToast('Dados Atualizados! ✨', 'Informações corporais atualizadas com sucesso.', 'success');
+            carregarGraficoPeso(session.user.id);
+        };
 
         // Botão de Sair com Limpeza
         document.getElementById('btn-logout').addEventListener('click', async () => {

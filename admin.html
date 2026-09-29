@@ -128,45 +128,61 @@
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
-                <!-- Atalhos de Navegação Rápida no Topo -->
-                <button onclick="navegarParaSecao('secao-cadastrar-aluno')" title="Cadastrar Novo Aluno"
-                    class="hidden md:flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-emerald-400 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-700/80 transition-all">
-                    <i data-lucide="user-plus" class="w-3.5 h-3.5 text-emerald-400"></i>
-                    <span>+ Aluno</span>
-                </button>
 
-                <button onclick="navegarParaSecao('secao-cadastrar-refeicao')" title="Cadastrar Refeição"
-                    class="hidden md:flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-brand-300 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-700/80 transition-all">
-                    <i data-lucide="utensils" class="w-3.5 h-3.5 text-brand-400"></i>
-                    <span>+ Dieta</span>
-                </button>
+                <!-- Menu Suspenso de Ações Rápidas -->
+                <div class="relative group">
+                    <button type="button"
+                        class="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all relative">
+                        <i data-lucide="layers" class="w-4 h-4 text-brand-400"></i>
+                        <span class="hidden sm:inline">Ações Rápidas</span>
+                        <i data-lucide="chevron-down"
+                            class="w-3.5 h-3.5 text-slate-400 group-hover:rotate-180 transition-transform"></i>
 
-                <!-- Atalho Fotos Alunos (Exclusivo Admin) -->
-                <button onclick="navegarParaSecao('secao-fotos-alunos')" title="Ver Fotos de Evolução dos Alunos"
-                    class="flex items-center gap-1.5 bg-purple-950/40 hover:bg-purple-900/50 text-purple-300 hover:text-white text-xs font-semibold px-3 py-2 rounded-xl border border-purple-500/30 transition-all">
-                    <i data-lucide="camera" class="w-3.5 h-3.5 text-purple-400"></i>
-                    <span>Fotos Alunos</span>
-                </button>
-
-                <!-- Atalho & Notificação do Canal de Dúvidas -->
-                <button id="btn-header-duvidas" onclick="navegarParaSecao('canal-duvidas')"
-                    title="Canal de Dúvidas com Alunos"
-                    class="relative flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all">
-                    <div class="relative flex items-center justify-center">
-                        <i data-lucide="message-square" class="w-4 h-4 text-brand-400"></i>
-                        <!-- Símbolo de Notificação em Vermelho e Branco (Ícone / Contador) -->
+                        <!-- Badge Geral de Notificação do Cabeçalho -->
                         <span id="badge-header-counter"
-                            class="hidden absolute -top-2.5 -right-2.5 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-black rounded-full border-2 border-white flex items-center justify-center shadow-lg shadow-red-600/50 animate-pulse">
+                            class="hidden absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-black rounded-full border-2 border-slate-900 flex items-center justify-center shadow-lg shadow-red-600/50 animate-pulse">
                             0
                         </span>
+                    </button>
+
+                    <!-- Lista Oculta do Menu Suspenso -->
+                    <div
+                        class="absolute right-0 mt-2 w-52 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
+                        <div class="p-1 space-y-0.5">
+                            <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
+                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800 transition-colors">
+                                <i data-lucide="user-plus" class="w-4 h-4 text-emerald-400"></i>
+                                <span>+ Aluno</span>
+                            </button>
+
+                            <button onclick="navegarParaSecao('secao-cadastrar-refeicao')"
+                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-brand-300 hover:bg-slate-800 transition-colors">
+                                <i data-lucide="utensils" class="w-4 h-4 text-brand-400"></i>
+                                <span>+ Dieta</span>
+                            </button>
+
+                            <!-- 1. Chat com Alunos primeiro -->
+                            <button id="btn-header-duvidas" onclick="navegarParaSecao('canal-duvidas')"
+                                class="w-full text-left flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800 transition-colors">
+                                <div class="flex items-center gap-2.5">
+                                    <i data-lucide="message-square" class="w-4 h-4 text-emerald-400"></i>
+                                    <span>Chat com alunos</span>
+                                </div>
+                                <span id="badge-header-pill"
+                                    class="hidden bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full border border-white shadow-sm shadow-red-600/40 animate-pulse">
+                                    0 nova(s)
+                                </span>
+                            </button>
+
+                            <!-- 2. Fotos dos Alunos depois -->
+                            <button onclick="navegarParaSecao('secao-fotos-alunos')"
+                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-300 hover:bg-slate-800 transition-colors">
+                                <i data-lucide="camera" class="w-4 h-4 text-purple-400"></i>
+                                <span>Fotos dos Alunos</span>
+                            </button>
+                        </div>
                     </div>
-                    <span class="hidden sm:inline">Dúvidas</span>
-                    <!-- Tag Notificação Vermelha e Branca -->
-                    <span id="badge-header-pill"
-                        class="hidden bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full border border-white shadow-sm shadow-red-600/40 animate-pulse">
-                        0 nova(s)
-                    </span>
-                </button>
+                </div>
 
                 <a href="dashboard.html"
                     class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all">
@@ -198,99 +214,6 @@
                 Cadastre novos alunos, prescreva refeições personalizadas, tire dúvidas no chat e avalie as fotos de
                 evolução corporal de cada aluno.
             </p>
-        </div>
-
-        <!-- PAINEL DE ATALHOS RÁPIDOS (Navegação Instantânea para as 4 Opções) -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <!-- Atalho 1: Cadastrar Novo Aluno -->
-            <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
-                class="glass-panel p-4 rounded-2xl border border-slate-800 hover:border-emerald-500/50 hover:bg-slate-900/90 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg">
-                <div class="flex items-center justify-between w-full mb-3">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="user-plus" class="w-5 h-5"></i>
-                    </div>
-                    <span
-                        class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-emerald-400 transition-colors">Atalho</span>
-                </div>
-                <div>
-                    <h3
-                        class="text-xs sm:text-sm font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-1">
-                        Cadastrar Aluno
-                        <i data-lucide="arrow-down-right"
-                            class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                    </h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Novo login & senha</p>
-                </div>
-            </button>
-
-            <!-- Atalho 2: Cadastrar Refeição -->
-            <button onclick="navegarParaSecao('secao-cadastrar-refeicao')"
-                class="glass-panel p-4 rounded-2xl border border-slate-800 hover:border-brand-500/50 hover:bg-slate-900/90 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg">
-                <div class="flex items-center justify-between w-full mb-3">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="utensils" class="w-5 h-5"></i>
-                    </div>
-                    <span
-                        class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-brand-400 transition-colors">Atalho</span>
-                </div>
-                <div>
-                    <h3
-                        class="text-xs sm:text-sm font-bold text-white group-hover:text-brand-400 transition-colors flex items-center gap-1">
-                        Cadastrar Refeição
-                        <i data-lucide="arrow-down-right"
-                            class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                    </h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Plano alimentar</p>
-                </div>
-            </button>
-
-            <!-- Atalho 3: Canal de Dúvidas -->
-            <button onclick="navegarParaSecao('canal-duvidas')"
-                class="glass-panel p-4 rounded-2xl border border-slate-800 hover:border-red-500/50 hover:bg-slate-900/90 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg relative">
-                <div class="flex items-center justify-between w-full mb-3">
-                    <div
-                        class="relative w-10 h-10 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="message-square" class="w-5 h-5"></i>
-                        <span id="badge-atalho-chat"
-                            class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-black rounded-full border-2 border-white flex items-center justify-center shadow-lg shadow-red-600/50 animate-pulse">0</span>
-                    </div>
-                    <span id="badge-atalho-novas-pill"
-                        class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-red-400 transition-colors">Atalho</span>
-                </div>
-                <div>
-                    <h3
-                        class="text-xs sm:text-sm font-bold text-white group-hover:text-red-400 transition-colors flex items-center gap-1">
-                        Canal de Dúvidas
-                        <i data-lucide="arrow-down-right"
-                            class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                    </h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Chat com alunos</p>
-                </div>
-            </button>
-
-            <!-- Atalho 4: Fotos dos Alunos (Nova Opção) -->
-            <button onclick="navegarParaSecao('secao-fotos-alunos')"
-                class="glass-panel p-4 rounded-2xl border border-purple-500/30 hover:border-purple-500 hover:bg-purple-950/20 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg shadow-purple-950/20 relative">
-                <div class="flex items-center justify-between w-full mb-3">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="camera" class="w-5 h-5"></i>
-                    </div>
-                    <span
-                        class="text-[9px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-1.5 py-0.5 rounded-full font-bold">Admin</span>
-                </div>
-                <div>
-                    <h3
-                        class="text-xs sm:text-sm font-bold text-white group-hover:text-purple-300 transition-colors flex items-center gap-1">
-                        Fotos de Evolução0
-                        <i data-lucide="arrow-down-right"
-                            class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                    </h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Galeria corporal</p>
-                </div>
-            </button>
         </div>
 
         <!-- SEÇÃO: Formulário para Cadastrar Aluno -->
@@ -340,20 +263,24 @@
         <!-- Formulário para Adicionar/Atualizar Refeição -->
         <section id="secao-cadastrar-refeicao"
             class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800/80 mb-6 gap-3">
+            <div
+                class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800/80 mb-6 gap-3">
                 <div>
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
                         <i data-lucide="plus-circle" class="w-5 h-5 text-brand-400"></i>
                         Cadastrar Refeição no Plano do Aluno
                     </h2>
-                    <p class="text-xs text-slate-400">Os dados serão sincronizados instantaneamente no portal do aluno</p>
+                    <p class="text-xs text-slate-400">Os dados serão sincronizados instantaneamente no portal do aluno
+                    </p>
                 </div>
                 <div>
                     <button type="button" onclick="gerarPdfAlunoAdmin()" id="btn-exportar-pdf-admin"
                         class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-brand-400 hover:text-white border border-slate-700 hover:border-brand-500/50 text-xs font-bold px-3.5 py-2 rounded-xl transition-all cursor-pointer shadow-sm active:scale-95">
                         <i data-lucide="file-down" class="w-4 h-4" id="btn-admin-pdf-icon"></i>
                         <span id="btn-admin-pdf-text">Baixar PDF do Aluno</span>
-                        <div id="btn-admin-pdf-spinner" class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <div id="btn-admin-pdf-spinner"
+                            class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin">
+                        </div>
                     </button>
                 </div>
             </div>
@@ -372,6 +299,49 @@
                             class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
                             <option value="" disabled selected>A carregar lista de alunos...</option>
                         </select>
+                    </div>
+
+                    <!-- Card de Informações Clínicas & Biométricas do Aluno (Visualização do Admin) -->
+                    <div id="card-aluno-clinico"
+                        class="hidden mt-3 p-4 bg-slate-900/90 rounded-2xl border border-slate-700/80 shadow-lg animate-in fade-in duration-200">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div class="flex items-center gap-3">
+                                <div id="clinico-avatar"
+                                    class="w-12 h-12 rounded-2xl bg-brand-500/20 text-brand-400 border border-brand-500/40 flex items-center justify-center font-bold text-sm overflow-hidden shrink-0 shadow-md">
+                                    A
+                                </div>
+                                <div>
+                                    <div class="text-sm font-bold text-white flex items-center gap-2">
+                                        <span id="clinico-nome">Aluno</span>
+                                        <span id="clinico-status-badge"
+                                            class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                                            Perfil Ativo
+                                        </span>
+                                    </div>
+                                    <div class="text-xs text-slate-400" id="clinico-email">aluno@email.com</div>
+                                </div>
+                            </div>
+
+                            <!-- Métricas: Altura, Peso, Idade, IMC -->
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 shrink-0">
+                                <div class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Altura</span>
+                                    <span class="text-xs font-extrabold text-white" id="clinico-altura">-- m</span>
+                                </div>
+                                <div class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Peso Atual</span>
+                                    <span class="text-xs font-extrabold text-emerald-400" id="clinico-peso">-- kg</span>
+                                </div>
+                                <div class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Idade</span>
+                                    <span class="text-xs font-extrabold text-white" id="clinico-idade">-- anos</span>
+                                </div>
+                                <div class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[75px]">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">IMC</span>
+                                    <span class="text-xs font-extrabold text-blue-400" id="clinico-imc">--</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -810,10 +780,110 @@
                 return;
             }
 
+            await carregarPerfisAlunosAdmin();
             await carregarAlunosSelect();
             await carregarListaAlunosChat();
             await atualizarNotificacoesChat(false);
             iniciarRealtimeEPolling();
+        }
+
+        // ==============================================================
+        // CACHE DE PERFIS DOS ALUNOS & DADOS BIOMÉTRICOS PARA O ADMIN
+        // ==============================================================
+        let perfisAlunosCache = {};
+
+        async function carregarPerfisAlunosAdmin() {
+            try {
+                const { data: mensagens, error } = await supabaseClient
+                    .from('mensagens')
+                    .select('aluno_id, mensagem, created_at')
+                    .eq('remetente', 'sistema_perfil')
+                    .order('created_at', { ascending: false });
+
+                if (!error && mensagens) {
+                    mensagens.forEach(m => {
+                        if (!perfisAlunosCache[m.aluno_id]) {
+                            try {
+                                perfisAlunosCache[m.aluno_id] = JSON.parse(m.mensagem);
+                            } catch (e) {}
+                        }
+                    });
+                }
+            } catch (err) {
+                console.warn("Aviso ao carregar perfis dos alunos:", err);
+            }
+        }
+
+        async function atualizarCardAlunoClinico(alunoId) {
+            const cardEl = document.getElementById('card-aluno-clinico');
+            if (!cardEl) return;
+            if (!alunoId) {
+                cardEl.classList.add('hidden');
+                return;
+            }
+
+            const aluno = listaAlunosCache.find(a => a.id === alunoId);
+            if (!aluno) return;
+
+            // Busca perfil no cache ou recarrega se necessário
+            let perfil = perfisAlunosCache[alunoId];
+            if (!perfil) {
+                await carregarPerfisAlunosAdmin();
+                perfil = perfisAlunosCache[alunoId] || {};
+            }
+
+            // Tenta obter o peso mais recente registrado no historico_peso
+            try {
+                const { data: ultimosPesos } = await supabaseClient
+                    .from('historico_peso')
+                    .select('peso, date_registro')
+                    .eq('aluno_id', alunoId)
+                    .order('date_registro', { ascending: false })
+                    .limit(1);
+
+                if (ultimosPesos && ultimosPesos.length > 0) {
+                    perfil.peso = ultimosPesos[0].peso;
+                }
+            } catch (e) {}
+
+            cardEl.classList.remove('hidden');
+            document.getElementById('clinico-nome').textContent = aluno.nome || 'Aluno';
+            document.getElementById('clinico-email').textContent = aluno.email || '';
+
+            const avatarEl = document.getElementById('clinico-avatar');
+            if (perfil.foto_perfil && perfil.foto_perfil.startsWith('data:image')) {
+                avatarEl.innerHTML = `<img src="${perfil.foto_perfil}" alt="Perfil" class="w-full h-full object-cover">`;
+            } else {
+                avatarEl.textContent = (aluno.nome || 'A').charAt(0).toUpperCase();
+            }
+
+            const alturaEl = document.getElementById('clinico-altura');
+            const pesoEl = document.getElementById('clinico-peso');
+            const idadeEl = document.getElementById('clinico-idade');
+            const imcEl = document.getElementById('clinico-imc');
+            const statusBadge = document.getElementById('clinico-status-badge');
+
+            alturaEl.textContent = perfil.altura ? `${parseFloat(perfil.altura).toFixed(2)} m` : '-- m';
+            pesoEl.textContent = perfil.peso ? `${parseFloat(perfil.peso).toFixed(1)} kg` : '-- kg';
+            idadeEl.textContent = perfil.idade ? `${perfil.idade} anos` : '-- anos';
+
+            if (perfil.altura && perfil.peso) {
+                let altM = perfil.altura > 3 ? perfil.altura / 100 : perfil.altura;
+                const imc = (perfil.peso / (altM * altM)).toFixed(1);
+                let classif = 'Normal';
+                if (imc < 18.5) classif = 'Baixo Peso';
+                else if (imc < 25) classif = 'Normal';
+                else if (imc < 30) classif = 'Sobrepeso';
+                else classif = 'Obesidade';
+                imcEl.textContent = `${imc} (${classif})`;
+                statusBadge.textContent = 'Métricas Preenchidas';
+                statusBadge.className = 'text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30';
+            } else {
+                imcEl.textContent = '--';
+                statusBadge.textContent = 'Aguardando Aluno no Portal';
+                statusBadge.className = 'text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30';
+            }
+            lucide.createIcons();
         }
 
         async function carregarAlunosSelect() {
@@ -847,6 +917,9 @@
                     option.textContent = `${aluno.nome || 'Sem Nome'} (${aluno.email || 'Sem e-mail'})`;
                     selectEl.appendChild(option);
                 });
+
+                // Listener para atualizar o card clínico do aluno no momento da prescrição da dieta
+                selectEl.onchange = (e) => atualizarCardAlunoClinico(e.target.value);
             }
 
             if (selectFotosEl) {
@@ -1190,6 +1263,13 @@
             listaAlunosCache.forEach(aluno => {
                 const unread = contagemPorAlunoGlobal[aluno.id] || 0;
                 const isSelecionado = alunoChatAtivoId === aluno.id;
+                const perfilAluno = perfisAlunosCache[aluno.id] || {};
+                const fotoPerfil = perfilAluno.foto_perfil;
+
+                // Renderiza foto de perfil do aluno ou inicial estilizada
+                const avatarInnerHtml = (fotoPerfil && fotoPerfil.startsWith('data:image'))
+                    ? `<img src="${fotoPerfil}" alt="Avatar" class="w-full h-full object-cover">`
+                    : `<span class="font-bold text-xs">${(aluno.nome || 'A').charAt(0).toUpperCase()}</span>`;
 
                 const btn = document.createElement('button');
                 btn.type = 'button';
@@ -1203,23 +1283,23 @@
 
                 btn.innerHTML = `
                 <div class="flex items-center gap-3">
-                    <div class="relative">
-                        <div class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center font-bold text-xs ${unread > 0 ? 'text-white bg-red-900/50' : 'text-slate-300'}">
-                            ${(aluno.nome || 'A').charAt(0).toUpperCase()}
+                    <div class="relative shrink-0">
+                        <div class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center overflow-hidden border ${isSelecionado ? 'border-brand-500/50' : 'border-slate-700/60'} ${unread > 0 ? 'text-white bg-red-900/50' : 'text-slate-300'}">
+                            ${avatarInnerHtml}
                         </div>
                         ${unread > 0 ? `
                             <!-- Símbolo indicador vermelho e branco -->
                             <span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-600 border-2 border-white rounded-full shadow-sm"></span>
                         ` : ''}
                     </div>
-                    <div>
-                        <div class="text-xs font-bold text-white group-hover:text-brand-400 flex items-center gap-2">
+                    <div class="min-w-0">
+                        <div class="text-xs font-bold text-white group-hover:text-brand-400 flex items-center gap-2 truncate">
                             <span>${aluno.nome || 'Sem Nome'}</span>
                         </div>
-                        <div class="text-[10px] text-slate-400">${aluno.email}</div>
+                        <div class="text-[10px] text-slate-400 truncate">${aluno.email}</div>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 shrink-0">
                     ${unread > 0 ? `
                         <!-- Símbolo contador na cor vermelha e branco -->
                         <span class="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full bg-red-600 text-white text-[11px] font-black border-2 border-white shadow-md shadow-red-600/40 animate-pulse" title="${unread} nova(s) mensagem(ns)">
@@ -1265,47 +1345,39 @@
             contagemPorAlunoGlobal = novaContagem;
             const totalNaoLidas = msgsNaoLidas.length;
 
-            // 1. Atualiza Badges no Cabeçalho e no Atalho Rápido (Vermelho e Branco)
+            // 1. Atualiza Badges no Cabeçalho (Vermelho e Branco)
             const headerCounter = document.getElementById('badge-header-counter');
             const headerPill = document.getElementById('badge-header-pill');
-            const atalhoBadge = document.getElementById('badge-atalho-chat');
-            const atalhoPill = document.getElementById('badge-atalho-novas-pill');
 
             if (totalNaoLidas > 0) {
                 const textoContador = totalNaoLidas > 99 ? '99+' : totalNaoLidas;
-                headerCounter.textContent = textoContador;
-                headerCounter.classList.remove('hidden');
-                headerPill.textContent = `${totalNaoLidas} nova${totalNaoLidas > 1 ? 's' : ''}`;
-                headerPill.classList.remove('hidden');
-
-                if (atalhoBadge) {
-                    atalhoBadge.textContent = textoContador;
-                    atalhoBadge.classList.remove('hidden');
+                if (headerCounter) {
+                    headerCounter.textContent = textoContador;
+                    headerCounter.classList.remove('hidden');
                 }
-                if (atalhoPill) {
-                    atalhoPill.textContent = `${totalNaoLidas} nova(s)`;
-                    atalhoPill.className = 'text-[10px] uppercase font-black text-red-400 animate-pulse';
+                if (headerPill) {
+                    headerPill.textContent = `${totalNaoLidas} nova${totalNaoLidas > 1 ? 's' : ''}`;
+                    headerPill.classList.remove('hidden');
                 }
             } else {
-                headerCounter.classList.add('hidden');
-                headerPill.classList.add('hidden');
-                if (atalhoBadge) atalhoBadge.classList.add('hidden');
-                if (atalhoPill) {
-                    atalhoPill.textContent = 'Atalho';
-                    atalhoPill.className = 'text-[10px] uppercase font-bold text-slate-500 group-hover:text-red-400 transition-colors';
-                }
+                if (headerCounter) headerCounter.classList.add('hidden');
+                if (headerPill) headerPill.classList.add('hidden');
             }
 
             // 2. Atualiza Badge na Seção de Chat (Vermelho e Branco)
             const sectionBadge = document.getElementById('badge-section-novas');
             const sectionBadgeText = document.getElementById('badge-section-novas-texto');
             if (totalNaoLidas > 0) {
-                sectionBadgeText.textContent = `${totalNaoLidas} ${totalNaoLidas > 1 ? 'novas mensagens' : 'nova mensagem'}`;
-                sectionBadge.classList.remove('hidden');
-                sectionBadge.classList.add('inline-flex');
+                if (sectionBadgeText) sectionBadgeText.textContent = `${totalNaoLidas} ${totalNaoLidas > 1 ? 'novas mensagens' : 'nova mensagem'}`;
+                if (sectionBadge) {
+                    sectionBadge.classList.remove('hidden');
+                    sectionBadge.classList.add('inline-flex');
+                }
             } else {
-                sectionBadge.classList.add('hidden');
-                sectionBadge.classList.remove('inline-flex');
+                if (sectionBadge) {
+                    sectionBadge.classList.add('hidden');
+                    sectionBadge.classList.remove('inline-flex');
+                }
             }
 
             // 3. Re-renderiza a lista de alunos com os símbolos vermelhos e brancos
@@ -1329,7 +1401,39 @@
         async function selecionarAlunoChat(id, nome) {
             alunoChatAtivoId = id;
             alunoChatAtivoNome = nome;
-            document.getElementById('admin-chat-header').innerHTML = `<i data-lucide="user" class="w-4 h-4 text-brand-400"></i> Conversando com: <span class="text-brand-400 font-bold">${nome}</span>`;
+            const aluno = listaAlunosCache.find(a => a.id === id);
+            const perfil = perfisAlunosCache[id] || {};
+            const foto = perfil.foto_perfil;
+
+            // Foto de perfil do aluno no cabeçalho do chat
+            const avatarHeaderHtml = (foto && foto.startsWith('data:image'))
+                ? `<img src="${foto}" alt="Avatar" class="w-8 h-8 rounded-xl object-cover border border-brand-500/40 shadow-sm shrink-0">`
+                : `<div class="w-8 h-8 rounded-xl bg-brand-500/20 text-brand-400 font-bold text-xs flex items-center justify-center shrink-0 border border-brand-500/30">${(nome || 'A').charAt(0).toUpperCase()}</div>`;
+
+            let infoClinica = '';
+            if (perfil.peso || perfil.altura) {
+                infoClinica = `
+                    <div class="ml-auto hidden sm:flex items-center gap-2 bg-slate-900/90 px-2.5 py-1 rounded-xl border border-slate-700/80 text-[11px]">
+                        ${perfil.altura ? `<span class="text-slate-300 font-semibold">${parseFloat(perfil.altura).toFixed(2)}m</span>` : ''} 
+                        ${perfil.peso ? `<span class="text-emerald-400 font-bold">• ${parseFloat(perfil.peso).toFixed(1)}kg</span>` : ''}
+                        ${perfil.idade ? `<span class="text-slate-400 font-medium">• ${perfil.idade} anos</span>` : ''}
+                    </div>
+                `;
+            }
+
+            document.getElementById('admin-chat-header').innerHTML = `
+                <div class="flex items-center gap-3 w-full py-0.5">
+                    ${avatarHeaderHtml}
+                    <div class="leading-tight">
+                        <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                            <span>${nome}</span>
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block" title="Aluno"></span>
+                        </div>
+                        <div class="text-[10px] text-slate-400 font-normal">${aluno ? aluno.email : ''}</div>
+                    </div>
+                    ${infoClinica}
+                </div>
+            `;
             document.getElementById('admin-chat-form').classList.remove('hidden');
             lucide.createIcons();
 
@@ -1381,12 +1485,24 @@
             if (error) return;
 
             box.innerHTML = '';
-            if (!msgs || msgs.length === 0) {
+
+            // Filtra mensagens técnicas do sistema para não poluir o histórico do chat
+            const msgsChat = (msgs || []).filter(m => m.remetente !== 'sistema_perfil');
+
+            // Atualiza perfil no cache se houver mensagem de perfil recente
+            const ultMsgPerfil = (msgs || []).slice().reverse().find(m => m.remetente === 'sistema_perfil');
+            if (ultMsgPerfil) {
+                try {
+                    perfisAlunosCache[alunoId] = JSON.parse(ultMsgPerfil.mensagem);
+                } catch(e) {}
+            }
+
+            if (msgsChat.length === 0) {
                 box.innerHTML = '<div class="text-center text-slate-500 mt-20">Nenhuma mensagem trocada com este aluno.</div>';
                 return;
             }
 
-            msgs.forEach(m => {
+            msgsChat.forEach(m => {
                 const isAdmin = m.remetente === 'admin';
                 const div = document.createElement('div');
                 div.className = `flex ${isAdmin ? 'justify-end' : 'justify-start'}`;
