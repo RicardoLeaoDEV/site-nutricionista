@@ -129,9 +129,8 @@
 
             <div class="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
 
-                <!-- Menu Suspenso de Ações Rápidas (Substitui os 4 botões lado a lado) -->
+                <!-- Menu Suspenso de Ações Rápidas -->
                 <div class="relative group">
-                    <!-- Botão Gatilho -->
                     <button type="button"
                         class="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all relative">
                         <i data-lucide="layers" class="w-4 h-4 text-brand-400"></i>
@@ -139,7 +138,7 @@
                         <i data-lucide="chevron-down"
                             class="w-3.5 h-3.5 text-slate-400 group-hover:rotate-180 transition-transform"></i>
 
-                        <!-- Badge de Notificação do Topo (Contador Geral) -->
+                        <!-- Badge Geral de Notificação do Cabeçalho -->
                         <span id="badge-header-counter"
                             class="hidden absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-black rounded-full border-2 border-slate-900 flex items-center justify-center shadow-lg shadow-red-600/50 animate-pulse">
                             0
@@ -153,31 +152,33 @@
                             <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
                                 class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800 transition-colors">
                                 <i data-lucide="user-plus" class="w-4 h-4 text-emerald-400"></i>
-                                <span>Cadastrar novo aluno</span>
+                                <span>+ Aluno</span>
                             </button>
 
                             <button onclick="navegarParaSecao('secao-cadastrar-refeicao')"
                                 class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-brand-300 hover:bg-slate-800 transition-colors">
                                 <i data-lucide="utensils" class="w-4 h-4 text-brand-400"></i>
-                                <span>Cadastrar dieta</span>
+                                <span>+ Dieta</span>
                             </button>
 
-                            <button onclick="navegarParaSecao('secao-fotos-alunos')"
-                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-300 hover:bg-slate-800 transition-colors">
-                                <i data-lucide="camera" class="w-4 h-4 text-purple-400"></i>
-                                <span>Fotos dos Alunos</span>
-                            </button>
-
+                            <!-- 1. Chat com Alunos primeiro -->
                             <button id="btn-header-duvidas" onclick="navegarParaSecao('canal-duvidas')"
-                                class="w-full text-left flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-red-400 hover:bg-slate-800 transition-colors">
+                                class="w-full text-left flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800 transition-colors">
                                 <div class="flex items-center gap-2.5">
-                                    <i data-lucide="message-square" class="w-4 h-4 text-brand-400"></i>
+                                    <i data-lucide="message-square" class="w-4 h-4 text-emerald-400"></i>
                                     <span>Chat com alunos</span>
                                 </div>
                                 <span id="badge-header-pill"
                                     class="hidden bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full border border-white shadow-sm shadow-red-600/40 animate-pulse">
                                     0 nova(s)
                                 </span>
+                            </button>
+
+                            <!-- 2. Fotos dos Alunos depois -->
+                            <button onclick="navegarParaSecao('secao-fotos-alunos')"
+                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-300 hover:bg-slate-800 transition-colors">
+                                <i data-lucide="camera" class="w-4 h-4 text-purple-400"></i>
+                                <span>Fotos dos Alunos</span>
                             </button>
                         </div>
                     </div>
@@ -213,99 +214,6 @@
                 Cadastre novos alunos, prescreva refeições personalizadas, tire dúvidas no chat e avalie as fotos de
                 evolução corporal de cada aluno.
             </p>
-        </div>
-
-        <!-- PAINEL DE ATALHOS RÁPIDOS (Navegação Instantânea para as 4 Opções) -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <!-- Atalho 1: Cadastrar Novo Aluno -->
-            <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
-                class="glass-panel p-4 rounded-2xl border border-slate-800 hover:border-emerald-500/50 hover:bg-slate-900/90 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg">
-                <div class="flex items-center justify-between w-full mb-3">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="user-plus" class="w-5 h-5"></i>
-                    </div>
-                    <span
-                        class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-emerald-400 transition-colors">Atalho</span>
-                </div>
-                <div>
-                    <h3
-                        class="text-xs sm:text-sm font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-1">
-                        Cadastrar Aluno
-                        <i data-lucide="arrow-down-right"
-                            class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                    </h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Novo login & senha</p>
-                </div>
-            </button>
-
-            <!-- Atalho 2: Cadastrar Refeição -->
-            <button onclick="navegarParaSecao('secao-cadastrar-refeicao')"
-                class="glass-panel p-4 rounded-2xl border border-slate-800 hover:border-brand-500/50 hover:bg-slate-900/90 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg">
-                <div class="flex items-center justify-between w-full mb-3">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="utensils" class="w-5 h-5"></i>
-                    </div>
-                    <span
-                        class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-brand-400 transition-colors">Atalho</span>
-                </div>
-                <div>
-                    <h3
-                        class="text-xs sm:text-sm font-bold text-white group-hover:text-brand-400 transition-colors flex items-center gap-1">
-                        Cadastrar Refeição
-                        <i data-lucide="arrow-down-right"
-                            class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                    </h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Plano alimentar</p>
-                </div>
-            </button>
-
-            <!-- Atalho 3: Canal de Dúvidas -->
-            <button onclick="navegarParaSecao('canal-duvidas')"
-                class="glass-panel p-4 rounded-2xl border border-slate-800 hover:border-red-500/50 hover:bg-slate-900/90 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg relative">
-                <div class="flex items-center justify-between w-full mb-3">
-                    <div
-                        class="relative w-10 h-10 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="message-square" class="w-5 h-5"></i>
-                        <span id="badge-atalho-chat"
-                            class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-black rounded-full border-2 border-white flex items-center justify-center shadow-lg shadow-red-600/50 animate-pulse">0</span>
-                    </div>
-                    <span id="badge-atalho-novas-pill"
-                        class="text-[10px] uppercase font-bold text-slate-500 group-hover:text-red-400 transition-colors">Atalho</span>
-                </div>
-                <div>
-                    <h3
-                        class="text-xs sm:text-sm font-bold text-white group-hover:text-red-400 transition-colors flex items-center gap-1">
-                        Canal de Dúvidas
-                        <i data-lucide="arrow-down-right"
-                            class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                    </h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Chat com alunos</p>
-                </div>
-            </button>
-
-            <!-- Atalho 4: Fotos dos Alunos (Nova Opção) -->
-            <button onclick="navegarParaSecao('secao-fotos-alunos')"
-                class="glass-panel p-4 rounded-2xl border border-purple-500/30 hover:border-purple-500 hover:bg-purple-950/20 transition-all text-left group flex flex-col justify-between hover:scale-[1.02] shadow-lg shadow-purple-950/20 relative">
-                <div class="flex items-center justify-between w-full mb-3">
-                    <div
-                        class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="camera" class="w-5 h-5"></i>
-                    </div>
-                    <span
-                        class="text-[9px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-1.5 py-0.5 rounded-full font-bold">Admin</span>
-                </div>
-                <div>
-                    <h3
-                        class="text-xs sm:text-sm font-bold text-white group-hover:text-purple-300 transition-colors flex items-center gap-1">
-                        Fotos de Evolução
-                        <i data-lucide="arrow-down-right"
-                            class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                    </h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Galeria corporal</p>
-                </div>
-            </button>
         </div>
 
         <!-- SEÇÃO: Formulário para Cadastrar Aluno -->
@@ -459,7 +367,7 @@
                     <div class="flex items-center gap-3 flex-wrap">
                         <h2 class="text-lg font-bold text-white flex items-center gap-2">
                             <i data-lucide="message-square" class="w-5 h-5 text-brand-400"></i>
-                            <span>Chat com Alunos</span>
+                            <span>Canal de Dúvidas (Chat com Alunos)</span>
                         </h2>
                         <!-- Símbolo de Notificação em Vermelho e Branco -->
                         <span id="badge-section-novas"
@@ -1284,47 +1192,39 @@
             contagemPorAlunoGlobal = novaContagem;
             const totalNaoLidas = msgsNaoLidas.length;
 
-            // 1. Atualiza Badges no Cabeçalho e no Atalho Rápido (Vermelho e Branco)
+            // 1. Atualiza Badges no Cabeçalho (Vermelho e Branco)
             const headerCounter = document.getElementById('badge-header-counter');
             const headerPill = document.getElementById('badge-header-pill');
-            const atalhoBadge = document.getElementById('badge-atalho-chat');
-            const atalhoPill = document.getElementById('badge-atalho-novas-pill');
 
             if (totalNaoLidas > 0) {
                 const textoContador = totalNaoLidas > 99 ? '99+' : totalNaoLidas;
-                headerCounter.textContent = textoContador;
-                headerCounter.classList.remove('hidden');
-                headerPill.textContent = `${totalNaoLidas} nova${totalNaoLidas > 1 ? 's' : ''}`;
-                headerPill.classList.remove('hidden');
-
-                if (atalhoBadge) {
-                    atalhoBadge.textContent = textoContador;
-                    atalhoBadge.classList.remove('hidden');
+                if (headerCounter) {
+                    headerCounter.textContent = textoContador;
+                    headerCounter.classList.remove('hidden');
                 }
-                if (atalhoPill) {
-                    atalhoPill.textContent = `${totalNaoLidas} nova(s)`;
-                    atalhoPill.className = 'text-[10px] uppercase font-black text-red-400 animate-pulse';
+                if (headerPill) {
+                    headerPill.textContent = `${totalNaoLidas} nova${totalNaoLidas > 1 ? 's' : ''}`;
+                    headerPill.classList.remove('hidden');
                 }
             } else {
-                headerCounter.classList.add('hidden');
-                headerPill.classList.add('hidden');
-                if (atalhoBadge) atalhoBadge.classList.add('hidden');
-                if (atalhoPill) {
-                    atalhoPill.textContent = 'Atalho';
-                    atalhoPill.className = 'text-[10px] uppercase font-bold text-slate-500 group-hover:text-red-400 transition-colors';
-                }
+                if (headerCounter) headerCounter.classList.add('hidden');
+                if (headerPill) headerPill.classList.add('hidden');
             }
 
             // 2. Atualiza Badge na Seção de Chat (Vermelho e Branco)
             const sectionBadge = document.getElementById('badge-section-novas');
             const sectionBadgeText = document.getElementById('badge-section-novas-texto');
             if (totalNaoLidas > 0) {
-                sectionBadgeText.textContent = `${totalNaoLidas} ${totalNaoLidas > 1 ? 'novas mensagens' : 'nova mensagem'}`;
-                sectionBadge.classList.remove('hidden');
-                sectionBadge.classList.add('inline-flex');
+                if (sectionBadgeText) sectionBadgeText.textContent = `${totalNaoLidas} ${totalNaoLidas > 1 ? 'novas mensagens' : 'nova mensagem'}`;
+                if (sectionBadge) {
+                    sectionBadge.classList.remove('hidden');
+                    sectionBadge.classList.add('inline-flex');
+                }
             } else {
-                sectionBadge.classList.add('hidden');
-                sectionBadge.classList.remove('inline-flex');
+                if (sectionBadge) {
+                    sectionBadge.classList.add('hidden');
+                    sectionBadge.classList.remove('inline-flex');
+                }
             }
 
             // 3. Re-renderiza a lista de alunos com os símbolos vermelhos e brancos
