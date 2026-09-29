@@ -1014,22 +1014,50 @@
                             garantir que você nunca fique sem rumo.
                         </p>
 
-                        <div class="grid grid-cols-2 gap-4 mb-10">
-                            <div class="flex items-center gap-2.5 text-xs sm:text-sm font-semibold">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-400"></i> Atendimento
-                                Presencial & Online
-                            </div>
-                            <div class="flex items-center gap-2.5 text-xs sm:text-sm font-semibold">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-400"></i> Prescrição de
-                                Fitoterápicos
-                            </div>
-                            <div class="flex items-center gap-2.5 text-xs sm:text-sm font-semibold">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-400"></i> Chat Direto com o
-                                Nutri
-                            </div>
-                            <div class="flex items-center gap-2.5 text-xs sm:text-sm font-semibold">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-400"></i> Acesso Ilimitado ao
-                                App
+                        <!-- Menu Suspenso de Ações Rápidas -->
+                        <div class="relative group">
+                            <!-- Botão Principal -->
+                            <button type="button"
+                                class="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-4 py-2 rounded-xl border border-slate-700/80 transition-all relative">
+                                <i data-lucide="layers" class="w-4 h-4 text-brand-400"></i>
+                                <span class="hidden sm:inline">Ações Rápidas</span>
+                                <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+
+                                <!-- Badge de notificação transferido para o botão principal -->
+                                <span id="badge-header-counter"
+                                    class="hidden absolute -top-2 -right-2 min-w-[18px] h-[18px] bg-red-600 text-white text-[10px] font-black rounded-full border-2 border-slate-900 flex items-center justify-center animate-pulse">0</span>
+                            </button>
+
+                            <!-- Lista Suspensa -->
+                            <div
+                                class="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-700 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
+
+                                <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
+                                    class="w-full text-left flex items-center gap-2.5 px-4 py-3 text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800 transition-colors">
+                                    <i data-lucide="user-plus" class="w-4 h-4 text-emerald-400"></i> + Aluno
+                                </button>
+
+                                <button onclick="navegarParaSecao('secao-cadastrar-refeicao')"
+                                    class="w-full text-left flex items-center gap-2.5 px-4 py-3 text-xs font-semibold text-slate-300 hover:text-brand-300 hover:bg-slate-800 transition-colors border-t border-slate-800">
+                                    <i data-lucide="utensils" class="w-4 h-4 text-brand-400"></i> + Dieta
+                                </button>
+
+                                <button onclick="navegarParaSecao('secao-fotos-alunos')"
+                                    class="w-full text-left flex items-center gap-2.5 px-4 py-3 text-xs font-semibold text-slate-300 hover:text-purple-300 hover:bg-slate-800 transition-colors border-t border-slate-800">
+                                    <i data-lucide="camera" class="w-4 h-4 text-purple-400"></i> Fotos Alunos
+                                </button>
+
+                                <button id="btn-header-duvidas" onclick="navegarParaSecao('canal-duvidas')"
+                                    class="w-full text-left flex items-center justify-between px-4 py-3 text-xs font-semibold text-slate-300 hover:text-red-400 hover:bg-slate-800 transition-colors border-t border-slate-800">
+                                    <div class="flex items-center gap-2.5">
+                                        <i data-lucide="message-square" class="w-4 h-4 text-red-400"></i> Dúvidas
+                                    </div>
+                                    <!-- Pill de notificação transferido para dentro do dropdown -->
+                                    <span id="badge-header-pill"
+                                        class="hidden bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full shadow-sm animate-pulse">0
+                                        nova(s)</span>
+                                </button>
+
                             </div>
                         </div>
 
