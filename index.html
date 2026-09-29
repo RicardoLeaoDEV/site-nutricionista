@@ -68,6 +68,17 @@
     </script>
 
     <style>
+        /* Correção universal para evitar overflow horizontal no mobile */
+        html,
+        body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         :root {
             --bg: #060911;
             --brand-green: #10b981;
