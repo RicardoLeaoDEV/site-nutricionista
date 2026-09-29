@@ -860,10 +860,14 @@
             document.getElementById('clinico-email').textContent = aluno.email || '';
 
             const avatarEl = document.getElementById('clinico-avatar');
-            if (perfil.foto_perfil && perfil.foto_perfil.startsWith('data:image')) {
+            const temFoto = perfil.foto_perfil && (perfil.foto_perfil.startsWith('data:image') || perfil.foto_perfil.startsWith('http') || perfil.foto_perfil.length > 50);
+
+            if (temFoto) {
                 avatarEl.innerHTML = `<img src="${perfil.foto_perfil}" alt="Perfil" class="w-full h-full object-cover">`;
+                avatarEl.className = 'w-12 h-12 rounded-2xl bg-brand-500/20 border border-brand-500/40 flex items-center justify-center overflow-hidden shrink-0 shadow-md';
             } else {
                 avatarEl.textContent = (aluno.nome || 'A').charAt(0).toUpperCase();
+                avatarEl.className = 'w-12 h-12 rounded-2xl bg-brand-500/20 text-brand-400 border border-brand-500/40 flex items-center justify-center font-bold text-sm overflow-hidden shrink-0 shadow-md';
             }
 
             const alturaEl = document.getElementById('clinico-altura');
@@ -1276,7 +1280,8 @@
                 const fotoPerfil = perfilAluno.foto_perfil;
 
                 // Renderiza foto de perfil do aluno ou inicial estilizada
-                const avatarInnerHtml = (fotoPerfil && fotoPerfil.startsWith('data:image'))
+                const temFoto = fotoPerfil && (fotoPerfil.startsWith('data:image') || fotoPerfil.startsWith('http') || fotoPerfil.length > 50);
+                const avatarInnerHtml = temFoto
                     ? `<img src="${fotoPerfil}" alt="Avatar" class="w-full h-full object-cover">`
                     : `<span class="font-bold text-xs">${(aluno.nome || 'A').charAt(0).toUpperCase()}</span>`;
 
@@ -1415,7 +1420,8 @@
             const foto = perfil.foto_perfil;
 
             // Foto de perfil do aluno no cabeçalho do chat
-            const avatarHeaderHtml = (foto && foto.startsWith('data:image'))
+            const temFoto = foto && (foto.startsWith('data:image') || foto.startsWith('http') || foto.length > 50);
+            const avatarHeaderHtml = temFoto
                 ? `<img src="${foto}" alt="Avatar" class="w-8 h-8 rounded-xl object-cover border border-brand-500/40 shadow-sm shrink-0">`
                 : `<div class="w-8 h-8 rounded-xl bg-brand-500/20 text-brand-400 font-bold text-xs flex items-center justify-center shrink-0 border border-brand-500/30">${(nome || 'A').charAt(0).toUpperCase()}</div>`;
 
@@ -1596,7 +1602,19 @@
             // Atualiza resumo no card
             document.getElementById('fotos-aluno-nome').textContent = alunoFotosSelecionadoNome;
             document.getElementById('fotos-aluno-email').textContent = alunoEmail;
-            document.getElementById('fotos-aluno-avatar').textContent = (alunoFotosSelecionadoNome || 'A').charAt(0).toUpperCase();
+
+            const perfilFotos = perfisAlunosCache[alunoId] || {};
+            const avatarEl = document.getElementById('fotos-aluno-avatar');
+            const temFoto = perfilFotos.foto_perfil && (perfilFotos.foto_perfil.startsWith('data:image') || perfilFotos.foto_perfil.startsWith('http') || perfilFotos.foto_perfil.length > 50);
+
+            if (temFoto) {
+                avatarEl.innerHTML = `<img src="${perfilFotos.foto_perfil}" alt="Perfil" class="w-full h-full object-cover">`;
+                avatarEl.className = "w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center overflow-hidden shrink-0";
+            } else {
+                avatarEl.innerHTML = (alunoFotosSelecionadoNome || 'A').charAt(0).toUpperCase();
+                avatarEl.className = "w-8 h-8 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center justify-center font-bold text-xs shrink-0";
+            }
+
             document.getElementById('fotos-aluno-resumo').classList.remove('hidden');
 
             const container = document.getElementById('fotos-timeline-container');
