@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApexFit - Painel do Nutricionista</title>
+    <title>ApexFit - Painel do Personal</title>
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,13 +27,13 @@
                     },
                     colors: {
                         brand: {
-                            50: '#ecfdf5',
-                            100: '#d1fae5',
-                            400: '#34d399',
-                            500: '#10b981',
-                            600: '#059669',
-                            700: '#047857',
-                            900: '#064e3b',
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            400: '#fb923c',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            900: '#7c2d12',
                         }
                     }
                 }
@@ -63,7 +63,7 @@
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #10b981;
+            background: #f97316;
         }
 
         /* Galeria de Fotos no Admin */
@@ -123,7 +123,7 @@
                 <span
                     class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20 font-semibold flex items-center gap-1.5">
                     <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                    Painel do Nutricionista
+                    Painel do Personal
                 </span>
             </div>
 
@@ -150,22 +150,22 @@
                         class="absolute right-0 mt-2 w-52 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
                         <div class="p-1 space-y-0.5">
                             <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
-                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800 transition-colors">
-                                <i data-lucide="user-plus" class="w-4 h-4 text-emerald-400"></i>
+                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-orange-400 hover:bg-slate-800 transition-colors">
+                                <i data-lucide="user-plus" class="w-4 h-4 text-orange-400"></i>
                                 <span>Cadastrar novo aluno</span>
                             </button>
 
-                            <button onclick="navegarParaSecao('secao-cadastrar-refeicao')"
+                            <button onclick="navegarParaSecao('secao-cadastrar-treino')"
                                 class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-brand-300 hover:bg-slate-800 transition-colors">
-                                <i data-lucide="utensils" class="w-4 h-4 text-brand-400"></i>
-                                <span>Cadastrar de refeição</span>
+                                <i data-lucide="dumbbell" class="w-4 h-4 text-brand-400"></i>
+                                <span>Montar treino</span>
                             </button>
 
                             <!-- 1. Chat com Alunos primeiro -->
                             <button id="btn-header-duvidas" onclick="navegarParaSecao('canal-duvidas')"
-                                class="w-full text-left flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800 transition-colors">
+                                class="w-full text-left flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-orange-400 hover:bg-slate-800 transition-colors">
                                 <div class="flex items-center gap-2.5">
-                                    <i data-lucide="message-square" class="w-4 h-4 text-emerald-400"></i>
+                                    <i data-lucide="message-square" class="w-4 h-4 text-orange-400"></i>
                                     <span>Chat com alunos</span>
                                 </div>
                                 <span id="badge-header-pill"
@@ -184,7 +184,7 @@
                     </div>
                 </div>
 
-                <a href="personal.html" class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all"><i data-lucide="dumbbell" class="w-4 h-4 text-orange-400"></i><span class="hidden lg:inline">Espaço do Personal</span></a>
+                <a href="admin.html" class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all"><i data-lucide="apple" class="w-4 h-4 text-orange-400"></i><span class="hidden lg:inline">Espaço do Nutricionista</span></a>
                 <a href="dashboard.html"
                     class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all">
                     <i data-lucide="eye" class="w-4 h-4 text-brand-400"></i>
@@ -206,13 +206,12 @@
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1 w-full">
         <div
             class="bg-gradient-to-r from-slate-900/90 to-brand-950/20 p-6 rounded-3xl border border-slate-800 shadow-xl">
-            <span class="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1 inline-block">Área de
-                Prescrição</span>
+            <span class="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1 inline-block">Espaço do Nutricionista</span>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                Gestão de Alunos e Dietas 📋
+                Gestão de Alunos e Treinos 🏋️
             </h1>
             <p class="text-sm text-slate-400 mt-1">
-                Cadastre novos alunos, prescreva refeições personalizadas, tire dúvidas no chat e avalie as fotos de
+                Cadastre novos alunos, monte treinos focados por objetivo, tire dúvidas no chat e avalie as fotos de
                 evolução corporal de cada aluno.
             </p>
         </div>
@@ -223,7 +222,7 @@
             <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-6">
                 <div>
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i data-lucide="user-plus" class="w-5 h-5 text-emerald-400"></i>
+                        <i data-lucide="user-plus" class="w-5 h-5 text-orange-400"></i>
                         Cadastrar Novo Aluno
                     </h2>
                     <p class="text-xs text-slate-400">Cria o acesso para o aluno entrar no portal com senha temporária
@@ -237,24 +236,24 @@
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Nome do
                             Aluno</label>
                         <input type="text" id="novo-aluno-nome" placeholder="Ex: Maria Silva" required
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">E-mail de
                             Acesso</label>
                         <input type="email" id="novo-aluno-email" placeholder="aluno@email.com" required
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Senha
                             Inicial</label>
                         <input type="text" id="novo-aluno-senha" placeholder="Mínimo 6 caracteres" required
                             value="123456"
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
                     </div>
                 </div>
                 <button type="submit" id="btn-cadastrar-aluno"
-                    class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold py-3 rounded-xl transition-all border border-slate-700 flex items-center justify-center gap-2">
+                    class="w-full bg-slate-800 hover:bg-slate-700 text-orange-400 font-bold py-3 rounded-xl transition-all border border-slate-700 flex items-center justify-center gap-2">
                     <i data-lucide="user-check" class="w-4 h-4"></i>
                     <span>Cadastrar Aluno no Sistema</span>
                 </button>
@@ -262,14 +261,14 @@
         </section>
 
         <!-- Formulário para Adicionar/Atualizar Refeição -->
-        <section id="secao-cadastrar-refeicao"
+        <section id="secao-cadastrar-treino"
             class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
             <div
                 class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800/80 mb-6 gap-3">
                 <div>
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
                         <i data-lucide="plus-circle" class="w-5 h-5 text-brand-400"></i>
-                        Cadastrar Refeição no Plano do Aluno
+                        Montar Treino do Aluno
                     </h2>
                     <p class="text-xs text-slate-400">Os dados serão sincronizados instantaneamente no portal do aluno
                     </p>
@@ -278,7 +277,7 @@
                     <button type="button" onclick="gerarPdfAlunoAdmin()" id="btn-exportar-pdf-admin"
                         class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-brand-400 hover:text-white border border-slate-700 hover:border-brand-500/50 text-xs font-bold px-3.5 py-2 rounded-xl transition-all cursor-pointer shadow-sm active:scale-95">
                         <i data-lucide="file-down" class="w-4 h-4" id="btn-admin-pdf-icon"></i>
-                        <span id="btn-admin-pdf-text">Baixar PDF do Aluno</span>
+                        <span id="btn-admin-pdf-text">Baixar Treino em PDF</span>
                         <div id="btn-admin-pdf-spinner"
                             class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin">
                         </div>
@@ -315,7 +314,7 @@
                                     <div class="text-sm font-bold text-white flex items-center gap-2">
                                         <span id="clinico-nome">Aluno</span>
                                         <span id="clinico-status-badge"
-                                            class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                                            class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/30">
                                             Perfil Ativo
                                         </span>
                                     </div>
@@ -336,7 +335,7 @@
                                     <span
                                         class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Peso
                                         Atual</span>
-                                    <span class="text-xs font-extrabold text-emerald-400" id="clinico-peso">-- kg</span>
+                                    <span class="text-xs font-extrabold text-orange-400" id="clinico-peso">-- kg</span>
                                 </div>
                                 <div
                                     class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
@@ -355,63 +354,32 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                            Nome da Refeição
-                        </label>
-                        <div class="relative">
-                            <div
-                                class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                                <i data-lucide="utensils" class="w-4 h-4"></i>
-                            </div>
-                            <input type="text" id="refeicao-nome" placeholder="Ex: Café da Manhã, Almoço..." required
-                                class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                            Horário Sugerido
-                        </label>
-                        <div class="relative">
-                            <div
-                                class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                                <i data-lucide="clock" class="w-4 h-4"></i>
-                            </div>
-                            <input type="text" id="refeicao-horario" placeholder="Ex: 08:00, 12:30 ou Flexível" required
-                                class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                        Alimentos e Gramaturas
-                    </label>
-                    <textarea id="refeicao-alimentos" rows="3" placeholder="Descreva os alimentos da refeição..."
-                        required
-                        class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all leading-relaxed"></textarea>
-                </div>
-
-                <div>
-                    <label
-                        class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
-                        <i data-lucide="repeat" class="w-3.5 h-3.5 text-amber-400"></i>
-                        Opções de Substituição Inteligente (Opcional)
-                    </label>
-                    <textarea id="refeicao-substituicoes" rows="3" placeholder="Ex: • Pão integral ➔ Tapioca..."
-                        class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all leading-relaxed"></textarea>
-                </div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Nome do treino</label><input type="text" id="treino-nome" placeholder="Ex: Treino A – Peito e Tríceps" required  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div>
+<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Dia da semana</label><select id="treino-dia" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"><option>Segunda</option><option>Terça</option><option>Quarta</option><option>Quinta</option><option>Sexta</option><option>Sábado</option><option>Domingo</option><option>Flexível</option></select></div>
+<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Grupo muscular</label><select id="treino-grupo" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"><option>Peito</option><option>Costas</option><option>Ombros</option><option>Bíceps</option><option>Tríceps</option><option>Pernas</option><option>Glúteos</option><option>Abdômen</option><option>Full body</option><option>Cardio</option><option>Mobilidade</option></select></div>
+</div>
+<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Exercício</label><input type="text" id="exercicio-nome" placeholder="Ex: Supino reto com barra" required  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Séries</label><input type="text" id="exercicio-series" placeholder="4" required  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div><div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Repetições</label><input type="text" id="exercicio-reps" placeholder="8-10" required  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div><div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Carga</label><input type="text" id="exercicio-carga" placeholder="Ex: 60 kg"   class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div><div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Descanso</label><input type="text" id="exercicio-descanso" placeholder="60s"   class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div>
+</div>
+<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Execução e observações (opcional)</label><textarea id="exercicio-obs" rows="2" placeholder="Cadência, técnica, pontos de atenção..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></textarea></div>
+<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Link de vídeo demonstrativo (opcional)</label><input type="text" id="exercicio-video" placeholder="https://youtube.com/..."   class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div>
 
                 <button type="submit" id="btn-submit"
                     class="w-full bg-brand-600 hover:bg-brand-500 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl transition-all duration-200 shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2">
                     <i data-lucide="check" class="w-4 h-4" id="btn-icon"></i>
-                    <span id="btn-text">Guardar Refeição na Dieta do Aluno</span>
+                    <span id="btn-text">Adicionar Exercício ao Treino</span>
                     <div id="btn-spinner"
                         class="hidden w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 </button>
             </form>
         </section>
+
+        <section id="secao-treino-atual" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+<h2 class="text-lg font-bold text-white flex items-center gap-2 mb-1"><i data-lucide="list-checks" class="w-5 h-5 text-brand-400"></i>Treino atual do aluno</h2>
+<p class="text-xs text-slate-400 mb-5">Selecione um aluno acima para ver e editar os exercícios prescritos.</p>
+<div id="lista-treino-aluno" class="space-y-4"></div></section>
 
         <!-- Canal de Dúvidas / Chat com Alunos no Admin -->
         <section id="canal-duvidas" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
@@ -552,7 +520,7 @@
                         </button>
                         <button onclick="irParaDietaComAlunoAtual()" title="Prescrever dieta para este aluno"
                             class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl border border-slate-700 transition-colors flex items-center gap-1.5 font-medium">
-                            <i data-lucide="utensils" class="w-3.5 h-3.5 text-brand-400"></i>
+                            <i data-lucide="dumbbell" class="w-3.5 h-3.5 text-brand-400"></i>
                             <span>Prescrever Dieta</span>
                         </button>
                     </div>
@@ -743,8 +711,8 @@
             toast.onclick = null;
 
             if (type === 'success') {
-                toastInner.className = 'glass-panel border border-emerald-500/30 rounded-2xl p-4 shadow-2xl shadow-emerald-500/10 flex items-center gap-3 bg-slate-900/95';
-                toastIconWrapper.className = 'w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0';
+                toastInner.className = 'glass-panel border border-orange-500/30 rounded-2xl p-4 shadow-2xl shadow-orange-500/10 flex items-center gap-3 bg-slate-900/95';
+                toastIconWrapper.className = 'w-8 h-8 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0';
                 toastIcon.setAttribute('data-lucide', 'check-circle-2');
             } else if (type === 'error') {
                 toastInner.className = 'glass-panel border border-rose-500/30 rounded-2xl p-4 shadow-2xl shadow-rose-500/10 flex items-center gap-3 bg-slate-900/95';
@@ -784,8 +752,9 @@
 
             const ADMIN_UID = '04fb83ed-ec6b-4a56-9993-e99f32ededee';
 
-            if (session.user.id !== ADMIN_UID) {
-                alert('Acesso negado. Esta área é restrita ao nutricionista.');
+            const _m = session.user.user_metadata || {};
+            if (session.user.id !== ADMIN_UID && _m.papel !== 'personal') {
+                alert('Acesso negado. Esta área é restrita ao personal trainer.');
                 window.location.href = 'dashboard.html';
                 return;
             }
@@ -949,7 +918,7 @@
                 else classif = 'Obesidade';
                 imcEl.textContent = `${imc} (${classif})`;
                 statusBadge.textContent = 'Métricas Preenchidas';
-                statusBadge.className = 'text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30';
+                statusBadge.className = 'text-[10px] font-semibold px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/30';
             } else {
                 imcEl.textContent = '--';
                 statusBadge.textContent = 'Aguardando Aluno no Portal';
@@ -1016,7 +985,7 @@
 
             const btn = document.getElementById('btn-cadastrar-aluno');
             btn.disabled = true;
-            btn.innerHTML = `<div class="w-4 h-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"></div> Cadastrando...`;
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div> Cadastrando...`;
 
             const { data, error: authError } = await supabaseClient.auth.signUp({
                 email: email,
@@ -1053,262 +1022,70 @@
             lucide.createIcons();
         });
 
-        // Submeter nova refeição na dieta
+        // Treinos (ApexFit)
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        let treinosAluno = [];
+        async function carregarTreinoAdmin() {
+            const id = document.getElementById('aluno-select').value;
+            const box = document.getElementById('lista-treino-aluno');
+            if (!id) { box.innerHTML = ''; treinosAluno = []; return; }
+            const { data, error } = await supabaseClient.from('treinos').select('*').eq('aluno_id', id).order('created_at');
+            if (error) { box.innerHTML = `<p class="text-xs text-rose-400">Erro ao carregar treino: ${esc(error.message)}. Rode o script apexfit-setup.sql no Supabase.</p>`; return; }
+            treinosAluno = data || [];
+            if (!treinosAluno.length) { box.innerHTML = '<p class="text-sm text-slate-500">Nenhum exercício prescrito ainda. Use o formulário acima para começar.</p>'; return; }
+            const grupos = {};
+            treinosAluno.forEach(t => (grupos[t.treino_nome] = grupos[t.treino_nome] || []).push(t));
+            box.innerHTML = Object.entries(grupos).map(([nome, ex]) => `
+              <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+                <div class="flex items-center justify-between mb-3"><h3 class="font-bold text-white text-sm">${esc(nome)}</h3>
+                <span class="text-[11px] text-slate-400">${esc(ex[0].dia_semana || '')} · ${esc(ex[0].grupo_muscular || '')}</span></div>
+                <div class="space-y-2">${ex.map(e => `<div class="flex items-center justify-between gap-3 text-xs bg-slate-950/60 rounded-xl px-3 py-2.5">
+                  <div><p class="font-semibold text-slate-100">${esc(e.exercicio)}</p>
+                  <p class="text-slate-400">${esc(e.series)}x${esc(e.repeticoes)}${e.carga ? ' · ' + esc(e.carga) : ''}${e.descanso ? ' · desc. ' + esc(e.descanso) : ''}</p></div>
+                  <button onclick="removerExercicio('${e.id}')" class="text-slate-500 hover:text-rose-400" title="Remover"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('')}</div>
+              </div>`).join('');
+            lucide.createIcons();
+        }
+        async function removerExercicio(id) {
+            if (!confirm('Remover este exercício do treino?')) return;
+            const { error } = await supabaseClient.from('treinos').delete().eq('id', id);
+            if (error) return showToast('Erro ao remover', error.message, 'error');
+            showToast('Exercício removido', 'O treino do aluno foi atualizado.', 'success');
+            carregarTreinoAdmin();
+        }
+        document.getElementById('aluno-select').addEventListener('change', carregarTreinoAdmin);
         document.getElementById('form-dieta').addEventListener('submit', async (e) => {
             e.preventDefault();
-
             const alunoId = document.getElementById('aluno-select').value;
-            const refeicao = document.getElementById('refeicao-nome').value.trim();
-            const horario = document.getElementById('refeicao-horario').value.trim();
-            const alimentos = document.getElementById('refeicao-alimentos').value.trim();
-            const substituicoes = document.getElementById('refeicao-substituicoes').value.trim();
-
-            if (!alunoId) {
-                showToast('Atenção', 'Selecione um aluno da lista.', 'error');
-                return;
-            }
-
+            if (!alunoId) return showToast('Atenção', 'Selecione um aluno da lista.', 'error');
+            const v = id => document.getElementById(id).value.trim();
             const btn = document.getElementById('btn-submit');
-            const btnText = document.getElementById('btn-text');
-            const btnIcon = document.getElementById('btn-icon');
-            const btnSpinner = document.getElementById('btn-spinner');
-
             btn.disabled = true;
-            btnText.textContent = 'Salvando no banco de dados...';
-            btnIcon.classList.add('hidden');
-            btnSpinner.classList.remove('hidden');
-
-            const { error } = await supabaseClient
-                .from('dietas')
-                .insert([{
-                    aluno_id: alunoId,
-                    refeicao: refeicao,
-                    horario: horario,
-                    alimentos: alimentos,
-                    substituicoes: substituicoes
-                }]);
-
+            const { error } = await supabaseClient.from('treinos').insert([{
+                aluno_id: alunoId, treino_nome: v('treino-nome'), dia_semana: v('treino-dia'), grupo_muscular: v('treino-grupo'),
+                exercicio: v('exercicio-nome'), series: v('exercicio-series'), repeticoes: v('exercicio-reps'),
+                carga: v('exercicio-carga'), descanso: v('exercicio-descanso'), observacoes: v('exercicio-obs'), video_url: v('exercicio-video')
+            }]);
             btn.disabled = false;
-            btnText.textContent = 'Guardar Refeição na Dieta do Aluno';
-            btnIcon.classList.remove('hidden');
-            btnSpinner.classList.add('hidden');
-            lucide.createIcons();
-
-            if (error) {
-                showToast('Erro ao salvar', error.message, 'error');
-            } else {
-                showToast('Refeição Adicionada! 🥗', `Refeição "${refeicao}" vinculada com sucesso ao aluno.`, 'success');
-                document.getElementById('refeicao-nome').value = '';
-                document.getElementById('refeicao-horario').value = '';
-                document.getElementById('refeicao-alimentos').value = '';
-                document.getElementById('refeicao-substituicoes').value = '';
-                document.getElementById('refeicao-nome').focus();
-            }
+            if (error) return showToast('Erro ao salvar', error.message, 'error');
+            showToast('Exercício adicionado! 💪', 'O treino já aparece no portal do aluno.', 'success');
+            ['exercicio-nome','exercicio-carga','exercicio-obs','exercicio-video'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('exercicio-nome').focus();
+            carregarTreinoAdmin();
         });
 
         // ───────────────── EXPORTAÇÃO DE PDF DO PLANO NO PAINEL ADMIN ─────────────────
         async function gerarPdfAlunoAdmin() {
-            const selectEl = document.getElementById('aluno-select');
-            const alunoId = selectEl ? selectEl.value : null;
-
-            if (!alunoId) {
-                showToast('Selecione um Aluno', 'Por favor, selecione um aluno no campo abaixo para gerar o PDF.', 'error');
-                return;
-            }
-
-            const alunoObj = listaAlunosCache.find(a => a.id === alunoId);
-            const nomeAluno = alunoObj ? (alunoObj.nome || (alunoObj.email ? alunoObj.email.split('@')[0] : 'Aluno')) : 'Aluno';
-
-            const btnText = document.getElementById('btn-admin-pdf-text');
-            const btnIcon = document.getElementById('btn-admin-pdf-icon');
-            const btnSpinner = document.getElementById('btn-admin-pdf-spinner');
-            const btn = document.getElementById('btn-exportar-pdf-admin');
-
-            const textoOriginal = btnText ? btnText.textContent : 'Baixar PDF do Aluno';
-            if (btnText) btnText.textContent = 'Buscando dieta...';
-            if (btnIcon) btnIcon.classList.add('hidden');
-            if (btnSpinner) btnSpinner.classList.remove('hidden');
-            if (btn) btn.disabled = true;
-
-            const { data: dietas, error } = await supabaseClient
-                .from('dietas')
-                .select('*')
-                .eq('aluno_id', alunoId);
-
-            if (error || !dietas || dietas.length === 0) {
-                if (btnText) btnText.textContent = textoOriginal;
-                if (btnIcon) btnIcon.classList.remove('hidden');
-                if (btnSpinner) btnSpinner.classList.add('hidden');
-                if (btn) btn.disabled = false;
-                showToast('Sem Refeições', `O aluno ${nomeAluno} ainda não possui nenhuma refeição cadastrada no plano.`, 'error');
-                return;
-            }
-
-            if (btnText) btnText.textContent = 'Gerando PDF...';
-
-            const containerPdf = document.getElementById('area-impressao-pdf-admin');
-            const dataHojeFormatada = new Date().toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric'
-            });
-
-            let refeicoesCards = '';
-            dietas.forEach((d, idx) => {
-                const horarioStr = d.horario ? d.horario : 'Horário Flexível';
-                const alimentosFormatados = (d.alimentos || '')
-                    .split('\n')
-                    .map(linha => linha.trim())
-                    .filter(linha => linha.length > 0)
-                    .map(linha => `<li style="margin-bottom: 5px; color: #1e293b; font-size: 13px; line-height: 1.5;">${linha}</li>`)
-                    .join('');
-
-                let blocoSubstituicoes = '';
-                if (d.substituicoes && d.substituicoes.trim().length > 0) {
-                    blocoSubstituicoes = `
-                        <div style="margin-top: 10px; padding: 10px 14px; background-color: #f0fdf4; border-left: 3px solid #10b981; border-radius: 6px;">
-                            <div style="font-size: 11px; font-weight: 700; color: #047857; text-transform: uppercase; margin-bottom: 4px;">
-                                🔄 Opções de Substituição Equivalentes:
-                            </div>
-                            <div style="font-size: 12px; color: #166534; line-height: 1.4; white-space: pre-line;">
-                                ${d.substituicoes}
-                            </div>
-                        </div>
-                    `;
-                }
-
-                refeicoesCards += `
-                    <div style="margin-bottom: 14px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; page-break-inside: avoid; break-inside: avoid; background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                        <div style="background-color: #f8fafc; padding: 9px 16px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="background-color: #10b981; color: #ffffff; font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 20px;">
-                                    ${idx + 1}
-                                </span>
-                                <span style="font-size: 13px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.03em;">
-                                    ${d.refeicao}
-                                </span>
-                            </div>
-                            <span style="font-size: 11px; font-weight: 700; color: #059669; background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 2px 9px; border-radius: 12px;">
-                                ⏰ ${horarioStr}
-                            </span>
-                        </div>
-                        <div style="padding: 12px 16px;">
-                            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em; margin-bottom: 6px;">
-                                Alimentos e Porções Prescritas:
-                            </div>
-                            <ul style="margin: 0; padding-left: 18px;">
-                                ${alimentosFormatados}
-                            </ul>
-                            ${blocoSubstituicoes}
-                        </div>
-                    </div>
-                `;
-            });
-
-            containerPdf.innerHTML = `
-                <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; color: #0f172a; max-width: 800px; margin: 0 auto; background: #ffffff; padding: 24px;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #10b981; padding-bottom: 14px; margin-bottom: 18px;">
-                        <div>
-                            <div style="font-size: 24px; font-weight: 900; letter-spacing: -0.02em; color: #0f172a;">
-                                NUTRI<span style="color: #10b981;">LIFE</span>
-                            </div>
-                            <div style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px;">
-                                Nutrição Clínica & Alta Performance
-                            </div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 999px; display: inline-block; text-transform: uppercase;">
-                                Prescrição Nutricional Individualizada
-                            </div>
-                            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">
-                                Emissão: <strong>${dataHojeFormatada}</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-                        <div>
-                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 700;">Aluno / Paciente:</div>
-                            <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-top: 2px;">${nomeAluno}</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 700;">Nutricionista Responsável:</div>
-                            <div style="font-size: 12px; font-weight: 700; color: #059669; margin-top: 2px;">Ricardo Leão (Nutri)</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 700;">Meta de Hidratação Diária:</div>
-                            <div style="font-size: 12px; font-weight: 700; color: #0284c7; margin-top: 2px;">💧 2.8 a 3.0 Litros / dia</div>
-                        </div>
-                    </div>
-
-                    <div style="margin-bottom: 16px;">
-                        ${refeicoesCards}
-                    </div>
-
-                    <div style="background-color: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 10px; color: #475569; line-height: 1.4;">
-                        <strong style="color: #0f172a;">Recomendações ApexFit:</strong>
-                        Mastigue devagar e mantenha a consistência. Beba água ao longo do dia e evite grandes volumes de líquidos junto às refeições principais. Em caso de dúvidas, utilize o canal de suporte com o nutricionista.
-                    </div>
-
-                    <div style="border-top: 1px solid #e2e8f0; padding-top: 10px; display: flex; justify-content: space-between; font-size: 9px; color: #94a3b8;">
-                        <span>ApexFit Digital Platform • Transformando rotinas através da nutrição consciente</span>
-                        <span>Documento emitido digitalmente para uso pessoal</span>
-                    </div>
-                </div>
-            `;
-
-            containerPdf.style.display = 'block';
-            containerPdf.style.position = 'fixed';
-            containerPdf.style.left = '-9999px';
-            containerPdf.style.top = '0';
-            containerPdf.style.width = '800px';
-            containerPdf.classList.remove('hidden');
-
-            const nomeArquivo = `Plano_Alimentar_${nomeAluno.replace(/[^a-zA-Z0-9]/g, '_')}_ApexFit.pdf`;
-
-            try {
-                if (typeof html2pdf !== 'undefined') {
-                    const opt = {
-                        margin: [8, 8, 8, 8],
-                        filename: nomeArquivo,
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
-                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-                    };
-                    await html2pdf().set(opt).from(containerPdf.firstElementChild).save();
-                    showToast('PDF Gerado! 📄', `Cardápio de ${nomeAluno} salvo em PDF.`, 'success');
-                } else {
-                    window.print();
-                }
-            } catch (err) {
-                console.error("Erro ao gerar PDF no admin:", err);
-                showToast('Aviso', 'Tentando impressão padrão do navegador...', 'warning');
-                window.print();
-            } finally {
-                if (btnText) btnText.textContent = textoOriginal;
-                if (btnIcon) btnIcon.classList.remove('hidden');
-                if (btnSpinner) btnSpinner.classList.add('hidden');
-                if (btn) btn.disabled = false;
-                containerPdf.classList.add('hidden');
-                containerPdf.style.display = '';
-                containerPdf.style.position = '';
-                containerPdf.style.left = '';
-                containerPdf.style.top = '';
-                containerPdf.style.width = '';
-            }
+            const sel = document.getElementById('aluno-select');
+            if (!sel.value) return showToast('Selecione um Aluno', 'Escolha um aluno para gerar o PDF do treino.', 'error');
+            if (!treinosAluno.length) return showToast('Sem treino', 'Este aluno ainda não tem exercícios.', 'error');
+            const nome = sel.options[sel.selectedIndex].text;
+            const g = {}; treinosAluno.forEach(t => (g[t.treino_nome] = g[t.treino_nome] || []).push(t));
+            const html = `<div style="font-family:Arial;padding:24px;color:#111"><h1 style="color:#ea580c;margin:0">ApexFit</h1><p>Treino de <b>${esc(nome)}</b></p>` +
+              Object.entries(g).map(([n, ex]) => `<h3 style="margin:18px 0 6px">${esc(n)} <small style="color:#666">${esc(ex[0].dia_semana||'')}</small></h3><table style="width:100%;border-collapse:collapse;font-size:12px">` +
+              ex.map(e => `<tr><td style="border-bottom:1px solid #ddd;padding:6px"><b>${esc(e.exercicio)}</b><br><span style="color:#666">${esc(e.observacoes||'')}</span></td><td style="border-bottom:1px solid #ddd;padding:6px;white-space:nowrap">${esc(e.series)}x${esc(e.repeticoes)} ${esc(e.carga||'')}</td><td style="border-bottom:1px solid #ddd;padding:6px">${esc(e.descanso||'')}</td></tr>`).join('') + '</table>').join('') + '</div>';
+            html2pdf().set({ margin: 8, filename: 'treino-' + nome.replace(/\s+/g, '-') + '.pdf', html2canvas: { scale: 2 } }).from(html, 'string').save();
         }
-
-        document.getElementById('btn-logout').addEventListener('click', async () => {
-            const btn = document.getElementById('btn-logout');
-            btn.innerHTML = '<div class="w-3.5 h-3.5 border-2 border-slate-400 border-t-white rounded-full animate-spin"></div>';
-            await supabaseClient.auth.signOut();
-            window.location.href = 'login.html';
-        });
-
-        // ==========================================
-        // GESTÃO DO CHAT & NOTIFICAÇÕES (VERMELHO E BRANCO)
-        // ==========================================
 
         async function carregarListaAlunosChat() {
             const listEl = document.getElementById('admin-chat-alunos-list');
@@ -1489,7 +1266,7 @@
                 infoClinica = `
                     <div class="ml-auto hidden sm:flex items-center gap-2 bg-slate-900/90 px-2.5 py-1 rounded-xl border border-slate-700/80 text-[11px]">
                         ${perfil.altura ? `<span class="text-slate-300 font-semibold">${parseFloat(perfil.altura).toFixed(2)}m</span>` : ''} 
-                        ${perfil.peso ? `<span class="text-emerald-400 font-bold">• ${parseFloat(perfil.peso).toFixed(1)}kg</span>` : ''}
+                        ${perfil.peso ? `<span class="text-orange-400 font-bold">• ${parseFloat(perfil.peso).toFixed(1)}kg</span>` : ''}
                         ${perfil.idade ? `<span class="text-slate-400 font-medium">• ${perfil.idade} anos</span>` : ''}
                     </div>
                 `;
@@ -1501,7 +1278,7 @@
                     <div class="leading-tight">
                         <div class="text-xs font-bold text-white flex items-center gap-1.5">
                             <span>${nome}</span>
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block" title="Aluno"></span>
+                            <span class="w-2 h-2 rounded-full bg-orange-400 inline-block" title="Aluno"></span>
                         </div>
                         <div class="text-[10px] text-slate-400 font-normal">${aluno ? aluno.email : ''}</div>
                     </div>
@@ -1803,7 +1580,7 @@
 
                 fotosData.forEach(foto => {
                     const tipoLabel = foto.tipo.charAt(0).toUpperCase() + foto.tipo.slice(1);
-                    const tagCor = foto.tipo === 'frente' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : (foto.tipo === 'perfil' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' : 'bg-purple-500/20 text-purple-300 border-purple-500/30');
+                    const tagCor = foto.tipo === 'frente' ? 'bg-orange-500/20 text-orange-300 border-orange-500/30' : (foto.tipo === 'perfil' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' : 'bg-purple-500/20 text-purple-300 border-purple-500/30');
 
                     html += `
                         <div class="galeria-thumb relative rounded-xl overflow-hidden cursor-pointer group border border-slate-800 hover:border-purple-500/70 bg-slate-950"
@@ -1881,7 +1658,7 @@
             if (!alunoFotosSelecionadoId) return;
             const sel = document.getElementById('aluno-select');
             if (sel) sel.value = alunoFotosSelecionadoId;
-            navegarParaSecao('secao-cadastrar-refeicao');
+            navegarParaSecao('secao-cadastrar-treino');
         }
 
         verificarSessao();
