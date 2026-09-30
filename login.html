@@ -259,8 +259,26 @@
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        function redirecionarPorPapel(session) {
+            if (!session || !session.user) {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+            const ADMIN_UID = '04fb83ed-ec6b-4a56-9993-e99f32ededee';
+            const papel = session.user.user_metadata?.papel;
+            if (session.user.id === ADMIN_UID) {
+                window.location.href = 'admin.html';
+            } else if (papel === 'personal') {
+                window.location.href = 'personal.html';
+            } else if (papel === 'nutricionista') {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'dashboard.html';
+            }
+        }
+
         supabaseClient.auth.getSession().then(({ data: { session } }) => {
-            if (session) { window.location.href = 'dashboard.html'; }
+            if (session) { redirecionarPorPapel(session); }
         });
 
         const passwordInput = document.getElementById('password');
@@ -302,7 +320,7 @@
             btnArrow.classList.add('hidden');
             btnSpinner.classList.remove('hidden');
 
-            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
             if (error) {
                 showAlert('E-mail ou palavra-passe incorretos. Por favor, verifique os seus dados.', 'error');
@@ -312,10 +330,11 @@
                 btnSpinner.classList.add('hidden');
             } else {
                 showAlert('Autenticado com sucesso! Redirecionando...', 'success');
-                setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+                setTimeout(() => { redirecionarPorPapel(data?.session); }, 800);
             }
         });
     </script>
+    <script src="js/apexfit-core.js"></script>
 </body>
 
 </html>

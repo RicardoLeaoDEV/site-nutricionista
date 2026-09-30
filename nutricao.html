@@ -115,8 +115,12 @@
                 <p class="text-sm text-slate-400 mt-1">Refeições prescritas pelo nutricionista. Consulte e marque cada refeição ao concluir.</p>
             </div>
 
-            <!-- Ações PDF -->
+            <!-- Ações PDF & Lista de Compras -->
             <div class="flex items-center gap-2 flex-wrap" id="acoes-pdf" style="display:none!important">
+                <button type="button" onclick="abrirListaCompras()" id="btn-lista-compras" class="btn-acao flex items-center gap-2 bg-[#0a140a] hover:bg-[#122412] text-lime-400 border border-lime-500/30 hover:border-lime-500/60 font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-lime-500/10 transition-all active:scale-95 cursor-pointer">
+                    <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                    <span>Lista de Compras 🛒</span>
+                </button>
                 <button type="button" onclick="gerarPdfPlanoAlimentar()" id="btn-exportar-pdf" class="btn-acao flex items-center gap-2 bg-gradient-to-r from-brand-600 to-lime-500 hover:from-brand-500 hover:to-lime-400 text-[#05080a] font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-brand-500/25 transition-all active:scale-95 cursor-pointer">
                     <i data-lucide="file-down" class="w-4 h-4" id="btn-pdf-icon"></i>
                     <span id="btn-pdf-text">Baixar Cardápio em PDF</span>
@@ -126,6 +130,66 @@
                     <i data-lucide="printer" class="w-4 h-4"></i>
                     <span class="text-xs font-bold hidden md:inline">Imprimir</span>
                 </button>
+            </div>
+        </div>
+
+        <!-- Bloco de Metas Nutricionais & Macronutrientes Prescritos pelo Nutricionista -->
+        <div id="card-macros-prescritos" class="glass-panel border border-brand-500/30 rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden" style="display:none">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800/80 mb-4 gap-2">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-brand-500/20 text-brand-400 border border-brand-500/40 flex items-center justify-center shrink-0">
+                        <i data-lucide="target" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                            Suas Metas Diárias Prescritas
+                        </h2>
+                        <p class="text-xs text-slate-400">Macronutrientes planejados individualmente pelo seu nutricionista</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="aluno-macro-objetivo-badge"
+                        class="text-[11px] font-extrabold px-3 py-1 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/30">
+                        Plano Individualizado
+                    </span>
+                </div>
+            </div>
+
+            <!-- 4 Cards de Métricas Principais -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                <div class="p-3.5 rounded-2xl bg-gradient-to-b from-brand-950/40 to-slate-900 border border-brand-500/30 text-center">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-brand-400 block mb-1">Calorias Diárias</span>
+                    <div class="text-xl sm:text-2xl font-black text-white" id="aluno-macro-calorias">-- kcal</div>
+                    <span class="text-[10px] text-slate-400">Meta VET</span>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-gradient-to-b from-emerald-950/40 to-slate-900 border border-emerald-500/30 text-center">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 block mb-1">Proteínas</span>
+                    <div class="text-xl sm:text-2xl font-black text-emerald-400" id="aluno-macro-proteinas">-- g</div>
+                    <span class="text-[10px] text-slate-400" id="aluno-macro-prot-sub">--</span>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-gradient-to-b from-sky-950/40 to-slate-900 border border-sky-500/30 text-center">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-sky-400 block mb-1">Carboidratos</span>
+                    <div class="text-xl sm:text-2xl font-black text-sky-400" id="aluno-macro-carboidratos">-- g</div>
+                    <span class="text-[10px] text-slate-400" id="aluno-macro-carb-sub">--</span>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-gradient-to-b from-amber-950/40 to-slate-900 border border-amber-500/30 text-center">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">Gorduras</span>
+                    <div class="text-xl sm:text-2xl font-black text-amber-400" id="aluno-macro-gorduras">-- g</div>
+                    <span class="text-[10px] text-slate-400" id="aluno-macro-gord-sub">--</span>
+                </div>
+            </div>
+
+            <!-- Barra Visual Proporcional -->
+            <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/80">
+                <div class="flex items-center justify-between text-xs font-semibold mb-1.5">
+                    <span class="text-slate-300">Distribuição Energética</span>
+                    <span class="text-[11px] text-slate-400" id="aluno-macro-barra-texto">P 30% • C 45% • G 25%</span>
+                </div>
+                <div class="h-2.5 rounded-full bg-slate-800 flex overflow-hidden p-0.5 gap-0.5">
+                    <div id="aluno-bar-prot" class="h-full rounded-l-full bg-emerald-500 transition-all duration-300" style="width: 30%"></div>
+                    <div id="aluno-bar-carb" class="h-full bg-sky-500 transition-all duration-300" style="width: 45%"></div>
+                    <div id="aluno-bar-gord" class="h-full rounded-r-full bg-amber-500 transition-all duration-300" style="width: 25%"></div>
+                </div>
             </div>
         </div>
 
@@ -317,6 +381,9 @@
                 }
             } catch (e) {}
 
+            // Carregar metas de macronutrientes prescritas pelo nutricionista
+            await carregarMetasMacrosAluno(uid);
+
             // Carregar dietas
             const { data: dietas, error: erroDieta } = await supabaseClient
                 .from('dietas').select('*').eq('aluno_id', uid);
@@ -423,9 +490,133 @@
             lucide.createIcons();
         }
 
+        // ===== CARREGAR METAS DE MACROS PRESCRITAS =====
+        async function carregarMetasMacrosAluno(uid) {
+            let macros = null;
+            try {
+                const cache = localStorage.getItem('nutrilife_macros_' + uid);
+                if (cache) macros = JSON.parse(cache);
+            } catch (e) { }
+
+            if (!macros) {
+                try {
+                    const { data: msgs } = await supabaseClient
+                        .from('mensagens')
+                        .select('mensagem')
+                        .eq('aluno_id', uid)
+                        .eq('remetente', 'sistema_macros')
+                        .order('created_at', { ascending: false })
+                        .limit(1);
+
+                    if (msgs && msgs.length > 0) {
+                        macros = JSON.parse(msgs[0].mensagem);
+                        localStorage.setItem('nutrilife_macros_' + uid, JSON.stringify(macros));
+                    }
+                } catch (e) { }
+            }
+
+            const cardMacros = document.getElementById('card-macros-prescritos');
+            if (!macros || !macros.calorias) {
+                if (cardMacros) cardMacros.style.display = 'none';
+                return;
+            }
+
+            window.macrosAlunoAtual = macros;
+
+            if (cardMacros) {
+                cardMacros.style.removeProperty('display');
+
+                const calEl = document.getElementById('aluno-macro-calorias');
+                const protEl = document.getElementById('aluno-macro-proteinas');
+                const carbEl = document.getElementById('aluno-macro-carboidratos');
+                const gordEl = document.getElementById('aluno-macro-gorduras');
+                const badgeObj = document.getElementById('aluno-macro-objetivo-badge');
+
+                const protSub = document.getElementById('aluno-macro-prot-sub');
+                const carbSub = document.getElementById('aluno-macro-carb-sub');
+                const gordSub = document.getElementById('aluno-macro-gord-sub');
+
+                const barProt = document.getElementById('aluno-bar-prot');
+                const barCarb = document.getElementById('aluno-bar-carb');
+                const barGord = document.getElementById('aluno-bar-gord');
+                const barTexto = document.getElementById('aluno-macro-barra-texto');
+
+                const objetivosNomes = {
+                    deficit_moderado: '📉 Emagrecimento Saudável (-20%)',
+                    deficit_agressivo: '⚡ Cutting Acelerado (-25%)',
+                    manutencao: '⚖️ Manutenção & Recomposição',
+                    superavit_moderado: '💪 Hipertrofia Limpa (+12%)',
+                    superavit_agressivo: '🚀 Bulking Intenso (+20%)'
+                };
+
+                if (calEl) calEl.textContent = `${macros.calorias.toLocaleString('pt-BR')} kcal`;
+                if (protEl) protEl.textContent = `${macros.proteinas}g`;
+                if (carbEl) carbEl.textContent = `${macros.carboidratos}g`;
+                if (gordEl) gordEl.textContent = `${macros.gorduras}g`;
+
+                if (badgeObj) badgeObj.textContent = objetivosNomes[macros.objetivo] || 'Prescrição Individualizada';
+
+                const peso = macros.peso || 75;
+                const pctP = macros.pctProt || Math.round((macros.proteinas * 4 / macros.calorias) * 100);
+                const pctC = macros.pctCarb || Math.round((macros.carboidratos * 4 / macros.calorias) * 100);
+                const pctG = macros.pctGord || Math.round((macros.gorduras * 9 / macros.calorias) * 100);
+
+                if (protSub) protSub.textContent = `${(macros.proteinas / peso).toFixed(1)} g/kg • ${pctP}%`;
+                if (carbSub) carbSub.textContent = `${(macros.carboidratos / peso).toFixed(1)} g/kg • ${pctC}%`;
+                if (gordSub) gordSub.textContent = `${(macros.gorduras / peso).toFixed(1)} g/kg • ${pctG}%`;
+
+                if (barProt) barProt.style.width = `${pctP}%`;
+                if (barCarb) barCarb.style.width = `${pctC}%`;
+                if (barGord) barGord.style.width = `${pctG}%`;
+                if (barTexto) barTexto.textContent = `P ${pctP}% (${macros.proteinas}g) • C ${pctC}% (${macros.carboidratos}g) • G ${pctG}% (${macros.gorduras}g)`;
+
+                // Atualiza também o card de hidratação
+                const statHidra = document.getElementById('stat-hidratacao');
+                if (statHidra && macros.agua_litros) {
+                    statHidra.textContent = `${macros.agua_litros}L`;
+                }
+
+                lucide.createIcons();
+            }
+        }
+
         // ===== GERAR PDF =====
         function montarHtmlPlanoPdf(dietas, nomeAluno) {
             const dataHoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+
+            let blocoMacrosPdf = '';
+            let metaHidratacaoStr = '💧 2.8 a 3.0 Litros / dia';
+            if (window.macrosAlunoAtual && window.macrosAlunoAtual.calorias) {
+                const m = window.macrosAlunoAtual;
+                metaHidratacaoStr = `💧 ${m.agua_litros || '2.8'} Litros / dia`;
+                blocoMacrosPdf = `
+                    <div style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 1.5px solid #86efac; border-radius: 12px; padding: 12px 16px; margin-bottom: 18px;">
+                        <div style="font-size: 11px; font-weight: 800; color: #166534; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: flex; justify-content: space-between;">
+                            <span>🎯 Metas Nutricionais & Macronutrientes Prescritos</span>
+                            <span style="color: #059669; font-weight: 700;">Planejamento Individualizado</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center;">
+                            <div style="background: #ffffff; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px;">
+                                <div style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase;">Calorias (VET)</div>
+                                <div style="font-size: 15px; font-weight: 900; color: #15803d; margin-top: 2px;">${m.calorias} <span style="font-size: 10px;">kcal</span></div>
+                            </div>
+                            <div style="background: #ffffff; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px;">
+                                <div style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase;">Proteínas</div>
+                                <div style="font-size: 15px; font-weight: 900; color: #047857; margin-top: 2px;">${m.proteinas}g <span style="font-size: 10px; color: #64748b;">(${m.pctProt || Math.round(m.proteinas * 4 / m.calorias * 100)}%)</span></div>
+                            </div>
+                            <div style="background: #ffffff; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px;">
+                                <div style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase;">Carboidratos</div>
+                                <div style="font-size: 15px; font-weight: 900; color: #0284c7; margin-top: 2px;">${m.carboidratos}g <span style="font-size: 10px; color: #64748b;">(${m.pctCarb || Math.round(m.carboidratos * 4 / m.calorias * 100)}%)</span></div>
+                            </div>
+                            <div style="background: #ffffff; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px;">
+                                <div style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase;">Gorduras</div>
+                                <div style="font-size: 15px; font-weight: 900; color: #d97706; margin-top: 2px;">${m.gorduras}g <span style="font-size: 10px; color: #64748b;">(${m.pctGord || Math.round(m.gorduras * 9 / m.calorias * 100)}%)</span></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
             let refeicoesCards = '';
             dietas.forEach((d, idx) => {
                 const horario = d.horario || 'Horário Flexível';
@@ -441,8 +632,9 @@
                 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 16px;margin-bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
                     <div><div style="font-size:10px;color:#64748b;text-transform:uppercase;font-weight:700;">Aluno / Paciente:</div><div style="font-size:13px;font-weight:800;color:#0f172a;margin-top:2px;">${nomeAluno}</div></div>
                     <div><div style="font-size:10px;color:#64748b;text-transform:uppercase;font-weight:700;">Nutricionista:</div><div style="font-size:12px;font-weight:700;color:#059669;margin-top:2px;">Ricardo Leão (Nutri)</div></div>
-                    <div><div style="font-size:10px;color:#64748b;text-transform:uppercase;font-weight:700;">Meta de Hidratação:</div><div style="font-size:12px;font-weight:700;color:#0284c7;margin-top:2px;">💧 2.8 a 3.0 Litros / dia</div></div>
+                    <div><div style="font-size:10px;color:#64748b;text-transform:uppercase;font-weight:700;">Meta de Hidratação:</div><div style="font-size:12px;font-weight:700;color:#0284c7;margin-top:2px;">${metaHidratacaoStr}</div></div>
                 </div>
+                ${blocoMacrosPdf}
                 <div style="margin-bottom:16px;">${refeicoesCards}</div>
                 <div style="background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:10px;color:#475569;line-height:1.4;"><strong style="color:#0f172a;">Recomendações ApexFit:</strong> Mastigue devagar e mantenha a consistência. Beba água ao longo do dia e evite grandes volumes de líquidos junto às refeições principais.</div>
                 <div style="border-top:1px solid #e2e8f0;padding-top:10px;display:flex;justify-content:space-between;font-size:9px;color:#94a3b8;"><span>ApexFit Digital Platform</span><span>Documento emitido digitalmente para uso pessoal</span></div>
@@ -488,6 +680,23 @@
             setTimeout(() => { window.print(); containerPdf.classList.add('hidden'); }, 300);
         }
 
+        // ===== LISTA DE COMPRAS (Item 10) =====
+        function abrirListaCompras() {
+            if (!dietasCarregadas || !dietasCarregadas.length) {
+                showToast('Aviso', 'Nenhum plano alimentar carregado para gerar a lista de compras.', 'info');
+                return;
+            }
+            if (window.ApexAlimentos) {
+                ApexAlimentos.gerarListaAPartirDaDieta(dietasCarregadas);
+                ApexAlimentos.renderModalListaCompras('modal-lista-compras-conteudo');
+                document.getElementById('modal-lista-compras').classList.remove('hidden');
+            }
+        }
+
+        function fecharListaCompras() {
+            document.getElementById('modal-lista-compras').classList.add('hidden');
+        }
+
         // ===== LOGOUT =====
         document.getElementById('btn-logout').addEventListener('click', async () => {
             document.getElementById('btn-logout').innerHTML = '<div class="w-3.5 h-3.5 border-2 border-slate-400 border-t-white rounded-full animate-spin"></div>';
@@ -497,5 +706,18 @@
 
         carregarNutricao();
     </script>
+
+    <!-- Modal da Lista de Compras -->
+    <div id="modal-lista-compras" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="max-w-2xl w-full my-8 relative">
+            <button type="button" onclick="fecharListaCompras()" class="absolute -top-3 -right-3 z-10 text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800 border border-slate-700 shadow-xl transition-colors cursor-pointer">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+            <div id="modal-lista-compras-conteudo"></div>
+        </div>
+    </div>
+
+    <script src="js/apexfit-core.js"></script>
+    <script src="js/grocery-foods.js"></script>
 </body>
 </html>

@@ -147,7 +147,7 @@
 
                     <!-- Lista Oculta do Menu Suspenso -->
                     <div
-                        class="absolute right-0 mt-2 w-52 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
+                        class="absolute right-0 mt-2 w-56 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
                         <div class="p-1 space-y-0.5">
                             <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
                                 class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-orange-400 hover:bg-slate-800 transition-colors">
@@ -159,6 +159,30 @@
                                 class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-brand-300 hover:bg-slate-800 transition-colors">
                                 <i data-lucide="dumbbell" class="w-4 h-4 text-brand-400"></i>
                                 <span>Montar treino</span>
+                            </button>
+
+                            <button onclick="navegarParaSecao('secao-checkins')"
+                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-amber-400 hover:bg-slate-800 transition-colors">
+                                <i data-lucide="clipboard-check" class="w-4 h-4 text-amber-400"></i>
+                                <span>Check-ins dos Alunos</span>
+                            </button>
+
+                            <button onclick="navegarParaSecao('secao-agenda')"
+                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-cyan-400 hover:bg-slate-800 transition-colors">
+                                <i data-lucide="calendar" class="w-4 h-4 text-cyan-400"></i>
+                                <span>Agenda de Treinos</span>
+                            </button>
+
+                            <button onclick="navegarParaSecao('secao-financeiro')"
+                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800 transition-colors">
+                                <i data-lucide="badge-dollar-sign" class="w-4 h-4 text-emerald-400"></i>
+                                <span>Painel Financeiro</span>
+                            </button>
+
+                            <button onclick="navegarParaSecao('secao-ia')"
+                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-400 hover:bg-slate-800 transition-colors">
+                                <i data-lucide="bot" class="w-4 h-4 text-purple-400"></i>
+                                <span>Assistente Clínico IA</span>
                             </button>
 
                             <!-- 1. Chat com Alunos primeiro -->
@@ -209,16 +233,18 @@
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1 w-full">
         <div
             class="bg-gradient-to-r from-slate-900/90 to-brand-950/20 p-6 rounded-3xl border border-slate-800 shadow-xl">
-            <span class="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1 inline-block">Espaço do
-                Nutricionista</span>
+            <span class="text-xs font-semibold uppercase tracking-wider text-orange-400 mb-1 inline-block">Espaço do
+                Personal Trainer</span>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                Gestão de Alunos e Treinos 🏋️
+                Gestão de Alunos, Treinos e Performance 🏋️
             </h1>
             <p class="text-sm text-slate-400 mt-1">
-                Cadastre novos alunos, monte treinos focados por objetivo, tire dúvidas no chat e avalie as fotos de
-                evolução corporal de cada aluno.
+                Cadastre novos alunos, monte treinos focados por objetivo, acompanhe check-ins semanais, tire dúvidas no chat e avalie a evolução física.
             </p>
         </div>
+
+        <!-- RESUMO DO PROFISSIONAL (Item 22) -->
+        <div id="container-resumo-personal"></div>
 
         <!-- SEÇÃO: Formulário para Cadastrar Aluno -->
         <section id="secao-cadastrar-aluno"
@@ -610,6 +636,26 @@
             </div>
         </section>
 
+        <!-- SEÇÃO: Check-ins dos Alunos (Item 2) -->
+        <section id="secao-checkins" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+            <div id="conteudo-checkins-personal"></div>
+        </section>
+
+        <!-- SEÇÃO: Agenda de Treinos & Avaliações (Item 21) -->
+        <section id="secao-agenda" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+            <div id="conteudo-agenda-personal"></div>
+        </section>
+
+        <!-- SEÇÃO: Painel Financeiro & Mensalidades (Itens 16 & 17) -->
+        <section id="secao-financeiro" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+            <div id="conteudo-financeiro-personal"></div>
+        </section>
+
+        <!-- SEÇÃO: Assistente Clínico IA (Item 20) -->
+        <section id="secao-ia" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+            <div id="conteudo-ia-personal"></div>
+        </section>
+
         <!-- Template Oculto para Geração de PDF no Admin -->
         <div id="area-impressao-pdf-admin" class="hidden"></div>
     </main>
@@ -831,6 +877,23 @@
             await carregarListaAlunosChat();
             await atualizarNotificacoesChat(false);
             iniciarRealtimeEPolling();
+
+            // Inicializar Suíte de Gestão e Check-ins no Painel do Personal
+            if (window.ApexProfissional) {
+                const totalAlunos = Object.keys(perfisAlunosCache || {}).length || 1;
+                ApexProfissional.renderDashboardResumo('container-resumo-personal', {
+                    alunos: totalAlunos,
+                    checkinsPendentes: 1,
+                    consultasHoje: 2,
+                    pagamentosPendentes: 0
+                });
+                ApexProfissional.renderAgenda('conteudo-agenda-personal');
+                ApexProfissional.renderFinanceiro('conteudo-financeiro-personal');
+                ApexProfissional.renderPainelIA('conteudo-ia-personal', 'Ricardo Leão');
+            }
+            if (window.ApexCheckin) {
+                ApexCheckin.renderPainelProfissional('conteudo-checkins-personal');
+            }
         }
 
         // ==============================================================
@@ -1771,6 +1834,9 @@
             </button>
         </div>
     </div>
+    <script src="js/apexfit-core.js"></script>
+    <script src="js/checkin-system.js"></script>
+    <script src="js/professional-suite.js"></script>
 </body>
 
 </html>

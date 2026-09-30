@@ -343,6 +343,12 @@
 
         </div> <!-- FECHAMENTO DA DIV QUE ESTAVA FALTANDO E QUEBROU O LAYOUT -->
 
+        <!-- CONTAINER DO CHECK-IN SEMANAL DO ALUNO (Item 2) -->
+        <div id="container-checkin-aluno"></div>
+
+        <!-- CONTAINER DE GAMIFICAÇÃO & NÍVEL XP (Item 18) -->
+        <div id="container-gamificacao"></div>
+
         <!-- Cards de Métricas Principais (Quick Stats) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- 1. Peso Atual com Botão de Atualização Rápida -->
@@ -469,8 +475,15 @@
                     <div class="h-full rounded-full bg-gradient-to-r from-lime-600 to-emerald-400 transition-all duration-500" id="dashboard-refeicoes-fill" style="width:0%"></div>
                 </div>
                 <!-- Preview das próximas refeições -->
-                <div id="dashboard-proximas-refeicoes" class="space-y-1.5 mb-4 min-h-[48px]">
+                <div id="dashboard-proximas-refeicoes" class="space-y-1.5 mb-3 min-h-[48px]">
                     <p class="text-xs text-slate-500">Carregando...</p>
+                </div>
+                <!-- Strip de Metas Nutricionais de Macros no Dashboard -->
+                <div id="dashboard-macros-strip" class="mb-3 p-2.5 rounded-xl bg-slate-900/80 border border-lime-500/20 text-[11px] flex items-center justify-between hidden">
+                    <span class="text-slate-400 font-bold flex items-center gap-1.5 shrink-0">
+                        <i data-lucide="target" class="w-3.5 h-3.5 text-lime-400"></i>Metas:
+                    </span>
+                    <span id="dashboard-macros-valores" class="font-bold text-white truncate ml-2">--</span>
                 </div>
                 <a href="nutricao.html" class="flex items-center justify-between w-full bg-lime-500/10 hover:bg-lime-500/20 text-lime-400 hover:text-lime-300 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-lime-500/20 transition-all group-hover:border-lime-500/40">
                     <span>Ver Plano Alimentar Completo</span>
@@ -508,7 +521,20 @@
 
         </div>
 
+        <!-- HÁBITOS DIÁRIOS & STREAK (Item 12) -->
+        <div id="container-habitos-diarios"></div>
 
+        <!-- CONTROLE COMPLETO DE HIDRATAÇÃO (Item 11) -->
+        <div id="container-hidratacao-completa"></div>
+
+        <!-- MINHAS METAS (Item 19) -->
+        <div id="container-metas-aluno"></div>
+
+        <!-- MEDIDAS CORPORAIS & ANTROPOMETRIA (Item 3) -->
+        <div id="container-medidas-corporais"></div>
+
+        <!-- COMPARADOR DE FOTOS ANTES | DEPOIS (Itens 3 & 4) -->
+        <div id="container-comparador-fotos"></div>
 
         <!-- ============================================================== -->
         <!-- 2. SEÇÃO: GALERIA DE EVOLUÇÃO CORPORAL (SEGUNDO)               -->
@@ -1235,6 +1261,11 @@
 
             // 2. Carregar Histórico de Peso
             carregarGraficoPeso(userId);
+
+            // === INICIALIZAÇÃO DOS MÓDULOS SAAS APEXFIT ===
+            if (window.ApexCheckin) window.ApexCheckin.initAluno(userId);
+            if (window.ApexEvolucao) window.ApexEvolucao.init(userId);
+            if (window.ApexHabitos) window.ApexHabitos.init(userId);
         }
 
         // Resumo compacto das refeições para o card de atalho no dashboard
@@ -1285,6 +1316,32 @@
                     else { elStatus.textContent = `${total - done} restantes hoje`; elStatus.className = 'text-xs font-medium text-slate-400 mt-1'; }
                 }
                 window.dietasCarregadas = dietas;
+
+                // Carregar metas de macros do aluno se existirem
+                try {
+                    let macros = null;
+                    const cache = localStorage.getItem('nutrilife_macros_' + userId);
+                    if (cache) macros = JSON.parse(cache);
+                    if (!macros) {
+                        const { data: mMsgs } = await supabaseClient
+                            .from('mensagens')
+                            .select('mensagem')
+                            .eq('aluno_id', userId)
+                            .eq('remetente', 'sistema_macros')
+                            .order('created_at', { ascending: false })
+                            .limit(1);
+                        if (mMsgs && mMsgs.length > 0) macros = JSON.parse(mMsgs[0].mensagem);
+                    }
+                    if (macros && macros.calorias) {
+                        const strip = document.getElementById('dashboard-macros-strip');
+                        const val = document.getElementById('dashboard-macros-valores');
+                        if (strip && val) {
+                            val.innerHTML = `<span class="text-lime-400 font-extrabold">${macros.calorias} kcal</span> • <span class="text-emerald-400 font-bold">P ${macros.proteinas}g</span> • <span class="text-sky-400 font-bold">C ${macros.carboidratos}g</span> • <span class="text-amber-400 font-bold">G ${macros.gorduras}g</span>`;
+                            strip.classList.remove('hidden');
+                            lucide.createIcons();
+                        }
+                    }
+                } catch (e) { }
 
             } catch (e) {
                 if (proxEl) proxEl.innerHTML = '<p class="text-xs text-slate-500">Erro ao carregar refeições.</p>';
@@ -2860,6 +2917,10 @@
   box.addEventListener('change', ev => { const c = ev.target; if (c.dataset.id) { feitos[c.dataset.id] = c.checked; localStorage.setItem(key, JSON.stringify(feitos)); } });
 })();
 </script>
+<script src="js/apexfit-core.js"></script>
+<script src="js/checkin-system.js"></script>
+<script src="js/evolution-tracker.js"></script>
+<script src="js/habits-hydration-gamification.js"></script>
 </body>
 
 </html>
