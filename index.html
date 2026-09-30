@@ -4,12 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApexFit | Nutrição e Treino em uma só Plataforma</title>
+    <title>ApexFit | Nutrição & Training — Plataforma Digital</title>
     <meta name="description"
-        content="A plataforma mais completa de acompanhamento nutricional, dietas flexíveis calculadas e evolução corporal em tempo real. Transforme sua rotina sem restrições.">
+        content="A plataforma definitiva de acompanhamento nutricional e treinos de alta performance.">
     <meta name="theme-color" content="#060911">
 
-    <!-- Tipografia WebHub: Clash Display + Plus Jakarta Sans + Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@300,400,500,600,700&display=swap" rel="stylesheet">
@@ -17,9 +16,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
@@ -32,20 +29,19 @@
                         poppins: ['"Poppins"', 'sans-serif'],
                     },
                     colors: {
+                        navy: {
+                            900: '#030712',
+                            950: '#020408',
+                        },
+                        gold: {
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        },
                         brand: {
-                            50: '#ecfdf5',
-                            100: '#d1fae5',
-                            300: '#6ee7b7',
                             400: '#34d399',
                             500: '#10b981',
                             600: '#059669',
-                            700: '#047857',
-                            900: '#064e3b',
-                            950: '#022c22',
-                        },
-                        obsidian: {
-                            900: '#0b0f19',
-                            950: '#060911',
                         }
                     }
                 }
@@ -54,13 +50,10 @@
     </script>
 
     <script>
-            // Inicialização Imediata do Tema (Evita FOUC / Piscar de tela)
             (function () {
                 try {
-                    const temaSalvo = localStorage.getItem('nutrilife_theme');
+                    const temaSalvo = localStorage.getItem('apexfit_theme');
                     if (temaSalvo === 'light') {
-                        document.documentElement.classList.add('light-mode');
-                    } else if (!temaSalvo && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
                         document.documentElement.classList.add('light-mode');
                     }
                 } catch (e) { }
@@ -68,7 +61,6 @@
     </script>
 
     <style>
-        /* Correção universal para evitar overflow horizontal no mobile */
         html,
         body {
             max-width: 100vw;
@@ -80,395 +72,68 @@
         }
 
         :root {
-            --bg: #060911;
-            --brand-green: #10b981;
-            --brand-glow: rgba(16, 185, 129, 0.25);
-            --branco: rgba(255, 255, 255, 0.95);
-            --branco-sub: rgba(255, 255, 255, 0.7);
-        }
-
-        html,
-        body,
-        header,
-        .glass-card,
-        .cardBordaInterna,
-        .botao,
-        footer,
-        input {
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            --bg-nav: #030712;
+            --text-main: rgba(255, 255, 255, 0.95);
+            --gold-primary: #eab308;
+            --gold-glow: rgba(234, 179, 8, 0.2);
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--branco);
+            background-color: #020408;
+            /* Azul marinho profundo */
+            color: var(--text-main);
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
         }
 
         ::selection {
-            background-color: #10b981;
-            color: #060911;
+            background-color: #eab308;
+            color: #020408;
         }
 
-        /* ───────── MODO CLARO (LIGHT MODE) INVERTIDO: VERDE CLARINHO DA LOGO + AZUL ESCURO ───────── */
-        html.light-mode {
-            --bg: #ecfdf5;
-            /* Verde clarinho da logo */
-            --branco: #0b0f19;
-            /* Azul escuro */
-            --branco-sub: #1e293b;
+        /* Cores Douradas e Azul Marinho */
+        .text-gold {
+            color: #eab308;
         }
 
-        html.light-mode body {
-            background-color: #ecfdf5;
-            color: #0b0f19;
+        .bg-gold-gradient {
+            background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
         }
 
-        html.light-mode header {
-            background-color: rgba(236, 253, 245, 0.95) !important;
-            border-bottom-color: rgba(16, 185, 129, 0.2) !important;
+        .border-gold {
+            border-color: rgba(234, 179, 8, 0.3);
         }
 
-        html.light-mode header nav a {
-            color: #0b0f19 !important;
+        .glass-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(234, 179, 8, 0.15);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
         }
 
-        html.light-mode header nav a:hover {
-            color: #059669 !important;
-        }
-
-        html.light-mode .text-white {
-            color: #0b0f19 !important;
-        }
-
-        html.light-mode .text-slate-200 {
-            color: #0b0f19 !important;
-        }
-
-        html.light-mode .text-slate-300 {
-            color: #1e293b !important;
-        }
-
-        html.light-mode .text-slate-400 {
-            color: #334155 !important;
-        }
-
-        html.light-mode .text-slate-500 {
-            color: #475569 !important;
-        }
-
-        html.light-mode .bg-obsidian-950,
-        html.light-mode .bg-obsidian-950\/70,
-        html.light-mode .bg-obsidian-950\/80,
-        html.light-mode .bg-obsidian-950\/95,
-        html.light-mode .bg-obsidian-950\/60 {
-            background-color: #d1fae5 !important;
-            /* Tom verde logo mais sólido para seções */
-        }
-
-        html.light-mode .bg-obsidian-900,
-        html.light-mode .bg-obsidian-900\/95,
-        html.light-mode .bg-obsidian-900\/80 {
-            background-color: #a7f3d0 !important;
-        }
-
-        html.light-mode .border-white\/10 {
-            border-color: rgba(16, 185, 129, 0.25) !important;
-        }
-
-        html.light-mode .border-white\/5 {
-            border-color: rgba(16, 185, 129, 0.15) !important;
-        }
-
-        html.light-mode .border-white\/15 {
-            border-color: rgba(16, 185, 129, 0.3) !important;
-        }
-
-        html.light-mode .glass-card {
-            background: #d1fae5 !important;
-            border-color: rgba(16, 185, 129, 0.3) !important;
-            box-shadow: 0 20px 40px -15px rgba(6, 78, 59, 0.1) !important;
-        }
-
-        html.light-mode .cardBordaInterna {
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%) !important;
-            border-color: rgba(16, 185, 129, 0.35) !important;
-            box-shadow: 0 20px 35px -10px rgba(6, 78, 59, 0.1) !important;
-        }
-
-        html.light-mode .cardBordaInterna:hover {
-            border-color: rgba(5, 150, 105, 0.6) !important;
-            box-shadow: 0 30px 60px -15px rgba(5, 150, 105, 0.2) !important;
-        }
-
-        html.light-mode .cardBordaInterna .icone-corner {
-            background-color: #ecfdf5 !important;
-        }
-
-        html.light-mode .cardBordaInterna:before {
-            box-shadow: 10px -10px 0px #ecfdf5 !important;
-        }
-
-        html.light-mode .cardBordaInterna:after {
-            box-shadow: 10px -10px 0px #ecfdf5 !important;
-        }
-
-        html.light-mode .cardSubtitulo {
-            background: rgba(5, 150, 105, 0.15) !important;
-            border-color: rgba(5, 150, 105, 0.4) !important;
-        }
-
-        html.light-mode .cardSubtitulo h3 {
-            color: #047857 !important;
-        }
-
-        /* ───────── BOTÃO PRIMÁRIO (INSCREVER-SE / AGENDAR) PRESERVADO EM AMBOS OS MODOS ───────── */
-        html.light-mode .botaoPrimario,
-        html.light-mode .botao {
-            background-color: #ffffff !important;
-            color: #060911 !important;
-            box-shadow:
-                0 4px 6px -1px rgba(0, 0, 0, 0.1),
-                0 20px 35px -5px rgba(16, 185, 129, 0.28),
-                inset 0 1px 1px 0 rgba(255, 255, 255, 0.9) !important;
-        }
-
-        html.light-mode .botaoPrimario:hover,
-        html.light-mode .botao:hover {
-            transform: translateY(-2px);
-            box-shadow:
-                0 6px 12px -2px rgba(0, 0, 0, 0.15),
-                0 25px 45px -5px rgba(16, 185, 129, 0.4),
-                inset 0 1px 1px 0 rgba(255, 255, 255, 1) !important;
-        }
-
-        html.light-mode .botaoPrimario .divSeta {
-            background-color: #060911 !important;
-            color: #34d399 !important;
-        }
-
-        html.light-mode .botaoPrimario:hover .divSeta {
-            width: calc(100% - 12px) !important;
-            background-color: #10b981 !important;
-            color: #ffffff !important;
-        }
-
-        html.light-mode .botaoPrimario:hover .divSeta.\!right-1 {
-            width: calc(100% - 8px) !important;
-        }
-
-
-        html.light-mode .botaoSecundario {
-            background-color: rgba(11, 15, 25, 0.08) !important;
-            border-color: rgba(11, 15, 25, 0.2) !important;
-            color: #0b0f19 !important;
-        }
-
-        html.light-mode .botaoSecundario:hover {
-            background-color: rgba(11, 15, 25, 0.15) !important;
-            border-color: #047857 !important;
-            color: #047857 !important;
-        }
-
-        html.light-mode footer {
-            background-color: #d1fae5 !important;
-            border-top-color: rgba(16, 185, 129, 0.3) !important;
-        }
-
-        html.light-mode .theme-btn-toggle {
-            background-color: rgba(11, 15, 25, 0.08) !important;
-            border-color: rgba(11, 15, 25, 0.2) !important;
-            color: #0b0f19 !important;
-        }
-
-        html.light-mode #mobile-menu {
-            background-color: #ecfdf5 !important;
-            border-bottom-color: rgba(16, 185, 129, 0.2) !important;
-        }
-
-        html.light-mode .mobile-nav-link {
-            color: #0b0f19 !important;
-        }
-
-        html.light-mode section#metodo,
-        html.light-mode section#plataforma,
-        html.light-mode section#sobre,
-        html.light-mode section#faq,
-        html.light-mode .bg-obsidian-950,
-        html.light-mode footer {
-            background: #ecfdf5 !important;
-            color: #0b0f19 !important;
-        }
-
-        /* ───────── PRELOADER INTERATIVO ESTILO WEBHUB ───────── */
-        #preloader {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background: #060911;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: all;
-        }
-
-        #preloader.loaded {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .preloader-logo-wrap {
-            position: relative;
-            width: 90px;
-            height: 90px;
-            margin-bottom: 24px;
-        }
-
-        .preloader-logo-empty,
-        .preloader-logo-fill {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .preloader-logo-fill {
-            clip-path: inset(100% 0 0 0);
-            transition: clip-path 0.15s ease-out;
-        }
-
-        .preloader-percent {
-            font-family: 'Clash Display', sans-serif;
-            font-size: 1.75rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            color: #34d399;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .preloader-tagline {
-            font-size: 0.75rem;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.4);
-            margin-top: 8px;
-        }
-
-        /* ───────── BOTÕES INTERATIVOS WEBHUB (.botao, .botaoPrimario, .divSeta) ───────── */
-        .botao {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: clamp(13px, 1.1vw, 15px);
-            font-weight: 700;
-            height: 60px;
-            text-decoration: none;
-            color: #060911;
-            background-color: #ffffff;
-            border: none;
-            border-radius: 9999px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 6px 6px 6px 26px;
-            gap: 12px;
-            cursor: pointer;
-            box-shadow:
-                0 4px 6px -1px rgba(0, 0, 0, 0.1),
-                0 20px 35px -5px rgba(16, 185, 129, 0.28),
-                inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .botao:hover {
-            transform: translateY(-2px);
-            box-shadow:
-                0 6px 12px -2px rgba(0, 0, 0, 0.15),
-                0 25px 45px -5px rgba(16, 185, 129, 0.4),
-                inset 0 1px 1px 0 rgba(255, 255, 255, 1);
-        }
-
-        .botaoPrimario {
-            position: relative;
-            padding-right: 70px;
-            background-color: #ffffff !important;
-            color: #060911 !important;
-        }
-
-        .botaoPrimario .divSeta {
-            background-color: #060911 !important;
-            color: #34d399 !important;
-            border-radius: 9999px;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            position: absolute;
-            right: 6px;
-        }
-
-        .botaoPrimario:hover .divSeta {
-            width: calc(100% - 12px) !important;
-            background-color: #10b981 !important;
-            color: #ffffff !important;
-        }
-
-        .botaoPrimario:hover .divSeta.\!right-1 {
-            width: calc(100% - 8px) !important;
-        }
-
-        .botaoSecundario {
-            color: #ffffff;
-            background-color: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            padding: 0 28px;
-            border-radius: 9999px;
-            height: 60px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .botaoSecundario:hover {
-            background-color: rgba(255, 255, 255, 0.12);
-            border-color: rgba(52, 211, 153, 0.5);
-            transform: translateY(-3px);
-            color: #34d399;
-        }
-
-        /* ───────── CARD CHANFRADO INVERTIDO WEBHUB (.cardBordaInterna) ───────── */
         .cardBordaInterna {
             position: relative;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.82) 0%, rgba(8, 12, 22, 0.95) 100%);
+            background: linear-gradient(135deg, rgba(11, 15, 25, 0.9) 0%, rgba(3, 7, 18, 0.98) 100%);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(234, 179, 8, 0.2);
             border-radius: 32px;
             padding: 36px 30px;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.35s ease;
             overflow: hidden;
         }
 
         .cardBordaInterna:hover {
-            transform: translateY(-8px);
-            border-color: rgba(52, 211, 153, 0.45);
-            box-shadow: 0 30px 60px -15px rgba(16, 185, 129, 0.18);
+            transform: translateY(-6px);
+            border-color: rgba(234, 179, 8, 0.6);
+            box-shadow: 0 30px 60px -15px rgba(234, 179, 8, 0.15);
         }
 
         .cardBordaInterna .icone-corner {
             position: absolute;
             right: 0;
             top: 0;
-            background-color: #060911;
+            background-color: #020408;
             width: 74px;
             height: 74px;
             border-radius: 0 0 0 32px;
@@ -478,51 +143,103 @@
             z-index: 10;
         }
 
-        .cardBordaInterna:before {
-            content: "";
-            width: 32px;
-            height: 32px;
-            position: absolute;
-            background-color: transparent;
-            border-radius: 50%;
-            right: 74px;
-            top: 0;
-            box-shadow: 10px -10px 0px #060911;
-            pointer-events: none;
-            z-index: 10;
+        /* Botões Estilo Luxo Dourado */
+        .botaoDourado {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            height: 60px;
+            text-decoration: none;
+            color: #020408;
+            background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
+            border: none;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 6px 6px 28px;
+            gap: 12px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px -5px rgba(234, 179, 8, 0.35);
+            transition: all 0.35s ease;
+            position: relative;
+            padding-right: 70px;
         }
 
-        .cardBordaInterna:after {
-            content: "";
-            width: 32px;
-            height: 32px;
-            position: absolute;
-            background-color: transparent;
-            border-radius: 50%;
-            right: 0;
-            top: 74px;
-            box-shadow: 10px -10px 0px #060911;
-            pointer-events: none;
-            z-index: 10;
+        .botaoDourado:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -5px rgba(234, 179, 8, 0.5);
         }
 
-        /* ───────── MARQUEE INFINITO WEBHUB ───────── */
+        .botaoDourado .divSeta {
+            background-color: #020408;
+            color: #facc15;
+            border-radius: 9999px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.35s ease;
+            position: absolute;
+            right: 6px;
+        }
+
+        .botaoDourado:hover .divSeta {
+            width: calc(100% - 12px);
+            background-color: #facc15;
+            color: #020408;
+        }
+
+        .cardSubtitulo {
+            width: max-content;
+            display: inline-flex;
+            padding: 7px 16px;
+            align-items: center;
+            gap: 8px;
+            border-radius: 9999px;
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+
+        .cardSubtitulo h3 {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #facc15;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .faq-answer.open {
+            max-height: 250px;
+            opacity: 1;
+        }
+
+        .faq-icon {
+            transition: transform 0.35s ease;
+        }
+
+        .faq-icon.rotated {
+            transform: rotate(180deg);
+        }
+
         .marquee-wrapper {
             overflow: hidden;
             white-space: nowrap;
             position: relative;
-            mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
         }
 
         .marquee-content {
             display: inline-flex;
             gap: 2rem;
             animation: marqueeScroll 32s linear infinite;
-        }
-
-        .marquee-content:hover {
-            animation-play-state: paused;
         }
 
         @keyframes marqueeScroll {
@@ -534,231 +251,46 @@
                 transform: translateX(-50%);
             }
         }
-
-        /* ───────── AMBIENT GLOWS DE PROFUNDIDADE ───────── */
-        .ambient-glow-green {
-            position: absolute;
-            width: 650px;
-            height: 650px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.14) 0%, rgba(16, 185, 129, 0) 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            filter: blur(70px);
-            z-index: 0;
-        }
-
-        .ambient-glow-purple {
-            position: absolute;
-            width: 550px;
-            height: 550px;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, rgba(168, 85, 247, 0) 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            filter: blur(80px);
-            z-index: 0;
-        }
-
-        /* Glass Cards Padrão */
-        .glass-card {
-            background: rgba(15, 23, 42, 0.72);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
-        }
-
-        /* Accordion FAQ */
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-            opacity: 0;
-        }
-
-        .faq-answer.open {
-            max-height: 250px;
-            opacity: 1;
-        }
-
-        .faq-icon {
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .faq-icon.rotated {
-            transform: rotate(180deg);
-        }
     </style>
 </head>
 
 <body class="relative">
 
-    <!-- ───────── PRELOADER INTERATIVO ESTILO WEBHUB ───────── -->
-    <div id="preloader" aria-hidden="true">
-        <div class="preloader-logo-wrap">
-            <svg class="preloader-logo-empty" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 48C12 28 28 12 48 12C48 32 32 48 12 48Z" fill="white" fill-opacity="0.12" />
-                <path d="M12 48L36 24" stroke="white" stroke-opacity="0.2" stroke-width="3" stroke-linecap="round" />
-            </svg>
-            <svg class="preloader-logo-fill" id="preloader-fill" viewBox="0 0 60 60" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 48C12 28 28 12 48 12C48 32 32 48 12 48Z" fill="url(#greenGradient)" />
-                <path d="M12 48L36 24" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
-                <defs>
-                    <linearGradient id="greenGradient" x1="12" y1="48" x2="48" y2="12" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#059669" />
-                        <stop offset="1" stop-color="#34d399" />
-                    </linearGradient>
-                </defs>
-            </svg>
-        </div>
-        <div class="preloader-percent" id="preloader-percent">0%</div>
-        <div class="preloader-tagline">APEXFIT DIGITAL PLATFORM</div>
+    <!-- Preloader -->
+    <div id="preloader"
+        class="fixed inset-0 z-50 bg-navy-950 flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="text-3xl font-clash font-bold text-gold-400 mb-2">APEX<span class="text-white">FIT</span></div>
+        <div class="text-xs uppercase tracking-widest text-slate-400">Carregando plataforma...</div>
     </div>
 
-    <!-- Iluminação Ambiente de Fundo -->
-    <div class="ambient-glow-green -top-40 -left-40"></div>
-    <div class="ambient-glow-purple top-[40%] -right-40"></div>
-
-    <!-- ───────── HEADER FIXO COM BLUR E ESTILO WEBHUB ───────── -->
-    <header
-        class="fixed top-0 left-0 w-full bg-obsidian-950/80 backdrop-blur-2xl border-b border-white/10 z-50 transition-all duration-300">
+    <!-- Header Fixo -->
+    <header class="fixed top-0 left-0 w-full bg-navy-950/90 backdrop-blur-2xl border-b border-gold/20 z-40">
         <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-            <!-- Brand Logo -->
-            <a href="#" class="flex items-center gap-2.5 group shrink-0">
+            <a href="#" class="flex items-center gap-2.5 group">
                 <div
-                    class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-brand-500/25 group-hover:scale-105 transition-transform">
-                    <i data-lucide="leaf" class="w-5 h-5"></i>
+                    class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-gold-600 to-amber-300 flex items-center justify-center text-navy-950 shadow-lg shadow-gold-500/20">
+                    <i data-lucide="zap" class="w-5 h-5"></i>
                 </div>
                 <div class="font-clash text-2xl font-bold tracking-tight text-white">
-                    NUTRI<span class="text-brand-400">LIFE</span>
+                    APEX<span class="text-gold-400">FIT</span>
                 </div>
             </a>
 
-            <!-- Navegação Desktop Atualizada -->
             <nav class="hidden lg:flex items-center gap-7 text-xs uppercase tracking-wider font-bold text-slate-300">
-                <a href="#metodo" class="hover:text-brand-400 transition-colors">O Método</a>
-                <a href="#plataforma" class="hover:text-brand-400 transition-colors">A Plataforma</a>
-                <a href="#treino" class="hover:text-brand-400 transition-colors">Personal Trainer</a>
-                <a href="#sobre" class="hover:text-brand-400 transition-colors">O profissional</a>
-                <a href="#faq" class="hover:text-brand-400 transition-colors">Dúvidas</a>
+                <a href="#plataforma" class="hover:text-gold-400 transition-colors">A Plataforma</a>
+                <a href="#sobre" class="hover:text-gold-400 transition-colors">Sobre os Profissionais</a>
+                <a href="#faq" class="hover:text-gold-400 transition-colors">Dúvidas</a>
             </nav>
 
-            <!-- Ações Desktop (lg+) -->
             <div class="hidden lg:flex items-center gap-3.5">
-                <button type="button" onclick="alternarTema()"
-                    class="theme-btn-toggle w-10 h-10 rounded-full border border-white/10 hover:border-brand-500/50 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center cursor-pointer shadow-sm group"
-                    title="Alternar Modo Claro / Escuro" aria-label="Alternar tema">
-                    <i data-lucide="sun"
-                        class="w-4 h-4 text-amber-400 hidden theme-icon-sun transition-transform group-hover:rotate-45"></i>
-                    <i data-lucide="moon"
-                        class="w-4 h-4 text-brand-400 theme-icon-moon transition-transform group-hover:-rotate-12"></i>
-                </button>
-
                 <a href="login.html"
-                    class="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-slate-300 hover:text-white px-4 py-2.5 rounded-full hover:bg-white/5 border border-transparent hover:border-white/10 transition-all">
-                    <i data-lucide="user" class="w-4 h-4 text-brand-400"></i>
-                    Área do Aluno
+                    class="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-slate-300 hover:text-white px-4 py-2.5 rounded-full hover:bg-white/5 border border-white/10 transition-all">
+                    <i data-lucide="user" class="w-4 h-4 text-gold-400"></i> Área do Aluno
                 </a>
-
-                <a href="https://wa.me/5581997969058?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta%20nutricional!"
-                    target="_blank" class="botao botaoPrimario !h-[48px] !text-xs !py-1 !pl-5 !pr-[58px]">
-                    <span>Agendar Consulta</span>
-                    <div class="divSeta !w-[38px] !h-[38px] !right-1">
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Ações Mobile & Tablet -->
-            <div class="flex lg:hidden items-center gap-2">
-                <button type="button" onclick="alternarTema()"
-                    class="theme-btn-toggle w-10 h-10 rounded-xl border border-white/15 bg-white/10 text-slate-200 hover:text-white flex items-center justify-center cursor-pointer shadow-sm active:scale-95 transition-all"
-                    title="Alternar Modo Claro / Escuro" aria-label="Alternar tema">
-                    <i data-lucide="sun" class="w-4 h-4 text-amber-400 hidden theme-icon-sun"></i>
-                    <i data-lucide="moon" class="w-4 h-4 text-brand-400 theme-icon-moon"></i>
-                </button>
-
-                <a href="login.html"
-                    class="flex items-center gap-1.5 h-10 px-3 rounded-xl bg-white/10 border border-white/15 text-xs font-bold text-slate-200 hover:text-white active:scale-95 transition-all"
-                    title="Área do Aluno">
-                    <i data-lucide="user" class="w-4 h-4 text-brand-400"></i>
-                    <span class="hidden sm:inline">Aluno</span>
-                </a>
-
-                <button id="mobile-menu-btn" type="button"
-                    class="w-10 h-10 rounded-xl bg-brand-500/20 border border-brand-500/50 text-brand-400 hover:text-white hover:bg-brand-500/30 flex items-center justify-center cursor-pointer shadow-lg active:scale-95 transition-all"
-                    aria-label="Abrir Menu">
-                    <svg id="hamburger-svg" class="w-5 h-5 transition-transform" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="4" y1="6" x2="20" y2="6"></line>
-                        <line x1="4" y1="12" x2="20" y2="12"></line>
-                        <line x1="4" y1="18" x2="20" y2="18"></line>
-                    </svg>
-                    <svg id="close-svg" class="w-5 h-5 hidden transition-transform text-white" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Menu Mobile Drawer Atualizado -->
-        <div id="mobile-menu"
-            class="hidden lg:hidden bg-obsidian-950/98 border-b border-white/10 px-5 py-6 space-y-4 backdrop-blur-2xl shadow-2xl transition-all">
-            <div
-                class="text-[11px] font-bold uppercase tracking-wider text-slate-400 pb-2 border-b border-white/10 flex items-center justify-between">
-                <span>Navegação Rápida</span>
-                <span class="text-brand-400">ApexFit</span>
-            </div>
-
-            <div class="grid grid-cols-1 gap-1.5">
-                <a href="#metodo"
-                    class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
-                    <i data-lucide="sparkles" class="w-4 h-4 text-brand-400"></i>
-                    <span>O Método</span>
-                </a>
-                <a href="#plataforma"
-                    class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
-                    <i data-lucide="smartphone" class="w-4 h-4 text-brand-400"></i>
-                    <span>A Plataforma</span>
-                </a>
-                <a href="#sobre"
-                    class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
-                    <i data-lucide="user-check" class="w-4 h-4 text-brand-400"></i>
-                    <span>Sobre o Nutri</span>
-                </a>
-                <a href="#faq"
-                    class="mobile-nav-link flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-200 hover:text-brand-400 py-3 px-3.5 rounded-xl hover:bg-white/5 transition-all">
-                    <i data-lucide="help-circle" class="w-4 h-4 text-brand-400"></i>
-                    <span>Dúvidas Frequentes</span>
-                </a>
-            </div>
-
-            <div class="pt-4 border-t border-white/10 flex flex-col gap-3">
-                <button type="button" onclick="alternarTema()"
-                    class="theme-btn-toggle flex items-center justify-between w-full py-3.5 px-4 bg-white/5 border border-white/10 rounded-2xl text-slate-200 font-bold text-xs uppercase tracking-wider transition-all">
-                    <span class="flex items-center gap-2.5">
-                        <i data-lucide="sun" class="w-4 h-4 text-amber-400 hidden theme-icon-sun"></i>
-                        <i data-lucide="moon" class="w-4 h-4 text-brand-400 theme-icon-moon"></i>
-                        <span class="theme-text-label">Alternar para Modo Claro</span>
-                    </span>
-                    <span
-                        class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded-full border border-brand-500/30">Tema</span>
-                </button>
-
-                <a href="login.html"
-                    class="flex items-center justify-center gap-2 w-full py-3.5 text-center bg-white/5 border border-white/10 hover:border-brand-500/40 rounded-2xl text-slate-200 font-bold text-xs uppercase tracking-wider transition-all">
-                    <i data-lucide="user" class="w-4 h-4 text-brand-400"></i>
-                    Aceder à Área do Aluno
-                </a>
-
-                <a href="https://wa.me/5581997969058?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20consulta%20nutricional!"
-                    target="_blank" class="botao botaoPrimario w-full text-center">
-                    <span>Marcar Consulta no WhatsApp</span>
-                    <div class="divSeta">
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                <a href="https://wa.me/5581997969058?text=Olá%2C%20gostaria%20de%20iniciar%20na%20ApexFit!"
+                    target="_blank" class="botaoDourado !h-[48px] !text-xs !py-1 !pl-5 !pr-[58px]">
+                    <span>Entrar na Consultoria</span>
+                    <div class="divSeta !w-[38px] !h-[38px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </div>
                 </a>
             </div>
@@ -766,79 +298,64 @@
     </header>
 
     <main>
-
-        <!-- ───────── HERO SECTION ───────── -->
-        <section class="pt-28 pb-16 md:pt-40 md:pb-28 px-4 sm:px-6 relative overflow-hidden bg-cover bg-center"
-            style="background-image: linear-gradient(to right bottom, rgba(2, 6, 23, 0.95), rgba(2, 6, 23, 0.88)), url('https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=1920');">
-
-            <div class="max-w-7xl mx-auto w-full">
-                <div class="max-w-4xl mx-auto text-center px-2">
-                    <h1 class="font-clash text-3xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.15] sm:leading-[1.08] mb-8 sm:mb-10"
-                        style="color: #ffffff !important;">
-                        A PLATAFORMA MAIS <span
-                            class="bg-gradient-to-r from-brand-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">COMPLETA
-                            DE NUTRIÇÃO</span>
-                    </h1>
-
-                    <div
-                        class="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 mb-8 w-full max-w-md sm:max-w-none mx-auto">
-                        <a href="https://wa.me/5581997969058?text=Ol%C3%A1%2C%20quero%20come%C3%A7ar%20meu%20acompanhamento%20nutricional!"
-                            target="_blank"
-                            class="botao botaoPrimario w-full sm:w-auto !justify-between sm:!justify-center">
-                            <span>INSCREVER-SE AGORA</span>
-                            <div class="divSeta">
-                                <i data-lucide="arrow-right" class="w-5 h-5"></i>
-                            </div>
-                        </a>
-
-                        <a href="login.html" class="botaoSecundario w-full sm:w-auto"
-                            style="color: #ffffff !important; background-color: rgba(255, 255, 255, 0.06) !important; border-color: rgba(255, 255, 255, 0.14) !important;">
-                            <i data-lucide="lock" class="w-4 h-4 text-brand-400"></i>
-                            <span>Área do Aluno</span>
-                        </a>
-                    </div>
+        <!-- Hero Section -->
+        <section class="pt-32 pb-20 md:pt-44 md:pb-32 px-4 sm:px-6 relative bg-cover bg-center"
+            style="background-image: linear-gradient(to right bottom, rgba(2, 4, 8, 0.95), rgba(3, 7, 18, 0.90)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1920');">
+            <div class="max-w-7xl mx-auto text-center">
+                <div class="cardSubtitulo mx-auto mb-6">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-gold-400"></i>
+                    <h3>NUTRIÇÃO & TRAINING EM ALTO PADRÃO</h3>
+                </div>
+                <h1
+                    class="font-clash text-3xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-8 text-white">
+                    A EVOLUÇÃO DO SEU CORPO <span class="text-gold-400">DIRECIONADA POR ESPECIALISTAS</span>
+                </h1>
+                <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-300 mb-10 leading-relaxed">
+                    A única plataforma que une o acompanhamento clínico nutricional e a prescrição avançada de treinos
+                    em um único painel exclusivo para resultados de alta performance.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+                    <a href="https://wa.me/5581997969058?text=Olá%2C%20quero%20começar%20na%20ApexFit!" target="_blank"
+                        class="botaoDourado w-full sm:w-auto">
+                        <span>COMEÇAR AGORA</span>
+                        <div class="divSeta"><i data-lucide="arrow-right" class="w-5 h-5"></i></div>
+                    </a>
+                    <a href="login.html"
+                        class="flex items-center justify-center gap-2 w-full sm:w-auto h-[60px] px-8 rounded-full bg-white/5 border border-gold/30 text-white font-bold text-sm hover:bg-white/10 transition-all">
+                        <i data-lucide="lock" class="w-4 h-4 text-gold-400"></i> Aceder ao Portal
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- ───────── MARQUEE INFINITO (FITA DE BENEFÍCIOS) ───────── -->
-        <section class="py-3 border-y border-white/10 bg-obsidian-950/95 relative overflow-hidden -mx-6 px-6">
+        <!-- Marquee -->
+        <section class="py-3 border-y border-gold/20 bg-navy-950 relative overflow-hidden">
             <div class="marquee-wrapper">
                 <div
                     class="marquee-content font-clash text-lg sm:text-xl font-semibold tracking-wider text-slate-300 uppercase items-center">
-                    <span>✦ DIETA 100% PERSONALIZADA</span>
-                    <span class="text-brand-400 font-bold">✦ PORTAL EXCLUSIVO DO ALUNO</span>
-                    <span>✦ SEM DIETAS RESTRITIVAS</span>
-                    <span class="text-teal-300 font-bold">✦ ACOMPANHAMENTO 24/7 NO WHATSAPP</span>
-                    <span>✦ GRÁFICOS DE EVOLUÇÃO CORPORAL</span>
-                    <span class="text-brand-400 font-bold">✦ SUBSTITUIÇÕES INTELIGENTES</span>
-                    <span>✦ GALERIA FÍSICA PROTEGIDA</span>
-                    <span class="text-teal-300 font-bold">✦ ALTA PERFORMANCE & SAÚDE</span>
-                    <span>✦ DIETA 100% PERSONALIZADA</span>
-                    <span class="text-brand-400 font-bold">✦ PORTAL EXCLUSIVO DO ALUNO</span>
-                    <span>✦ SEM DIETAS RESTRITIVAS</span>
-                    <span class="text-teal-300 font-bold">✦ ACOMPANHAMENTO 24/7 NO WHATSAPP</span>
-                    <span>✦ GRÁFICOS DE EVOLUÇÃO CORPORAL</span>
-                    <span class="text-brand-400 font-bold">✦ SUBSTITUIÇÕES INTELIGENTES</span>
-                    <span>✦ GALERIA FÍSICA PROTEGIDA</span>
-                    <span class="text-teal-300 font-bold">✦ ALTA PERFORMANCE & SAÚDE</span>
+                    <span>✦ DIETA 100% PERSONALIZADA</span> <span class="text-gold-400 font-bold">✦ TREINOS DE ALTA
+                        PERFORMANCE</span>
+                    <span>✦ SUPORTE DIRETO COM PROFISSIONAIS</span> <span class="text-amber-300 font-bold">✦
+                        ACOMPANHAMENTO DE CARGAS E PESO</span>
+                    <span>✦ GALERIA DE EVOLUÇÃO SEGURA</span> <span class="text-gold-400 font-bold">✦ APEXFIT
+                        ECOSYSTEM</span>
                 </div>
             </div>
         </section>
 
-        <!-- ───────── SEÇÃO: O MÉTODO ───────── -->
-        <section id="metodo" class="py-24 px-6 border-t border-white/10 bg-obsidian-950/70 relative">
+        <!-- ───────── SEÇÃO: A PLATAFORMA (TUDO SOBRE NUTRIÇÃO E PERSONAL) ───────── -->
+        <section id="plataforma" class="py-24 px-6 bg-navy-950 relative">
             <div class="max-w-7xl mx-auto">
                 <div class="text-center max-w-2xl mx-auto mb-16">
                     <div class="cardSubtitulo mx-auto mb-4">
-                        <h3>PASSO A PASSO COMPROVADO</h3>
+                        <h3>ECOSSISTEMA COMPLETO</h3>
                     </div>
-                    <h2 class="font-clash text-3xl sm:text-5xl font-bold tracking-tight mb-4">
-                        O MÉTODO APEXFIT: CIÊNCIA & PRATICIDADE
+                    <h2 class="font-clash text-3xl sm:text-5xl font-bold tracking-tight mb-4 text-white">
+                        O PODER DA NUTRIÇÃO E DO TREINO <span class="text-gold-400">EM SINERGIA</span>
                     </h2>
-                    <p class="text-sm sm:text-base leading-relaxed">
-                        Esqueça dietas genéricas de gaveta. Nosso método une avaliação clínica minuciosa, cálculo
-                        metabólico de alta precisão e suporte tecnológico contínuo.
+                    <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+                        Esqueça aplicativos separados e planilhas confusas. Na ApexFit, o seu nutricionista e o seu
+                        personal trainer trabalham integrados na mesma plataforma.
                     </p>
                 </div>
 
@@ -846,196 +363,87 @@
                     <div class="cardBordaInterna">
                         <div class="icone-corner">
                             <div
-                                class="w-12 h-12 rounded-2xl bg-brand-500/15 text-brand-400 flex items-center justify-center border border-brand-500/25">
-                                <i data-lucide="clipboard-check" class="w-6 h-6"></i>
-                            </div>
+                                class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
+                                <i data-lucide="utensils" class="w-6 h-6"></i></div>
                         </div>
-                        <div class="text-xs font-bold text-brand-400 uppercase tracking-wider mb-2">Passo 01</div>
-                        <h3 class="font-clash text-xl font-bold mb-3">Anamnese Profunda</h3>
-                        <p class="text-sm leading-relaxed">
-                            Mapeamos seus horários, histórico de exames, rotina de treino e preferências para criar uma
-                            estratégia sustentável.
+                        <div class="text-xs font-bold text-gold-400 uppercase tracking-wider mb-2">Nutrição Clínica
+                        </div>
+                        <h3 class="font-clash text-xl font-bold mb-3 text-white">Cardápio Inteligente</h3>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Refeições detalhadas por horários, gramaturas exatas e opções inteligentes de substituição
+                            para manter a consistência sem restrições extremas.
                         </p>
                     </div>
 
                     <div class="cardBordaInterna">
                         <div class="icone-corner">
                             <div
-                                class="w-12 h-12 rounded-2xl bg-teal-500/15 text-teal-400 flex items-center justify-center border border-teal-500/25">
-                                <i data-lucide="sliders" class="w-6 h-6"></i>
-                            </div>
+                                class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
+                                <i data-lucide="dumbbell" class="w-6 h-6"></i></div>
                         </div>
-                        <div class="text-xs font-bold text-teal-400 uppercase tracking-wider mb-2">Passo 02</div>
-                        <h3 class="font-clash text-xl font-bold mb-3">Plano Sob Medida</h3>
-                        <p class="text-sm leading-relaxed">
-                            Cálculo exato de calorias e macronutrientes com alimentos acessíveis e prazerosos que você
-                            realmente consome.
+                        <div class="text-xs font-bold text-gold-400 uppercase tracking-wider mb-2">Personal Trainer
+                        </div>
+                        <h3 class="font-clash text-xl font-bold mb-3 text-white">Fichas de Treino</h3>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Exercícios divididos por dias da semana, com controle rigoroso de séries, repetições, tempos
+                            de descanso e cargas sugeridas pelo seu personal.
                         </p>
                     </div>
 
                     <div class="cardBordaInterna">
                         <div class="icone-corner">
                             <div
-                                class="w-12 h-12 rounded-2xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center border border-cyan-500/25">
-                                <i data-lucide="smartphone" class="w-6 h-6"></i>
-                            </div>
+                                class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
+                                <i data-lucide="trending-up" class="w-6 h-6"></i></div>
                         </div>
-                        <div class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2">Passo 03</div>
-                        <h3 class="font-clash text-xl font-bold mb-3">Acesso no Portal</h3>
-                        <p class="text-sm leading-relaxed">
-                            Suas refeições, opções de substituição e controle de água sincronizados em tempo real no seu
-                            smartphone.
+                        <div class="text-xs font-bold text-gold-400 uppercase tracking-wider mb-2">Métricas e Evolução
+                        </div>
+                        <h3 class="font-clash text-xl font-bold mb-3 text-white">Gráficos de Progresso</h3>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Acompanhe a evolução do seu peso corporal e o histórico de cargas nos principais exercícios
+                            através de gráficos dinâmicos em tempo real.
                         </p>
                     </div>
 
                     <div class="cardBordaInterna">
                         <div class="icone-corner">
                             <div
-                                class="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-400 flex items-center justify-center border border-purple-500/25">
-                                <i data-lucide="camera" class="w-6 h-6"></i>
-                            </div>
+                                class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
+                                <i data-lucide="message-square" class="w-6 h-6"></i></div>
                         </div>
-                        <div class="text-xs font-bold text-purple-400 uppercase tracking-wider mb-2">Passo 04</div>
-                        <h3 class="font-clash text-xl font-bold mb-3">Evolução & Fotos</h3>
-                        <p class="text-sm leading-relaxed">
-                            Acompanhe gráficos de peso corporal e registre sua evolução física em fotos protegidas por
-                            senha clínica pessoal.
+                        <div class="text-xs font-bold text-gold-400 uppercase tracking-wider mb-2">Comunicação Direta
+                        </div>
+                        <h3 class="font-clash text-xl font-bold mb-3 text-white">Chat com Especialistas</h3>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Tire dúvidas sobre a dieta ou execução de treinos diretamente pelo chat integrado com
+                            alertas e notificações instantâneas.
                         </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ───────── SEÇÃO: A PLATAFORMA ───────── -->
-        <section id="plataforma" class="py-24 px-6 border-t border-white/10 bg-obsidian-950 relative">
-            <div class="max-w-7xl mx-auto">
-                <div class="text-center max-w-2xl mx-auto mb-16">
-                    <div class="cardSubtitulo mx-auto mb-4">
-                        <h3>TECNOLOGIA EXCLUSIVA</h3>
-                    </div>
-                    <h2 class="font-clash text-3xl sm:text-5xl font-bold tracking-tight mb-4">
-                        TUDO O QUE VOCÊ PRECISA NA PALMA DA MÃO
-                    </h2>
-                    <p class="text-sm sm:text-base leading-relaxed">
-                        Nossa plataforma digital foi desenvolvida para tornar sua rotina nutricional simples, prática e
-                        100% integrada com seus objetivos de saúde.
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="cardBordaInterna">
-                        <div class="icone-corner">
-                            <div
-                                class="w-12 h-12 rounded-2xl bg-brand-500/15 text-brand-400 flex items-center justify-center border border-brand-500/25">
-                                <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
-                            </div>
-                        </div>
-                        <div class="text-xs font-bold text-brand-400 uppercase tracking-wider mb-2">Portal Digital</div>
-                        <h3 class="font-clash text-xl font-bold mb-3">Dieta no Celular</h3>
-                        <p class="text-sm leading-relaxed">
-                            Acesse seu plano alimentar atualizado, listas de compras e substituições inteligentes a
-                            qualquer momento.
-                        </p>
-                    </div>
-
-                    <div class="cardBordaInterna">
-                        <div class="icone-corner">
-                            <div
-                                class="w-12 h-12 rounded-2xl bg-teal-500/15 text-teal-400 flex items-center justify-center border border-teal-500/25">
-                                <i data-lucide="trending-up" class="w-6 h-6"></i>
-                            </div>
-                        </div>
-                        <div class="text-xs font-bold text-teal-400 uppercase tracking-wider mb-2">Métricas</div>
-                        <h3 class="font-clash text-xl font-bold mb-3">Gráficos de Evolução</h3>
-                        <p class="text-sm leading-relaxed">
-                            Registre seu peso, medidas e fotos de acompanhamento para visualizar seu progresso detalhado
-                            em tempo real.
-                        </p>
-                    </div>
-
-                    <div class="cardBordaInterna">
-                        <div class="icone-corner">
-                            <div
-                                class="w-12 h-12 rounded-2xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center border border-cyan-500/25">
-                                <i data-lucide="message-square" class="w-6 h-6"></i>
-                            </div>
-                        </div>
-                        <div class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2">Suporte</div>
-                        <h3 class="font-clash text-xl font-bold mb-3">Chat Direto</h3>
-                        <p class="text-sm leading-relaxed">
-                            Tire dúvidas rápidas sobre substituições de última hora diretamente com o suporte ou com o
-                            seu nutricionista.
-                        </p>
-                    </div>
-
-                    <div class="cardBordaInterna">
-                        <div class="icone-corner">
-                            <div
-                                class="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-400 flex items-center justify-center border border-purple-500/25">
-                                <i data-lucide="droplet" class="w-6 h-6"></i>
-                            </div>
-                        </div>
-                        <div class="text-xs font-bold text-purple-400 uppercase tracking-wider mb-2">Rotina Diária</div>
-                        <h3 class="font-clash text-xl font-bold mb-3">Controle de Hidratação</h3>
-                        <p class="text-sm leading-relaxed">
-                            Lembretes inteligentes e metas diárias de consumo de água calculadas de forma personalizada
-                            para o seu peso.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ───────── SEÇÃO: SOBRE O NUTRICIONISTA ───────── -->
-        <section id="treino" class="py-24 px-6 border-t border-white/10 bg-obsidian-950 relative">
-            <div class="max-w-6xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Nutrição e treino trabalhando juntos
-                </h2>
-                <p class="text-slate-400 max-w-2xl mb-10">A ApexFit reúne nutricionista e personal trainer no mesmo
-                    acesso: o aluno segue a dieta e o treino no mesmo lugar e ambos acompanham a evolução.</p>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="rounded-3xl border border-white/10 bg-white/5 p-8"><i data-lucide="apple"
-                            class="w-7 h-7 text-brand-400 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white mb-3">Espaço do Nutricionista</h3>
-                        <ul class="space-y-2 text-sm text-slate-300">
-                            <li>Plano alimentar por refeição, com substituições</li>
-                            <li>Chat de dúvidas e fotos de evolução</li>
-                            <li>Acompanhamento de peso e medidas</li>
-                        </ul>
-                    </div>
-                    <div class="rounded-3xl border border-white/10 bg-white/5 p-8"><i data-lucide="dumbbell"
-                            class="w-7 h-7 text-brand-400 mb-4"></i>
-                        <h3 class="text-xl font-bold text-white mb-3">Espaço do Personal Trainer</h3>
-                        <ul class="space-y-2 text-sm text-slate-300">
-                            <li>Treinos por dia da semana e grupo muscular</li>
-                            <li>Séries, repetições, carga, descanso e vídeo por exercício</li>
-                            <li>Aluno marca cada exercício concluído e baixa o treino em PDF</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="sobre" class="py-24 px-6 border-t border-white/10 bg-obsidian-950/60 relative">
+        <!-- ───────── SEÇÃO: SOBRE OS PROFISSIONAIS (COMO FUNCIONA O CONTATO) ───────── -->
+        <section id="sobre" class="py-24 px-6 border-t border-gold/20 bg-navy-950/80 relative">
             <div class="max-w-6xl mx-auto">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
                     <div class="lg:col-span-5 text-center lg:text-left">
                         <div class="relative inline-block">
                             <div
-                                class="w-64 h-80 sm:w-80 sm:h-[420px] rounded-3xl overflow-hidden border-2 border-brand-500/30 shadow-2xl relative mx-auto bg-slate-900">
+                                class="w-64 h-80 sm:w-80 sm:h-[420px] rounded-3xl overflow-hidden border-2 border-gold-500/40 shadow-2xl relative mx-auto bg-slate-900">
                                 <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800"
-                                    alt="Nutricionista Responsável"
+                                    alt="Profissionais ApexFit"
                                     class="w-full h-full object-cover grayscale contrast-125">
                             </div>
                             <div
-                                class="absolute -bottom-5 -right-5 bg-obsidian-900 border border-white/10 rounded-2xl px-5 py-3 shadow-2xl flex items-center gap-3 backdrop-blur-xl">
+                                class="absolute -bottom-5 -right-5 bg-navy-900 border border-gold/30 rounded-2xl px-5 py-3 shadow-2xl flex items-center gap-3 backdrop-blur-xl">
                                 <div
-                                    class="w-10 h-10 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold">
-                                    <i data-lucide="award" class="w-5 h-5"></i>
+                                    class="w-10 h-10 rounded-xl bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold">
+                                    <i data-lucide="shield-check" class="w-5 h-5"></i>
                                 </div>
                                 <div class="text-left">
-                                    <div class="text-xs font-bold">CRN Regularizado</div>
-                                    <div class="text-[10px] text-slate-400">Conselho Regional de Nutrição</div>
+                                    <div class="text-xs font-bold text-white">Equipa Certificada</div>
+                                    <div class="text-[10px] text-slate-400">Nutrição & Educação Física</div>
                                 </div>
                             </div>
                         </div>
@@ -1043,155 +451,127 @@
 
                     <div class="lg:col-span-7">
                         <div class="cardSubtitulo mb-4">
-                            <h3>SEU NUTRICIONISTA</h3>
+                            <h3>COMO FUNCIONA O ACOMPANHAMENTO</h3>
                         </div>
-                        <h2 class="font-clash text-3xl sm:text-5xl font-bold tracking-tight mb-5 leading-tight">
-                            CIÊNCIA APLICADA SEM TERRORISMO NUTRICIONAL.
+                        <h2
+                            class="font-clash text-3xl sm:text-5xl font-bold tracking-tight mb-5 text-white leading-tight">
+                            SUPORTE INDIVIDUALIZADO COM <span class="text-gold-400">O NUTRICIONISTA E O PERSONAL</span>.
                         </h2>
-                        <p class="text-sm sm:text-base leading-relaxed mb-5 font-normal">
-                            Sou especialista em Nutrição Clínica e Esportiva, focado em emagrecimento definitivo,
-                            recomposição corporal e máxima performance cognitiva e atlética.
+                        <p class="text-sm sm:text-base text-slate-300 leading-relaxed mb-5">
+                            Na ApexFit, você não é apenas mais um número. O nosso ecossistema foi pensado para estreitar
+                            a relação entre você e os seus profissionais de saúde e treino.
                         </p>
-                        <p class="text-sm leading-relaxed mb-8">
-                            Acredito que a melhor dieta do mundo é aquela que você consegue manter com prazer por meses
-                            e anos. Por isso, utilizo estratégias flexíveis apoiadas por tecnologia digital própria para
-                            garantir que você nunca fique sem rumo.
-                        </p>
-
-                        <!-- Menu Suspenso de Ações Rápidas -->
-                        <div class="relative group">
-                            <!-- Botão Principal -->
-                            <button type="button"
-                                class="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-4 py-2 rounded-xl border border-slate-700/80 transition-all relative">
-                                <i data-lucide="layers" class="w-4 h-4 text-brand-400"></i>
-                                <span class="hidden sm:inline">Ações Rápidas</span>
-                                <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
-
-                                <!-- Badge de notificação transferido para o botão principal -->
-                                <span id="badge-header-counter"
-                                    class="hidden absolute -top-2 -right-2 min-w-[18px] h-[18px] bg-red-600 text-white text-[10px] font-black rounded-full border-2 border-slate-900 flex items-center justify-center animate-pulse">0</span>
-                            </button>
-
-                            <!-- Lista Suspensa -->
-                            <div
-                                class="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-700 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
-
-                                <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
-                                    class="w-full text-left flex items-center gap-2.5 px-4 py-3 text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800 transition-colors">
-                                    <i data-lucide="user-plus" class="w-4 h-4 text-emerald-400"></i> + Aluno
-                                </button>
-
-                                <button onclick="navegarParaSecao('secao-cadastrar-refeicao')"
-                                    class="w-full text-left flex items-center gap-2.5 px-4 py-3 text-xs font-semibold text-slate-300 hover:text-brand-300 hover:bg-slate-800 transition-colors border-t border-slate-800">
-                                    <i data-lucide="utensils" class="w-4 h-4 text-brand-400"></i> + Dieta
-                                </button>
-
-                                <button onclick="navegarParaSecao('secao-fotos-alunos')"
-                                    class="w-full text-left flex items-center gap-2.5 px-4 py-3 text-xs font-semibold text-slate-300 hover:text-purple-300 hover:bg-slate-800 transition-colors border-t border-slate-800">
-                                    <i data-lucide="camera" class="w-4 h-4 text-purple-400"></i> Fotos Alunos
-                                </button>
-
-                                <button id="btn-header-duvidas" onclick="navegarParaSecao('canal-duvidas')"
-                                    class="w-full text-left flex items-center justify-between px-4 py-3 text-xs font-semibold text-slate-300 hover:text-red-400 hover:bg-slate-800 transition-colors border-t border-slate-800">
-                                    <div class="flex items-center gap-2.5">
-                                        <i data-lucide="message-square" class="w-4 h-4 text-red-400"></i> Dúvidas
-                                    </div>
-                                    <!-- Pill de notificação transferido para dentro do dropdown -->
-                                    <span id="badge-header-pill"
-                                        class="hidden bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full shadow-sm animate-pulse">0
-                                        nova(s)</span>
-                                </button>
-
+                        <div class="space-y-4 mb-8 text-sm text-slate-300">
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-6 h-6 rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    ✓</div>
+                                <div><strong>Nutricionista dedicado:</strong> Ajusta a sua dieta periodicamente com base
+                                    nas suas pesagens e feedback de saciedade ou desempenho.</div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-6 h-6 rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    ✓</div>
+                                <div><strong>Personal Trainer dedicado:</strong> Prescreve as fichas de treino alinhadas
+                                    com a sua periodização de carga e objetivo estético ou funcional.</div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-6 h-6 rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0 mt-0.5">
+                                    ✓</div>
+                                <div><strong>Canal de Mensagens Exclusivo:</strong> O contacto para tirar dúvidas
+                                    rápidas de última hora é feito de forma segura e direta através do chat interno da
+                                    plataforma ou WhatsApp de suporte.</div>
                             </div>
                         </div>
 
-                        <a href="https://wa.me/5581997969058?text=Ol%C3%A1%20Nutri%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20acompanhamento!"
-                            target="_blank" class="botao botaoPrimario">
-                            <span>FALAR DIRETAMENTE COMIGO</span>
-                            <div class="divSeta">
-                                <i data-lucide="message-circle" class="w-5 h-5"></i>
-                            </div>
+                        <a href="https://wa.me/5581997969058?text=Olá%2C%20gostaria%20de%20falar%20com%20a%20equipa%20ApexFit!"
+                            target="_blank" class="botaoDourado">
+                            <span>FALAR COM A EQUIPA</span>
+                            <div class="divSeta"><i data-lucide="message-circle" class="w-5 h-5"></i></div>
                         </a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ───────── SEÇÃO: FAQ ───────── -->
-        <section id="faq" class="py-24 px-6 border-t border-white/10 bg-obsidian-950 relative">
+        <!-- ───────── SEÇÃO: NOVO BLOCO DE FAQ (DÚVIDAS) ───────── -->
+        <section id="faq" class="py-24 px-6 border-t border-gold/20 bg-navy-950 relative">
             <div class="max-w-3xl mx-auto">
                 <div class="text-center mb-16">
                     <div class="cardSubtitulo mx-auto mb-4">
-                        <h3>TIRE SUAS DÚVIDAS</h3>
+                        <h3>ESCLARECIMENTOS</h3>
                     </div>
-                    <h2 class="font-clash text-3xl sm:text-5xl font-bold tracking-tight mb-3">
-                        PERGUNTAS FREQUENTES
+                    <h2 class="font-clash text-3xl sm:text-5xl font-bold tracking-tight mb-3 text-white">
+                        PERGUNTAS FREQUENTES <span class="text-gold-400">SOBRE A APEXFIT</span>
                     </h2>
-                    <p class="text-sm sm:text-base">
-                        Tudo o que você precisa saber sobre a consultoria e o uso da plataforma digital.
+                    <p class="text-sm sm:text-base text-slate-300">
+                        Tudo o que você precisa de saber sobre o funcionamento unificado de treino e nutrição.
                     </p>
                 </div>
 
                 <div class="space-y-4" id="faq-container">
-                    <div class="glass-card rounded-2xl p-6 border border-white/10 cursor-pointer faq-item hover:border-brand-500/40 transition-all"
+                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all"
                         onclick="toggleFaq(this)">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-base font-bold">Como recebo o acesso à Área do Aluno?</h3>
-                            <i data-lucide="chevron-down" class="w-5 h-5 text-brand-400 faq-icon"></i>
+                            <h3 class="text-base font-bold text-white">Como é feito o acesso conjuto à nutrição e ao
+                                treino?</h3>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gold-400 faq-icon"></i>
                         </div>
                         <div class="faq-answer">
-                            <p class="pt-4 text-sm leading-relaxed">
-                                Logo após a sua consulta (seja presencial ou por videochamada online), o nutricionista
-                                estrutura todo o seu plano alimentar personalizado no portal e envia seus dados de
-                                acesso exclusivos via WhatsApp e e-mail.
+                            <p class="pt-4 text-sm text-slate-300 leading-relaxed">
+                                Ao fazer o login na sua Área do Aluno com as credenciais fornecidas pela nossa equipa, o
+                                seu painel exibe simultaneamente o seu plano alimentar completo e as suas fichas de
+                                treino atualizadas pelo personal trainer.
                             </p>
                         </div>
                     </div>
 
-                    <div class="glass-card rounded-2xl p-6 border border-white/10 cursor-pointer faq-item hover:border-brand-500/40 transition-all"
+                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all"
                         onclick="toggleFaq(this)">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-base font-bold">Vou precisar cortar tudo o que gosto de comer?
-                            </h3>
-                            <i data-lucide="chevron-down" class="w-5 h-5 text-brand-400 faq-icon"></i>
+                            <h3 class="text-base font-bold text-white">Posso contratar apenas o treino ou apenas a
+                                nutrição?</h3>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gold-400 faq-icon"></i>
                         </div>
                         <div class="faq-answer">
-                            <p class="pt-4 text-sm leading-relaxed">
-                                Absolutamente não! A metodologia ApexFit é estruturada com base na flexibilidade
-                                inteligente. Incorporamos seus alimentos favoritos de forma calculada para que você
-                                atinja seus objetivos com satisfação e sustentabilidade.
+                            <p class="pt-4 text-sm text-slate-300 leading-relaxed">
+                                Sim! Embora a sinergia entre ambos traga os resultados mais rápidos e expressivos, a
+                                plataforma adapta-se ao plano contratado, ativando os módulos correspondentes ao seu
+                                perfil de acompanhamento.
                             </p>
                         </div>
                     </div>
 
-                    <div class="glass-card rounded-2xl p-6 border border-white/10 cursor-pointer faq-item hover:border-brand-500/40 transition-all"
+                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all"
                         onclick="toggleFaq(this)">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-base font-bold">Como funcionam as opções de substituição no
-                                portal?</h3>
-                            <i data-lucide="chevron-down" class="w-5 h-5 text-brand-400 faq-icon"></i>
+                            <h3 class="text-base font-bold text-white">Como envio fotos e atualizo o meu peso para os
+                                profissionais?</h3>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gold-400 faq-icon"></i>
                         </div>
                         <div class="faq-answer">
-                            <p class="pt-4 text-sm leading-relaxed">
-                                Cada refeição cadastrada possui uma lista de alimentos alternativos nutricionalmente
-                                equivalentes. Se hoje você não quiser comer frango ou arroz, basta abrir a aba de
-                                substituição e escolher a opção recomendada pelo nutri.
+                            <p class="pt-4 text-sm text-slate-300 leading-relaxed">
+                                No seu portal, você tem uma galeria de evolução corporal protegida por palavra-passe e
+                                um gráfico dedicado ao registo periódico de peso. Os profissionais visualizam as
+                                atualizações instantaneamente no painel administrativo deles.
                             </p>
                         </div>
                     </div>
 
-                    <div class="glass-card rounded-2xl p-6 border border-white/10 cursor-pointer faq-item hover:border-brand-500/40 transition-all"
+                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all"
                         onclick="toggleFaq(this)">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-base font-bold">Minhas fotos corporais ficam seguras na galeria?
-                            </h3>
-                            <i data-lucide="chevron-down" class="w-5 h-5 text-brand-400 faq-icon"></i>
+                            <h3 class="text-base font-bold text-white">O que acontece se eu precisar de alterar um
+                                exercício ou alimento?</h3>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gold-400 faq-icon"></i>
                         </div>
                         <div class="faq-answer">
-                            <p class="pt-4 text-sm leading-relaxed">
-                                Sim, 100% seguras. A galeria de evolução possui bloqueio por senha pessoal criptografada
-                                e é visualizada exclusivamente por você e pelo nutricionista no painel administrativo
-                                para fins de comparação clínica.
+                            <p class="pt-4 text-sm text-slate-300 leading-relaxed">
+                                Você pode utilizar as listas de substituição inteligentes integradas no cardápio ou
+                                enviar uma mensagem direta através do chat com os profissionais para que eles façam os
+                                ajustes necessários.
                             </p>
                         </div>
                     </div>
@@ -1201,129 +581,44 @@
     </main>
 
     <!-- ───────── FOOTER ───────── -->
-    <footer class="border-t border-white/10 bg-obsidian-950 py-16 px-6">
+    <footer class="border-t border-gold/20 bg-navy-950 py-16 px-6">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
             <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-2xl bg-brand-600 flex items-center justify-center text-white">
-                    <i data-lucide="leaf" class="w-5 h-5"></i>
+                <div
+                    class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-gold-600 to-amber-300 flex items-center justify-center text-navy-950">
+                    <i data-lucide="zap" class="w-5 h-5"></i>
                 </div>
-                <div class="font-clash text-2xl font-bold tracking-tight">
-                    NUTRI<span class="text-brand-400">LIFE</span>
+                <div class="font-clash text-2xl font-bold tracking-tight text-white">
+                    APEX<span class="text-gold-400">FIT</span>
                 </div>
             </div>
 
-            <div class="flex flex-wrap items-center justify-center gap-8 text-xs font-bold uppercase tracking-wider">
-                <a href="#metodo" class="hover:text-brand-400 transition-colors">O Método</a>
-                <a href="#plataforma" class="hover:text-brand-400 transition-colors">A Plataforma</a>
-                <a href="#treino" class="hover:text-brand-400 transition-colors">Personal Trainer</a>
-                <a href="login.html" class="hover:text-brand-400 transition-colors">Área do Aluno</a>
+            <div
+                class="flex flex-wrap items-center justify-center gap-8 text-xs font-bold uppercase tracking-wider text-slate-300">
+                <a href="#plataforma" class="hover:text-gold-400 transition-colors">A Plataforma</a>
+                <a href="#sobre" class="hover:text-gold-400 transition-colors">Profissionais</a>
+                <a href="login.html" class="hover:text-gold-400 transition-colors">Área do Aluno</a>
                 <a href="https://wa.me/5581997969058" target="_blank"
-                    class="hover:text-brand-400 transition-colors">Suporte WhatsApp</a>
+                    class="hover:text-gold-400 transition-colors">Suporte WhatsApp</a>
             </div>
 
-            <div class="text-xs text-center md:text-right font-medium">
+            <div class="text-xs text-center md:text-right font-medium text-slate-400">
                 © 2026 ApexFit Digital Platform.<br>
-                Nutrição Clínica & Esportiva de Alta Performance.
+                Nutrição & Training de Alta Performance.
             </div>
         </div>
     </footer>
 
-    <!-- ───────── SCRIPTS ───────── -->
     <script>
         lucide.createIcons();
 
-        function atualizarIconesTema(isLight) {
-            document.querySelectorAll('.theme-icon-sun').forEach(el => {
-                if (isLight) {
-                    el.classList.remove('hidden');
-                } else {
-                    el.classList.add('hidden');
-                }
-            });
-            document.querySelectorAll('.theme-icon-moon').forEach(el => {
-                if (isLight) {
-                    el.classList.add('hidden');
-                } else {
-                    el.classList.remove('hidden');
-                }
-            });
-            document.querySelectorAll('.theme-text-label').forEach(el => {
-                el.textContent = isLight ? 'Alternar para Modo Escuro' : 'Alternar para Modo Claro';
-            });
-            document.querySelectorAll('.theme-btn-toggle').forEach(el => {
-                el.setAttribute('title', isLight ? 'Mudar para Modo Escuro' : 'Mudar para Modo Claro');
-                el.setAttribute('aria-label', isLight ? 'Mudar para Modo Escuro' : 'Mudar para Modo Claro');
-            });
-        }
-
-        function alternarTema() {
-            const isCurrentlyLight = document.documentElement.classList.contains('light-mode');
-            if (isCurrentlyLight) {
-                document.documentElement.classList.remove('light-mode');
-                localStorage.setItem('nutrilife_theme', 'dark');
-                atualizarIconesTema(false);
-            } else {
-                document.documentElement.classList.add('light-mode');
-                localStorage.setItem('nutrilife_theme', 'light');
-                atualizarIconesTema(true);
-            }
-        }
-
-        atualizarIconesTema(document.documentElement.classList.contains('light-mode'));
-
         window.addEventListener('load', () => {
             const preloader = document.getElementById('preloader');
-            const percentEl = document.getElementById('preloader-percent');
-            const fillEl = document.getElementById('preloader-fill');
-            let progress = 0;
-
-            const interval = setInterval(() => {
-                progress += Math.floor(Math.random() * 8) + 4;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    percentEl.textContent = '100%';
-                    fillEl.style.clipPath = 'inset(0% 0 0 0)';
-
-                    setTimeout(() => {
-                        preloader.classList.add('loaded');
-                    }, 400);
-                } else {
-                    percentEl.textContent = progress + '%';
-                    const insetVal = 100 - progress;
-                    fillEl.style.clipPath = `inset(${insetVal}% 0 0 0)`;
-                }
-            }, 30);
+            if (preloader) {
+                preloader.style.opacity = '0';
+                setTimeout(() => preloader.style.display = 'none', 500);
+            }
         });
-
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const navLinks = document.querySelectorAll('.mobile-nav-link');
-        const hamburgerSvg = document.getElementById('hamburger-svg');
-        const closeSvg = document.getElementById('close-svg');
-
-        if (menuBtn && mobileMenu) {
-            menuBtn.addEventListener('click', () => {
-                const isHidden = mobileMenu.classList.contains('hidden');
-                if (isHidden) {
-                    mobileMenu.classList.remove('hidden');
-                    if (hamburgerSvg) hamburgerSvg.classList.add('hidden');
-                    if (closeSvg) closeSvg.classList.remove('hidden');
-                } else {
-                    mobileMenu.classList.add('hidden');
-                    if (hamburgerSvg) hamburgerSvg.classList.remove('hidden');
-                    if (closeSvg) closeSvg.classList.add('hidden');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                    if (hamburgerSvg) hamburgerSvg.classList.remove('hidden');
-                    if (closeSvg) closeSvg.classList.add('hidden');
-                });
-            });
-        }
 
         function toggleFaq(card) {
             const answer = card.querySelector('.faq-answer');

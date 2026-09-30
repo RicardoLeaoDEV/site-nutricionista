@@ -25,18 +25,22 @@
             theme: {
                 extend: {
                     fontFamily: {
+                        clash: ['"Clash Display"', '"Plus Jakarta Sans"', 'sans-serif'],
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     },
                     colors: {
                         brand: {
-                            50: '#ecfdf5',
-                            100: '#d1fae5',
-                            400: '#34d399',
-                            500: '#10b981',
-                            600: '#059669',
-                            700: '#047857',
-                            900: '#064e3b',
-                        }
+                            50:  '#fefce8',
+                            100: '#fef9c3',
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                            700: '#a16207',
+                            900: '#713f12',
+                            950: '#020408',
+                        },
+                        navy: { 900: '#030712', 950: '#020408' },
+                        gold: { 400: '#facc15', 500: '#eab308', 600: '#ca8a04' },
                     }
                 }
             }
@@ -59,42 +63,22 @@
 
         /* Ambient Glow Orbs para profundidade tridimensional */
         .ambient-glow-1 {
-            position: fixed;
-            top: -10%;
-            left: 15%;
-            width: 550px;
-            height: 550px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0) 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(50px);
+            position: fixed; top: -10%; left: 15%;
+            width: 550px; height: 550px;
+            background: radial-gradient(circle, rgba(234,179,8,0.13) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(55px);
         }
-
         .ambient-glow-2 {
-            position: fixed;
-            top: 40%;
-            right: -5%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.09) 0%, rgba(99, 102, 241, 0) 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(60px);
+            position: fixed; top: 40%; right: -5%;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(250,204,21,0.07) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(60px);
         }
-
         .ambient-glow-3 {
-            position: fixed;
-            bottom: -10%;
-            left: 30%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, rgba(168, 85, 247, 0) 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(60px);
+            position: fixed; bottom: -10%; left: 30%;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(202,138,4,0.07) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(60px);
         }
 
         /* Símbolo de Notificação Pulsante (Vermelho e Branco) */
@@ -140,6 +124,17 @@
             }
         }
 
+        /* Links de Navegação entre Páginas */
+        .nav-dash-link {
+            display: flex; align-items: center; gap: 6px;
+            padding: 6px 12px; border-radius: 10px;
+            font-size: 12px; font-weight: 600;
+            color: #94a3b8; transition: all 0.2s;
+            text-decoration: none; border: 1px solid transparent;
+        }
+        .nav-dash-link:hover { background: rgba(255,255,255,0.06); color: #f8fafc; }
+        .nav-dash-link.ativo { background: rgba(234,179,8,0.12); color: #facc15; border-color: rgba(234,179,8,0.30); }
+
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -156,7 +151,7 @@
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #10b981;
+            background: #eab308;
         }
 
         /* Galeria de Evolução */
@@ -254,7 +249,7 @@
 </head>
 
 <body
-    class="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-brand-500 selection:text-white flex flex-col justify-between relative overflow-x-hidden">
+    class="bg-[#020408] text-slate-100 min-h-screen font-sans selection:bg-gold-500 selection:text-[#020408] flex flex-col justify-between relative overflow-x-hidden">
 
     <!-- Efeitos de iluminação de profundidade (Glassmorphism orbs) -->
     <div class="ambient-glow-1" aria-hidden="true"></div>
@@ -263,71 +258,37 @@
 
     <!-- Topo da Aplicação / Barra de Navegação -->
     <header class="bg-slate-900/90 border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-md">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-18 py-3.5 flex items-center justify-between">
-            <div class="flex items-center gap-3">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-4">
                 <a href="index.html" class="flex items-center gap-2 group" title="Ir para a página inicial">
-                    <div
-                        class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
-                        <i data-lucide="leaf" class="w-5 h-5"></i>
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-gold-600 to-gold-400 flex items-center justify-center text-[#020408] shadow-md shadow-gold-500/20 group-hover:scale-105 transition-transform">
+                        <i data-lucide="zap" class="w-5 h-5"></i>
                     </div>
                     <span class="text-xl font-extrabold tracking-tight text-white hidden sm:inline">
-                        NUTRI<span class="text-brand-400">LIFE</span>
+                        APEX<span class="text-gold-400">FIT</span>
                     </span>
                 </a>
-                <span
-                    class="text-xs bg-brand-500/10 text-brand-400 px-3 py-1 rounded-full border border-brand-500/20 font-semibold flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>
-                    Portal do Aluno
-                </span>
+                <!-- Navegação entre páginas (desktop) -->
+                <nav class="hidden md:flex items-center gap-1 ml-2">
+                    <a href="dashboard.html" class="nav-dash-link ativo"><i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>Meu Painel</a>
+                    <a href="treinos.html" class="nav-dash-link"><i data-lucide="dumbbell" class="w-3.5 h-3.5"></i>Meus Treinos</a>
+                    <a href="nutricao.html" class="nav-dash-link"><i data-lucide="utensils" class="w-3.5 h-3.5"></i>Nutrição</a>
+                </nav>
             </div>
 
             <!-- Ações do Cabeçalho -->
             <div class="flex items-center gap-3">
-                <!-- Botão de Atalho Admin (Exibido para o nutricionista/admin) -->
-                <a id="link-personal" href="personal.html" class="hidden text-xs font-semibold text-orange-400 hover:text-orange-300 px-3 py-2">Espaço do Personal</a>
                 <a id="link-admin" href="admin.html"
-                    class="hidden text-xs bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 px-3.5 py-2 rounded-xl border border-emerald-500/20 font-semibold transition-all flex items-center gap-1.5 shadow-sm">
+                    class="hidden text-xs bg-gold-500/10 text-gold-400 hover:bg-gold-500/20 px-3.5 py-2 rounded-xl border border-gold-500/20 font-semibold transition-all flex items-center gap-1.5 shadow-sm">
                     <i data-lucide="settings" class="w-3.5 h-3.5"></i>
                     <span>Painel Admin</span>
                 </a>
 
-                <!-- NOVO: Menu Suspenso de Ações Rápidas (Estilo Admin) -->
-                <div class="relative group">
-                    <button type="button"
-                        class="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all relative">
-                        <i data-lucide="layers" class="w-4 h-4 text-brand-400"></i>
-                        <span class="hidden sm:inline">Ações Rápidas</span>
-                        <i data-lucide="chevron-down"
-                            class="w-3.5 h-3.5 text-slate-400 group-hover:rotate-180 transition-transform"></i>
-                    </button>
-
-                    <div
-                        class="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
-                        <div class="p-1 space-y-0.5">
-                            <button onclick="navegarSecaoDashboard(event, 'secao-plano-alimentar')"
-                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-brand-400 hover:bg-slate-800 transition-colors">
-                                <i data-lucide="clipboard-list" class="w-4 h-4 text-brand-400"></i>
-                                <span>Plano Alimentar</span>
-                            </button>
-                            <button onclick="navegarSecaoDashboard(event, 'secao-galeria')"
-                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-400 hover:bg-slate-800 transition-colors">
-                                <i data-lucide="camera" class="w-4 h-4 text-purple-400"></i>
-                                <span>Galeria de Fotos</span>
-                            </button>
-                            <button onclick="navegarSecaoDashboard(event, 'secao-peso')"
-                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800 transition-colors">
-                                <i data-lucide="line-chart" class="w-4 h-4 text-emerald-400"></i>
-                                <span>Evolução do Peso</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
                 <button type="button"
                     onclick="if(document.getElementById('chat-window').classList.contains('hidden')) document.getElementById('chat-toggle-btn').click();"
-                    class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-brand-400 hover:text-brand-300 text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all cursor-pointer">
+                    class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-gold-400 hover:text-gold-300 text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all cursor-pointer">
                     <i data-lucide="message-circle" class="w-4 h-4"></i>
-                    Dúvida com o Nutri
+                    Chat com o profissional
                 </button>
 
                 <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
@@ -335,12 +296,9 @@
                 <div class="flex items-center gap-2">
                     <button type="button" onclick="abrirModalFotoPerfil()"
                         class="relative group cursor-pointer focus:outline-none" title="Alterar foto de perfil">
-                        <div class="w-9 h-9 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/40 flex items-center justify-center font-bold text-xs overflow-hidden shadow-sm group-hover:border-brand-400 group-hover:scale-105 transition-all"
-                            id="user-avatar">
-                            A
-                        </div>
-                        <div
-                            class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-brand-600 text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                        <div class="w-9 h-9 rounded-full bg-gold-500/20 text-gold-400 border border-gold-500/40 flex items-center justify-center font-bold text-xs overflow-hidden shadow-sm group-hover:border-gold-400 group-hover:scale-105 transition-all"
+                            id="user-avatar">A</div>
+                        <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-gold-600 text-[#020408] flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
                             <i data-lucide="camera" class="w-2.5 h-2.5"></i>
                         </div>
                     </button>
@@ -352,18 +310,23 @@
                 </div>
             </div>
         </div>
+        <!-- Nav mobile -->
+        <div class="md:hidden border-t border-slate-800/60 flex">
+            <a href="dashboard.html" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-gold-400 border-b-2 border-gold-500 bg-gold-500/5"><i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>Painel</a>
+            <a href="treinos.html" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-slate-400"><i data-lucide="dumbbell" class="w-3.5 h-3.5"></i>Treinos</a>
+            <a href="nutricao.html" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-slate-400"><i data-lucide="utensils" class="w-3.5 h-3.5"></i>Nutrição</a>
+        </div>
     </header>
 
     <!-- Conteúdo Principal -->
     <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1 w-full">
 
         <!-- Boas-vindas e Data -->
-        <div
-            class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-900/90 to-brand-950/20 p-6 rounded-3xl border border-slate-800 shadow-xl">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-[#030712]/90 to-[#0a0a02]/40 p-6 rounded-3xl border border-gold-500/15 shadow-xl">
             <div>
-                <div class="text-xs font-semibold uppercase tracking-wider text-brand-400 mb-1" id="data-hoje">--</div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-gold-400 mb-1" id="data-hoje">--</div>
                 <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                    <span id="saudacao">Olá</span>, <span id="nome-aluno" class="text-brand-400">Aluno(a)</span>! 👋
+                    <span id="saudacao">Olá</span>, <span id="nome-aluno" class="text-gold-400">Aluno(a)</span>! 👋
                 </h1>
                 <p class="text-sm text-slate-400 mt-1">
                     Mantenha a consistência. Cada refeição saudável conta para a sua transformação.
@@ -448,12 +411,12 @@
                         <div class="text-2xl font-extrabold text-white" id="stat-refeicoes-contador">0 / 0</div>
                     </div>
                     <div
-                        class="w-11 h-11 rounded-2xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center">
+                        class="w-11 h-11 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/20 flex items-center justify-center">
                         <i data-lucide="utensils" class="w-5 h-5"></i>
                     </div>
                 </div>
                 <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between">
-                    <span class="text-xs font-medium text-emerald-400" id="stat-refeicoes-status">Marque suas
+                    <span class="text-xs font-medium text-lime-400" id="stat-refeicoes-status">Marque suas
                         refeições</span>
                 </div>
             </div>
@@ -483,54 +446,67 @@
         </div>
 
         <!-- ============================================================== -->
-        <!-- 1. SEÇÃO: O SEU PLANO ALIMENTAR PRESCRITO (PRIMEIRO)           -->
+        <!-- BLOCO: RESUMO DO DIA — ATALHOS RÁPIDOS PARA TREINOS E NUTRIÇÃO -->
         <!-- ============================================================== -->
-        <section id="secao-plano-alimentar" class="space-y-4 scroll-mt-36">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div>
-                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i data-lucide="clipboard-list" class="w-5 h-5 text-brand-400"></i>
-                        O seu Plano Alimentar Prescrito
-                    </h2>
-                    <p class="text-xs text-slate-400">Consulte suas refeições diárias e marque quando concluir cada uma
-                    </p>
-                </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                <div class="flex items-center gap-2.5 flex-wrap">
-                    <!-- Botão Geração Automática de PDF do Plano Alimentar -->
-                    <button type="button" onclick="gerarPdfPlanoAlimentar()" id="btn-exportar-pdf"
-                        class="flex items-center gap-2 bg-gradient-to-r from-brand-600 to-teal-500 hover:from-brand-500 hover:to-teal-400 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 transition-all duration-200 active:scale-95 cursor-pointer">
-                        <i data-lucide="file-down" class="w-4 h-4" id="btn-pdf-icon"></i>
-                        <span id="btn-pdf-text">Baixar Cardápio em PDF</span>
-                        <div id="btn-pdf-spinner"
-                            class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin">
+            <!-- Card Atalho: Refeição de Hoje -->
+            <div class="glass-panel p-5 rounded-2xl border border-slate-800 hover:border-lime-500/30 transition-all group">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-lime-500/10 text-lime-400 border border-lime-500/20 flex items-center justify-center">
+                            <i data-lucide="utensils" class="w-4.5 h-4.5"></i>
                         </div>
-                    </button>
-
-                    <!-- Botão de Impressão Rápida / Salvar Nativo -->
-                    <button type="button" onclick="imprimirPlanoAlimentar()" id="btn-imprimir-pdf"
-                        title="Imprimir diretamente / Salvar como PDF nativo"
-                        class="flex items-center gap-1.5 p-2.5 sm:px-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-all active:scale-95 cursor-pointer">
-                        <i data-lucide="printer" class="w-4 h-4"></i>
-                        <span class="text-xs font-bold hidden md:inline">Imprimir</span>
-                    </button>
+                        <div>
+                            <h2 class="text-sm font-bold text-white">Refeição de Hoje</h2>
+                            <p class="text-[11px] text-slate-400">Progresso do plano alimentar</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-lime-400" id="dashboard-refeicoes-badge">-- / --</span>
                 </div>
+                <!-- Mini barra de progresso -->
+                <div class="h-1.5 rounded-full bg-slate-800/80 overflow-hidden mb-3">
+                    <div class="h-full rounded-full bg-gradient-to-r from-lime-600 to-emerald-400 transition-all duration-500" id="dashboard-refeicoes-fill" style="width:0%"></div>
+                </div>
+                <!-- Preview das próximas refeições -->
+                <div id="dashboard-proximas-refeicoes" class="space-y-1.5 mb-4 min-h-[48px]">
+                    <p class="text-xs text-slate-500">Carregando...</p>
+                </div>
+                <a href="nutricao.html" class="flex items-center justify-between w-full bg-lime-500/10 hover:bg-lime-500/20 text-lime-400 hover:text-lime-300 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-lime-500/20 transition-all group-hover:border-lime-500/40">
+                    <span>Ver Plano Alimentar Completo</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </a>
             </div>
 
-            <div id="container-dietas" class="space-y-4">
-                <!-- Skeleton Loader durante o carregamento -->
-                <div class="animate-pulse space-y-4">
-                    <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
-                    <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
-                    <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
+            <!-- Card Atalho: Meus Treinos -->
+            <div class="glass-panel p-5 rounded-2xl border border-slate-800 hover:border-orange-500/30 transition-all group">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center justify-center">
+                            <i data-lucide="dumbbell" class="w-4.5 h-4.5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-bold text-white">Meus Treinos</h2>
+                            <p class="text-[11px] text-slate-400">Fichas do personal trainer</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-orange-400" id="dashboard-treinos-badge">--</span>
                 </div>
+                <!-- Preview dos treinos -->
+                <div id="dashboard-preview-treinos" class="space-y-1.5 mb-4 min-h-[48px]">
+                    <p class="text-xs text-slate-500">Carregando...</p>
+                </div>
+                <!-- Mini barra de progresso de treinos -->
+                <div class="h-1.5 rounded-full bg-slate-800/80 overflow-hidden mb-3">
+                    <div class="h-full rounded-full bg-gradient-to-r from-orange-600 to-amber-400 transition-all duration-500" id="dashboard-treinos-fill" style="width:0%"></div>
+                </div>
+                <a href="treinos.html" class="flex items-center justify-between w-full bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 hover:text-orange-300 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-orange-500/20 transition-all group-hover:border-orange-500/40">
+                    <span>Ver Ficha de Treinos Completa</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </a>
             </div>
-        </section>
-        <section id="secao-treinos" class="space-y-4 scroll-mt-36">
-            <div><h2 class="text-xl font-bold text-white flex items-center gap-2"><i data-lucide="dumbbell" class="w-5 h-5 text-orange-400"></i>Meus Treinos</h2>
-            <p class="text-xs text-slate-400">Treinos prescritos pelo seu personal. Marque cada exercício ao concluir.</p></div>
-            <div id="container-treinos" class="space-y-4"><p class="text-sm text-slate-500">Carregando treinos...</p></div>
-        </section>
+
+        </div>
 
 
 
@@ -1251,121 +1227,117 @@
 
             const userId = session.user.id;
 
-            // 1. Carregar Dietas
-            const { data: dietas, error: erroDieta } = await supabaseClient
-                .from('dietas')
-                .select('*')
-                .eq('aluno_id', userId);
+            // === RESUMO DE REFEIÇÕES (card atalho) ===
+            carregarResumoDietas(userId);
 
-            const container = document.getElementById('container-dietas');
-
-            if (erroDieta) {
-                container.innerHTML = `
-                    <div class="glass-panel border border-rose-500/30 rounded-2xl p-6 text-center text-rose-300">
-                        <i data-lucide="alert-triangle" class="w-8 h-8 text-rose-400 mx-auto mb-2"></i>
-                        <p class="font-bold">Não foi possível carregar seu plano alimentar.</p>
-                        <p class="text-xs text-rose-400/80 mt-1">${erroDieta.message}</p>
-                    </div>
-                `;
-                lucide.createIcons();
-            } else if (!dietas || dietas.length === 0) {
-                window.dietasCarregadas = [];
-                container.innerHTML = `
-                    <div class="glass-panel border border-slate-800 rounded-3xl p-10 text-center text-slate-400">
-                        <div class="w-16 h-16 rounded-3xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center mx-auto mb-4">
-                            <i data-lucide="sparkles" class="w-8 h-8"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-white mb-2">Plano em Elaboração</h3>
-                        <p class="text-sm text-slate-400 max-w-md mx-auto mb-6">
-                            O seu nutricionista está calculando seus macronutrientes e montando um cardápio 100% individualizado.
-                        </p>
-                        <a href="https://wa.me/5581997969058?text=Ol%C3%A1%20Nutri%2C%20já%20tenho%20acesso%20ao%20portal%20e%20estou%20aguardando%20a%20liberação%20da%20minha%20dieta!" target="_blank"
-                            class="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-5 py-3 rounded-xl transition-all">
-                            <i data-lucide="message-circle" class="w-4 h-4"></i>
-                            Perguntar previsão ao Nutri
-                        </a>
-                    </div>
-                `;
-                lucide.createIcons();
-            } else {
-                window.dietasCarregadas = dietas;
-                totalRefeicoesCount = dietas.length;
-                const hojeKey = 'nutrilife_meals_' + new Date().toISOString().slice(0, 10);
-                const concluidas = JSON.parse(localStorage.getItem(hojeKey) || '[]');
-                atualizarContadorRefeicoes(concluidas.length);
-
-                container.innerHTML = '';
-                dietas.forEach((item, index) => {
-                    const itemRefeicaoId = item.id || `refeicao-${index}`;
-                    const isConcluida = concluidas.includes(itemRefeicaoId);
-                    const icone = obterIconeRefeicao(item.refeicao);
-
-                    let blocoSubstituicao = '';
-                    if (item.substituicoes) {
-                        blocoSubstituicao = `
-                            <div class="mt-4 pt-3.5 border-t border-slate-800/80 bg-slate-950/50 -mx-6 -mb-6 p-5 rounded-b-3xl">
-                                <div class="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">
-                                    <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
-                                    Opções de Substituição Prescritas:
-                                </div>
-                                <p class="text-xs text-slate-300 leading-relaxed">${item.substituicoes}</p>
-                            </div>
-                        `;
-                    }
-
-                    // Mensagem pré-formatada para o WhatsApp
-                    const msgWhatsApp = encodeURIComponent(`Olá Nutri, tenho uma dúvida sobre a refeição "${item.refeicao}" (${item.horario || ''}): `);
-
-                    container.innerHTML += `
-                        <div class="glass-panel border rounded-3xl p-6 transition-all duration-300 relative overflow-hidden group ${isConcluida ? 'border-brand-500/40 bg-brand-950/10' : 'border-slate-800 hover:border-slate-700'
-                        }" id="card-${itemRefeicaoId}">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800/80 gap-3">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-2xl ${isConcluida ? 'bg-brand-500/20 text-brand-400' : 'bg-slate-800 text-slate-300'} flex items-center justify-center shrink-0">
-                                        <i data-lucide="${icone}" class="w-5 h-5"></i>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                                            ${item.refeicao}
-                                            ${isConcluida ? '<span class="text-[10px] bg-brand-500/20 text-brand-400 font-bold px-2 py-0.5 rounded-full border border-brand-500/30">Feito ✓</span>' : ''}
-                                        </h3>
-                                        <span class="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                                            <i data-lucide="clock" class="w-3 h-3 text-brand-400"></i> ${item.horario || 'Horário flexível'}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div class="flex items-center gap-2 self-end sm:self-center">
-                                    <a href="https://wa.me/5581997969058?text=${msgWhatsApp}" target="_blank"
-                                        title="Dúvida nesta refeição"
-                                        class="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors border border-slate-700/60">
-                                        <i data-lucide="help-circle" class="w-4 h-4"></i>
-                                    </a>
-                                    <button onclick="toggleRefeicaoStatus('${itemRefeicaoId}')"
-                                        class="flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl transition-all ${isConcluida
-                            ? 'bg-brand-500/20 text-brand-400 border border-brand-500/40 hover:bg-brand-500/30'
-                            : 'bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700'
-                        }">
-                                        <i data-lucide="${isConcluida ? 'check-circle-2' : 'circle'}" class="w-4 h-4"></i>
-                                        <span>${isConcluida ? 'Concluída' : 'Marcar Feita'}</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="py-4">
-                                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">Alimentos e Porções:</span>
-                                <p class="text-slate-200 text-sm leading-relaxed whitespace-pre-line">${item.alimentos}</p>
-                            </div>
-
-                            ${blocoSubstituicao}
-                        </div>
-                    `;
-                });
-                lucide.createIcons();
-            }
+            // === RESUMO DE TREINOS (card atalho) ===
+            carregarResumoTreinos(userId);
 
             // 2. Carregar Histórico de Peso
             carregarGraficoPeso(userId);
+        }
+
+        // Resumo compacto das refeições para o card de atalho no dashboard
+        async function carregarResumoDietas(userId) {
+            const hojeKey = 'nutrilife_meals_' + new Date().toISOString().slice(0, 10);
+            const concluidas = JSON.parse(localStorage.getItem(hojeKey) || '[]');
+            const badgeEl = document.getElementById('dashboard-refeicoes-badge');
+            const fillEl = document.getElementById('dashboard-refeicoes-fill');
+            const proxEl = document.getElementById('dashboard-proximas-refeicoes');
+
+            try {
+                const { data: dietas } = await supabaseClient.from('dietas').select('id, refeicao, horario').eq('aluno_id', userId);
+
+                if (!dietas || !dietas.length) {
+                    if (proxEl) proxEl.innerHTML = '<p class="text-xs text-slate-500 italic">Plano ainda não cadastrado. <a href="nutricao.html" class="text-lime-400 underline">Ver mais</a></p>';
+                    return;
+                }
+
+                const total = dietas.length;
+                const done = concluidas.filter(id => dietas.find(d => d.id == id)).length;
+                const pct = Math.round((done / total) * 100);
+
+                if (badgeEl) badgeEl.textContent = `${done} / ${total}`;
+                if (fillEl) fillEl.style.width = pct + '%';
+
+                // Mostrar próximas refeições pendentes (até 3)
+                const pendentes = dietas.filter(d => !concluidas.includes(d.id)).slice(0, 3);
+                if (proxEl) {
+                    if (pendentes.length === 0) {
+                        proxEl.innerHTML = '<div class="flex items-center gap-2 text-xs text-lime-400 font-semibold"><i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>Todas as refeições concluídas hoje! 🎉</div>';
+                    } else {
+                        proxEl.innerHTML = pendentes.map(d => `
+                            <div class="flex items-center gap-2 bg-slate-900/60 rounded-lg px-3 py-1.5">
+                                <i data-lucide="circle" class="w-3 h-3 text-slate-600 shrink-0"></i>
+                                <span class="text-xs text-slate-300 flex-1 truncate">${d.refeicao}</span>
+                                ${d.horario ? `<span class="text-[10px] text-slate-500 shrink-0">${d.horario}</span>` : ''}
+                            </div>`).join('');
+                    }
+                    lucide.createIcons();
+                }
+
+                // Atualizar o contador de refeições no card de stats
+                const elContador = document.getElementById('stat-refeicoes-contador');
+                const elStatus = document.getElementById('stat-refeicoes-status');
+                if (elContador) elContador.textContent = `${done} / ${total}`;
+                if (elStatus) {
+                    if (done >= total) { elStatus.textContent = 'Todas concluídas hoje! 🔥'; elStatus.className = 'text-xs font-semibold text-lime-400 mt-1'; }
+                    else { elStatus.textContent = `${total - done} restantes hoje`; elStatus.className = 'text-xs font-medium text-slate-400 mt-1'; }
+                }
+                window.dietasCarregadas = dietas;
+
+            } catch (e) {
+                if (proxEl) proxEl.innerHTML = '<p class="text-xs text-slate-500">Erro ao carregar refeições.</p>';
+            }
+        }
+
+        // Resumo compacto dos treinos para o card de atalho no dashboard
+        async function carregarResumoTreinos(userId) {
+            const key = 'apexfit_treino_check_' + userId;
+            let feitos = {};
+            try { feitos = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
+
+            const badgeEl = document.getElementById('dashboard-treinos-badge');
+            const fillEl = document.getElementById('dashboard-treinos-fill');
+            const prevEl = document.getElementById('dashboard-preview-treinos');
+
+            try {
+                const { data } = await supabaseClient.from('treinos').select('id, treino_nome, exercicio, dia_semana').eq('aluno_id', userId).order('created_at');
+
+                if (!data || !data.length) {
+                    if (prevEl) prevEl.innerHTML = '<p class="text-xs text-slate-500 italic">Ficha ainda não cadastrada. <a href="treinos.html" class="text-orange-400 underline">Ver mais</a></p>';
+                    return;
+                }
+
+                // Grupos de treino
+                const grupos = {};
+                data.forEach(t => { (grupos[t.treino_nome] = grupos[t.treino_nome] || []).push(t); });
+                const nomesTreinos = Object.keys(grupos);
+                const totalExercicios = data.length;
+                const countFeitos = data.filter(e => feitos[e.id]).length;
+                const pct = Math.round((countFeitos / totalExercicios) * 100);
+
+                if (badgeEl) badgeEl.textContent = `${nomesTreinos.length} treinos`;
+                if (fillEl) fillEl.style.width = pct + '%';
+
+                if (prevEl) {
+                    prevEl.innerHTML = nomesTreinos.slice(0, 3).map(nome => {
+                        const ex = grupos[nome];
+                        const concl = ex.filter(e => feitos[e.id]).length;
+                        const p = Math.round((concl / ex.length) * 100);
+                        return `
+                            <div class="flex items-center gap-2 bg-slate-900/60 rounded-lg px-3 py-1.5">
+                                <div class="w-1.5 h-1.5 rounded-full ${p === 100 ? 'bg-emerald-400' : 'bg-orange-400'} shrink-0"></div>
+                                <span class="text-xs text-slate-300 flex-1 truncate">${nome}</span>
+                                <span class="text-[10px] ${p === 100 ? 'text-emerald-400' : 'text-orange-400'} font-bold shrink-0">${p}%</span>
+                            </div>`;
+                    }).join('');
+                    lucide.createIcons();
+                }
+
+            } catch (e) {
+                if (prevEl) prevEl.innerHTML = '<p class="text-xs text-slate-500">Erro ao carregar treinos.</p>';
+            }
         }
 
         // Alternar status de refeição
@@ -1374,11 +1346,11 @@
             if (agoraConcluida) {
                 showToast('Refeição registrada! 🥗', 'Parabéns por manter a disciplina no plano.', 'success');
             }
-            carregarDados();
         };
 
         // ───────────────── GERAÇÃO AUTOMÁTICA DE PDF DO PLANO ALIMENTAR ─────────────────
         function montarHtmlPlanoPdf(dietas, nomeAluno) {
+
             const dataHojeFormatada = new Date().toLocaleDateString('pt-BR', {
                 day: '2-digit',
                 month: 'long',
@@ -1483,7 +1455,7 @@
                     <!-- Recomendações Gerais no Rodapé -->
                     <div style="background-color: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 10px; color: #475569; line-height: 1.4;">
                         <strong style="color: #0f172a;">Recomendações ApexFit:</strong>
-                        Mastigue devagar e mantenha a consistência. Beba água ao longo do dia e evite grandes volumes de líquidos junto às refeições principais. Em caso de dúvidas, utilize o chat com o nutricionista no portal.
+                        Mastigue devagar e mantenha a consistência. Beba água ao longo do dia e evite grandes volumes de líquidos junto às refeições principais. Em caso de dúvidas, utilize o chat com o profissional no portal.
                     </div>
 
                     <div style="border-top: 1px solid #e2e8f0; padding-top: 10px; display: flex; justify-content: space-between; font-size: 9px; color: #94a3b8;">
@@ -2726,10 +2698,10 @@
         <div class="bg-slate-900/90 p-4 flex justify-between items-center border-b border-slate-800">
             <div class="flex items-center gap-2.5">
                 <div
-                    class="w-8 h-8 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold">
-                    N</div>
+                    class="w-8 h-8 rounded-xl bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold">
+                    P</div>
                 <div>
-                    <h3 class="text-xs font-bold text-white">Canal de Dúvidas com o Nutri</h3>
+                    <h3 class="text-xs font-bold text-white">Chat com o profissional</h3>
                     <span class="text-[10px] text-emerald-400 flex items-center gap-1">● Online</span>
                 </div>
             </div>
@@ -2741,8 +2713,7 @@
 
         <!-- Mensagens -->
         <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs bg-slate-950/40">
-            <div class="text-center text-slate-500 text-[11px] my-2">Envie sua dúvida sobre a dieta ou rotina. O nutri
-                responderá em breve!</div>
+            <div class="text-center text-slate-500 text-[11px] my-2">Envie sua mensagem ou dúvida sobre a rotina. Responderemos em breve!</div>
         </div>
 
         <!-- Input de Envio -->
@@ -2869,7 +2840,6 @@
   const { data: { session } } = await supabaseClient.auth.getSession();
   if (!session) return;
   const uid = session.user.id, box = document.getElementById('container-treinos');
-  if (uid === '04fb83ed-ec6b-4a56-9993-e99f32ededee' || (session.user.user_metadata || {}).papel === 'personal') document.getElementById('link-personal')?.classList.remove('hidden');
   const key = 'apexfit_treino_check_' + uid;
   let feitos = {}; try { feitos = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
   const { data, error } = await supabaseClient.from('treinos').select('*').eq('aluno_id', uid).order('created_at');

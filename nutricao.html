@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApexFit - Plano Alimentar</title>
+    <meta name="description" content="Consulte seu plano alimentar prescrito pelo nutricionista no portal ApexFit.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#f7fee7', 100: '#ecfccb', 400: '#a3e635', 500: '#84cc16', 600: '#65a30d', 700: '#4d7c0f', 900: '#1a2e05' },
+                        lime: { 400: '#a3e635', 500: '#84cc16', 600: '#65a30d' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: linear-gradient(135deg, rgba(10,18,10,0.85) 0%, rgba(5,10,5,0.92) 100%);
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255,255,255,0.07);
+            box-shadow: 0 20px 45px -15px rgba(0,0,0,0.75), inset 0 1px 1px 0 rgba(255,255,255,0.10);
+        }
+        .ambient-glow-1 { position:fixed; top:-10%; left:15%; width:550px; height:550px; background:radial-gradient(circle,rgba(132,204,22,0.14) 0%,transparent 70%); border-radius:50%; pointer-events:none; z-index:0; filter:blur(55px); }
+        .ambient-glow-2 { position:fixed; bottom:-10%; right:10%; width:500px; height:500px; background:radial-gradient(circle,rgba(101,163,13,0.09) 0%,transparent 70%); border-radius:50%; pointer-events:none; z-index:0; filter:blur(60px); }
+        ::-webkit-scrollbar { width:8px; }
+        ::-webkit-scrollbar-track { background:#050a05; }
+        ::-webkit-scrollbar-thumb { background:#1a2e1a; border-radius:4px; }
+        ::-webkit-scrollbar-thumb:hover { background:#84cc16; }
+        .nav-link { display:flex; align-items:center; gap:6px; padding:6px 12px; border-radius:10px; font-size:12px; font-weight:600; color:#94a3b8; transition:all 0.2s; text-decoration:none; border:1px solid transparent; }
+        .nav-link:hover { background:rgba(255,255,255,0.06); color:#f8fafc; }
+        .nav-link.ativo { background:rgba(132,204,22,0.14); color:#a3e635; border-color:rgba(132,204,22,0.30); }
+        .refeicao-card { transition: border-color 0.2s, box-shadow 0.2s; }
+        .refeicao-card.concluida { border-color: rgba(132,204,22,0.45); background: rgba(132,204,22,0.04); }
+        .refeicao-card:hover { box-shadow: 0 0 0 1px rgba(132,204,22,0.12); }
+        @keyframes slideInUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        .refeicao-anim { animation:slideInUp 0.35s ease forwards; opacity:0; }
+        #toast { transition:all 0.3s; }
+        @media print {
+            body { background:#ffffff !important; color:#0f172a !important; margin:0; padding:0; }
+            header, footer, #toast, .ambient-glow-1, .ambient-glow-2, #nav-actions, .btn-acao, #area-impressao-pdf ~ * { display:none !important; }
+            #area-impressao-pdf { display:block !important; position:static !important; width:100% !important; background:#fff !important; color:#0f172a !important; }
+            @page { size:A4 portrait; margin:12mm 15mm; }
+        }
+    </style>
+</head>
+
+<body class="bg-[#05080a] text-slate-100 min-h-screen font-sans selection:bg-lime-500 selection:text-[#05080a] flex flex-col relative overflow-x-hidden">
+
+    <div class="ambient-glow-1" aria-hidden="true"></div>
+    <div class="ambient-glow-2" aria-hidden="true"></div>
+
+    <!-- Header -->
+    <header class="bg-[#060d06]/95 border-b border-lime-500/10 sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="dashboard.html" class="flex items-center gap-2 group" title="Voltar ao Painel">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-lime-400 flex items-center justify-center text-[#05080a] shadow-md group-hover:scale-105 transition-transform">
+                        <i data-lucide="leaf" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-xl font-extrabold tracking-tight text-white hidden sm:inline">APEX<span class="text-brand-400">FIT</span></span>
+                </a>
+                <nav class="hidden md:flex items-center gap-1 ml-2">
+                    <a href="dashboard.html" class="nav-link"><i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>Painel</a>
+                    <a href="treinos.html" class="nav-link"><i data-lucide="dumbbell" class="w-3.5 h-3.5"></i>Meus Treinos</a>
+                    <a href="nutricao.html" class="nav-link ativo"><i data-lucide="utensils" class="w-3.5 h-3.5"></i>Nutrição</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-3" id="nav-actions">
+                <a id="link-admin" href="admin.html" class="hidden text-xs bg-lime-500/10 text-lime-400 hover:bg-lime-500/20 px-3 py-2 rounded-xl border border-lime-500/20 font-semibold transition-all flex items-center gap-1.5">
+                    <i data-lucide="settings" class="w-3.5 h-3.5"></i><span>Painel Admin</span>
+                </a>
+                <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
+                <button type="button" onclick="abrirModalFotoPerfil()" class="relative group cursor-pointer focus:outline-none" title="Perfil">
+                    <div class="w-9 h-9 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/40 flex items-center justify-center font-bold text-xs overflow-hidden shadow-sm group-hover:border-brand-400 group-hover:scale-105 transition-all" id="user-avatar">A</div>
+                    <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-brand-600 text-[#05080a] flex items-center justify-center shadow-md"><i data-lucide="camera" class="w-2.5 h-2.5"></i></div>
+                </button>
+                <button id="btn-logout" title="Terminar sessão" class="flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-rose-400 bg-slate-800/50 hover:bg-rose-500/10 px-3 py-2 rounded-xl border border-slate-800 transition-colors">
+                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i><span class="hidden sm:inline">Sair</span>
+                </button>
+            </div>
+        </div>
+        <!-- Nav mobile -->
+        <div class="md:hidden border-t border-lime-500/10 flex">
+            <a href="dashboard.html" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-slate-400"><i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>Painel</a>
+            <a href="treinos.html" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-slate-400"><i data-lucide="dumbbell" class="w-3.5 h-3.5"></i>Treinos</a>
+            <a href="nutricao.html" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-brand-400 border-b-2 border-brand-500 bg-brand-500/5"><i data-lucide="utensils" class="w-3.5 h-3.5"></i>Nutrição</a>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 flex-1 w-full relative z-10">
+
+        <!-- Cabeçalho da Página -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-[#060d06]/90 to-[#0a1a05]/40 p-6 rounded-3xl border border-lime-500/15 shadow-xl">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xs font-bold uppercase tracking-wider text-brand-400 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>Plano Alimentar
+                    </span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Minha <span class="text-brand-400">Dieta</span> 🥗</h1>
+                <p class="text-sm text-slate-400 mt-1">Refeições prescritas pelo nutricionista. Consulte e marque cada refeição ao concluir.</p>
+            </div>
+
+            <!-- Ações PDF -->
+            <div class="flex items-center gap-2 flex-wrap" id="acoes-pdf" style="display:none!important">
+                <button type="button" onclick="gerarPdfPlanoAlimentar()" id="btn-exportar-pdf" class="btn-acao flex items-center gap-2 bg-gradient-to-r from-brand-600 to-lime-500 hover:from-brand-500 hover:to-lime-400 text-[#05080a] font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-brand-500/25 transition-all active:scale-95 cursor-pointer">
+                    <i data-lucide="file-down" class="w-4 h-4" id="btn-pdf-icon"></i>
+                    <span id="btn-pdf-text">Baixar Cardápio em PDF</span>
+                    <div id="btn-pdf-spinner" class="hidden w-4 h-4 border-2 border-[#05080a]/30 border-t-[#05080a] rounded-full animate-spin"></div>
+                </button>
+                <button type="button" onclick="imprimirPlanoAlimentar()" id="btn-imprimir-pdf" title="Imprimir" class="btn-acao flex items-center gap-1.5 p-2.5 sm:px-3 rounded-xl bg-[#0a140a] border border-lime-500/20 text-slate-300 hover:text-white hover:border-lime-500/40 transition-all active:scale-95 cursor-pointer">
+                    <i data-lucide="printer" class="w-4 h-4"></i>
+                    <span class="text-xs font-bold hidden md:inline">Imprimir</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Cards de Stats Nutrição -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="stats-nutri" style="display:none">
+            <div class="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
+                <div class="text-2xl font-extrabold text-brand-400" id="stat-total-refeicoes">0</div>
+                <div class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Refeições</div>
+            </div>
+            <div class="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
+                <div class="text-2xl font-extrabold text-emerald-400" id="stat-refeicoes-concluidas">0</div>
+                <div class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Concluídas hoje</div>
+            </div>
+            <div class="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
+                <div class="text-2xl font-extrabold text-amber-400" id="stat-refeicoes-pct">0%</div>
+                <div class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Progresso</div>
+            </div>
+            <div class="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
+                <div class="text-2xl font-extrabold text-cyan-400" id="stat-hidratacao">2.8L</div>
+                <div class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Meta de água</div>
+            </div>
+        </div>
+
+        <!-- Barra de progresso das refeições -->
+        <div class="glass-panel p-4 rounded-2xl border border-slate-800 hidden" id="barra-nutri-container">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                    <i data-lucide="check-circle" class="w-3.5 h-3.5 text-brand-400"></i>Refeições de Hoje
+                </span>
+                <span class="text-xs font-bold text-brand-400" id="nutri-progresso-texto">0 / 0 feitas</span>
+            </div>
+            <div class="h-2 rounded-full bg-slate-800/80 overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-to-r from-brand-600 to-teal-400 transition-all duration-500" id="nutri-progresso-fill" style="width:0%"></div>
+            </div>
+        </div>
+
+        <!-- Container de Dietas -->
+        <div id="container-dietas" class="space-y-4">
+            <div class="animate-pulse space-y-4">
+                <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
+                <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
+                <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
+            </div>
+        </div>
+
+        <!-- Área de impressão PDF (oculta) -->
+        <div id="area-impressao-pdf" class="hidden"></div>
+
+    </main>
+
+    <footer class="border-t border-slate-900 bg-slate-950/80 py-5 px-6 text-center text-xs text-slate-500">
+        ApexFit Digital Platform • Transformando rotinas através da nutrição consciente.
+    </footer>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 max-w-sm pointer-events-none">
+        <div class="glass-panel border rounded-2xl p-4 shadow-2xl flex items-center gap-3" id="toast-inner">
+            <div id="toast-icon-wrapper" class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"><i id="toast-icon" data-lucide="check" class="w-4 h-4"></i></div>
+            <div>
+                <div class="text-xs font-bold text-white" id="toast-title">Notificação</div>
+                <div class="text-xs text-slate-300" id="toast-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const SUPABASE_URL = 'https://dnlqkozlaqizhqsexcei.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let perfilGlobal = { foto_perfil: '' };
+        let dietasCarregadas = [];
+        window.nomeAlunoAtual = 'Aluno';
+        let totalRefeicoesCount = 0;
+
+        // ===== TOAST =====
+        function showToast(title, message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastInner = document.getElementById('toast-inner');
+            const iconW = document.getElementById('toast-icon-wrapper');
+            const icon = document.getElementById('toast-icon');
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-message').textContent = message;
+            const configs = {
+                success: ['border-emerald-500/30', 'bg-emerald-500/20 text-emerald-400', 'check-circle-2'],
+                error: ['border-rose-500/30', 'bg-rose-500/20 text-rose-400', 'alert-circle'],
+                info: ['border-cyan-500/30', 'bg-cyan-500/20 text-cyan-400', 'info']
+            };
+            const [border, ic, icName] = configs[type] || configs.info;
+            toastInner.className = `glass-panel border ${border} rounded-2xl p-4 shadow-2xl flex items-center gap-3 bg-slate-900/95`;
+            iconW.className = `w-8 h-8 rounded-xl ${ic} flex items-center justify-center shrink-0`;
+            icon.setAttribute('data-lucide', icName);
+            lucide.createIcons();
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => { toast.classList.add('translate-y-24', 'opacity-0'); toast.classList.remove('translate-y-0', 'opacity-100'); }, 3500);
+        }
+
+        // ===== ÍCONE DE REFEIÇÃO =====
+        function obterIconeRefeicao(nome) {
+            const n = (nome || '').toLowerCase();
+            if (n.includes('café') || n.includes('manha') || n.includes('manhã') || n.includes('desjejum')) return 'sun';
+            if (n.includes('almoço') || n.includes('almoco')) return 'utensils-crossed';
+            if (n.includes('lanche')) return 'apple';
+            if (n.includes('jantar') || n.includes('janta')) return 'soup';
+            if (n.includes('ceia') || n.includes('noite')) return 'moon';
+            if (n.includes('pré-treino') || n.includes('pre-treino') || n.includes('pós-treino') || n.includes('pos-treino')) return 'flame';
+            return 'utensils';
+        }
+
+        // ===== PROGRESSO REFEIÇÕES =====
+        function atualizarProgressoNutri(concluidasCount) {
+            const fill = document.getElementById('nutri-progresso-fill');
+            const texto = document.getElementById('nutri-progresso-texto');
+            const pct = totalRefeicoesCount > 0 ? Math.round((concluidasCount / totalRefeicoesCount) * 100) : 0;
+            if (fill) fill.style.width = pct + '%';
+            if (texto) texto.textContent = `${concluidasCount} / ${totalRefeicoesCount} feitas`;
+            const pctEl = document.getElementById('stat-refeicoes-pct');
+            const conclEl = document.getElementById('stat-refeicoes-concluidas');
+            if (pctEl) pctEl.textContent = pct + '%';
+            if (conclEl) conclEl.textContent = concluidasCount;
+            document.getElementById('barra-nutri-container')?.classList.remove('hidden');
+        }
+
+        // ===== TOGGLE REFEIÇÃO =====
+        window.toggleRefeicaoStatus = function(refeicaoId) {
+            const hojeKey = 'nutrilife_meals_' + new Date().toISOString().slice(0, 10);
+            let concluidas = JSON.parse(localStorage.getItem(hojeKey) || '[]');
+            const isConcluida = concluidas.includes(refeicaoId);
+            if (isConcluida) {
+                concluidas = concluidas.filter(id => id !== refeicaoId);
+            } else {
+                concluidas.push(refeicaoId);
+                showToast('Refeição registrada! 🥗', 'Parabéns por manter a disciplina no plano.', 'success');
+            }
+            localStorage.setItem(hojeKey, JSON.stringify(concluidas));
+            atualizarProgressoNutri(concluidas.length);
+
+            // Atualizar visual do card
+            const card = document.getElementById('card-' + refeicaoId);
+            if (card) {
+                const agora = !isConcluida;
+                if (agora) {
+                    card.classList.add('concluida');
+                    card.classList.remove('border-slate-800');
+                } else {
+                    card.classList.remove('concluida');
+                    card.classList.add('border-slate-800');
+                }
+                // Atualizar botão e badge
+                const btn = card.querySelector('.btn-toggle-refeicao');
+                const badge = card.querySelector('.badge-feito');
+                if (btn) {
+                    if (agora) {
+                        btn.className = 'btn-toggle-refeicao flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl transition-all bg-brand-500/20 text-brand-400 border border-brand-500/40 hover:bg-brand-500/30';
+                        btn.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4"></i><span>Concluída</span>`;
+                    } else {
+                        btn.className = 'btn-toggle-refeicao flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl transition-all bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700';
+                        btn.innerHTML = `<i data-lucide="circle" class="w-4 h-4"></i><span>Marcar Feita</span>`;
+                    }
+                }
+                if (badge) badge.style.display = agora ? 'inline-flex' : 'none';
+                lucide.createIcons();
+            }
+        };
+
+        // ===== CARREGAR DADOS =====
+        async function carregarNutricao() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'login.html'; return; }
+            const uid = session.user.id;
+
+            if (uid === '04fb83ed-ec6b-4a56-9993-e99f32ededee') document.getElementById('link-admin')?.classList.remove('hidden');
+
+            // Avatar + nome
+            try {
+                const cache = localStorage.getItem('nutrilife_perfil_' + uid);
+                if (cache) perfilGlobal = { ...perfilGlobal, ...JSON.parse(cache) };
+                const { data: al } = await supabaseClient.from('alunos').select('nome, foto_perfil').eq('id', uid).single();
+                const nome = al?.nome || session.user.email?.split('@')[0] || 'Aluno';
+                window.nomeAlunoAtual = nome;
+                if (al?.foto_perfil) perfilGlobal.foto_perfil = al.foto_perfil;
+                const av = document.getElementById('user-avatar');
+                if (av) {
+                    if (perfilGlobal.foto_perfil?.startsWith('data:image')) av.innerHTML = `<img src="${perfilGlobal.foto_perfil}" class="w-full h-full object-cover" alt="Avatar">`;
+                    else av.textContent = nome.charAt(0).toUpperCase();
+                }
+            } catch (e) {}
+
+            // Carregar dietas
+            const { data: dietas, error: erroDieta } = await supabaseClient
+                .from('dietas').select('*').eq('aluno_id', uid);
+
+            const container = document.getElementById('container-dietas');
+
+            if (erroDieta) {
+                container.innerHTML = `
+                    <div class="glass-panel border border-rose-500/30 rounded-3xl p-10 text-center">
+                        <i data-lucide="alert-triangle" class="w-10 h-10 text-rose-400 mx-auto mb-3"></i>
+                        <p class="font-bold text-rose-300">Erro ao carregar plano alimentar.</p>
+                        <p class="text-xs text-rose-400/70 mt-1">${erroDieta.message}</p>
+                    </div>`;
+                lucide.createIcons(); return;
+            }
+
+            if (!dietas || dietas.length === 0) {
+                dietasCarregadas = [];
+                container.innerHTML = `
+                    <div class="glass-panel border border-slate-800 rounded-3xl p-12 text-center">
+                        <div class="w-16 h-16 rounded-3xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="sparkles" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Plano em Elaboração</h3>
+                        <p class="text-sm text-slate-400 max-w-md mx-auto mb-6">
+                            O seu nutricionista está calculando seus macronutrientes e montando um cardápio 100% individualizado para você.
+                        </p>
+                        <a href="https://wa.me/5581997969058?text=Ol%C3%A1%20Nutri%2C%20j%C3%A1%20tenho%20acesso%20ao%20portal%20e%20aguardo%20a%20libera%C3%A7%C3%A3o%20da%20minha%20dieta!" target="_blank"
+                            class="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-5 py-3 rounded-xl transition-all">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i>Perguntar previsão ao Nutri
+                        </a>
+                    </div>`;
+                lucide.createIcons(); return;
+            }
+
+            dietasCarregadas = dietas;
+            totalRefeicoesCount = dietas.length;
+
+            // Mostrar stats e ações
+            document.getElementById('acoes-pdf').style.removeProperty('display');
+            document.getElementById('stats-nutri').style.removeProperty('display');
+            document.getElementById('stat-total-refeicoes').textContent = dietas.length;
+
+            const hojeKey = 'nutrilife_meals_' + new Date().toISOString().slice(0, 10);
+            const concluidas = JSON.parse(localStorage.getItem(hojeKey) || '[]');
+            atualizarProgressoNutri(concluidas.length);
+
+            // Renderizar cards
+            container.innerHTML = '';
+            dietas.forEach((item, index) => {
+                const id = item.id || `refeicao-${index}`;
+                const isConcluida = concluidas.includes(id);
+                const icone = obterIconeRefeicao(item.refeicao);
+                const msgWA = encodeURIComponent(`Olá Nutri, tenho uma dúvida sobre a refeição "${item.refeicao}" (${item.horario || ''}): `);
+
+                const card = document.createElement('div');
+                card.id = `card-${id}`;
+                card.className = `refeicao-anim glass-panel border rounded-3xl p-6 ${isConcluida ? 'concluida border-brand-500/40' : 'border-slate-800 hover:border-slate-700'}`;
+                card.style.animationDelay = (index * 0.06) + 's';
+
+                card.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800/80 gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl ${isConcluida ? 'bg-brand-500/20 text-brand-400' : 'bg-slate-800 text-slate-300'} flex items-center justify-center shrink-0">
+                                <i data-lucide="${icone}" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                                    ${item.refeicao}
+                                    <span class="badge-feito text-[10px] bg-brand-500/20 text-brand-400 font-bold px-2 py-0.5 rounded-full border border-brand-500/30" style="display:${isConcluida ? 'inline-flex' : 'none'}">Feito ✓</span>
+                                </h3>
+                                <span class="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
+                                    <i data-lucide="clock" class="w-3 h-3 text-brand-400"></i>${item.horario || 'Horário flexível'}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 self-end sm:self-center">
+                            <a href="https://wa.me/5581997969058?text=${msgWA}" target="_blank" title="Dúvida nesta refeição"
+                                class="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors border border-slate-700/60">
+                                <i data-lucide="help-circle" class="w-4 h-4"></i>
+                            </a>
+                            <button onclick="toggleRefeicaoStatus('${id}')"
+                                class="btn-toggle-refeicao flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl transition-all ${isConcluida ? 'bg-brand-500/20 text-brand-400 border border-brand-500/40 hover:bg-brand-500/30' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700'}">
+                                <i data-lucide="${isConcluida ? 'check-circle-2' : 'circle'}" class="w-4 h-4"></i>
+                                <span>${isConcluida ? 'Concluída' : 'Marcar Feita'}</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="py-4">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1.5">Alimentos e Porções:</span>
+                        <p class="text-slate-200 text-sm leading-relaxed whitespace-pre-line">${item.alimentos}</p>
+                    </div>
+                    ${item.substituicoes ? `
+                    <div class="mt-1 pt-3.5 border-t border-slate-800/80 bg-slate-950/50 -mx-6 -mb-6 p-5 rounded-b-3xl">
+                        <div class="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider mb-2">
+                            <i data-lucide="repeat" class="w-3.5 h-3.5"></i>Opções de Substituição Prescritas:
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">${item.substituicoes}</p>
+                    </div>` : ''}`;
+
+                container.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        // ===== GERAR PDF =====
+        function montarHtmlPlanoPdf(dietas, nomeAluno) {
+            const dataHoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+            let refeicoesCards = '';
+            dietas.forEach((d, idx) => {
+                const horario = d.horario || 'Horário Flexível';
+                const alimentos = (d.alimentos || '').split('\n').map(l => l.trim()).filter(l => l).map(l => `<li style="margin-bottom:5px;color:#1e293b;font-size:13px;line-height:1.5;">${l}</li>`).join('');
+                const subs = d.substituicoes ? `<div style="margin-top:10px;padding:10px 14px;background:#f0fdf4;border-left:3px solid #10b981;border-radius:6px;"><div style="font-size:11px;font-weight:700;color:#047857;margin-bottom:4px;">🔄 Substituições:</div><div style="font-size:12px;color:#166534;white-space:pre-line;">${d.substituicoes}</div></div>` : '';
+                refeicoesCards += `<div style="margin-bottom:14px;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;break-inside:avoid;background:#fff;"><div style="background:#f8fafc;padding:9px 16px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;align-items:center;gap:8px;"><span style="background:#10b981;color:#fff;font-size:11px;font-weight:800;padding:2px 7px;border-radius:20px;">${idx + 1}</span><span style="font-size:13px;font-weight:800;color:#0f172a;text-transform:uppercase;">${d.refeicao}</span></div><span style="font-size:11px;font-weight:700;color:#059669;background:#ecfdf5;border:1px solid #a7f3d0;padding:2px 9px;border-radius:12px;">⏰ ${horario}</span></div><div style="padding:12px 16px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:6px;">Alimentos e Porções:</div><ul style="margin:0;padding-left:18px;">${alimentos}</ul>${subs}</div></div>`;
+            });
+            return `<div style="font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#0f172a;max-width:800px;margin:0 auto;background:#fff;padding:24px;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #10b981;padding-bottom:14px;margin-bottom:18px;">
+                    <div><div style="font-size:24px;font-weight:900;color:#0f172a;">NUTRI<span style="color:#10b981;">LIFE</span></div><div style="font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;margin-top:2px;">Nutrição Clínica & Alta Performance</div></div>
+                    <div style="text-align:right;"><div style="background:#ecfdf5;border:1px solid #a7f3d0;color:#047857;font-size:10px;font-weight:800;padding:3px 10px;border-radius:999px;display:inline-block;text-transform:uppercase;">Prescrição Nutricional</div><div style="font-size:11px;color:#64748b;margin-top:4px;">Emissão: <strong>${dataHoje}</strong></div></div>
+                </div>
+                <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 16px;margin-bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+                    <div><div style="font-size:10px;color:#64748b;text-transform:uppercase;font-weight:700;">Aluno / Paciente:</div><div style="font-size:13px;font-weight:800;color:#0f172a;margin-top:2px;">${nomeAluno}</div></div>
+                    <div><div style="font-size:10px;color:#64748b;text-transform:uppercase;font-weight:700;">Nutricionista:</div><div style="font-size:12px;font-weight:700;color:#059669;margin-top:2px;">Ricardo Leão (Nutri)</div></div>
+                    <div><div style="font-size:10px;color:#64748b;text-transform:uppercase;font-weight:700;">Meta de Hidratação:</div><div style="font-size:12px;font-weight:700;color:#0284c7;margin-top:2px;">💧 2.8 a 3.0 Litros / dia</div></div>
+                </div>
+                <div style="margin-bottom:16px;">${refeicoesCards}</div>
+                <div style="background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:10px;color:#475569;line-height:1.4;"><strong style="color:#0f172a;">Recomendações ApexFit:</strong> Mastigue devagar e mantenha a consistência. Beba água ao longo do dia e evite grandes volumes de líquidos junto às refeições principais.</div>
+                <div style="border-top:1px solid #e2e8f0;padding-top:10px;display:flex;justify-content:space-between;font-size:9px;color:#94a3b8;"><span>ApexFit Digital Platform</span><span>Documento emitido digitalmente para uso pessoal</span></div>
+            </div>`;
+        }
+
+        async function gerarPdfPlanoAlimentar() {
+            if (!dietasCarregadas || !dietasCarregadas.length) { showToast('Aviso', 'Nenhuma refeição para gerar PDF.', 'info'); return; }
+            const btnText = document.getElementById('btn-pdf-text');
+            const btnIcon = document.getElementById('btn-pdf-icon');
+            const btnSpinner = document.getElementById('btn-pdf-spinner');
+            const btn = document.getElementById('btn-exportar-pdf');
+            if (btnText) btnText.textContent = 'Gerando PDF...';
+            if (btnIcon) btnIcon.classList.add('hidden');
+            if (btnSpinner) btnSpinner.classList.remove('hidden');
+            if (btn) btn.disabled = true;
+            const nomeArquivo = `Plano_Alimentar_${(window.nomeAlunoAtual || 'Aluno').replace(/[^a-zA-Z0-9]/g, '_')}_ApexFit.pdf`;
+            const containerPdf = document.getElementById('area-impressao-pdf');
+            containerPdf.innerHTML = montarHtmlPlanoPdf(dietasCarregadas, window.nomeAlunoAtual || 'Aluno');
+            containerPdf.style.cssText = 'display:block;position:fixed;left:-9999px;top:0;width:800px;';
+            containerPdf.classList.remove('hidden');
+            const restaurar = () => {
+                if (btnText) btnText.textContent = 'Baixar Cardápio em PDF';
+                if (btnIcon) btnIcon.classList.remove('hidden');
+                if (btnSpinner) btnSpinner.classList.add('hidden');
+                if (btn) btn.disabled = false;
+                containerPdf.classList.add('hidden');
+                containerPdf.style.cssText = '';
+            };
+            if (typeof html2pdf !== 'undefined') {
+                try {
+                    await html2pdf().set({ margin:[8,8,8,8], filename:nomeArquivo, image:{type:'jpeg',quality:0.98}, html2canvas:{scale:2,useCORS:true}, jsPDF:{unit:'mm',format:'a4',orientation:'portrait'} }).from(containerPdf.firstElementChild).save();
+                    restaurar(); showToast('PDF Gerado! 📄', 'Cardápio salvo no seu dispositivo.', 'success');
+                } catch(e) { restaurar(); imprimirPlanoAlimentar(); }
+            } else { restaurar(); imprimirPlanoAlimentar(); }
+        }
+
+        function imprimirPlanoAlimentar() {
+            if (!dietasCarregadas || !dietasCarregadas.length) { showToast('Aviso', 'Nenhuma refeição cadastrada.', 'info'); return; }
+            const containerPdf = document.getElementById('area-impressao-pdf');
+            containerPdf.innerHTML = montarHtmlPlanoPdf(dietasCarregadas, window.nomeAlunoAtual || 'Aluno');
+            containerPdf.classList.remove('hidden');
+            setTimeout(() => { window.print(); containerPdf.classList.add('hidden'); }, 300);
+        }
+
+        // ===== LOGOUT =====
+        document.getElementById('btn-logout').addEventListener('click', async () => {
+            document.getElementById('btn-logout').innerHTML = '<div class="w-3.5 h-3.5 border-2 border-slate-400 border-t-white rounded-full animate-spin"></div>';
+            await supabaseClient.auth.signOut();
+            window.location.href = 'login.html';
+        });
+
+        carregarNutricao();
+    </script>
+</body>
+</html>

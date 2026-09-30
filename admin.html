@@ -27,13 +27,18 @@
                     },
                     colors: {
                         brand: {
-                            50: '#ecfdf5',
-                            100: '#d1fae5',
-                            400: '#34d399',
-                            500: '#10b981',
-                            600: '#059669',
-                            700: '#047857',
-                            900: '#064e3b',
+                            50: '#f7fee7',
+                            100: '#ecfccb',
+                            400: '#a3e635',
+                            500: '#84cc16',
+                            600: '#65a30d',
+                            700: '#4d7c0f',
+                            900: '#1a2e05',
+                        },
+                        lime: {
+                            400: '#a3e635',
+                            500: '#84cc16',
+                            600: '#65a30d',
                         }
                     }
                 }
@@ -63,7 +68,7 @@
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #10b981;
+            background: #84cc16;
         }
 
         /* Galeria de Fotos no Admin */
@@ -113,16 +118,16 @@
             <div class="flex items-center gap-3">
                 <a href="index.html" class="flex items-center gap-2 group" title="Ir para a página inicial">
                     <div
-                        class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                        class="w-9 h-9 rounded-xl bg-gradient-to-tr from-lime-600 to-lime-400 flex items-center justify-center text-slate-950 shadow-md shadow-lime-500/20 group-hover:scale-105 transition-transform">
                         <i data-lucide="leaf" class="w-5 h-5"></i>
                     </div>
                     <span class="text-xl font-extrabold tracking-tight text-white hidden sm:inline">
-                        NUTRI<span class="text-brand-400">LIFE</span>
+                        APEX<span class="text-lime-400">FIT</span>
                     </span>
                 </a>
                 <span
-                    class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20 font-semibold flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                    class="text-xs bg-lime-500/10 text-lime-400 px-3 py-1 rounded-full border border-lime-500/20 font-semibold flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse"></span>
                     Painel do Nutricionista
                 </span>
             </div>
@@ -150,22 +155,22 @@
                         class="absolute right-0 mt-2 w-52 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
                         <div class="p-1 space-y-0.5">
                             <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
-                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800 transition-colors">
-                                <i data-lucide="user-plus" class="w-4 h-4 text-emerald-400"></i>
+                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-lime-400 hover:bg-slate-800 transition-colors">
+                                <i data-lucide="user-plus" class="w-4 h-4 text-lime-400"></i>
                                 <span>Cadastrar novo aluno</span>
                             </button>
 
                             <button onclick="navegarParaSecao('secao-cadastrar-refeicao')"
-                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-brand-300 hover:bg-slate-800 transition-colors">
-                                <i data-lucide="utensils" class="w-4 h-4 text-brand-400"></i>
+                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-lime-300 hover:bg-slate-800 transition-colors">
+                                <i data-lucide="utensils" class="w-4 h-4 text-lime-400"></i>
                                 <span>Cadastrar de refeição</span>
                             </button>
 
                             <!-- 1. Chat com Alunos primeiro -->
                             <button id="btn-header-duvidas" onclick="navegarParaSecao('canal-duvidas')"
-                                class="w-full text-left flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800 transition-colors">
+                                class="w-full text-left flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-lime-400 hover:bg-slate-800 transition-colors">
                                 <div class="flex items-center gap-2.5">
-                                    <i data-lucide="message-square" class="w-4 h-4 text-emerald-400"></i>
+                                    <i data-lucide="message-square" class="w-4 h-4 text-lime-400"></i>
                                     <span>Chat com alunos</span>
                                 </div>
                                 <span id="badge-header-pill"
@@ -205,8 +210,8 @@
     <!-- Conteúdo Principal -->
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1 w-full">
         <div
-            class="bg-gradient-to-r from-slate-900/90 to-brand-950/20 p-6 rounded-3xl border border-slate-800 shadow-xl">
-            <span class="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1 inline-block">Área de
+            class="bg-gradient-to-r from-slate-900/90 to-lime-950/30 p-6 rounded-3xl border border-lime-500/20 shadow-xl">
+            <span class="text-xs font-semibold uppercase tracking-wider text-lime-400 mb-1 inline-block">Área de
                 Prescrição</span>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
                 Gestão de Alunos e Dietas 📋
@@ -223,7 +228,7 @@
             <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-6">
                 <div>
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i data-lucide="user-plus" class="w-5 h-5 text-emerald-400"></i>
+                        <i data-lucide="user-plus" class="w-5 h-5 text-lime-400"></i>
                         Cadastrar Novo Aluno
                     </h2>
                     <p class="text-xs text-slate-400">Cria o acesso para o aluno entrar no portal com senha temporária
@@ -237,24 +242,24 @@
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Nome do
                             Aluno</label>
                         <input type="text" id="novo-aluno-nome" placeholder="Ex: Maria Silva" required
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-lime-500">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">E-mail de
                             Acesso</label>
                         <input type="email" id="novo-aluno-email" placeholder="aluno@email.com" required
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-lime-500">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Senha
                             Inicial</label>
                         <input type="text" id="novo-aluno-senha" placeholder="Mínimo 6 caracteres" required
                             value="123456"
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-lime-500">
                     </div>
                 </div>
                 <button type="submit" id="btn-cadastrar-aluno"
-                    class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold py-3 rounded-xl transition-all border border-slate-700 flex items-center justify-center gap-2">
+                    class="w-full bg-slate-800 hover:bg-slate-700 text-lime-400 hover:text-lime-300 font-bold py-3 rounded-xl transition-all border border-slate-700 hover:border-lime-500/30 flex items-center justify-center gap-2">
                     <i data-lucide="user-check" class="w-4 h-4"></i>
                     <span>Cadastrar Aluno no Sistema</span>
                 </button>
@@ -315,7 +320,7 @@
                                     <div class="text-sm font-bold text-white flex items-center gap-2">
                                         <span id="clinico-nome">Aluno</span>
                                         <span id="clinico-status-badge"
-                                            class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                                            class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-lime-500/10 text-lime-400 border border-lime-500/30">
                                             Perfil Ativo
                                         </span>
                                     </div>
@@ -336,7 +341,7 @@
                                     <span
                                         class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Peso
                                         Atual</span>
-                                    <span class="text-xs font-extrabold text-emerald-400" id="clinico-peso">-- kg</span>
+                                    <span class="text-xs font-extrabold text-lime-400" id="clinico-peso">-- kg</span>
                                 </div>
                                 <div
                                     class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
@@ -743,8 +748,8 @@
             toast.onclick = null;
 
             if (type === 'success') {
-                toastInner.className = 'glass-panel border border-emerald-500/30 rounded-2xl p-4 shadow-2xl shadow-emerald-500/10 flex items-center gap-3 bg-slate-900/95';
-                toastIconWrapper.className = 'w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0';
+                toastInner.className = 'glass-panel border border-lime-500/30 rounded-2xl p-4 shadow-2xl shadow-lime-500/10 flex items-center gap-3 bg-slate-900/95';
+                toastIconWrapper.className = 'w-8 h-8 rounded-xl bg-lime-500/20 text-lime-400 flex items-center justify-center shrink-0';
                 toastIcon.setAttribute('data-lucide', 'check-circle-2');
             } else if (type === 'error') {
                 toastInner.className = 'glass-panel border border-rose-500/30 rounded-2xl p-4 shadow-2xl shadow-rose-500/10 flex items-center gap-3 bg-slate-900/95';
@@ -949,7 +954,7 @@
                 else classif = 'Obesidade';
                 imcEl.textContent = `${imc} (${classif})`;
                 statusBadge.textContent = 'Métricas Preenchidas';
-                statusBadge.className = 'text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30';
+                statusBadge.className = 'text-[10px] font-semibold px-2 py-0.5 rounded-full bg-lime-500/10 text-lime-400 border border-lime-500/30';
             } else {
                 imcEl.textContent = '--';
                 statusBadge.textContent = 'Aguardando Aluno no Portal';
@@ -1016,7 +1021,7 @@
 
             const btn = document.getElementById('btn-cadastrar-aluno');
             btn.disabled = true;
-            btn.innerHTML = `<div class="w-4 h-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"></div> Cadastrando...`;
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-lime-400 border-t-transparent rounded-full animate-spin"></div> Cadastrando...`;
 
             const { data, error: authError } = await supabaseClient.auth.signUp({
                 email: email,

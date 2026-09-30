@@ -117,7 +117,7 @@
                         <i data-lucide="leaf" class="w-5 h-5"></i>
                     </div>
                     <span class="text-xl font-extrabold tracking-tight text-white hidden sm:inline">
-                        NUTRI<span class="text-brand-400">LIFE</span>
+                        APEX<span class="text-brand-400">FIT</span>
                     </span>
                 </a>
                 <span
@@ -184,7 +184,10 @@
                     </div>
                 </div>
 
-                <a href="admin.html" class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all"><i data-lucide="apple" class="w-4 h-4 text-orange-400"></i><span class="hidden lg:inline">Espaço do Nutricionista</span></a>
+                <a href="admin.html"
+                    class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all"><i
+                        data-lucide="apple" class="w-4 h-4 text-orange-400"></i><span class="hidden lg:inline">Espaço do
+                        Nutricionista</span></a>
                 <a href="dashboard.html"
                     class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all">
                     <i data-lucide="eye" class="w-4 h-4 text-brand-400"></i>
@@ -206,7 +209,8 @@
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1 w-full">
         <div
             class="bg-gradient-to-r from-slate-900/90 to-brand-950/20 p-6 rounded-3xl border border-slate-800 shadow-xl">
-            <span class="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1 inline-block">Espaço do Nutricionista</span>
+            <span class="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1 inline-block">Espaço do
+                Nutricionista</span>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
                 Gestão de Alunos e Treinos 🏋️
             </h1>
@@ -354,17 +358,77 @@
                     </div>
                 </div>
 
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Nome do treino</label><input type="text" id="treino-nome" placeholder="Ex: Treino A – Peito e Tríceps" required  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div>
-<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Dia da semana</label><select id="treino-dia" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"><option>Segunda</option><option>Terça</option><option>Quarta</option><option>Quinta</option><option>Sexta</option><option>Sábado</option><option>Domingo</option><option>Flexível</option></select></div>
-<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Grupo muscular</label><select id="treino-grupo" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"><option>Peito</option><option>Costas</option><option>Ombros</option><option>Bíceps</option><option>Tríceps</option><option>Pernas</option><option>Glúteos</option><option>Abdômen</option><option>Full body</option><option>Cardio</option><option>Mobilidade</option></select></div>
-</div>
-<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Exercício</label><input type="text" id="exercicio-nome" placeholder="Ex: Supino reto com barra" required  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div>
-<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Séries</label><input type="text" id="exercicio-series" placeholder="4" required  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div><div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Repetições</label><input type="text" id="exercicio-reps" placeholder="8-10" required  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div><div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Carga</label><input type="text" id="exercicio-carga" placeholder="Ex: 60 kg"   class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div><div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Descanso</label><input type="text" id="exercicio-descanso" placeholder="60s"   class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div>
-</div>
-<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Execução e observações (opcional)</label><textarea id="exercicio-obs" rows="2" placeholder="Cadência, técnica, pontos de atenção..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></textarea></div>
-<div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Link de vídeo demonstrativo (opcional)</label><input type="text" id="exercicio-video" placeholder="https://youtube.com/..."   class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                    <div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Nome do
+                            treino</label><input type="text" id="treino-nome"
+                            placeholder="Ex: Treino A – Peito e Tríceps" required
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Dia da
+                            semana</label><select id="treino-dia"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                            <option>Segunda</option>
+                            <option>Terça</option>
+                            <option>Quarta</option>
+                            <option>Quinta</option>
+                            <option>Sexta</option>
+                            <option>Sábado</option>
+                            <option>Domingo</option>
+                            <option>Flexível</option>
+                        </select></div>
+                    <div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Grupo
+                            muscular</label><select id="treino-grupo"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                            <option>Peito</option>
+                            <option>Costas</option>
+                            <option>Ombros</option>
+                            <option>Bíceps</option>
+                            <option>Tríceps</option>
+                            <option>Pernas</option>
+                            <option>Glúteos</option>
+                            <option>Abdômen</option>
+                            <option>Full body</option>
+                            <option>Cardio</option>
+                            <option>Mobilidade</option>
+                        </select></div>
+                </div>
+                <div><label
+                        class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Exercício</label><input
+                        type="text" id="exercicio-nome" placeholder="Ex: Supino reto com barra" required
+                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div><label
+                            class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Séries</label><input
+                            type="text" id="exercicio-series" placeholder="4" required
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div><label
+                            class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Repetições</label><input
+                            type="text" id="exercicio-reps" placeholder="8-10" required
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div><label
+                            class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Carga</label><input
+                            type="text" id="exercicio-carga" placeholder="Ex: 60 kg"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div><label
+                            class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Descanso</label><input
+                            type="text" id="exercicio-descanso" placeholder="60s"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                    </div>
+                </div>
+                <div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Execução e
+                        observações (opcional)</label><textarea id="exercicio-obs" rows="2"
+                        placeholder="Cadência, técnica, pontos de atenção..."
+                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></textarea>
+                </div>
+                <div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Link de vídeo
+                        demonstrativo (opcional)</label><input type="text" id="exercicio-video"
+                        placeholder="https://youtube.com/..."
+                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                </div>
 
                 <button type="submit" id="btn-submit"
                     class="w-full bg-brand-600 hover:bg-brand-500 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl transition-all duration-200 shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2">
@@ -377,9 +441,12 @@
         </section>
 
         <section id="secao-treino-atual" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
-<h2 class="text-lg font-bold text-white flex items-center gap-2 mb-1"><i data-lucide="list-checks" class="w-5 h-5 text-brand-400"></i>Treino atual do aluno</h2>
-<p class="text-xs text-slate-400 mb-5">Selecione um aluno acima para ver e editar os exercícios prescritos.</p>
-<div id="lista-treino-aluno" class="space-y-4"></div></section>
+            <h2 class="text-lg font-bold text-white flex items-center gap-2 mb-1"><i data-lucide="list-checks"
+                    class="w-5 h-5 text-brand-400"></i>Treino atual do aluno</h2>
+            <p class="text-xs text-slate-400 mb-5">Selecione um aluno acima para ver e editar os exercícios prescritos.
+            </p>
+            <div id="lista-treino-aluno" class="space-y-4"></div>
+        </section>
 
         <!-- Canal de Dúvidas / Chat com Alunos no Admin -->
         <section id="canal-duvidas" class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
@@ -1023,7 +1090,7 @@
         });
 
         // Treinos (ApexFit)
-        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         let treinosAluno = [];
         async function carregarTreinoAdmin() {
             const id = document.getElementById('aluno-select').value;
@@ -1069,7 +1136,7 @@
             btn.disabled = false;
             if (error) return showToast('Erro ao salvar', error.message, 'error');
             showToast('Exercício adicionado! 💪', 'O treino já aparece no portal do aluno.', 'success');
-            ['exercicio-nome','exercicio-carga','exercicio-obs','exercicio-video'].forEach(id => document.getElementById(id).value = '');
+            ['exercicio-nome', 'exercicio-carga', 'exercicio-obs', 'exercicio-video'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('exercicio-nome').focus();
             carregarTreinoAdmin();
         });
@@ -1082,8 +1149,8 @@
             const nome = sel.options[sel.selectedIndex].text;
             const g = {}; treinosAluno.forEach(t => (g[t.treino_nome] = g[t.treino_nome] || []).push(t));
             const html = `<div style="font-family:Arial;padding:24px;color:#111"><h1 style="color:#ea580c;margin:0">ApexFit</h1><p>Treino de <b>${esc(nome)}</b></p>` +
-              Object.entries(g).map(([n, ex]) => `<h3 style="margin:18px 0 6px">${esc(n)} <small style="color:#666">${esc(ex[0].dia_semana||'')}</small></h3><table style="width:100%;border-collapse:collapse;font-size:12px">` +
-              ex.map(e => `<tr><td style="border-bottom:1px solid #ddd;padding:6px"><b>${esc(e.exercicio)}</b><br><span style="color:#666">${esc(e.observacoes||'')}</span></td><td style="border-bottom:1px solid #ddd;padding:6px;white-space:nowrap">${esc(e.series)}x${esc(e.repeticoes)} ${esc(e.carga||'')}</td><td style="border-bottom:1px solid #ddd;padding:6px">${esc(e.descanso||'')}</td></tr>`).join('') + '</table>').join('') + '</div>';
+                Object.entries(g).map(([n, ex]) => `<h3 style="margin:18px 0 6px">${esc(n)} <small style="color:#666">${esc(ex[0].dia_semana || '')}</small></h3><table style="width:100%;border-collapse:collapse;font-size:12px">` +
+                    ex.map(e => `<tr><td style="border-bottom:1px solid #ddd;padding:6px"><b>${esc(e.exercicio)}</b><br><span style="color:#666">${esc(e.observacoes || '')}</span></td><td style="border-bottom:1px solid #ddd;padding:6px;white-space:nowrap">${esc(e.series)}x${esc(e.repeticoes)} ${esc(e.carga || '')}</td><td style="border-bottom:1px solid #ddd;padding:6px">${esc(e.descanso || '')}</td></tr>`).join('') + '</table>').join('') + '</div>';
             html2pdf().set({ margin: 8, filename: 'treino-' + nome.replace(/\s+/g, '-') + '.pdf', html2canvas: { scale: 2 } }).from(html, 'string').save();
         }
 
