@@ -636,60 +636,13 @@
                             <i data-lucide="camera" class="w-5 h-5 text-purple-400"></i>
                             Galeria de Evolução Corporal
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5">Compare seu progresso físico ao longo do tempo —
-                            protegido por senha pessoal</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button id="btn-bloquear-galeria" onclick="bloquearGaleria()"
-                            class="hidden text-xs bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 px-3 py-1.5 rounded-lg border border-purple-500/20 font-semibold transition-all flex items-center gap-1.5">
-                            <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                            Bloquear
-                        </button>
-                        <span id="galeria-status-badge"
-                            class="text-xs text-slate-500 flex items-center gap-1.5 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
-                            <i data-lucide="shield" class="w-3.5 h-3.5 text-purple-400"></i>
-                            <span id="galeria-status-text">Protegida por Senha</span>
-                        </span>
+                        <p class="text-xs text-slate-400 mt-0.5">Compare seu progresso físico ao longo do tempo</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Overlay de Bloqueio por Senha -->
-            <div id="galeria-lock" class="px-6 sm:px-7 pb-8 pt-2">
-                <div class="flex flex-col items-center justify-center py-10 space-y-5">
-                    <div
-                        class="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
-                        <i data-lucide="lock" class="w-8 h-8 text-purple-400"></i>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="text-base font-bold text-white" id="galeria-lock-titulo">Galeria Protegida</h3>
-                        <p class="text-xs text-slate-400 mt-1 max-w-xs" id="galeria-lock-desc">Defina uma senha pessoal
-                            para proteger suas fotos de evolução corporal.</p>
-                    </div>
-                    <div class="flex flex-col items-center gap-3 w-full max-w-xs">
-                        <div class="relative w-full">
-                            <input type="password" id="galeria-senha-input" placeholder="Digite sua senha"
-                                maxlength="32"
-                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-center text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 tracking-widest">
-                            <button type="button" onclick="toggleGaleriaSenhaVisibilidade()"
-                                class="absolute right-3 top-3 text-slate-500 hover:text-slate-300 transition-colors">
-                                <i data-lucide="eye" class="w-4 h-4" id="galeria-senha-eye"></i>
-                            </button>
-                        </div>
-                        <input type="password" id="galeria-senha-confirmar" placeholder="Confirme a senha"
-                            maxlength="32"
-                            class="hidden w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-center text-slate-100 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 tracking-widest">
-                        <button id="btn-galeria-desbloquear" onclick="acaoSenhaGaleria()"
-                            class="w-full bg-purple-600 hover:bg-purple-500 active:scale-[0.98] text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2">
-                            <i data-lucide="unlock" class="w-4 h-4"></i>
-                            <span id="btn-galeria-senha-texto">Definir Senha e Abrir</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Conteúdo da Galeria (visível apenas quando desbloqueada) -->
-            <div id="galeria-conteudo" class="hidden px-6 sm:px-7 pb-6 pt-2 space-y-6">
+            <!-- Conteúdo da Galeria -->
+            <div id="galeria-conteudo" class="px-6 sm:px-7 pb-6 pt-2 space-y-6">
 
                 <!-- Formulário de Upload -->
                 <div class="bg-slate-900/60 rounded-2xl border border-slate-800 p-5">
@@ -2481,103 +2434,19 @@
                 const dateInput = document.getElementById('galeria-data');
                 if (dateInput) dateInput.value = hoje;
 
-                // Verificar se já tem senha definida
-                const hashGuardado = localStorage.getItem('nutrilife_galeria_hash_' + galeriaUserId);
-                if (hashGuardado) {
-                    // Já tem senha — mostrar modo "desbloquear"
-                    document.getElementById('galeria-lock-titulo').textContent = 'Digite sua Senha';
-                    document.getElementById('galeria-lock-desc').textContent = 'Insira a senha que definiu para acessar suas fotos de evolução.';
-                    document.getElementById('btn-galeria-senha-texto').textContent = 'Desbloquear Galeria';
-                    document.getElementById('galeria-senha-confirmar').classList.add('hidden');
-                } else {
-                    // Primeira vez — modo "criar senha"
-                    document.getElementById('galeria-senha-confirmar').classList.remove('hidden');
-                }
+                galeriaDesbloqueada = true;
+                const conteudo = document.getElementById('galeria-conteudo');
+                if (conteudo) conteudo.classList.remove('hidden');
 
                 configurarDragDrop();
-                lucide.createIcons();
-            };
-
-            // ===== AÇÃO DE SENHA (DEFINIR OU DESBLOQUEAR) =====
-            window.acaoSenhaGaleria = async function () {
-                const input = document.getElementById('galeria-senha-input');
-                const confirmar = document.getElementById('galeria-senha-confirmar');
-                const senha = input.value.trim();
-                const hashGuardado = localStorage.getItem('nutrilife_galeria_hash_' + galeriaUserId);
-
-                if (!senha || senha.length < 4) {
-                    showToast('Senha Inválida', 'A senha deve ter pelo menos 4 caracteres.', 'error');
-                    input.focus();
-                    return;
-                }
-
-                if (!hashGuardado) {
-                    // Modo: criar senha
-                    const senhaConfirmada = confirmar.value.trim();
-                    if (senha !== senhaConfirmada) {
-                        showToast('Senhas Diferentes', 'A confirmação não corresponde à senha digitada.', 'error');
-                        confirmar.focus();
-                        return;
-                    }
-                    const hash = await hashSenha(senha);
-                    localStorage.setItem('nutrilife_galeria_hash_' + galeriaUserId, hash);
-                    showToast('Senha Definida! 🔒', 'Sua galeria de evolução está protegida.', 'success');
-                } else {
-                    // Modo: verificar senha
-                    const hash = await hashSenha(senha);
-                    if (hash !== hashGuardado) {
-                        showToast('Senha Incorreta', 'A senha digitada não está correta.', 'error');
-                        input.value = '';
-                        input.focus();
-                        return;
-                    }
-                }
-
-                // Desbloquear
-                galeriaDesbloqueada = true;
-                document.getElementById('galeria-lock').classList.add('hidden');
-                document.getElementById('galeria-conteudo').classList.remove('hidden');
-                document.getElementById('btn-bloquear-galeria').classList.remove('hidden');
-                document.getElementById('galeria-status-text').textContent = 'Desbloqueada';
-                input.value = '';
-                confirmar.value = '';
-
                 await renderizarGaleria();
                 lucide.createIcons();
             };
 
-            // ===== BLOQUEAR GALERIA =====
-            window.bloquearGaleria = function () {
-                galeriaDesbloqueada = false;
-                document.getElementById('galeria-lock').classList.remove('hidden');
-                document.getElementById('galeria-conteudo').classList.add('hidden');
-                document.getElementById('btn-bloquear-galeria').classList.add('hidden');
-                document.getElementById('galeria-status-text').textContent = 'Protegida por Senha';
-
-                // Limpar previews
-                fotosParaUpload = { frente: null, perfil: null, costas: null };
-                ['frente', 'perfil', 'costas'].forEach(t => {
-                    const prev = document.getElementById('preview-' + t);
-                    if (prev) { prev.innerHTML = ''; prev.classList.add('hidden'); }
-                    const inp = document.getElementById('input-foto-' + t);
-                    if (inp) inp.value = '';
-                });
-                document.getElementById('btn-salvar-fotos').disabled = true;
-            };
-
-            // ===== TOGGLE VISIBILIDADE DA SENHA =====
-            window.toggleGaleriaSenhaVisibilidade = function () {
-                const inp = document.getElementById('galeria-senha-input');
-                const eye = document.getElementById('galeria-senha-eye');
-                if (inp.type === 'password') {
-                    inp.type = 'text';
-                    eye.setAttribute('data-lucide', 'eye-off');
-                } else {
-                    inp.type = 'password';
-                    eye.setAttribute('data-lucide', 'eye');
-                }
-                lucide.createIcons();
-            };
+            // Funções mantidas como no-op para segurança e compatibilidade
+            window.acaoSenhaGaleria = async function () {};
+            window.bloquearGaleria = function () {};
+            window.toggleGaleriaSenhaVisibilidade = function () {};
 
             // ===== DRAG & DROP =====
             function configurarDragDrop() {
