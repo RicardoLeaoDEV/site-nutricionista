@@ -18,6 +18,10 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- html2pdf.js para Exportação de PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Scripts da Suíte Profissional & Engine ApexFit -->
+    <script src="js/apexfit-core.js"></script>
+    <script src="js/checkin-system.js"></script>
+    <script src="js/professional-suite.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -328,11 +332,14 @@
                     </div>
                 </div>
                 <button type="submit" id="btn-cadastrar-aluno"
-                    class="w-full bg-slate-800 hover:bg-slate-700 text-orange-400 font-bold py-3 rounded-xl transition-all border border-slate-700 flex items-center justify-center gap-2">
+                    class="w-full bg-slate-800 hover:bg-slate-700 text-orange-400 font-bold py-3 rounded-xl transition-all border border-slate-700 flex items-center justify-center gap-2 cursor-pointer">
                     <i data-lucide="user-check" class="w-4 h-4"></i>
                     <span>Cadastrar Aluno no Sistema</span>
                 </button>
-               <!-- SEÇÃO: Montar Treino do Aluno (Accordion) -->
+            </form>
+        </section>
+
+        <!-- SEÇÃO: Montar Treino do Aluno (Accordion) -->
         <section id="secao-cadastrar-treino"
             class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
@@ -666,7 +673,7 @@
 
         <!-- SEÇÃO: Central de Check-ins Semanais (Accordion) -->
         <section id="secao-checkins" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
-            <div onclick="toggleSecaoDashboard(this)"
+            <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3">
                     <div
@@ -679,7 +686,7 @@
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -690,7 +697,7 @@
 
         <!-- SEÇÃO: Agenda de Consultas & Treinos (Accordion) -->
         <section id="secao-agenda" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
-            <div onclick="toggleSecaoDashboard(this)"
+            <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3">
                     <div
@@ -703,7 +710,7 @@
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -714,7 +721,7 @@
 
         <!-- SEÇÃO: Painel Financeiro & Planos (Accordion) -->
         <section id="secao-financeiro" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
-            <div onclick="toggleSecaoDashboard(this)"
+            <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3">
                     <div
@@ -727,7 +734,7 @@
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -738,7 +745,7 @@
 
         <!-- SEÇÃO: Assistente Clínico IA (Accordion) -->
         <section id="secao-ia" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
-            <div onclick="toggleSecaoDashboard(this)"
+            <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3">
                     <div
@@ -751,7 +758,7 @@
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -864,14 +871,127 @@
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // ===== FUNÇÃO GLOBAL DE EXPANDIR/RECOLHER ACCORDIONS =====
+        // ===== FUNÇÕES DEDICADAS DE RENDERIZAÇÃO DAS 4 SEÇÕES DO PERSONAL =====
+        window.renderizarSecaoCheckinsPersonal = function (alunoId = null) {
+            const container = document.getElementById('conteudo-checkins-personal');
+            if (!container) return;
+            const alunoSel = alunoId || document.getElementById('aluno-select')?.value || document.getElementById('fotos-aluno-select')?.value || null;
+            if (window.ApexCheckin && typeof ApexCheckin.renderPainelProfissional === 'function') {
+                ApexCheckin.renderPainelProfissional('conteudo-checkins-personal', alunoSel);
+            }
+        };
+
+        window.renderizarSecaoAgendaPersonal = function () {
+            const container = document.getElementById('conteudo-agenda-personal');
+            if (!container) return;
+            if (window.ApexProfissional && typeof ApexProfissional.renderAgenda === 'function') {
+                ApexProfissional.renderAgenda('conteudo-agenda-personal');
+            }
+        };
+
+        window.renderizarSecaoFinanceiroPersonal = function () {
+            const container = document.getElementById('conteudo-financeiro-personal');
+            if (!container) return;
+            if (window.ApexProfissional && typeof ApexProfissional.renderFinanceiro === 'function') {
+                ApexProfissional.renderFinanceiro('conteudo-financeiro-personal');
+            }
+        };
+
+        window.renderizarSecaoIAPersonal = function (alunoNome = null) {
+            const container = document.getElementById('conteudo-ia-personal');
+            if (!container) return;
+            let nome = alunoNome;
+            if (!nome) {
+                const sel = document.getElementById('aluno-select') || document.getElementById('fotos-aluno-select');
+                if (sel && sel.selectedOptions && sel.selectedOptions.length > 0 && sel.value) {
+                    nome = sel.selectedOptions[0].textContent.split('(')[0].trim();
+                }
+            }
+            if (!nome || nome === 'Selecione um aluno...') nome = 'Ricardo Leão';
+            if (window.ApexProfissional && typeof ApexProfissional.renderPainelIA === 'function') {
+                ApexProfissional.renderPainelIA('conteudo-ia-personal', nome);
+            }
+        };
+
+        // Garante que o conteúdo de cada seção seja renderizado corretamente ao abrir
+        function renderizarSecaoProfissionalAoAbrir(header, content) {
+            if (!content) return;
+
+            // 1. Central de Check-ins Semanais
+            if (content.querySelector('#conteudo-checkins-personal') || header.closest('#secao-checkins')) {
+                renderizarSecaoCheckinsPersonal();
+            }
+
+            // 2. Agenda de Consultas & Treinos
+            if (content.querySelector('#conteudo-agenda-personal') || header.closest('#secao-agenda')) {
+                renderizarSecaoAgendaPersonal();
+            }
+
+            // 3. Painel Financeiro & Planos
+            if (content.querySelector('#conteudo-financeiro-personal') || header.closest('#secao-financeiro')) {
+                renderizarSecaoFinanceiroPersonal();
+            }
+
+            // 4. Assistente Clínico IA
+            if (content.querySelector('#conteudo-ia-personal') || header.closest('#secao-ia')) {
+                renderizarSecaoIAPersonal();
+            }
+        }
+
+        // Inicializa antecipadamente todas as quatro seções para visualização instantânea
+        window.inicializarTodasSecoesProfissionais = function () {
+            const totalAlunos = (typeof listaAlunosCache !== 'undefined' && listaAlunosCache.length)
+                ? listaAlunosCache.length
+                : (typeof perfisAlunosCache !== 'undefined' ? Object.keys(perfisAlunosCache).length : 1);
+
+            if (window.ApexProfissional) {
+                if (document.getElementById('container-resumo-personal')) {
+                    ApexProfissional.renderDashboardResumo('container-resumo-personal', {
+                        alunos: totalAlunos || 1,
+                        checkinsPendentes: 1,
+                        consultasHoje: 2,
+                        pagamentosPendentes: 0
+                    });
+                }
+                renderizarSecaoAgendaPersonal();
+                renderizarSecaoFinanceiroPersonal();
+                renderizarSecaoIAPersonal();
+            }
+
+            if (window.ApexCheckin) {
+                renderizarSecaoCheckinsPersonal();
+            }
+
+            if (window.lucide) {
+                setTimeout(() => lucide.createIcons(), 60);
+            }
+        };
+
+        // ===== FUNÇÃO GLOBAL DE EXPANDIR/RECOLHER ACCORDIONS COM AUTO-RENDER =====
         window.toggleSecaoDashboard = function (headerElement) {
-            const content = headerElement.nextElementSibling;
+            if (!headerElement) return;
+
+            // Resolve o container de cabeçalho mesmo se o clique veio da seta ou ícone
+            const header = (headerElement.classList && headerElement.classList.contains('collapse-header'))
+                ? headerElement
+                : (headerElement.closest ? headerElement.closest('.collapse-header') : null) || headerElement;
+
+            const content = header.nextElementSibling || (header.parentElement ? header.parentElement.querySelector('.collapse-content') : null);
+            if (!content) return;
+
             const isOpen = content.classList.contains('expanded');
-            headerElement.classList.toggle('active', !isOpen);
-            content.classList.toggle('expanded', !isOpen);
-            if (!isOpen && window.lucide) {
-                setTimeout(() => lucide.createIcons(), 50);
+            const willOpen = !isOpen;
+
+            header.classList.toggle('active', willOpen);
+            content.classList.toggle('expanded', willOpen);
+
+            if (willOpen) {
+                // Renderiza o conteúdo imediatamente ao abrir para que nunca fique vazio
+                renderizarSecaoProfissionalAoAbrir(header, content);
+
+                if (window.lucide) {
+                    setTimeout(() => lucide.createIcons(), 60);
+                }
             }
         };
 
@@ -908,12 +1028,13 @@
             const el = document.getElementById(id);
             if (!el) return;
 
-            // Se for um accordion fechado, abre automaticamente
+            // Se for um accordion fechado, abre automaticamente e renderiza o conteúdo
             const header = el.querySelector('.collapse-header');
             const content = el.querySelector('.collapse-content');
             if (header && content && !content.classList.contains('expanded')) {
                 header.classList.add('active');
                 content.classList.add('expanded');
+                renderizarSecaoProfissionalAoAbrir(header, content);
             }
 
             el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1103,21 +1224,7 @@
             iniciarRealtimeEPolling();
 
             // Inicializar Suíte de Gestão e Check-ins no Painel do Personal
-            if (window.ApexProfissional) {
-                const totalAlunos = Object.keys(perfisAlunosCache || {}).length || 1;
-                ApexProfissional.renderDashboardResumo('container-resumo-personal', {
-                    alunos: totalAlunos,
-                    checkinsPendentes: 1,
-                    consultasHoje: 2,
-                    pagamentosPendentes: 0
-                });
-                ApexProfissional.renderAgenda('conteudo-agenda-personal');
-                ApexProfissional.renderFinanceiro('conteudo-financeiro-personal');
-                ApexProfissional.renderPainelIA('conteudo-ia-personal', 'Ricardo Leão');
-            }
-            if (window.ApexCheckin) {
-                ApexCheckin.renderPainelProfissional('conteudo-checkins-personal');
-            }
+            inicializarTodasSecoesProfissionais();
         }
 
         // ==============================================================
@@ -1313,8 +1420,15 @@
                     selectEl.appendChild(option);
                 });
 
-                // Listener para atualizar o card clínico do aluno no momento da prescrição da dieta
-                selectEl.onchange = (e) => atualizarCardAlunoClinico(e.target.value);
+                // Listener para atualizar o card clínico do aluno, check-ins e IA
+                selectEl.onchange = (e) => {
+                    const alunoId = e.target.value;
+                    atualizarCardAlunoClinico(alunoId);
+                    const opt = selectEl.selectedOptions ? selectEl.selectedOptions[0] : null;
+                    const nome = opt ? opt.textContent.split('(')[0].trim() : 'Aluno';
+                    renderizarSecaoCheckinsPersonal(alunoId);
+                    renderizarSecaoIAPersonal(nome);
+                };
             }
 
             if (selectFotosEl) {
@@ -2087,6 +2201,11 @@
             navegarParaSecao('secao-cadastrar-treino');
         }
 
+        // Pré-inicializa todas as quatro seções imediatamente para que o conteúdo já esteja disponível ao abrir
+        if (typeof inicializarTodasSecoesProfissionais === 'function') {
+            inicializarTodasSecoesProfissionais();
+        }
+
         verificarSessao();
     </script>
 
@@ -2130,9 +2249,6 @@
             </button>
         </div>
     </div>
-    <script src="js/apexfit-core.js"></script>
-    <script src="js/checkin-system.js"></script>
-    <script src="js/professional-suite.js"></script>
 </body>
 
 </html>

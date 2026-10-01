@@ -20,6 +20,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- Banco de Alimentos & Macronutrientes Core -->
     <script src="js/grocery-foods.js"></script>
+    <!-- Scripts da Suíte Profissional & Engine ApexFit -->
+    <script src="js/apexfit-core.js"></script>
+    <script src="js/checkin-system.js"></script>
+    <script src="js/professional-suite.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -219,11 +223,6 @@
                                 <span>Refeições atuais</span>
                             </button>
 
-                            <button onclick="navegarParaSecao('secao-banco-alimentos')"
-                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-lime-400 hover:bg-slate-800 transition-colors">
-                                <i data-lucide="database" class="w-4 h-4 text-lime-400"></i>
-                                <span>Banco de Alimentos</span>
-                            </button>
 
                             <button onclick="navegarParaSecao('secao-checkins-nutri')"
                                 class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-amber-400 hover:bg-slate-800 transition-colors">
@@ -1193,29 +1192,6 @@
             </div>
         </section>
 
-        <!-- SEÇÃO: Banco de Alimentos & Macronutrientes (Accordion) -->
-        <section id="secao-banco-alimentos" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
-            <div onclick="toggleSecaoDashboard(this)"
-                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                        <i data-lucide="apple" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Banco de Alimentos & Macronutrientes</h2>
-                        <p class="text-xs text-slate-400">Tabela de composição nutricional (TACO/IBGE) e equivalências</p>
-                    </div>
-                </div>
-                <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
-                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                </div>
-            </div>
-            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
-                <div id="conteudo-banco-alimentos"></div>
-            </div>
-        </section>
 
         <!-- SEÇÃO: Agenda de Consultas & Retornos (Accordion) -->
         <section id="secao-agenda-nutri" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
@@ -1393,14 +1369,127 @@
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // ===== FUNÇÃO GLOBAL DE EXPANDIR/RECOLHER ACCORDIONS =====
+        // ===== FUNÇÕES DEDICADAS DE RENDERIZAÇÃO DAS SEÇÕES PROFISSIONAIS NO ADMIN =====
+        window.renderizarSecaoCheckinsNutri = function (alunoId = null) {
+            const container = document.getElementById('conteudo-checkins-nutri');
+            if (!container) return;
+            const alunoSel = alunoId || document.getElementById('aluno-select')?.value || null;
+            if (window.ApexCheckin && typeof ApexCheckin.renderPainelProfissional === 'function') {
+                ApexCheckin.renderPainelProfissional('conteudo-checkins-nutri', alunoSel);
+            }
+        };
+
+        window.renderizarSecaoAgendaNutri = function () {
+            const container = document.getElementById('conteudo-agenda-nutri');
+            if (!container) return;
+            if (window.ApexProfissional && typeof ApexProfissional.renderAgenda === 'function') {
+                ApexProfissional.renderAgenda('conteudo-agenda-nutri');
+            }
+        };
+
+        window.renderizarSecaoFinanceiroNutri = function () {
+            const container = document.getElementById('conteudo-financeiro-nutri');
+            if (!container) return;
+            if (window.ApexProfissional && typeof ApexProfissional.renderFinanceiro === 'function') {
+                ApexProfissional.renderFinanceiro('conteudo-financeiro-nutri');
+            }
+        };
+
+        window.renderizarSecaoIANutri = function (alunoNome = null) {
+            const container = document.getElementById('conteudo-ia-nutri');
+            if (!container) return;
+            let nome = alunoNome;
+            if (!nome) {
+                const sel = document.getElementById('aluno-select');
+                if (sel && sel.selectedOptions && sel.selectedOptions.length > 0 && sel.value) {
+                    nome = sel.selectedOptions[0].textContent.split('(')[0].trim();
+                }
+            }
+            if (!nome || nome === 'Selecione um aluno...') nome = 'Ricardo Leão';
+            if (window.ApexProfissional && typeof ApexProfissional.renderPainelIA === 'function') {
+                ApexProfissional.renderPainelIA('conteudo-ia-nutri', nome);
+            }
+        };
+
+        // Garante que o conteúdo de cada seção seja renderizado corretamente ao abrir
+        function renderizarSecaoProfissionalAoAbrir(header, content) {
+            if (!content) return;
+
+            // 1. Central de Check-ins Semanais
+            if (content.querySelector('#conteudo-checkins-nutri') || header.closest('#secao-checkins-nutri')) {
+                renderizarSecaoCheckinsNutri();
+            }
+
+            // 2. Agenda de Consultas & Treinos
+            if (content.querySelector('#conteudo-agenda-nutri') || header.closest('#secao-agenda-nutri')) {
+                renderizarSecaoAgendaNutri();
+            }
+
+            // 3. Painel Financeiro & Planos
+            if (content.querySelector('#conteudo-financeiro-nutri') || header.closest('#secao-financeiro-nutri')) {
+                renderizarSecaoFinanceiroNutri();
+            }
+
+            // 4. Assistente Clínico IA
+            if (content.querySelector('#conteudo-ia-nutri') || header.closest('#secao-ia-nutri')) {
+                renderizarSecaoIANutri();
+            }
+        }
+
+        // Inicializa antecipadamente todas as seções profissionais para visualização instantânea
+        window.inicializarTodasSecoesProfissionaisAdmin = function () {
+            const totalAlunos = (typeof listaAlunosCache !== 'undefined' && listaAlunosCache.length)
+                ? listaAlunosCache.length
+                : (typeof perfisAlunosCache !== 'undefined' ? Object.keys(perfisAlunosCache).length : 1);
+
+            if (window.ApexProfissional) {
+                if (document.getElementById('container-resumo-nutri')) {
+                    ApexProfissional.renderDashboardResumo('container-resumo-nutri', {
+                        alunos: totalAlunos || 1,
+                        checkinsPendentes: 1,
+                        consultasHoje: 2,
+                        pagamentosPendentes: 0
+                    });
+                }
+                renderizarSecaoAgendaNutri();
+                renderizarSecaoFinanceiroNutri();
+                renderizarSecaoIANutri();
+            }
+
+            if (window.ApexCheckin) {
+                renderizarSecaoCheckinsNutri();
+            }
+
+            if (window.lucide) {
+                setTimeout(() => lucide.createIcons(), 60);
+            }
+        };
+
+        // ===== FUNÇÃO GLOBAL DE EXPANDIR/RECOLHER ACCORDIONS COM AUTO-RENDER =====
         window.toggleSecaoDashboard = function (headerElement) {
-            const content = headerElement.nextElementSibling;
+            if (!headerElement) return;
+
+            // Resolve o container de cabeçalho mesmo se o clique veio da seta ou ícone
+            const header = (headerElement.classList && headerElement.classList.contains('collapse-header'))
+                ? headerElement
+                : (headerElement.closest ? headerElement.closest('.collapse-header') : null) || headerElement;
+
+            const content = header.nextElementSibling || (header.parentElement ? header.parentElement.querySelector('.collapse-content') : null);
+            if (!content) return;
+
             const isOpen = content.classList.contains('expanded');
-            headerElement.classList.toggle('active', !isOpen);
-            content.classList.toggle('expanded', !isOpen);
-            if (!isOpen && window.lucide) {
-                setTimeout(() => lucide.createIcons(), 50);
+            const willOpen = !isOpen;
+
+            header.classList.toggle('active', willOpen);
+            content.classList.toggle('expanded', willOpen);
+
+            if (willOpen) {
+                // Renderiza o conteúdo imediatamente ao abrir para que nunca fique vazio
+                renderizarSecaoProfissionalAoAbrir(header, content);
+
+                if (window.lucide) {
+                    setTimeout(() => lucide.createIcons(), 60);
+                }
             }
         };
 
@@ -1437,12 +1526,13 @@
             const el = document.getElementById(id);
             if (!el) return;
 
-            // Se for um accordion fechado, abre automaticamente
+            // Se for um accordion fechado, abre automaticamente e renderiza o conteúdo
             const header = el.querySelector('.collapse-header');
             const content = el.querySelector('.collapse-content');
             if (header && content && !content.classList.contains('expanded')) {
                 header.classList.add('active');
                 content.classList.add('expanded');
+                renderizarSecaoProfissionalAoAbrir(header, content);
             }
 
             el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1631,22 +1721,7 @@
             iniciarRealtimeEPolling();
 
             // Inicializar Suíte de Gestão, Check-ins, Banco de Alimentos e IA no Admin
-            if (window.ApexProfissional) {
-                const totalAlunos = Object.keys(perfisAlunosCache || {}).length || 1;
-                ApexProfissional.renderDashboardResumo('container-resumo-nutri', {
-                    alunos: totalAlunos,
-                    checkinsPendentes: 1,
-                    consultasHoje: 2,
-                    pagamentosPendentes: 0
-                });
-                ApexProfissional.renderAgenda('conteudo-agenda-nutri');
-                ApexProfissional.renderFinanceiro('conteudo-financeiro-nutri');
-                ApexProfissional.renderPainelIA('conteudo-ia-nutri', 'Ricardo Leão');
-            }
-            if (window.ApexCheckin) {
-                ApexCheckin.renderPainelProfissional('conteudo-checkins-nutri');
-            }
-            renderBancoAlimentosAdmin();
+            inicializarTodasSecoesProfissionaisAdmin();
             inicializarBancoAlimentosBuilder();
         }
 
@@ -3488,85 +3563,7 @@ _Prescrição elaborada pelo seu nutricionista._`;
             navegarParaSecao('secao-cadastrar-refeicao');
         }
 
-        // ===== BANCO DE ALIMENTOS NO ADMIN (Item 8) =====
-        function renderBancoAlimentosAdmin() {
-            const container = document.getElementById('conteudo-banco-alimentos');
-            if (!container || !window.ApexAlimentos) return;
 
-            container.innerHTML = `
-                <div class="space-y-6">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
-                        <div>
-                            <span class="text-xs font-bold uppercase tracking-wider text-lime-400 flex items-center gap-1.5 mb-1">
-                                <i data-lucide="database" class="w-3.5 h-3.5"></i>Tabela Nutricional TACO / IBGE
-                            </span>
-                            <h2 class="text-lg font-bold text-white">Banco de Alimentos & Macronutrientes 🥗</h2>
-                            <p class="text-xs text-slate-400">Pesquise alimentos com dados nutricionais completos para montar dietas precisas.</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
-                        <div class="sm:col-span-8 relative">
-                            <input type="text" id="busca-alimento-admin" oninput="filtrarTabelaAlimentosAdmin()" placeholder="Pesquisar alimento (ex: Frango, Arroz, Aveia, Ovo...)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-lime-500">
-                        </div>
-                        <div class="sm:col-span-4">
-                            <select id="categoria-alimento-admin" onchange="filtrarTabelaAlimentosAdmin()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-xs text-slate-200 focus:outline-none">
-                                <option value="todos">Todas as Categorias</option>
-                                <option value="Proteínas">Proteínas</option>
-                                <option value="Carboidratos">Carboidratos</option>
-                                <option value="Frutas">Frutas</option>
-                                <option value="Vegetais">Vegetais</option>
-                                <option value="Gorduras">Gorduras</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="overflow-x-auto max-h-96 rounded-2xl border border-slate-800 bg-slate-950/60">
-                        <table class="w-full text-left text-xs text-slate-300">
-                            <thead class="bg-slate-900/90 text-slate-400 uppercase text-[10px] font-bold sticky top-0 border-b border-slate-800">
-                                <tr>
-                                    <th class="p-3">Alimento</th>
-                                    <th class="p-3">Porção</th>
-                                    <th class="p-3 text-lime-400">Calorias</th>
-                                    <th class="p-3 text-blue-400">Proteína</th>
-                                    <th class="p-3 text-amber-400">Carbo</th>
-                                    <th class="p-3 text-rose-400">Gordura</th>
-                                    <th class="p-3 text-right">Ação</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody-banco-alimentos" class="divide-y divide-slate-800/60">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-            if (window.lucide) window.lucide.createIcons();
-            filtrarTabelaAlimentosAdmin();
-        }
-
-        function filtrarTabelaAlimentosAdmin() {
-            const termo = document.getElementById('busca-alimento-admin')?.value || '';
-            const cat = document.getElementById('categoria-alimento-admin')?.value || 'todos';
-            const tbody = document.getElementById('tbody-banco-alimentos');
-            if (!tbody || !window.ApexAlimentos) return;
-
-            const lista = ApexAlimentos.buscar(termo, cat);
-            tbody.innerHTML = lista.map(a => `
-                <tr class="hover:bg-slate-900/60 transition-colors">
-                    <td class="p-3 font-bold text-white">${a.nome} <span class="text-[10px] text-slate-500 font-normal">(${a.cat})</span></td>
-                    <td class="p-3 text-slate-400">${a.porcao}</td>
-                    <td class="p-3 font-black text-lime-400">${a.cal} kcal</td>
-                    <td class="p-3 font-semibold text-blue-400">${a.prot}g</td>
-                    <td class="p-3 font-semibold text-amber-400">${a.carb}g</td>
-                    <td class="p-3 font-semibold text-rose-400">${a.gord}g</td>
-                    <td class="p-3 text-right">
-                        <button type="button" onclick="inserirAlimentoNaRefeicao('${a.nome}', '${a.porcao}')" class="px-2.5 py-1 rounded-lg bg-lime-500/10 hover:bg-lime-500/20 text-lime-400 border border-lime-500/30 text-[11px] font-bold transition-all cursor-pointer">
-                            + Inserir
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-        }
 
         // ==============================================================
         // BANCO DE ALIMENTOS & CALCULADORA INTEGRADA DE MACROS (SENIOR UX)
@@ -3842,9 +3839,6 @@ _Prescrição elaborada pelo seu nutricionista._`;
                 aoMudarAlimentoBuilder();
             }
 
-            if (typeof renderBancoAlimentosAdmin === 'function') {
-                renderBancoAlimentosAdmin();
-            }
 
             showToast('Alimento Cadastrado! 🎉', `"${nome}" foi incluído no banco de dados.`, 'success');
         }
@@ -3885,15 +3879,22 @@ _Prescrição elaborada pelo seu nutricionista._`;
             const { data, error } = await supabaseClient
                 .from('dietas')
                 .select('*')
-                .eq('aluno_id', alunoId)
-                .order('created_at', { ascending: true });
+                .eq('aluno_id', alunoId);
 
             if (error) {
                 box.innerHTML = `<p class="text-xs text-rose-400">Erro ao carregar refeições: ${error.message}</p>`;
                 return;
             }
 
-            dietasAlunoAtual = data || [];
+            // Ordena as refeições pelo horário (ou ID como critério secundário)
+            dietasAlunoAtual = (data || []).sort((a, b) => {
+                const hA = (a.horario || '').trim();
+                const hB = (b.horario || '').trim();
+                if (hA && hB) return hA.localeCompare(hB);
+                if (hA) return -1;
+                if (hB) return 1;
+                return (a.id || 0) > (b.id || 0) ? 1 : -1;
+            });
 
             if (dietasAlunoAtual.length === 0) {
                 box.innerHTML = `
@@ -4048,6 +4049,11 @@ _Prescrição elaborada pelo seu nutricionista._`;
             }
         }
 
+        // Pré-inicializa todas as seções profissionais imediatamente
+        if (typeof inicializarTodasSecoesProfissionaisAdmin === 'function') {
+            inicializarTodasSecoesProfissionaisAdmin();
+        }
+
         verificarSessao();
     </script>
 
@@ -4173,11 +4179,6 @@ _Prescrição elaborada pelo seu nutricionista._`;
             </form>
         </div>
     </div>
-
-    <script src="js/apexfit-core.js"></script>
-    <script src="js/checkin-system.js"></script>
-    <script src="js/grocery-foods.js"></script>
-    <script src="js/professional-suite.js"></script>
 </body>
 
 </html>

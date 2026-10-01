@@ -172,21 +172,26 @@
             }
 
             // Fallback: busca na tabela mensagens
-            if (alunoId && fallbackChannel) {
+            if (fallbackChannel) {
                 try {
-                    const { data, error } = await supabaseClient
+                    let query = supabaseClient
                         .from('mensagens')
-                        .select('id, mensagem, created_at')
-                        .eq('aluno_id', alunoId)
+                        .select('id, aluno_id, mensagem, created_at')
                         .eq('remetente', `sistema_${fallbackChannel}`)
                         .order('created_at', { ascending: false })
                         .limit(limit);
 
-                    if (!error && data) {
+                    if (alunoId) {
+                        query = query.eq('aluno_id', alunoId);
+                    }
+
+                    const { data, error } = await query;
+
+                    if (!error && data && data.length > 0) {
                         return data.map(m => {
                             try {
                                 const parsed = JSON.parse(m.mensagem);
-                                return { id: m.id, created_at: m.created_at, ...parsed };
+                                return { id: m.id, aluno_id: m.aluno_id, created_at: m.created_at, ...parsed };
                             } catch (e) {
                                 return null;
                             }
@@ -196,8 +201,23 @@
 
                 // Fallback do localStorage se estiver offline
                 try {
-                    const localKey = `apex_${fallbackChannel}_${alunoId}`;
-                    return JSON.parse(localStorage.getItem(localKey) || '[]');
+                    if (alunoId) {
+                        const localKey = `apex_${fallbackChannel}_${alunoId}`;
+                        return JSON.parse(localStorage.getItem(localKey) || '[]');
+                    } else {
+                        const prefix = `apex_${fallbackChannel}_`;
+                        const all = [];
+                        for (let i = 0; i < localStorage.length; i++) {
+                            const k = localStorage.key(i);
+                            if (k && k.startsWith(prefix)) {
+                                try {
+                                    const items = JSON.parse(localStorage.getItem(k) || '[]');
+                                    all.push(...items);
+                                } catch (e) { }
+                            }
+                        }
+                        return all.sort((a, b) => new Date(b._timestamp || b.created_at || 0) - new Date(a._timestamp || a.created_at || 0)).slice(0, limit);
+                    }
                 } catch (e) {
                     return [];
                 }

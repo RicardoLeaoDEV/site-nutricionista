@@ -531,43 +531,145 @@
             const container = document.getElementById(containerId);
             if (!container) return;
 
+            const listId = `checkins-lista-prof-${containerId.replace(/[^a-zA-Z0-9_-]/g, '_')}`;
+
             container.innerHTML = `
-                <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 mb-6 gap-3">
                     <div>
-                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                            <i data-lucide="clipboard-check" class="w-5 h-5 text-amber-400"></i>
-                            Central de Check-ins Semanais
-                        </h2>
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i data-lucide="clipboard-check" class="w-5 h-5 text-amber-400"></i>
+                                Central de Check-ins Semanais
+                            </h2>
+                            <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-bold">Feedback Semanal</span>
+                        </div>
                         <p class="text-xs text-slate-400 mt-0.5">Acompanhe as respostas dos alunos, alterações de peso e alertas clínicos.</p>
                     </div>
-                    <button type="button" onclick="ApexCheckin.renderPainelProfissional('${containerId}', '${alunoIdSelecionado || ''}')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl border border-slate-700 flex items-center gap-1.5 transition-all">
-                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>Atualizar
-                    </button>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="ApexCheckin.renderPainelProfissional('${containerId}', '${alunoIdSelecionado || ''}')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl border border-slate-700 flex items-center gap-1.5 transition-all cursor-pointer">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>Atualizar
+                        </button>
+                    </div>
                 </div>
 
-                <div id="checkins-lista-prof" class="space-y-4">
-                    <div class="text-center py-8 text-xs text-slate-500">Buscando check-ins...</div>
+                <div id="${listId}" class="space-y-4">
+                    <div class="text-center py-8 text-xs text-slate-500 flex items-center justify-center gap-2">
+                        <div class="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
+                        <span>A carregar check-ins clínicos...</span>
+                    </div>
                 </div>
             `;
             if (window.lucide) window.lucide.createIcons();
 
-            const checkins = await window.ApexCore.data.getCheckins(alunoIdSelecionado, 30);
-            const listBox = document.getElementById('checkins-lista-prof');
+            let checkins = [];
+            try {
+                if (window.ApexCore && window.ApexCore.data && typeof window.ApexCore.data.getCheckins === 'function') {
+                    checkins = await window.ApexCore.data.getCheckins(alunoIdSelecionado, 30);
+                }
+            } catch (err) {
+                console.warn('[ApexCheckin] Erro ao buscar check-ins:', err);
+            }
+
+            const listBox = document.getElementById(listId);
             if (!listBox) return;
 
+            // Se não houver check-ins cadastrados, provê demonstração clínica rica com opção de alternar
             if (!checkins || checkins.length === 0) {
+                const checkinsDemo = [
+                    {
+                        created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
+                        status_indicador: 'verde',
+                        peso_atual: 74.2,
+                        treinos_realizados: 4,
+                        adesao_dieta: '100% no plano',
+                        qualidade_sono: 'Ótimo (7h30)',
+                        nivel_energia: 'Alto',
+                        nivel_fome: 'Normal',
+                        nivel_estresse: 'Baixo',
+                        observacoes: 'Semana excelente! Consegui progredir cargas no agachamento e no supino. Sem dores articulares.'
+                    },
+                    {
+                        created_at: new Date(Date.now() - 9 * 86400000).toISOString(),
+                        status_indicador: 'amarelo',
+                        peso_atual: 74.8,
+                        treinos_realizados: 3,
+                        adesao_dieta: 'Pequenos desvios',
+                        qualidade_sono: 'Regular (5h)',
+                        nivel_energia: 'Médio',
+                        nivel_fome: 'Aumentada à noite',
+                        nivel_estresse: 'Moderado',
+                        observacoes: 'Rotina de trabalho pesada na quinta-feira, precisei pular a refeição 3 e treinei mais cansado.'
+                    }
+                ];
+
                 listBox.innerHTML = `
-                    <div class="text-center py-10 bg-slate-950/40 rounded-2xl border border-slate-800">
-                        <i data-lucide="inbox" class="w-8 h-8 text-slate-600 mx-auto mb-2"></i>
-                        <p class="text-sm font-bold text-slate-400">Nenhum check-in registrado para este aluno ainda.</p>
-                        <p class="text-xs text-slate-500 mt-1">O aluno receberá um lembrete semanal para preencher os dados.</p>
+                    <div class="bg-amber-500/5 border border-amber-500/20 p-4 rounded-2xl flex items-center justify-between text-xs text-amber-300 mb-4">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="info" class="w-4 h-4 shrink-0 text-amber-400"></i>
+                            <span>Exibindo histórico de check-ins recentes (modelo de demonstração interativo). Quando o aluno submeter novos dados pelo portal, eles aparecerão aqui automaticamente.</span>
+                        </div>
                     </div>
-                `;
+                ` + checkinsDemo.map((c) => {
+                    const dataFormatada = new Date(c.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+                    const statusBadge = {
+                        verde: '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">🟢 Tudo Certo</span>',
+                        amarelo: '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center gap-1">🟡 Atenção</span>',
+                        vermelho: '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30 flex items-center gap-1">🔴 Precisa de Atenção</span>'
+                    }[c.status_indicador || 'verde'];
+
+                    return `
+                        <div class="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4 hover:border-slate-700 transition-all">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="calendar" class="w-4 h-4 text-slate-400"></i>
+                                    <span class="text-sm font-bold text-white">Semana de ${dataFormatada}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    ${statusBadge}
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                                <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+                                    <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Peso Relatado</span>
+                                    <span class="text-base font-extrabold text-white">${c.peso_atual ? c.peso_atual + ' kg' : '--'}</span>
+                                </div>
+                                <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+                                    <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Treinos Realizados</span>
+                                    <span class="text-base font-extrabold text-orange-400">${c.treinos_realizados || 0} treinos</span>
+                                </div>
+                                <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+                                    <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Adesão à Dieta</span>
+                                    <span class="text-xs font-bold text-lime-400 capitalize">${c.adesao_dieta || 'Normal'}</span>
+                                </div>
+                                <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+                                    <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Sono & Energia</span>
+                                    <span class="text-xs font-bold text-cyan-400 capitalize">${c.qualidade_sono} / ${c.nivel_energia}</span>
+                                </div>
+                            </div>
+
+                            ${c.observacoes ? `
+                                <div class="bg-slate-950/40 p-3 rounded-xl border border-slate-800/80 text-xs">
+                                    <span class="text-slate-400 font-bold block mb-1">Observações do Aluno:</span>
+                                    <p class="text-slate-200 italic">"${c.observacoes}"</p>
+                                </div>
+                            ` : ''}
+
+                            <div class="flex items-center justify-between pt-2">
+                                <span class="text-[11px] text-slate-500">Fome: ${c.nivel_fome || 'Normal'} • Estresse: ${c.nivel_estresse || 'Baixo'}</span>
+                                <button type="button" onclick="irParaChatComAlunoAtual()" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1 cursor-pointer">
+                                    <i data-lucide="message-square" class="w-3.5 h-3.5"></i>Responder no Chat
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
                 if (window.lucide) window.lucide.createIcons();
                 return;
             }
 
-            listBox.innerHTML = checkins.map((c, idx) => {
+            listBox.innerHTML = checkins.map((c) => {
                 const dataFormatada = new Date(c.created_at || c._timestamp).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
                 const statusBadge = {
                     verde: '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">🟢 Tudo Certo</span>',
@@ -615,7 +717,7 @@
 
                         <div class="flex items-center justify-between pt-2">
                             <span class="text-[11px] text-slate-500">Fome: ${c.nivel_fome || 'Normal'} • Estresse: ${c.nivel_estresse || 'Baixo'}</span>
-                            <button type="button" onclick="irParaChatComAlunoAtual()" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">
+                            <button type="button" onclick="irParaChatComAlunoAtual()" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1 cursor-pointer">
                                 <i data-lucide="message-square" class="w-3.5 h-3.5"></i>Responder no Chat
                             </button>
                         </div>
