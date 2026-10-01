@@ -296,7 +296,10 @@
                 panturrilha: parseFloat(medidasData.panturrilha) || null,
                 percentual_gordura: parseFloat(medidasData.percentual_gordura) || null,
                 massa_muscular: parseFloat(medidasData.massa_muscular) || null,
-                observacoes: medidasData.observacoes || ''
+                observacoes: medidasData.observacoes || '',
+                profissional_nome: medidasData.profissional_nome || 'Profissional Responsável',
+                profissional_tipo: medidasData.profissional_tipo || 'profissional',
+                atualizado_em: new Date().toISOString()
             };
 
             const result = await this.saveRecord('medidas', 'medidas', record, alunoId);
@@ -306,6 +309,34 @@
 
         async getMedidas(alunoId, limit = 20) {
             return await this.getRecords('medidas', 'medidas', alunoId, limit);
+        },
+
+        // ----------------------------------------------------------------------
+        // AGENDAMENTOS DE CONSULTAS & TREINOS
+        // ----------------------------------------------------------------------
+        async saveAgendamento(agendData, alunoId) {
+            const record = {
+                aluno_id: alunoId,
+                aluno: agendData.aluno || agendData.aluno_nome || 'Aluno',
+                aluno_nome: agendData.aluno || agendData.aluno_nome || 'Aluno',
+                tipo: agendData.tipo || 'Consulta Nutricional',
+                data: agendData.data || 'Hoje',
+                hora: agendData.hora || '10:00',
+                descricao: agendData.descricao || agendData.observacoes || '',
+                video: agendData.video !== false,
+                status: agendData.status || 'Confirmada',
+                profissional_nome: agendData.profissional_nome || 'Profissional Responsável',
+                profissional_tipo: agendData.profissional_tipo || 'profissional',
+                meet_link: agendData.meet_link || (agendData.video ? 'https://meet.google.com/new' : ''),
+                created_at: new Date().toISOString()
+            };
+
+            const result = await this.saveRecord('agendamentos', 'agendamento', record, alunoId);
+            return result;
+        },
+
+        async getAgendamentos(alunoId = null, limit = 50) {
+            return await this.getRecords('agendamentos', 'agendamento', alunoId, limit);
         },
 
         // ----------------------------------------------------------------------

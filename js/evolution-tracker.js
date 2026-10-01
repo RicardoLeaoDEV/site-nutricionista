@@ -13,9 +13,15 @@
         alunoIdAtual: null,
         fotosCache: [],
         medidasCache: [],
+        isProfissional: false,
+        profissionalNome: '',
+        profissionalTipo: '',
 
-        init(alunoId) {
+        init(alunoId, options = {}) {
             this.alunoIdAtual = alunoId;
+            this.isProfissional = options.isProfissional === true;
+            this.profissionalNome = options.profissionalNome || '';
+            this.profissionalTipo = options.profissionalTipo || '';
             this.carregarDados();
         },
 
@@ -33,20 +39,86 @@
 
             const ultimas = this.medidasCache?.[0];
 
+            let dataFormatada = '--';
+            if (ultimas?.data_registro) {
+                const partes = ultimas.data_registro.split('-');
+                if (partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+                else dataFormatada = ultimas.data_registro;
+            } else if (ultimas?.created_at) {
+                try {
+                    dataFormatada = new Date(ultimas.created_at).toLocaleDateString('pt-BR');
+                } catch (e) { }
+            }
+
+            const nomeProfissional = ultimas?.profissional_nome || 'Profissional Vinculado';
+            const tipoProfissional = ultimas?.profissional_tipo
+                ? (ultimas.profissional_tipo.toLowerCase().includes('nutri') ? 'Nutricionista' : 'Personal Trainer')
+                : 'Nutricionista / Personal';
+
+            // HTML de Auditoria e Acesso Restrito (Exclusivo para o Aluno vs Profissional)
+            let blocoAcaoOuAuditoria = '';
+            if (this.isProfissional) {
+                blocoAcaoOuAuditoria = `
+                    <button type="button" onclick="ApexEvolucao.abrirModalMedidas()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl border border-blue-500/40 flex items-center gap-1.5 shadow-md shadow-blue-500/20 cursor-pointer self-start sm:self-center transition-all active:scale-95">
+                        <i data-lucide="plus" class="w-4 h-4"></i>Registrar / Atualizar Medidas do Aluno
+                    </button>
+                `;
+            } else {
+                // Aluno visualizando: apenas leitura com identificação de auditoria
+                if (ultimas) {
+                    blocoAcaoOuAuditoria = `
+                        <div class="flex items-center gap-2.5 bg-blue-500/10 border border-blue-500/25 px-3.5 py-2 rounded-2xl text-xs">
+                            <div class="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                            </div>
+                            <div class="leading-tight">
+                                <span class="text-[10px] uppercase font-bold text-blue-400 block tracking-wider">Última Avaliação Antropométrica</span>
+                                <span class="text-xs text-white font-medium">
+                                    Registrado por: <strong class="text-blue-300 font-bold">${nomeProfissional}</strong> <span class="text-slate-400">(${tipoProfissional})</span> • <strong class="text-slate-300">${dataFormatada}</strong>
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    blocoAcaoOuAuditoria = `
+                        <div class="flex items-center gap-2.5 bg-slate-900/80 border border-slate-800 px-3.5 py-2 rounded-2xl text-xs text-slate-400">
+                            <div class="w-7 h-7 rounded-lg bg-slate-800 text-slate-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                            </div>
+                            <span>As medidas corporais são atualizadas exclusivamente pelo seu Nutricionista ou Personal Trainer.</span>
+                        </div>
+                    `;
+                }
+            }
+
             container.innerHTML = `
                 <div class="glass-panel p-6 rounded-3xl border border-slate-800 space-y-5">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
                         <div>
                             <span class="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-1.5 mb-1">
-                                <i data-lucide="ruler" class="w-3.5 h-3.5"></i>Biometria Corporal
+                                <i data-lucide="ruler" class="w-3.5 h-3.5"></i>Biometria Corporal & Antropometria
                             </span>
                             <h2 class="text-lg font-bold text-white">Medidas Corporais & Circunferências</h2>
-                            <p class="text-xs text-slate-400">Acompanhe a perda de medidas e ganho de massa muscular.</p>
+                            <p class="text-xs text-slate-400">Dados antropométricos oficiais validados pelo profissional.</p>
                         </div>
-                        <button type="button" onclick="ApexEvolucao.abrirModalMedidas()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl border border-blue-500/40 flex items-center gap-1.5 shadow-md shadow-blue-500/20 cursor-pointer self-start sm:self-center transition-all">
-                            <i data-lucide="plus" class="w-4 h-4"></i>Registrar Novas Medidas
-                        </button>
+                        ${blocoAcaoOuAuditoria}
                     </div>
+
+                    <!-- Informações do Profissional Responsável (quando disponível) -->
+                    ${ultimas ? `
+                        <div class="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-slate-950/40 rounded-xl border border-slate-800/80 text-[11px] text-slate-400">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="user-check" class="w-3.5 h-3.5 text-blue-400"></i>
+                                <span>Avaliador Responsável: <strong class="text-slate-200">${nomeProfissional}</strong></span>
+                                <span class="text-slate-600">•</span>
+                                <span class="text-blue-400 font-medium">${tipoProfissional}</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 text-slate-400">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-500"></i>
+                                <span>Data do Registro: <strong class="text-slate-200">${dataFormatada}</strong></span>
+                            </div>
+                        </div>
+                    ` : ''}
 
                     <!-- Grid de Medidas Atuais -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -78,12 +150,18 @@
                 </div>
             `;
             if (window.lucide) window.lucide.createIcons();
-            this.injetarModalMedidas();
+
+            if (this.isProfissional) {
+                this.injetarModalMedidas();
+            }
         },
 
         injetarModalMedidas() {
             let modal = document.getElementById('modal-registro-medidas');
             if (modal) modal.remove();
+
+            const ultimas = this.medidasCache?.[0] || {};
+            const hoje = new Date().toISOString().split('T')[0];
 
             modal = document.createElement('div');
             modal.id = 'modal-registro-medidas';
@@ -95,58 +173,85 @@
                     </button>
 
                     <div class="border-b border-slate-800 pb-3">
-                        <span class="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-1.5 mb-1">
-                            <i data-lucide="ruler" class="w-3.5 h-3.5"></i>Antropometria
-                        </span>
-                        <h2 class="text-xl font-black text-white">Registrar Medidas Corporais 📏</h2>
-                        <p class="text-xs text-slate-400 mt-1">Preencha com fita métrica os valores em centímetros (cm).</p>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20 flex items-center gap-1">
+                                <i data-lucide="shield-check" class="w-3 h-3"></i>Área do Profissional
+                            </span>
+                            <span class="text-xs text-slate-400">${this.profissionalNome ? `Avaliador: <strong class="text-white">${this.profissionalNome}</strong>` : ''}</span>
+                        </div>
+                        <h2 class="text-xl font-black text-white">Avaliação Antropométrica 📏</h2>
+                        <p class="text-xs text-slate-400 mt-1">Preencha as circunferências com fita métrica em centímetros (cm).</p>
                     </div>
 
                     <form id="form-medidas-corpo" class="space-y-4" onsubmit="ApexEvolucao.salvarMedidas(event)">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Data da Avaliação *</label>
+                            <input type="date" id="med-data" value="${hoje}" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                        </div>
+
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Braço Direito (cm)</label>
-                                <input type="number" step="0.5" id="med-braco-d" placeholder="Ex: 36.5" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+                                <input type="number" step="0.1" id="med-braco-d" value="${ultimas.braco_direito || ''}" placeholder="Ex: 36.5" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Braço Esquerdo (cm)</label>
-                                <input type="number" step="0.5" id="med-braco-e" placeholder="Ex: 36.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+                                <input type="number" step="0.1" id="med-braco-e" value="${ultimas.braco_esquerdo || ''}" placeholder="Ex: 36.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Tórax / Peitoral (cm)</label>
-                                <input type="number" step="0.5" id="med-torax" placeholder="Ex: 102.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+                                <input type="number" step="0.1" id="med-torax" value="${ultimas.torax || ''}" placeholder="Ex: 102.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Cintura (cm)</label>
-                                <input type="number" step="0.5" id="med-cintura" placeholder="Ex: 82.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+                                <input type="number" step="0.1" id="med-cintura" value="${ultimas.cintura || ''}" placeholder="Ex: 82.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
                             </div>
                             <div>
-                                <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Abdômen (Umbigo)</label>
-                                <input type="number" step="0.5" id="med-abdomen" placeholder="Ex: 86.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+                                <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Abdômen / Umbigo (cm)</label>
+                                <input type="number" step="0.1" id="med-abdomen" value="${ultimas.abdomen || ''}" placeholder="Ex: 86.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Quadril (cm)</label>
-                                <input type="number" step="0.5" id="med-quadril" placeholder="Ex: 98.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+                                <input type="number" step="0.1" id="med-quadril" value="${ultimas.quadril || ''}" placeholder="Ex: 98.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Coxa Direita (cm)</label>
-                                <input type="number" step="0.5" id="med-coxa-d" placeholder="Ex: 58.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+                                <input type="number" step="0.1" id="med-coxa-d" value="${ultimas.coxa_direita || ''}" placeholder="Ex: 58.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Coxa Esquerda (cm)</label>
-                                <input type="number" step="0.5" id="med-coxa-e" placeholder="Ex: 57.5" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+                                <input type="number" step="0.1" id="med-coxa-e" value="${ultimas.coxa_esquerda || ''}" placeholder="Ex: 57.5" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Panturrilha (cm)</label>
+                                <input type="number" step="0.1" id="med-panturrilha" value="${ultimas.panturrilha || ''}" placeholder="Ex: 38.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Peso na Avaliação (kg)</label>
+                                <input type="number" step="0.1" id="med-peso-avaliacao" value="${ultimas.peso || ''}" placeholder="Ex: 78.5" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">% Gordura Estimado (BF)</label>
+                                <input type="number" step="0.1" id="med-bf" value="${ultimas.percentual_gordura || ''}" placeholder="Ex: 14.5" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Massa Muscular Estimada (kg)</label>
+                                <input type="number" step="0.1" id="med-massa" value="${ultimas.massa_muscular || ''}" placeholder="Ex: 34.0" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Percentual de Gordura Estimado (% - Opcional)</label>
-                            <input type="number" step="0.1" id="med-bf" placeholder="Ex: 14.5" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white">
+                            <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Observações Clínicas (Opcional)</label>
+                            <textarea id="med-observacoes" rows="2" placeholder="Observações posturais, retenção ou comentários..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">${ultimas.observacoes || ''}</textarea>
                         </div>
 
                         <div class="pt-2">
-                            <button type="submit" id="btn-salvar-medidas" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 cursor-pointer">
+                            <button type="submit" id="btn-salvar-medidas" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 cursor-pointer active:scale-95">
                                 <i data-lucide="check" class="w-4 h-4"></i>
-                                <span>Salvar Medidas (+10 XP)</span>
+                                <span>Salvar Avaliação Antropométrica</span>
                             </button>
                         </div>
                     </form>
@@ -157,6 +262,12 @@
         },
 
         abrirModalMedidas() {
+            if (!this.isProfissional) {
+                if (window.showToast) {
+                    window.showToast('Acesso Restrito 🔒', 'Apenas o nutricionista ou personal vinculado pode atualizar suas medidas.', 'info');
+                }
+                return;
+            }
             const modal = document.getElementById('modal-registro-medidas');
             if (modal) modal.classList.remove('hidden');
         },
@@ -168,29 +279,37 @@
 
         async salvarMedidas(e) {
             e.preventDefault();
+            if (!this.isProfissional) return;
+
             const btn = document.getElementById('btn-salvar-medidas');
-            btn.disabled = true;
+            if (btn) btn.disabled = true;
 
             const dados = {
-                braco_direito: document.getElementById('med-braco-d').value,
-                braco_esquerdo: document.getElementById('med-braco-e').value,
-                torax: document.getElementById('med-torax').value,
-                cintura: document.getElementById('med-cintura').value,
-                abdomen: document.getElementById('med-abdomen').value,
-                quadril: document.getElementById('med-quadril').value,
-                coxa_direita: document.getElementById('med-coxa-d').value,
-                coxa_esquerda: document.getElementById('med-coxa-e').value,
-                percentual_gordura: document.getElementById('med-bf').value,
-                data_registro: new Date().toISOString().split('T')[0]
+                braco_direito: document.getElementById('med-braco-d')?.value || null,
+                braco_esquerdo: document.getElementById('med-braco-e')?.value || null,
+                torax: document.getElementById('med-torax')?.value || null,
+                cintura: document.getElementById('med-cintura')?.value || null,
+                abdomen: document.getElementById('med-abdomen')?.value || null,
+                quadril: document.getElementById('med-quadril')?.value || null,
+                coxa_direita: document.getElementById('med-coxa-d')?.value || null,
+                coxa_esquerda: document.getElementById('med-coxa-e')?.value || null,
+                panturrilha: document.getElementById('med-panturrilha')?.value || null,
+                peso: document.getElementById('med-peso-avaliacao')?.value || null,
+                percentual_gordura: document.getElementById('med-bf')?.value || null,
+                massa_muscular: document.getElementById('med-massa')?.value || null,
+                observacoes: document.getElementById('med-observacoes')?.value || '',
+                data_registro: document.getElementById('med-data')?.value || new Date().toISOString().split('T')[0],
+                profissional_nome: this.profissionalNome || 'Profissional Responsável',
+                profissional_tipo: this.profissionalTipo || 'profissional'
             };
 
             await window.ApexCore.data.saveMedidas(dados, this.alunoIdAtual);
-            window.ApexCore.sound.playSuccess();
+            if (window.ApexCore && window.ApexCore.sound) window.ApexCore.sound.playSuccess();
             this.fecharModalMedidas();
             await this.carregarDados();
 
             if (window.showToast) {
-                window.showToast('Medidas Salvas!', 'Histórico biométrico atualizado com sucesso.', 'success');
+                window.showToast('Avaliação Salva! 📏', `Medidas atualizadas por ${this.profissionalNome || 'Profissional'}.`, 'success');
             }
         },
 

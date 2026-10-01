@@ -201,6 +201,9 @@
 
             const agendamentos = this.obterAgendamentos();
 
+            // Obter nomes únicos de alunos para popular o dropdown de filtro
+            const nomesAlunos = Array.from(new Set(agendamentos.map(a => a.aluno || a.aluno_nome).filter(Boolean))).sort();
+
             container.innerHTML = `
                 <div class="space-y-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
@@ -209,51 +212,148 @@
                                 <i data-lucide="calendar" class="w-3.5 h-3.5"></i>Atendimentos & Avaliações
                             </span>
                             <h2 class="text-lg font-bold text-white">Agenda de Consultas & Treinos</h2>
-                            <p class="text-xs text-slate-400">Gerencie horários de consultas, retornos e avaliações físicas.</p>
+                            <p class="text-xs text-slate-400">Gerencie horários de consultas, retornos e avaliações físicas sincronizadas com o aluno.</p>
                         </div>
-                        <button type="button" onclick="ApexProfissional.abrirModalAgendamento()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-md shadow-cyan-500/20 transition-all cursor-pointer active:scale-95">
+                        <button type="button" onclick="ApexProfissional.abrirModalAgendamento()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 shadow-md shadow-cyan-500/20 transition-all cursor-pointer active:scale-95">
                             <i data-lucide="plus" class="w-3.5 h-3.5"></i>Novo Agendamento
                         </button>
                     </div>
 
-                    <!-- Próximos Atendimentos -->
-                    <div class="space-y-2.5">
-                        ${agendamentos.length === 0 ? `
-                            <div class="p-8 text-center bg-slate-950/40 rounded-2xl border border-slate-800">
-                                <i data-lucide="calendar-x" class="w-8 h-8 text-slate-600 mx-auto mb-2"></i>
-                                <p class="text-sm font-bold text-slate-400">Nenhum atendimento agendado no momento.</p>
-                                <p class="text-xs text-slate-500 mt-1">Clique em "Novo Agendamento" para marcar uma consulta ou treino.</p>
+                    <!-- BARRA DE FILTRO & BUSCA INSTANTÂNEA -->
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 shadow-inner">
+                        <div class="sm:col-span-8 relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                <i data-lucide="search" class="w-4 h-4"></i>
                             </div>
-                        ` : agendamentos.map(ag => `
-                            <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-slate-700 transition-all">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 rounded-xl ${ag.tipo.includes('Treino') || ag.tipo.includes('Física') ? 'bg-orange-500/15 text-orange-400 border border-orange-500/30' : 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30'} flex flex-col items-center justify-center font-bold text-xs shrink-0">
-                                        <span>${ag.hora || '--:--'}</span>
-                                        <span class="text-[9px] font-normal opacity-80">${ag.data ? ag.data.slice(0, 5) : ''}</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-sm font-bold text-white">${ag.tipo}</h4>
-                                        <p class="text-xs text-slate-400">Aluno: <strong class="text-slate-200">${ag.aluno}</strong> • ${ag.data || 'Hoje'}</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${ag.status === 'Confirmada' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30' : 'bg-orange-500/10 text-orange-400 border border-orange-500/30'}">${ag.status || 'Agendado'}</span>
-                                    ${ag.video ? `
-                                        <button type="button" onclick="window.open('https://meet.google.com/new', '_blank')" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center gap-1 cursor-pointer" title="Iniciar Chamada">
-                                            <i data-lucide="video" class="w-3.5 h-3.5 text-cyan-400"></i>
-                                            <span class="hidden sm:inline">Meet</span>
-                                        </button>
-                                    ` : ''}
-                                    <button type="button" onclick="ApexProfissional.removerAgendamento(${ag.id})" class="p-2 rounded-xl bg-slate-800 hover:bg-rose-950/40 text-slate-400 hover:text-rose-400 text-xs transition-colors cursor-pointer" title="Cancelar Agendamento">
-                                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        `).join('')}
+                            <input type="text" id="filtro-busca-agenda-input"
+                                oninput="ApexProfissional.filtrarAgenda(this.value)"
+                                placeholder="Digite para filtrar por aluno, tipo de atendimento ou data..."
+                                class="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors">
+                        </div>
+                        <div class="sm:col-span-4">
+                            <select id="filtro-busca-agenda-aluno"
+                                onchange="ApexProfissional.filtrarAgendaPorAluno(this.value)"
+                                class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 transition-colors cursor-pointer">
+                                <option value="">Todos os Alunos</option>
+                                ${nomesAlunos.map(n => `<option value="${n}">${n}</option>`).join('')}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Contador e Lista de Atendimentos -->
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between text-xs text-slate-400 px-1">
+                            <span id="agenda-contador-texto">${agendamentos.length} compromisso${agendamentos.length === 1 ? '' : 's'} cadastrado${agendamentos.length === 1 ? '' : 's'}</span>
+                            <span class="text-[11px] text-cyan-400/80">Sincronizado com o portal do aluno</span>
+                        </div>
+                        <div id="agenda-lista-cards" class="space-y-2.5">
+                            ${this.gerarHtmlCardsAgenda(agendamentos)}
+                        </div>
                     </div>
                 </div>
             `;
             if (window.lucide) window.lucide.createIcons();
+        },
+
+        gerarHtmlCardsAgenda(lista) {
+            if (!lista || lista.length === 0) {
+                return `
+                    <div class="p-8 text-center bg-slate-950/40 rounded-2xl border border-slate-800">
+                        <i data-lucide="calendar-x" class="w-8 h-8 text-slate-600 mx-auto mb-2"></i>
+                        <p class="text-sm font-bold text-slate-400">Nenhum compromisso encontrado.</p>
+                        <p class="text-xs text-slate-500 mt-1">Verifique o filtro aplicado ou clique em "Novo Agendamento".</p>
+                    </div>
+                `;
+            }
+
+            return lista.map(ag => {
+                const alunoNome = ag.aluno || ag.aluno_nome || 'Aluno';
+                const isTreino = ag.tipo && (ag.tipo.includes('Treino') || ag.tipo.includes('Física'));
+                const corBadge = isTreino ? 'bg-orange-500/15 text-orange-400 border border-orange-500/30' : 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30';
+
+                return `
+                    <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col gap-3 hover:border-slate-700 transition-all group">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-xl ${corBadge} flex flex-col items-center justify-center font-bold text-xs shrink-0">
+                                    <span>${ag.hora || '--:--'}</span>
+                                    <span class="text-[9px] font-normal opacity-80">${ag.data ? ag.data.slice(0, 5) : ''}</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white">${ag.tipo}</h4>
+                                    <p class="text-xs text-slate-400">Aluno: <strong class="text-slate-200">${alunoNome}</strong> • <span class="text-cyan-400 font-semibold">${ag.data || 'Hoje'} às ${ag.hora || '--:--'}</span></p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${ag.status === 'Confirmada' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30' : 'bg-orange-500/10 text-orange-400 border border-orange-500/30'}">${ag.status || 'Confirmada'}</span>
+                                ${ag.video ? `
+                                    <button type="button" onclick="window.open('${ag.meet_link || 'https://meet.google.com/new'}', '_blank')" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center gap-1 cursor-pointer" title="Iniciar Videochamada Google Meet">
+                                        <i data-lucide="video" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                        <span class="hidden sm:inline">Meet</span>
+                                    </button>
+                                ` : ''}
+                                <button type="button" onclick="ApexProfissional.removerAgendamento(${ag.id})" class="p-2 rounded-xl bg-slate-800 hover:bg-rose-950/40 text-slate-400 hover:text-rose-400 text-xs transition-colors cursor-pointer" title="Cancelar Agendamento">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        ${ag.descricao ? `
+                            <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80 text-xs text-slate-300 flex items-start gap-2">
+                                <i data-lucide="file-text" class="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5"></i>
+                                <div class="leading-relaxed">
+                                    <span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Orientações do Atendimento:</span>
+                                    <span>${ag.descricao}</span>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        },
+
+        filtrarAgenda(termo) {
+            const agendamentos = this.obterAgendamentos();
+            const termoLimpo = (termo || '').trim().toLowerCase();
+            const alunoFiltro = document.getElementById('filtro-busca-agenda-aluno')?.value?.toLowerCase();
+
+            let filtrados = agendamentos.filter(ag => {
+                const nomeAluno = (ag.aluno || ag.aluno_nome || '').toLowerCase();
+                const tipo = (ag.tipo || '').toLowerCase();
+                const data = (ag.data || '').toLowerCase();
+                const hora = (ag.hora || '').toLowerCase();
+                const desc = (ag.descricao || '').toLowerCase();
+
+                const coincideTexto = !termoLimpo || (
+                    nomeAluno.includes(termoLimpo) ||
+                    tipo.includes(termoLimpo) ||
+                    data.includes(termoLimpo) ||
+                    hora.includes(termoLimpo) ||
+                    desc.includes(termoLimpo)
+                );
+
+                const coincideAluno = !alunoFiltro || nomeAluno === alunoFiltro;
+
+                return coincideTexto && coincideAluno;
+            });
+
+            const listaCards = document.getElementById('agenda-lista-cards');
+            const contadorTexto = document.getElementById('agenda-contador-texto');
+
+            if (listaCards) {
+                listaCards.innerHTML = this.gerarHtmlCardsAgenda(filtrados);
+                if (window.lucide) window.lucide.createIcons();
+            }
+
+            if (contadorTexto) {
+                contadorTexto.textContent = `${filtrados.length} compromisso${filtrados.length === 1 ? '' : 's'} exibido${filtrados.length === 1 ? '' : 's'}`;
+            }
+        },
+
+        filtrarAgendaPorAluno(alunoNome) {
+            const inputBusca = document.getElementById('filtro-busca-agenda-input');
+            const termo = inputBusca ? inputBusca.value : '';
+            this.filtrarAgenda(termo);
         },
 
         // ----------------------------------------------------------------------
@@ -430,68 +530,113 @@ ${resumoTexto}
 
         abrirModalAgendamento() {
             let modal = document.getElementById('modal-pro-agendamento');
-            if (!modal) {
-                modal = document.createElement('div');
-                modal.id = 'modal-pro-agendamento';
-                modal.className = 'fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4';
-                const hojeYMD = new Date().toISOString().split('T')[0];
-                modal.innerHTML = `
-                    <div class="glass-panel w-full max-w-md rounded-3xl border border-cyan-500/30 p-6 space-y-4 shadow-2xl relative">
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                            <div class="flex items-center gap-2">
-                                <div class="w-8 h-8 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center">
-                                    <i data-lucide="calendar-plus" class="w-4 h-4"></i>
-                                </div>
-                                <h3 class="text-sm font-bold text-white">Novo Agendamento Clínico / Treino</h3>
+            if (modal) modal.remove();
+
+            // Pega opções de alunos disponíveis na página para facilitar a seleção
+            const selAlunosPagina = document.getElementById('aluno-select') || document.getElementById('fotos-aluno-select');
+            let opcoesAlunosHtml = '';
+            if (selAlunosPagina && selAlunosPagina.options) {
+                Array.from(selAlunosPagina.options).forEach(opt => {
+                    if (opt.value && !opt.disabled) {
+                        const nomeLimpo = opt.text.split('(')[0].trim();
+                        opcoesAlunosHtml += `<option value="${opt.value}" data-nome="${nomeLimpo}">${opt.text}</option>`;
+                    }
+                });
+            }
+
+            modal = document.createElement('div');
+            modal.id = 'modal-pro-agendamento';
+            modal.className = 'fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto';
+            const hojeYMD = new Date().toISOString().split('T')[0];
+            modal.innerHTML = `
+                <div class="glass-panel w-full max-w-lg rounded-3xl border border-cyan-500/30 p-6 sm:p-7 space-y-4 shadow-2xl relative my-6">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-9 h-9 rounded-xl bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 flex items-center justify-center">
+                                <i data-lucide="calendar-plus" class="w-5 h-5"></i>
                             </div>
-                            <button type="button" onclick="ApexProfissional.fecharModalAgendamento()" class="text-slate-400 hover:text-white p-1 rounded-lg">
-                                <i data-lucide="x" class="w-5 h-5"></i>
+                            <div>
+                                <h3 class="text-sm font-bold text-white">Novo Agendamento Clínico / Treino</h3>
+                                <p class="text-[11px] text-slate-400">Notificação e orientações sincronizadas instantaneamente com o aluno.</p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="ApexProfissional.fecharModalAgendamento()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <form id="form-pro-agendamento" onsubmit="ApexProfissional.salvarNovoAgendamento(event)" class="space-y-3.5">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Selecionar Aluno *</label>
+                            ${opcoesAlunosHtml ? `
+                                <select id="novo-agend-aluno-select" onchange="ApexProfissional.aoSelecionarAlunoAgendamento(this)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 mb-2">
+                                    <option value="">Selecione um aluno da lista...</option>
+                                    ${opcoesAlunosHtml}
+                                    <option value="__outro__">Outro (digitar nome manualmente)</option>
+                                </select>
+                            ` : ''}
+                            <input type="text" id="novo-agend-aluno" placeholder="Nome do Aluno (Ex: Ricardo Leão)" required
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Tipo de Atendimento *</label>
+                            <select id="novo-agend-tipo" required
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                                <option value="Consulta Nutricional Inicial">Consulta Nutricional Inicial</option>
+                                <option value="Retorno Nutricional & Ajuste de Metas">Retorno Nutricional & Ajuste de Metas</option>
+                                <option value="Avaliação Física Presencial & Treino Guiado">Avaliação Física Presencial & Treino Guiado</option>
+                                <option value="Sessão de Personal Trainer VIP">Sessão de Personal Trainer VIP</option>
+                                <option value="Análise de Check-in Clínico & Bioimpedância">Análise de Check-in Clínico & Bioimpedância</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Data *</label>
+                                <input type="date" id="novo-agend-data" value="${hojeYMD}" required
+                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Horário *</label>
+                                <input type="time" id="novo-agend-hora" value="10:00" required
+                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Descrição e Orientações para o Aluno (Visível no Portal)</label>
+                            <textarea id="novo-agend-descricao" rows="2" placeholder="Ex: Trazer exames laboratoriais recentes; jejum de 2h para bioimpedância; vir com roupa leve de treino..."
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"></textarea>
+                        </div>
+
+                        <div class="flex items-center gap-2 pt-1">
+                            <input type="checkbox" id="novo-agend-video" checked class="rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-0">
+                            <label for="novo-agend-video" class="text-xs text-slate-300 font-semibold cursor-pointer">Incluir sala de vídeo online (Google Meet)</label>
+                        </div>
+
+                        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
+                            <button type="button" onclick="ApexProfissional.fecharModalAgendamento()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all">Cancelar</button>
+                            <button type="submit" id="btn-submit-agendamento" class="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-black transition-all shadow-md shadow-cyan-500/20 active:scale-95 flex items-center gap-1.5">
+                                <i data-lucide="check" class="w-4 h-4"></i>
+                                <span>Confirmar & Notificar Aluno</span>
                             </button>
                         </div>
-                        <form id="form-pro-agendamento" onsubmit="ApexProfissional.salvarNovoAgendamento(event)" class="space-y-3.5">
-                            <div>
-                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Nome do Aluno *</label>
-                                <input type="text" id="novo-agend-aluno" placeholder="Ex: Ricardo Leão" required
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Tipo de Atendimento *</label>
-                                <select id="novo-agend-tipo" required
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
-                                    <option value="Consulta Nutricional Inicial">Consulta Nutricional Inicial</option>
-                                    <option value="Retorno Nutricional & Ajuste de Metas">Retorno Nutricional & Ajuste de Metas</option>
-                                    <option value="Avaliação Física Presencial & Treino Guiado">Avaliação Física Presencial & Treino Guiado</option>
-                                    <option value="Sessão de Personal Trainer VIP">Sessão de Personal Trainer VIP</option>
-                                    <option value="Análise de Check-in Clínico & Bioimpedância">Análise de Check-in Clínico & Bioimpedância</option>
-                                </select>
-                            </div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Data *</label>
-                                    <input type="date" id="novo-agend-data" value="${hojeYMD}" required
-                                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Horário *</label>
-                                    <input type="time" id="novo-agend-hora" value="10:00" required
-                                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2 pt-1">
-                                <input type="checkbox" id="novo-agend-video" checked class="rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-0">
-                                <label for="novo-agend-video" class="text-xs text-slate-300 font-semibold cursor-pointer">Incluir link de vídeochamada (Google Meet)</label>
-                            </div>
-                            <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
-                                <button type="button" onclick="ApexProfissional.fecharModalAgendamento()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all">Cancelar</button>
-                                <button type="submit" class="px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-black transition-all shadow-md shadow-cyan-500/20 active:scale-95">Confirmar Agendamento</button>
-                            </div>
-                        </form>
-                    </div>
-                `;
-                document.body.appendChild(modal);
-            }
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
             modal.classList.remove('hidden');
             if (window.lucide) lucide.createIcons();
+        },
+
+        aoSelecionarAlunoAgendamento(sel) {
+            const inputNome = document.getElementById('novo-agend-aluno');
+            if (!inputNome) return;
+            if (sel.value && sel.value !== '__outro__') {
+                const opt = sel.selectedOptions[0];
+                inputNome.value = opt.getAttribute('data-nome') || opt.text.split('(')[0].trim();
+            } else if (sel.value === '__outro__') {
+                inputNome.value = '';
+                inputNome.focus();
+            }
         },
 
         fecharModalAgendamento() {
@@ -499,15 +644,26 @@ ${resumoTexto}
             if (modal) modal.classList.add('hidden');
         },
 
-        salvarNovoAgendamento(e) {
+        async salvarNovoAgendamento(e) {
             e.preventDefault();
-            const aluno = document.getElementById('novo-agend-aluno')?.value.trim();
+            const btnSubmit = document.getElementById('btn-submit-agendamento');
+            if (btnSubmit) btnSubmit.disabled = true;
+
+            const inputAluno = document.getElementById('novo-agend-aluno');
+            const selAluno = document.getElementById('novo-agend-aluno-select');
+            const alunoNome = inputAluno?.value.trim();
+            const alunoId = selAluno?.value && selAluno.value !== '__outro__' ? selAluno.value : null;
+
             const tipo = document.getElementById('novo-agend-tipo')?.value;
             const dataRaw = document.getElementById('novo-agend-data')?.value;
             const hora = document.getElementById('novo-agend-hora')?.value;
+            const descricao = document.getElementById('novo-agend-descricao')?.value.trim() || '';
             const video = document.getElementById('novo-agend-video')?.checked ?? true;
 
-            if (!aluno || !tipo || !hora) return;
+            if (!alunoNome || !tipo || !hora) {
+                if (btnSubmit) btnSubmit.disabled = false;
+                return;
+            }
 
             let dataFormatada = 'Hoje';
             if (dataRaw) {
@@ -515,23 +671,42 @@ ${resumoTexto}
                 if (partes.length === 3) dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
             }
 
-            const agendamentos = this.obterAgendamentos();
-            agendamentos.unshift({
+            const novoItem = {
                 id: Date.now(),
-                aluno,
+                aluno: alunoNome,
+                aluno_id: alunoId,
+                aluno_nome: alunoNome,
                 tipo,
                 data: dataFormatada,
+                data_iso: dataRaw,
                 hora,
+                descricao,
                 status: 'Confirmada',
-                video
-            });
+                video,
+                meet_link: video ? 'https://meet.google.com/new' : '',
+                profissional_nome: window.nomeProfissionalLogado || (window.location.pathname.includes('personal') ? 'Personal Trainer' : 'Nutricionista Responsável'),
+                profissional_tipo: window.location.pathname.includes('personal') ? 'personal' : 'nutricionista'
+            };
 
+            // 1. Salva localmente para atualização imediata do profissional
+            const agendamentos = this.obterAgendamentos();
+            agendamentos.unshift(novoItem);
             this.salvarAgendamentos(agendamentos);
+
+            // 2. Sincroniza com o Supabase (para aparecer automaticamente no portal do aluno)
+            if (window.ApexCore && window.ApexCore.data) {
+                try {
+                    await window.ApexCore.data.saveAgendamento(novoItem, alunoId);
+                } catch (errSupa) {
+                    console.warn('[ApexProfissional] Falha ao persistir agendamento no Supabase:', errSupa);
+                }
+            }
+
             this.fecharModalAgendamento();
             this.renderAgenda(this.lastAgendaContainerId);
 
             if (window.showToast) {
-                window.showToast('Agendamento Criado! 📅', `${tipo} agendada para ${aluno} às ${hora}.`, 'success');
+                window.showToast('Agendamento Sincronizado! 📅', `${tipo} agendada para ${alunoNome} às ${hora}.`, 'success');
             }
         },
 

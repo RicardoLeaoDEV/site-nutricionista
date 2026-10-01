@@ -22,6 +22,7 @@
     <script src="js/apexfit-core.js"></script>
     <script src="js/checkin-system.js"></script>
     <script src="js/professional-suite.js"></script>
+    <script src="js/evolution-tracker.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -439,6 +440,19 @@
                                         <span class="text-xs font-extrabold text-blue-400" id="clinico-imc">--</span>
                                     </div>
                                 </div>
+                            </div>
+
+                            <!-- Barra de Ações Clínicas: Medidas & Antropometria -->
+                            <div class="mt-3 pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
+                                <div class="text-[11px] text-slate-400 flex items-center gap-1.5">
+                                    <i data-lucide="ruler" class="w-3.5 h-3.5 text-blue-400"></i>
+                                    <span>Avaliação Antropométrica & Circunferências Corporais</span>
+                                </div>
+                                <button type="button" onclick="abrirModalMedidasProfissional()"
+                                    class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-blue-500/20 transition-all cursor-pointer active:scale-95">
+                                    <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+                                    <span>Registrar / Atualizar Medidas</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1211,6 +1225,8 @@
             const ADMIN_UID = '04fb83ed-ec6b-4a56-9993-e99f32ededee';
 
             const _m = session.user.user_metadata || {};
+            window.nomeProfissionalLogado = _m.nome || 'Personal Trainer';
+
             if (session.user.id !== ADMIN_UID && _m.papel !== 'personal') {
                 alert('Acesso negado. Esta área é restrita ao personal trainer.');
                 window.location.href = 'dashboard.html';
@@ -1226,6 +1242,26 @@
             // Inicializar Suíte de Gestão e Check-ins no Painel do Personal
             inicializarTodasSecoesProfissionais();
         }
+
+        // Função para o Personal Trainer registrar avaliação antropométrica do aluno
+        window.abrirModalMedidasProfissional = function () {
+            const alunoId = document.getElementById('aluno-select')?.value || alunoChatAtivoId || null;
+            if (!alunoId) {
+                showToast('Selecione um Aluno', 'Escolha um aluno no menu acima para registrar ou atualizar as medidas.', 'warning');
+                return;
+            }
+            const alunoObj = (typeof listaAlunosCache !== 'undefined' ? listaAlunosCache.find(a => a.id === alunoId) : null);
+            const nomeProf = window.nomeProfissionalLogado || 'Personal Trainer';
+
+            if (window.ApexEvolucao) {
+                ApexEvolucao.init(alunoId, {
+                    isProfissional: true,
+                    profissionalNome: nomeProf,
+                    profissionalTipo: 'personal'
+                });
+                ApexEvolucao.abrirModalMedidas();
+            }
+        };
 
         // ==============================================================
         // CACHE DE PERFIS DOS ALUNOS & DADOS BIOMÉTRICOS PARA O ADMIN

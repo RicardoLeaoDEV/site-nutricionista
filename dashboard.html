@@ -422,6 +422,9 @@
             </button>
         </div>
 
+        <!-- AVISOS & COMPROMISSOS AGENDADOS (Sincronização em Tempo Real com o Profissional) -->
+        <div id="container-notificacao-agendamentos" class="hidden"></div>
+
         <!-- 1. OS 4 CARDS DE MÉTRICAS NO TOPO (LADO A LADO) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- 1. Peso Atual -->
@@ -550,53 +553,7 @@
             </div>
         </div>
 
-        <!-- CONTROLE COMPLETO DE HIDRATAÇÃO (Item 11) -->
-        <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
-            <div onclick="toggleSecaoDashboard(this)"
-                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center">
-                        <i data-lucide="droplets" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Controle de Hidratação</h2>
-                        <p class="text-xs text-slate-400">Monitorize seu consumo diário de água</p>
-                    </div>
-                </div>
-                <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow">
-                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                </div>
-            </div>
-            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
-                <div id="container-hidratacao-completa"></div>
-            </div>
-        </div>
 
-        <!-- MINHAS METAS (Item 19) -->
-        <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
-            <div onclick="toggleSecaoDashboard(this)"
-                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-9 h-9 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center">
-                        <i data-lucide="target" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Minhas Metas</h2>
-                        <p class="text-xs text-slate-400">Objetivos definidos para sua evolução</p>
-                    </div>
-                </div>
-                <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow">
-                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                </div>
-            </div>
-            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
-                <div id="container-metas-aluno"></div>
-            </div>
-        </div>
 
         <!-- MEDIDAS CORPORAIS & ANTROPOMETRIA (Item 3) -->
         <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
@@ -1325,11 +1282,158 @@
             // 2. Carregar Histórico de Peso
             carregarGraficoPeso(userId);
 
+            // === SINCRONIZAÇÃO DE AGENDAMENTOS (AVISOS & NOTIFICAÇÕES) ===
+            await carregarNotificacoesAgendamentos(userId);
+
             // === INICIALIZAÇÃO DOS MÓDULOS SAAS APEXFIT ===
             if (window.ApexCheckin) window.ApexCheckin.initAluno(userId);
-            if (window.ApexEvolucao) window.ApexEvolucao.init(userId);
+            if (window.ApexEvolucao) window.ApexEvolucao.init(userId, { isProfissional: false });
             if (window.ApexHabitos) window.ApexHabitos.init(userId);
         }
+
+        // ───────────────── AVISOS & COMPROMISSOS AGENDADOS NA ÁREA DO ALUNO ─────────────────
+        async function carregarNotificacoesAgendamentos(userId) {
+            const container = document.getElementById('container-notificacao-agendamentos');
+            if (!container) return;
+
+            try {
+                let agendamentos = [];
+
+                // 1. Carrega do ApexCore (Supabase tabela agendamentos ou fallback mensagens)
+                if (window.ApexCore && window.ApexCore.data) {
+                    try {
+                        const doBanco = await window.ApexCore.data.getAgendamentos(userId, 10);
+                        if (doBanco && doBanco.length > 0) {
+                            agendamentos = doBanco;
+                        }
+                    } catch (e) { }
+                }
+
+                // 2. Fallback de cache do localStorage
+                if (!agendamentos || agendamentos.length === 0) {
+                    try {
+                        const local = JSON.parse(localStorage.getItem('apex_agendamentos_pro') || '[]');
+                        const nomeAtual = (window.nomeAlunoAtual || '').toLowerCase().trim();
+                        agendamentos = local.filter(a => {
+                            if (a.aluno_id && a.aluno_id === userId) return true;
+                            const nomeAg = (a.aluno || a.aluno_nome || '').toLowerCase().trim();
+                            if (nomeAtual && nomeAg && (nomeAg.includes(nomeAtual) || nomeAtual.includes(nomeAg))) return true;
+                            return false;
+                        });
+                    } catch (e) { }
+                }
+
+                if (!agendamentos || agendamentos.length === 0) {
+                    container.innerHTML = '';
+                    container.classList.add('hidden');
+                    return;
+                }
+
+                // Chave de controle de ciência do aluno
+                const cientesKey = 'apex_agendamentos_cientes_' + userId;
+                let cientes = [];
+                try { cientes = JSON.parse(localStorage.getItem(cientesKey) || '[]'); } catch (e) { }
+
+                const compromissosAtivos = agendamentos.filter(a => !cientes.includes(a.id));
+
+                if (compromissosAtivos.length === 0) {
+                    container.innerHTML = '';
+                    container.classList.add('hidden');
+                    return;
+                }
+
+                container.classList.remove('hidden');
+                container.innerHTML = compromissosAtivos.map(ag => {
+                    const isTreino = ag.tipo && (ag.tipo.includes('Treino') || ag.tipo.includes('Física'));
+                    const badgeCor = isTreino ? 'bg-orange-500/20 text-orange-300 border-orange-500/40' : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40';
+                    const iconeTipo = isTreino ? 'dumbbell' : 'calendar-check';
+                    const prof = ag.profissional_nome || 'Profissional Vinculado';
+
+                    return `
+                        <div class="glass-panel p-5 sm:p-6 rounded-3xl border border-cyan-500/35 bg-gradient-to-r from-slate-900 via-slate-900 to-cyan-950/30 shadow-2xl relative overflow-hidden group mb-4">
+                            <!-- Efeito de iluminação suave -->
+                            <div class="absolute -right-8 -bottom-8 w-36 h-36 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
+                                <div class="flex items-start gap-3.5">
+                                    <div class="w-12 h-12 rounded-2xl ${badgeCor} flex items-center justify-center shrink-0 shadow-md">
+                                        <i data-lucide="${iconeTipo}" class="w-6 h-6"></i>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <div class="flex flex-wrap items-center gap-2">
+                                            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center gap-1.5 animate-pulse">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                                                Compromisso Agendado
+                                            </span>
+                                            <span class="text-xs font-bold text-white">${ag.tipo}</span>
+                                        </div>
+                                        <p class="text-xs text-slate-300">
+                                            Profissional: <strong class="text-cyan-400 font-semibold">${prof}</strong>
+                                        </p>
+                                        <div class="flex flex-wrap items-center gap-2.5 pt-1 text-xs text-slate-200 font-medium">
+                                            <div class="flex items-center gap-1.5 bg-slate-950/70 border border-slate-800 px-3 py-1.5 rounded-xl">
+                                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                                <span>Data: <strong class="text-white">${ag.data}</strong></span>
+                                            </div>
+                                            <div class="flex items-center gap-1.5 bg-slate-950/70 border border-slate-800 px-3 py-1.5 rounded-xl">
+                                                <i data-lucide="clock" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                                <span>Horário: <strong class="text-white">${ag.hora}</strong></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-wrap items-center gap-2.5 self-end lg:self-center">
+                                    ${ag.video ? `
+                                        <a href="${ag.meet_link || 'https://meet.google.com/new'}" target="_blank" rel="noopener noreferrer"
+                                            class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs shadow-lg shadow-cyan-500/20 transition-all active:scale-95 cursor-pointer">
+                                            <i data-lucide="video" class="w-4 h-4"></i>
+                                            <span>Entrar na Sala (Meet)</span>
+                                        </a>
+                                    ` : ''}
+                                    <button type="button" onclick="confirmarCienciaAgendamento(${ag.id})"
+                                        class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs border border-slate-700 transition-all cursor-pointer">
+                                        <i data-lucide="check-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                        <span>Confirmar Presença</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            ${ag.descricao ? `
+                                <div class="mt-3.5 pt-3 border-t border-slate-800/80 text-xs text-slate-300 flex items-start gap-2 bg-slate-950/50 p-3 rounded-2xl border border-slate-800/60">
+                                    <i data-lucide="info" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+                                    <div>
+                                        <strong class="text-white block mb-0.5 text-[11px] uppercase tracking-wider">Orientações do Atendimento:</strong>
+                                        <p class="leading-relaxed text-slate-300">${ag.descricao}</p>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                if (window.lucide) window.lucide.createIcons();
+            } catch (err) {
+                console.warn('[Dashboard] Erro ao carregar agendamentos:', err);
+            }
+        }
+
+        window.confirmarCienciaAgendamento = async function (agendamentoId) {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            const userId = session?.user?.id || (window.perfilAlunoGlobal && window.perfilAlunoGlobal.id) || 'aluno';
+            const cientesKey = 'apex_agendamentos_cientes_' + userId;
+            try {
+                let cientes = JSON.parse(localStorage.getItem(cientesKey) || '[]');
+                if (!cientes.includes(agendamentoId)) {
+                    cientes.push(agendamentoId);
+                    localStorage.setItem(cientesKey, JSON.stringify(cientes));
+                }
+            } catch (e) { }
+
+            showToast('Presença Confirmada! 📅', 'Seu profissional foi notificado da confirmação.', 'success');
+            if (window.ApexCore && window.ApexCore.sound) window.ApexCore.sound.playSuccess();
+            await carregarNotificacoesAgendamentos(userId);
+        };
 
         // Resumo compacto das refeições para o card de atalho no dashboard
         async function carregarResumoDietas(userId) {

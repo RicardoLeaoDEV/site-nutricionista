@@ -25,10 +25,8 @@
 
         init(alunoId) {
             this.alunoIdAtual = alunoId;
-            this.renderHidratacao();
             this.renderHabitos();
             this.renderGamificacao();
-            this.renderMetas();
         },
 
         // ----------------------------------------------------------------------
