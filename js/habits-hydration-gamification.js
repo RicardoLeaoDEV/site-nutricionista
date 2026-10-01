@@ -185,61 +185,88 @@
                 'Elite ApexFit 🏆'
             ];
             const tituloAtual = titulosNiveis[Math.min(gam.nivel - 1, titulosNiveis.length - 1)];
+            const streakDias = this.calcularStreakDias();
 
             container.innerHTML = `
-                <div class="glass-panel p-6 rounded-3xl border border-gold-500/20 bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/20 space-y-5">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-gold-600 to-amber-400 text-slate-950 flex items-center justify-center font-black text-lg shadow-lg shadow-gold-500/20 shrink-0">
-                                ${gam.nivel}
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <h2 class="text-base font-extrabold text-white">Nível ${gam.nivel} • ${tituloAtual}</h2>
-                                    <span class="text-[10px] bg-gold-500/20 text-gold-300 font-extrabold px-2 py-0.5 rounded-full border border-gold-500/30">PONTOS VIP</span>
+                <div class="glass-panel p-5 sm:p-6 rounded-3xl border border-gold-500/25 bg-gradient-to-br from-slate-900/95 via-slate-900/80 to-amber-950/20 shadow-xl hover:border-gold-500/45 transition-all h-full flex flex-col justify-between relative overflow-hidden group">
+                    <!-- Efeito Glow de Fundo -->
+                    <div class="pointer-events-none absolute -top-10 -right-10 w-36 h-36 bg-gold-500/10 rounded-full blur-3xl group-hover:bg-gold-500/20 transition-all"></div>
+
+                    <!-- 1. Header do Card -->
+                    <div>
+                        <div class="flex items-center justify-between gap-3 pb-4 border-b border-slate-800/80">
+                            <div class="flex items-center gap-3">
+                                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-gold-600 via-amber-500 to-yellow-400 text-slate-950 flex items-center justify-center font-black text-lg shadow-lg shadow-gold-500/25 shrink-0 ring-2 ring-gold-400/30">
+                                    ${gam.nivel}
                                 </div>
-                                <p class="text-xs text-slate-400 mt-0.5">${gam.xp} XP acumulados no total</p>
+                                <div>
+                                    <h2 class="text-base font-bold text-white leading-tight">Nível ${gam.nivel} • ${tituloAtual}</h2>
+                                    <p class="text-xs text-slate-400">${gam.xp} XP acumulados no total</p>
+                                </div>
+                            </div>
+
+                            <div class="shrink-0">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-gold-500/20 text-gold-300 border border-gold-500/40 shadow-sm">
+                                    <i data-lucide="crown" class="w-3.5 h-3.5"></i>PONTOS VIP
+                                </span>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <span class="text-xs font-bold text-gold-400">${xpNoNivel} / 100 XP</span>
+
+                        <!-- 2. Barra de Progresso XP -->
+                        <div class="mt-4 mb-3">
+                            <div class="flex items-center justify-between text-xs mb-1.5 font-semibold">
+                                <span class="text-slate-400 text-[11px] uppercase tracking-wider font-bold">Progresso para o Nível ${gam.nivel + 1}</span>
+                                <span class="text-gold-400 font-black">${xpNoNivel} / 100 XP <span class="text-slate-500 font-normal">(${pctNivel}%)</span></span>
+                            </div>
+                            <div class="h-2.5 w-full bg-slate-950 rounded-full border border-slate-800/80 overflow-hidden p-0.5 shadow-inner">
+                                <div class="h-full bg-gradient-to-r from-amber-500 via-gold-400 to-yellow-300 rounded-full transition-all duration-700 shadow-md shadow-gold-500/30" style="width: ${Math.max(5, pctNivel)}%"></div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Grade de Conquistas & Badges (2x2) -->
+                        <div class="grid grid-cols-2 gap-2.5 my-3">
+                            <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/90 flex items-center gap-2.5 hover:border-slate-700 transition-all">
+                                <span class="text-2xl shrink-0">🏆</span>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-extrabold text-white block truncate">1º Treino</span>
+                                    <span class="text-[10px] text-emerald-400 font-bold block">Desbloqueado</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/90 flex items-center gap-2.5 hover:border-slate-700 transition-all">
+                                <span class="text-2xl shrink-0">🔥</span>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-extrabold text-white block truncate">7 Dias Invictos</span>
+                                    <span class="text-[10px] text-emerald-400 font-bold block">${streakDias >= 7 ? 'Desbloqueado' : `${streakDias}/7 dias`}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/90 flex items-center gap-2.5 hover:border-slate-700 transition-all">
+                                <span class="text-2xl shrink-0">💧</span>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-extrabold text-white block truncate">Meta H2O</span>
+                                    <span class="text-[10px] text-cyan-400 font-bold block">Ativo Hoje</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/90 flex items-center gap-2.5 hover:border-slate-700 transition-all">
+                                <span class="text-2xl shrink-0">🥗</span>
+                                <div class="min-w-0">
+                                    <span class="text-xs font-extrabold text-white block truncate">Dieta 100%</span>
+                                    <span class="text-[10px] text-gold-400 font-bold block">Nível 2</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Barra de XP -->
-                    <div class="h-2.5 w-full bg-slate-950 rounded-full border border-slate-800 overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-amber-500 to-gold-400 rounded-full transition-all duration-500" style="width: ${pctNivel}%"></div>
-                    </div>
-
-                    <!-- Medalhas / Badges Desbloqueáveis -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-                        <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800 flex items-center gap-2.5">
-                            <span class="text-xl">🏆</span>
-                            <div>
-                                <span class="text-xs font-extrabold text-white block">Primeiro Treino</span>
-                                <span class="text-[10px] text-emerald-400 font-semibold">Desbloqueado</span>
+                    <!-- 4. Rodapé Informativo / Dica de Ganho de XP -->
+                    <div class="pt-1">
+                        <div class="py-2.5 px-3.5 rounded-xl bg-slate-950/70 border border-slate-800/80 flex items-center justify-between gap-2 text-xs">
+                            <div class="flex items-center gap-2 text-slate-300">
+                                <i data-lucide="zap" class="w-4 h-4 text-amber-400 shrink-0"></i>
+                                <span class="text-[11px] sm:text-xs">Ganhe XP registrando água, hábitos e treinos.</span>
                             </div>
-                        </div>
-                        <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800 flex items-center gap-2.5">
-                            <span class="text-xl">🔥</span>
-                            <div>
-                                <span class="text-xs font-extrabold text-white block">7 Dias Invictos</span>
-                                <span class="text-[10px] text-emerald-400 font-semibold">Desbloqueado</span>
-                            </div>
-                        </div>
-                        <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800 flex items-center gap-2.5">
-                            <span class="text-xl">💧</span>
-                            <div>
-                                <span class="text-xs font-extrabold text-white block">Meta H2O</span>
-                                <span class="text-[10px] text-cyan-400 font-semibold">Ativo</span>
-                            </div>
-                        </div>
-                        <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800 flex items-center gap-2.5">
-                            <span class="text-xl">🥗</span>
-                            <div>
-                                <span class="text-xs font-extrabold text-white block">Dieta 100%</span>
-                                <span class="text-[10px] text-gold-400 font-semibold">Nível 2</span>
-                            </div>
+                            <span class="text-[10px] font-black text-gold-400 shrink-0 uppercase tracking-wider">+100 XP = 1 Nível</span>
                         </div>
                     </div>
                 </div>

@@ -15,8 +15,9 @@
         // Inicializa o módulo para o Aluno (no dashboard.html)
         async initAluno(alunoId) {
             this.alunoIdAtual = alunoId;
-            this.renderCardCheckinAluno();
+            await this.renderCardCheckinAluno();
             this.renderModalCheckinAluno();
+            this.renderModalHistoricoAluno();
         },
 
         // Renderiza o card de status do check-in no dashboard do aluno
@@ -24,54 +25,201 @@
             const container = document.getElementById('container-checkin-aluno');
             if (!container) return;
 
-            const checkins = await window.ApexCore.data.getCheckins(this.alunoIdAtual, 1);
+            const checkins = await window.ApexCore.data.getCheckins(this.alunoIdAtual, 5);
             const ultimo = checkins?.[0];
+            const penultimo = checkins?.[1];
             const hoje = new Date();
             let pendente = true;
+            let diasPassados = null;
 
             if (ultimo) {
                 const dataUltimo = new Date(ultimo.created_at || ultimo._timestamp);
-                const diasPassados = Math.floor((hoje - dataUltimo) / (1000 * 60 * 60 * 24));
+                diasPassados = Math.floor((hoje - dataUltimo) / (1000 * 60 * 60 * 24));
                 if (diasPassados < 7) {
                     pendente = false;
                 }
             }
 
             const statusConfig = {
-                verde: { texto: 'Tudo Certo', cor: 'emerald', icone: 'check-circle' },
-                amarelo: { texto: 'Atenção', cor: 'amber', icone: 'alert-triangle' },
-                vermelho: { texto: 'Precisa de Atenção', cor: 'rose', icone: 'alert-octagon' }
+                verde: { texto: 'Tudo Certo', badgeClass: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30', dotClass: 'bg-emerald-400', icone: 'check-circle' },
+                amarelo: { texto: 'Atenção', badgeClass: 'bg-amber-500/15 text-amber-400 border-amber-500/30', dotClass: 'bg-amber-400', icone: 'alert-triangle' },
+                vermelho: { texto: 'Precisa de Atenção', badgeClass: 'bg-rose-500/15 text-rose-400 border-rose-500/30', dotClass: 'bg-rose-400', icone: 'alert-octagon' }
             };
 
             const status = ultimo ? (statusConfig[ultimo.status_indicador] || statusConfig.verde) : null;
 
-            container.innerHTML = `
-                <div class="glass-panel p-5 rounded-2xl border ${pendente ? 'border-amber-500/40 bg-gradient-to-r from-amber-950/20 via-slate-900/60 to-slate-900/90' : 'border-slate-800'} transition-all">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-2xl ${pendente ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'} flex items-center justify-center shrink-0">
-                                <i data-lucide="${pendente ? 'clipboard-pen' : 'clipboard-check'}" class="w-6 h-6"></i>
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <h3 class="text-sm sm:text-base font-extrabold text-white">Check-in Semanal</h3>
-                                    ${pendente ? '<span class="text-[10px] bg-amber-500/20 text-amber-300 font-bold px-2 py-0.5 rounded-full border border-amber-500/30 animate-pulse">Disponível</span>' : '<span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">Atualizado</span>'}
+            // Variação de peso comparado com check-in anterior
+            let deltaHtml = '';
+            if (ultimo && ultimo.peso_atual && penultimo && penultimo.peso_atual) {
+                const diff = (parseFloat(ultimo.peso_atual) - parseFloat(penultimo.peso_atual)).toFixed(1);
+                const isPerda = parseFloat(diff) < 0;
+                deltaHtml = `<span class="text-[10px] font-bold ${isPerda ? 'text-emerald-400' : 'text-amber-400'} ml-1.5">(${diff > 0 ? '+' : ''}${diff} kg)</span>`;
+            }
+
+            // Data legível
+            let dataStr = 'Nenhum envio recente';
+            if (ultimo) {
+                const d = new Date(ultimo.created_at || ultimo._timestamp);
+                dataStr = d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+                if (diasPassados === 0) dataStr = 'Hoje';
+                else if (diasPassados === 1) dataStr = 'Ontem';
+                else if (diasPassados < 7) dataStr = `Há ${diasPassados} dias`;
+            }
+
+            // Textos amigáveis
+            let dietaLimpa = 'Em dia';
+            if (ultimo && ultimo.adesao_dieta) {
+                dietaLimpa = ultimo.adesao_dieta.replace(/^[🟢🟡🔴]\s*/, '').replace(/\(.*\)/, '').trim();
+            }
+            let sonoLimpo = ultimo && ultimo.qualidade_sono ? (ultimo.qualidade_sono.charAt(0).toUpperCase() + ultimo.qualidade_sono.slice(1)) : 'Normal';
+            let energiaLimpa = ultimo && ultimo.nivel_energia ? (ultimo.nivel_energia.charAt(0).toUpperCase() + ultimo.nivel_energia.slice(1)) : 'Alta';
+
+            if (!ultimo) {
+                // Estado inicial sem check-ins
+                container.innerHTML = `
+                    <div class="glass-panel p-5 sm:p-6 rounded-3xl border border-slate-800 shadow-xl hover:border-slate-700/80 transition-all h-full flex flex-col justify-between relative overflow-hidden group">
+                        <div class="pointer-events-none absolute -top-10 -right-10 w-36 h-36 bg-amber-500/10 rounded-full blur-3xl group-hover:bg-amber-500/15 transition-all"></div>
+                        <div>
+                            <div class="flex items-center justify-between gap-3 pb-4 border-b border-slate-800/80">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-11 h-11 rounded-2xl bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0">
+                                        <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-base font-bold text-white leading-tight">Check-in Semanal</h2>
+                                        <p class="text-xs text-slate-400">Feedback com seu Personal & Nutri</p>
+                                    </div>
                                 </div>
-                                <p class="text-xs text-slate-400 mt-0.5">
-                                    ${pendente ? 'Seu personal e nutricionista aguardam seu relato da semana.' : `Último envio registrado. Status da sua semana: <strong class="text-${status.cor}-400 font-bold">🟢 ${status.texto}</strong>`}
-                                </p>
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse">
+                                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>Disponível
+                                </span>
+                            </div>
+
+                            <div class="my-5 p-4 rounded-2xl bg-slate-950/60 border border-slate-800/90 text-center space-y-3">
+                                <div class="w-10 h-10 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center mx-auto">
+                                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-white">Faça seu Primeiro Check-in</h3>
+                                    <p class="text-xs text-slate-400 mt-1 max-w-xs mx-auto">Envie seu peso em jejum e seu relato semanal para alinhar seus treinos e dieta.</p>
+                                </div>
+                                <div class="flex items-center justify-center gap-2 pt-1 text-[11px] text-amber-400 font-semibold">
+                                    <span>⚖️ Peso</span> • <span>🥗 Dieta</span> • <span>🏋️ Treinos</span> • <span>⚡ +10 XP</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-2 shrink-0">
-                            <button type="button" onclick="ApexCheckin.abrirModal()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl font-bold text-xs ${pendente ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-lg shadow-amber-500/20' : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'} flex items-center justify-center gap-1.5 transition-all cursor-pointer">
-                                <i data-lucide="${pendente ? 'send' : 'history'}" class="w-4 h-4"></i>
-                                <span>${pendente ? 'Responder Agora' : 'Ver Histórico / Novo'}</span>
+                        <div class="pt-1">
+                            <button type="button" onclick="ApexCheckin.abrirModal()" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
+                                <i data-lucide="clipboard-pen" class="w-4 h-4"></i>
+                                <span>Iniciar 1º Check-in (+10 XP)</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
                             </button>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            } else {
+                // Estado com dados registrados
+                container.innerHTML = `
+                    <div class="glass-panel p-5 sm:p-6 rounded-3xl border border-slate-800 shadow-xl hover:border-slate-700/80 transition-all h-full flex flex-col justify-between relative overflow-hidden group">
+                        <div class="pointer-events-none absolute -top-10 -right-10 w-36 h-36 bg-amber-500/10 rounded-full blur-3xl group-hover:bg-amber-500/15 transition-all"></div>
+
+                        <div>
+                            <!-- Header -->
+                            <div class="flex items-center justify-between gap-3 pb-4 border-b border-slate-800/80">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-11 h-11 rounded-2xl ${pendente ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-lg shadow-amber-500/10' : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'} flex items-center justify-center shrink-0">
+                                        <i data-lucide="${pendente ? 'clipboard-pen' : 'clipboard-check'}" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-base font-bold text-white leading-tight">Check-in Semanal</h2>
+                                        <p class="text-xs text-slate-400">Feedback com seu Personal & Nutri</p>
+                                    </div>
+                                </div>
+
+                                <div class="shrink-0">
+                                    ${pendente 
+                                        ? '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 animate-pulse"><span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>Aberto</span>' 
+                                        : `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${status.badgeClass} border"><span class="w-2 h-2 rounded-full ${status.dotClass}"></span>${status.texto}</span>`
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Métricas 2x2 -->
+                            <div class="grid grid-cols-2 gap-2.5 my-4">
+                                <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/90 flex flex-col justify-between">
+                                    <span class="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1">
+                                        <i data-lucide="scale" class="w-3 h-3 text-amber-400"></i> Peso em Jejum
+                                    </span>
+                                    <div class="mt-1 flex items-baseline">
+                                        <span class="text-base sm:text-lg font-black text-white">${ultimo.peso_atual ? ultimo.peso_atual + ' kg' : '--'}</span>
+                                        ${deltaHtml}
+                                    </div>
+                                </div>
+
+                                <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/90 flex flex-col justify-between">
+                                    <span class="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1">
+                                        <i data-lucide="dumbbell" class="w-3 h-3 text-orange-400"></i> Treinos Feitos
+                                    </span>
+                                    <div class="mt-1">
+                                        <span class="text-base sm:text-lg font-black text-white">${ultimo.treinos_realizados || 0} <span class="text-xs font-semibold text-slate-400">dias</span></span>
+                                    </div>
+                                </div>
+
+                                <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/90 flex flex-col justify-between">
+                                    <span class="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1">
+                                        <i data-lucide="utensils" class="w-3 h-3 text-emerald-400"></i> Dieta
+                                    </span>
+                                    <div class="mt-1 truncate">
+                                        <span class="text-xs sm:text-sm font-bold text-emerald-300" title="${dietaLimpa}">${dietaLimpa}</span>
+                                    </div>
+                                </div>
+
+                                <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/90 flex flex-col justify-between">
+                                    <span class="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1">
+                                        <i data-lucide="moon" class="w-3 h-3 text-cyan-400"></i> Sono & Energia
+                                    </span>
+                                    <div class="mt-1 truncate">
+                                        <span class="text-xs sm:text-sm font-bold text-slate-200">${sonoLimpo} • ${energiaLimpa}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Alerta de status ou dica -->
+                            <div class="px-3.5 py-2.5 rounded-xl ${pendente ? 'bg-amber-500/10 border border-amber-500/30 text-amber-300' : 'bg-slate-950/60 border border-slate-800/80 text-slate-300'} flex items-center justify-between text-xs mb-4">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="${pendente ? 'bell-ring' : 'check-check'}" class="w-4 h-4 ${pendente ? 'text-amber-400' : 'text-emerald-400'} shrink-0"></i>
+                                    <span class="text-[11px] sm:text-xs">${pendente ? 'Novo check-in semanal liberado! Registre seu progresso.' : 'Último check-in avaliado pela equipe técnica.'}</span>
+                                </div>
+                                <span class="text-[10px] text-slate-400 shrink-0 font-medium">${dataStr}</span>
+                            </div>
+                        </div>
+
+                        <!-- Botões de Ação na base -->
+                        <div class="pt-1">
+                            ${pendente ? `
+                                <button type="button" onclick="ApexCheckin.abrirModal()" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer">
+                                    <i data-lucide="clipboard-pen" class="w-4 h-4"></i>
+                                    <span>Preencher Check-in Agora (+10 XP)</span>
+                                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            ` : `
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button type="button" onclick="ApexCheckin.abrirHistorico()" class="py-2.5 px-3 rounded-xl bg-slate-950/80 hover:bg-slate-800 text-slate-300 hover:text-white font-bold text-xs border border-slate-800 hover:border-slate-700 flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+                                        <i data-lucide="history" class="w-4 h-4 text-slate-400"></i>
+                                        <span>Ver Histórico</span>
+                                    </button>
+                                    <button type="button" onclick="ApexCheckin.abrirModal()" class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 hover:border-amber-400/40 flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+                                        <i data-lucide="plus-circle" class="w-4 h-4 text-amber-400"></i>
+                                        <span>Novo Envio</span>
+                                    </button>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                `;
+            }
+
             if (window.lucide) window.lucide.createIcons();
         },
 
@@ -189,11 +337,137 @@
 
         abrirModal() {
             const modal = document.getElementById('modal-checkin-aluno');
-            if (modal) modal.classList.remove('hidden');
+            if (modal) {
+                modal.classList.remove('hidden');
+                // Auto preencher peso se vazio
+                const inputPeso = document.getElementById('checkin-peso');
+                if (inputPeso && !inputPeso.value) {
+                    const statPesoEl = document.getElementById('stat-peso');
+                    if (statPesoEl) {
+                        const m = statPesoEl.textContent.match(/[\d.]+/);
+                        if (m) inputPeso.value = m[0];
+                    }
+                }
+            }
         },
 
         fecharModal() {
             const modal = document.getElementById('modal-checkin-aluno');
+            if (modal) modal.classList.add('hidden');
+        },
+
+        // Renderiza o Modal de Histórico de Check-in para o Aluno
+        renderModalHistoricoAluno() {
+            let modal = document.getElementById('modal-historico-checkin');
+            if (modal) modal.remove();
+
+            modal = document.createElement('div');
+            modal.id = 'modal-historico-checkin';
+            modal.className = 'fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto';
+            modal.innerHTML = `
+                <div class="bg-slate-900 border border-slate-700/80 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-5 my-8 text-slate-100 relative">
+                    <button type="button" onclick="ApexCheckin.fecharHistoricoModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 transition-colors">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+
+                    <div class="border-b border-slate-800 pb-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5 mb-1">
+                            <i data-lucide="history" class="w-3.5 h-3.5"></i>Registros Semanais
+                        </span>
+                        <h2 class="text-xl sm:text-2xl font-black text-white">Histórico de Check-ins</h2>
+                        <p class="text-xs text-slate-400 mt-1">Acompanhe a sua linha do tempo de evolução, relatos e notas da equipe.</p>
+                    </div>
+
+                    <div id="lista-historico-checkins" class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+                        <div class="text-center py-8 text-xs text-slate-500">Carregando histórico...</div>
+                    </div>
+
+                    <div class="pt-2 flex justify-between items-center">
+                        <button type="button" onclick="ApexCheckin.fecharHistoricoModal(); ApexCheckin.abrirModal();" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                            <span>Novo Envio</span>
+                        </button>
+                        <button type="button" onclick="ApexCheckin.fecharHistoricoModal()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition-colors cursor-pointer">
+                            Fechar
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            if (window.lucide) window.lucide.createIcons();
+        },
+
+        async abrirHistorico() {
+            this.renderModalHistoricoAluno();
+            const modal = document.getElementById('modal-historico-checkin');
+            if (modal) modal.classList.remove('hidden');
+
+            const container = document.getElementById('lista-historico-checkins');
+            if (!container) return;
+
+            const checkins = await window.ApexCore.data.getCheckins(this.alunoIdAtual, 20);
+            if (!checkins || checkins.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10 bg-slate-950/40 rounded-2xl border border-slate-800">
+                        <i data-lucide="inbox" class="w-8 h-8 text-slate-600 mx-auto mb-2"></i>
+                        <p class="text-sm font-bold text-slate-400">Nenhum check-in registrado ainda.</p>
+                        <p class="text-xs text-slate-500 mt-1">Faça seu primeiro check-in semanal para começar seu histórico!</p>
+                    </div>
+                `;
+                if (window.lucide) window.lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = checkins.map((c) => {
+                const dataFormatada = new Date(c.created_at || c._timestamp).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+                const statusBadge = {
+                    verde: '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">🟢 Tudo Certo</span>',
+                    amarelo: '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">🟡 Atenção</span>',
+                    vermelho: '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30">🔴 Precisa de Atenção</span>'
+                }[c.status_indicador || 'verde'];
+
+                const dietaClean = c.adesao_dieta ? c.adesao_dieta.replace(/^[🟢🟡🔴]\s*/, '').replace(/\(.*\)/, '').trim() : 'No Plano';
+
+                return `
+                    <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-2.5 hover:border-slate-700 transition-all">
+                        <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+                            <span class="text-xs font-bold text-white flex items-center gap-1.5">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i> ${dataFormatada}
+                            </span>
+                            ${statusBadge}
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
+                            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800/80">
+                                <span class="text-slate-400 text-[10px] uppercase block font-semibold">Peso</span>
+                                <span class="font-extrabold text-white text-xs">${c.peso_atual ? c.peso_atual + ' kg' : '--'}</span>
+                            </div>
+                            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800/80">
+                                <span class="text-slate-400 text-[10px] uppercase block font-semibold">Treinos</span>
+                                <span class="font-extrabold text-orange-400 text-xs">${c.treinos_realizados || 0} dias</span>
+                            </div>
+                            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800/80">
+                                <span class="text-slate-400 text-[10px] uppercase block font-semibold">Dieta</span>
+                                <span class="font-extrabold text-emerald-400 text-xs truncate block" title="${dietaClean}">${dietaClean}</span>
+                            </div>
+                            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800/80">
+                                <span class="text-slate-400 text-[10px] uppercase block font-semibold">Sono/Energia</span>
+                                <span class="font-extrabold text-cyan-400 text-xs capitalize">${c.qualidade_sono || 'Bom'} • ${c.nivel_energia || 'Alto'}</span>
+                            </div>
+                        </div>
+                        ${c.observacoes ? `
+                            <div class="text-[11px] text-slate-300 bg-slate-900/50 p-2.5 rounded-xl border border-slate-800/50 italic">
+                                "${c.observacoes}"
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            if (window.lucide) window.lucide.createIcons();
+        },
+
+        fecharHistoricoModal() {
+            const modal = document.getElementById('modal-historico-checkin');
             if (modal) modal.classList.add('hidden');
         },
 
@@ -240,7 +514,10 @@
 
             window.ApexCore.sound.playSuccess();
             this.fecharModal();
-            this.renderCardCheckinAluno();
+            await this.renderCardCheckinAluno();
+            if (window.ApexHabitos && typeof window.ApexHabitos.renderGamificacao === 'function') {
+                window.ApexHabitos.renderGamificacao();
+            }
 
             if (window.showToast) {
                 window.showToast('Check-in Enviado com Sucesso! 🚀', 'Seus profissionais foram notificados e analisarão seu progresso.', 'success');

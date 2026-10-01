@@ -400,7 +400,7 @@
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1 w-full">
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 flex-1 w-full">
 
         <!-- Boas-vindas e Data -->
         <div
@@ -414,68 +414,17 @@
                     Mantenha a consistência. Cada refeição saudável conta para a sua transformação.
                 </p>
             </div>
-
-            <!-- Botão de suporte rápido mobile -->
             <button type="button"
                 onclick="if(document.getElementById('chat-window').classList.contains('hidden')) document.getElementById('chat-toggle-btn').click();"
                 class="sm:hidden flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all cursor-pointer">
                 <i data-lucide="message-circle" class="w-4 h-4"></i>
                 <span>Suporte</span>
             </button>
-
-        </div> <!-- FECHAMENTO DA DIV QUE ESTAVA FALTANDO E QUEBROU O LAYOUT -->
-
-        <!-- CONTAINER DO CHECK-IN SEMANAL DO ALUNO (Item 2) -->
-        <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
-            <div onclick="toggleSecaoDashboard(this)"
-                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center">
-                        <i data-lucide="clipboard-check" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Check-in Semanal</h2>
-                        <p class="text-xs text-slate-400">Envie seu feedback e peso para o nutricionista</p>
-                    </div>
-                </div>
-                <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow">
-                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                </div>
-            </div>
-            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
-                <div id="container-checkin-aluno"></div>
-            </div>
         </div>
 
-        <!-- CONTAINER DE GAMIFICAÇÃO & NÍVEL XP (Item 18) -->
-        <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
-            <div onclick="toggleSecaoDashboard(this)"
-                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-9 h-9 rounded-xl bg-gold-500/10 text-gold-400 border border-gold-500/20 flex items-center justify-center">
-                        <i data-lucide="award" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Gamificação & Nível XP</h2>
-                        <p class="text-xs text-slate-400">Acompanhe sua pontuação e conquistas</p>
-                    </div>
-                </div>
-                <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow">
-                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                </div>
-            </div>
-            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
-                <div id="container-gamificacao"></div>
-            </div>
-        </div>
-
-        <!-- Cards de Métricas Principais (Quick Stats) -->
+        <!-- 1. OS 4 CARDS DE MÉTRICAS NO TOPO (LADO A LADO) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <!-- 1. Peso Atual com Botão de Atualização Rápida -->
+            <!-- 1. Peso Atual -->
             <div
                 class="glass-panel p-5 rounded-2xl border border-slate-800 flex flex-col justify-between relative overflow-hidden group">
                 <div class="flex items-center justify-between">
@@ -499,7 +448,7 @@
                 </div>
             </div>
 
-            <!-- 2. Perfil Físico (Altura, Idade e IMC) -->
+            <!-- 2. Perfil Físico -->
             <div
                 class="glass-panel p-5 rounded-2xl border border-slate-800 flex flex-col justify-between relative overflow-hidden group">
                 <div class="flex items-center justify-between">
@@ -562,11 +511,7 @@
                     </div>
                     <span class="text-xs font-bold text-cyan-400" id="agua-contador-texto">0 / 8 copos</span>
                 </div>
-
-                <!-- Copos Clicáveis -->
-                <div class="flex items-center justify-between gap-1 pt-1" id="copos-container">
-                    <!-- Gerados via JavaScript -->
-                </div>
+                <div class="flex items-center justify-between gap-1 pt-1" id="copos-container"></div>
                 <div class="text-[11px] text-slate-500 mt-2 flex justify-between items-center">
                     <span>Clique nos copos</span>
                     <button id="btn-reset-agua"
@@ -575,83 +520,10 @@
             </div>
         </div>
 
-        <!-- ============================================================== -->
-        <!-- BLOCO: RESUMO DO DIA — ATALHOS RÁPIDOS PARA TREINOS E NUTRIÇÃO -->
-        <!-- ============================================================== -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-            <!-- Card Atalho: Refeição de Hoje -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-slate-800 hover:border-lime-500/30 transition-all group">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2.5">
-                        <div
-                            class="w-9 h-9 rounded-xl bg-lime-500/10 text-lime-400 border border-lime-500/20 flex items-center justify-center">
-                            <i data-lucide="utensils" class="w-4.5 h-4.5"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-sm font-bold text-white">Refeição de Hoje</h2>
-                            <p class="text-[11px] text-slate-400">Progresso do plano alimentar</p>
-                        </div>
-                    </div>
-                    <span class="text-xs font-bold text-lime-400" id="dashboard-refeicoes-badge">-- / --</span>
-                </div>
-                <!-- Mini barra de progresso -->
-                <div class="h-1.5 rounded-full bg-slate-800/80 overflow-hidden mb-3">
-                    <div class="h-full rounded-full bg-gradient-to-r from-lime-600 to-emerald-400 transition-all duration-500"
-                        id="dashboard-refeicoes-fill" style="width:0%"></div>
-                </div>
-                <!-- Preview das próximas refeições -->
-                <div id="dashboard-proximas-refeicoes" class="space-y-1.5 mb-3 min-h-[48px]">
-                    <p class="text-xs text-slate-500">Carregando...</p>
-                </div>
-                <!-- Strip de Metas Nutricionais de Macros no Dashboard -->
-                <div id="dashboard-macros-strip"
-                    class="mb-3 p-2.5 rounded-xl bg-slate-900/80 border border-lime-500/20 text-[11px] flex items-center justify-between hidden">
-                    <span class="text-slate-400 font-bold flex items-center gap-1.5 shrink-0">
-                        <i data-lucide="target" class="w-3.5 h-3.5 text-lime-400"></i>Metas:
-                    </span>
-                    <span id="dashboard-macros-valores" class="font-bold text-white truncate ml-2">--</span>
-                </div>
-                <a href="nutricao.html"
-                    class="flex items-center justify-between w-full bg-lime-500/10 hover:bg-lime-500/20 text-lime-400 hover:text-lime-300 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-lime-500/20 transition-all group-hover:border-lime-500/40">
-                    <span>Ver Plano Alimentar Completo</span>
-                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                </a>
-            </div>
-
-            <!-- Card Atalho: Meus Treinos -->
-            <div
-                class="glass-panel p-5 rounded-2xl border border-slate-800 hover:border-orange-500/30 transition-all group">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2.5">
-                        <div
-                            class="w-9 h-9 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center justify-center">
-                            <i data-lucide="dumbbell" class="w-4.5 h-4.5"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-sm font-bold text-white">Meus Treinos</h2>
-                            <p class="text-[11px] text-slate-400">Fichas do personal trainer</p>
-                        </div>
-                    </div>
-                    <span class="text-xs font-bold text-orange-400" id="dashboard-treinos-badge">--</span>
-                </div>
-                <!-- Preview dos treinos -->
-                <div id="dashboard-preview-treinos" class="space-y-1.5 mb-4 min-h-[48px]">
-                    <p class="text-xs text-slate-500">Carregando...</p>
-                </div>
-                <!-- Mini barra de progresso de treinos -->
-                <div class="h-1.5 rounded-full bg-slate-800/80 overflow-hidden mb-3">
-                    <div class="h-full rounded-full bg-gradient-to-r from-orange-600 to-amber-400 transition-all duration-500"
-                        id="dashboard-treinos-fill" style="width:0%"></div>
-                </div>
-                <a href="treinos.html"
-                    class="flex items-center justify-between w-full bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 hover:text-orange-300 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-orange-500/20 transition-all group-hover:border-orange-500/40">
-                    <span>Ver Ficha de Treinos Completa</span>
-                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                </a>
-            </div>
-
+        <!-- 2. PAINÉIS LADO A LADO: CHECK-IN SEMANAL & GAMIFICAÇÃO XP -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
+            <div id="container-checkin-aluno" class="h-full flex flex-col"></div>
+            <div id="container-gamificacao" class="h-full flex flex-col"></div>
         </div>
 
         <!-- HÁBITOS DIÁRIOS & STREAK (Item 12) -->
@@ -747,30 +619,6 @@
             </div>
             <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
                 <div id="container-medidas-corporais"></div>
-            </div>
-        </div>
-
-        <!-- COMPARADOR DE FOTOS ANTES | DEPOIS (Itens 3 & 4) -->
-        <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
-            <div onclick="toggleSecaoDashboard(this)"
-                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center">
-                        <i data-lucide="columns" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Comparador de Evolução: Antes & Depois</h2>
-                        <p class="text-xs text-slate-400">Analise seu progresso visualmente lado a lado</p>
-                    </div>
-                </div>
-                <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow">
-                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                </div>
-            </div>
-            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
-                <div id="container-comparador-fotos"></div>
             </div>
         </div>
 
@@ -947,6 +795,30 @@
                     <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                     Excluir Foto
                 </button>
+            </div>
+        </div>
+
+        <!-- COMPARADOR DE FOTOS ANTES | DEPOIS (Itens 3 & 4) -->
+        <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
+            <div onclick="toggleSecaoDashboard(this)"
+                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center">
+                        <i data-lucide="columns" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-bold text-white">Comparador de Evolução: Antes & Depois</h2>
+                        <p class="text-xs text-slate-400">Analise seu progresso visualmente lado a lado</p>
+                    </div>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </div>
+            </div>
+            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
+                <div id="container-comparador-fotos"></div>
             </div>
         </div>
 
