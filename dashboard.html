@@ -20,6 +20,19 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- html2pdf.js para Geração Automática de PDF do Plano Alimentar -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+        window.toggleSecaoDashboard = function (headerElement) {
+            const content = headerElement.nextElementSibling;
+            const isOpen = content.classList.contains('expanded');
+
+            headerElement.classList.toggle('active', !isOpen);
+            content.classList.toggle('expanded', !isOpen);
+        };
+    </script>
+
+    <script src="js/apexfit-core.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -30,7 +43,7 @@
                     },
                     colors: {
                         brand: {
-                            50:  '#fefce8',
+                            50: '#fefce8',
                             100: '#fef9c3',
                             400: '#facc15',
                             500: '#eab308',
@@ -47,6 +60,28 @@
         }
     </script>
     <style>
+        /* Estilos para Blocos Colapsáveis */
+        .collapse-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .collapse-content.expanded {
+            max-height: 2000px;
+            /* Altura máxima estimada para caber o conteúdo */
+            opacity: 1;
+        }
+
+        .collapse-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .collapse-header.active .collapse-arrow {
+            transform: rotate(180deg);
+        }
+
         /* Modern Glassmorphism Profundo com Iluminação Especular e Sombras Multi-camadas */
         .glass-panel {
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.78) 0%, rgba(11, 17, 33, 0.88) 100%);
@@ -63,22 +98,42 @@
 
         /* Ambient Glow Orbs para profundidade tridimensional */
         .ambient-glow-1 {
-            position: fixed; top: -10%; left: 15%;
-            width: 550px; height: 550px;
-            background: radial-gradient(circle, rgba(234,179,8,0.13) 0%, transparent 70%);
-            border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(55px);
+            position: fixed;
+            top: -10%;
+            left: 15%;
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(234, 179, 8, 0.13) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(55px);
         }
+
         .ambient-glow-2 {
-            position: fixed; top: 40%; right: -5%;
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(250,204,21,0.07) 0%, transparent 70%);
-            border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(60px);
+            position: fixed;
+            top: 40%;
+            right: -5%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(250, 204, 21, 0.07) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(60px);
         }
+
         .ambient-glow-3 {
-            position: fixed; bottom: -10%; left: 30%;
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(202,138,4,0.07) 0%, transparent 70%);
-            border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(60px);
+            position: fixed;
+            bottom: -10%;
+            left: 30%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(202, 138, 4, 0.07) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(60px);
         }
 
         /* Símbolo de Notificação Pulsante (Vermelho e Branco) */
@@ -126,14 +181,29 @@
 
         /* Links de Navegação entre Páginas */
         .nav-dash-link {
-            display: flex; align-items: center; gap: 6px;
-            padding: 6px 12px; border-radius: 10px;
-            font-size: 12px; font-weight: 600;
-            color: #94a3b8; transition: all 0.2s;
-            text-decoration: none; border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #94a3b8;
+            transition: all 0.2s;
+            text-decoration: none;
+            border: 1px solid transparent;
         }
-        .nav-dash-link:hover { background: rgba(255,255,255,0.06); color: #f8fafc; }
-        .nav-dash-link.ativo { background: rgba(234,179,8,0.12); color: #facc15; border-color: rgba(234,179,8,0.30); }
+
+        .nav-dash-link:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #f8fafc;
+        }
+
+        .nav-dash-link.ativo {
+            background: rgba(234, 179, 8, 0.12);
+            color: #facc15;
+            border-color: rgba(234, 179, 8, 0.30);
+        }
 
         /* Custom scrollbar */
         ::-webkit-scrollbar {
@@ -261,7 +331,8 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <a href="index.html" class="flex items-center gap-2 group" title="Ir para a página inicial">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-gold-600 to-gold-400 flex items-center justify-center text-[#020408] shadow-md shadow-gold-500/20 group-hover:scale-105 transition-transform">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-gradient-to-tr from-gold-600 to-gold-400 flex items-center justify-center text-[#020408] shadow-md shadow-gold-500/20 group-hover:scale-105 transition-transform">
                         <i data-lucide="zap" class="w-5 h-5"></i>
                     </div>
                     <span class="text-xl font-extrabold tracking-tight text-white hidden sm:inline">
@@ -270,9 +341,12 @@
                 </a>
                 <!-- Navegação entre páginas (desktop) -->
                 <nav class="hidden md:flex items-center gap-1 ml-2">
-                    <a href="dashboard.html" class="nav-dash-link ativo"><i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>Meu Painel</a>
-                    <a href="treinos.html" class="nav-dash-link"><i data-lucide="dumbbell" class="w-3.5 h-3.5"></i>Meus Treinos</a>
-                    <a href="nutricao.html" class="nav-dash-link"><i data-lucide="utensils" class="w-3.5 h-3.5"></i>Nutrição</a>
+                    <a href="dashboard.html" class="nav-dash-link ativo"><i data-lucide="layout-dashboard"
+                            class="w-3.5 h-3.5"></i>Meu Painel</a>
+                    <a href="treinos.html" class="nav-dash-link"><i data-lucide="dumbbell" class="w-3.5 h-3.5"></i>Meus
+                        Treinos</a>
+                    <a href="nutricao.html" class="nav-dash-link"><i data-lucide="utensils"
+                            class="w-3.5 h-3.5"></i>Nutrição</a>
                 </nav>
             </div>
 
@@ -298,7 +372,8 @@
                         class="relative group cursor-pointer focus:outline-none" title="Alterar foto de perfil">
                         <div class="w-9 h-9 rounded-full bg-gold-500/20 text-gold-400 border border-gold-500/40 flex items-center justify-center font-bold text-xs overflow-hidden shadow-sm group-hover:border-gold-400 group-hover:scale-105 transition-all"
                             id="user-avatar">A</div>
-                        <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-gold-600 text-[#020408] flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                        <div
+                            class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-gold-600 text-[#020408] flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
                             <i data-lucide="camera" class="w-2.5 h-2.5"></i>
                         </div>
                     </button>
@@ -312,9 +387,15 @@
         </div>
         <!-- Nav mobile -->
         <div class="md:hidden border-t border-slate-800/60 flex">
-            <a href="dashboard.html" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-gold-400 border-b-2 border-gold-500 bg-gold-500/5"><i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>Painel</a>
-            <a href="treinos.html" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-slate-400"><i data-lucide="dumbbell" class="w-3.5 h-3.5"></i>Treinos</a>
-            <a href="nutricao.html" class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-slate-400"><i data-lucide="utensils" class="w-3.5 h-3.5"></i>Nutrição</a>
+            <a href="dashboard.html"
+                class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-gold-400 border-b-2 border-gold-500 bg-gold-500/5"><i
+                    data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>Painel</a>
+            <a href="treinos.html"
+                class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-slate-400"><i
+                    data-lucide="dumbbell" class="w-3.5 h-3.5"></i>Treinos</a>
+            <a href="nutricao.html"
+                class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-slate-400"><i
+                    data-lucide="utensils" class="w-3.5 h-3.5"></i>Nutrição</a>
         </div>
     </header>
 
@@ -322,7 +403,8 @@
     <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1 w-full">
 
         <!-- Boas-vindas e Data -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-[#030712]/90 to-[#0a0a02]/40 p-6 rounded-3xl border border-gold-500/15 shadow-xl">
+        <div
+            class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-[#030712]/90 to-[#0a0a02]/40 p-6 rounded-3xl border border-gold-500/15 shadow-xl">
             <div>
                 <div class="text-xs font-semibold uppercase tracking-wider text-gold-400 mb-1" id="data-hoje">--</div>
                 <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
@@ -344,10 +426,52 @@
         </div> <!-- FECHAMENTO DA DIV QUE ESTAVA FALTANDO E QUEBROU O LAYOUT -->
 
         <!-- CONTAINER DO CHECK-IN SEMANAL DO ALUNO (Item 2) -->
-        <div id="container-checkin-aluno"></div>
+        <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
+            <div onclick="toggleSecaoDashboard(this)"
+                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center">
+                        <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-bold text-white">Check-in Semanal</h2>
+                        <p class="text-xs text-slate-400">Envie seu feedback e peso para o nutricionista</p>
+                    </div>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </div>
+            </div>
+            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
+                <div id="container-checkin-aluno"></div>
+            </div>
+        </div>
 
         <!-- CONTAINER DE GAMIFICAÇÃO & NÍVEL XP (Item 18) -->
-        <div id="container-gamificacao"></div>
+        <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
+            <div onclick="toggleSecaoDashboard(this)"
+                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-gold-500/10 text-gold-400 border border-gold-500/20 flex items-center justify-center">
+                        <i data-lucide="award" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-bold text-white">Gamificação & Nível XP</h2>
+                        <p class="text-xs text-slate-400">Acompanhe sua pontuação e conquistas</p>
+                    </div>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </div>
+            </div>
+            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
+                <div id="container-gamificacao"></div>
+            </div>
+        </div>
 
         <!-- Cards de Métricas Principais (Quick Stats) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -457,10 +581,12 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
             <!-- Card Atalho: Refeição de Hoje -->
-            <div class="glass-panel p-5 rounded-2xl border border-slate-800 hover:border-lime-500/30 transition-all group">
+            <div
+                class="glass-panel p-5 rounded-2xl border border-slate-800 hover:border-lime-500/30 transition-all group">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-xl bg-lime-500/10 text-lime-400 border border-lime-500/20 flex items-center justify-center">
+                        <div
+                            class="w-9 h-9 rounded-xl bg-lime-500/10 text-lime-400 border border-lime-500/20 flex items-center justify-center">
                             <i data-lucide="utensils" class="w-4.5 h-4.5"></i>
                         </div>
                         <div>
@@ -472,30 +598,35 @@
                 </div>
                 <!-- Mini barra de progresso -->
                 <div class="h-1.5 rounded-full bg-slate-800/80 overflow-hidden mb-3">
-                    <div class="h-full rounded-full bg-gradient-to-r from-lime-600 to-emerald-400 transition-all duration-500" id="dashboard-refeicoes-fill" style="width:0%"></div>
+                    <div class="h-full rounded-full bg-gradient-to-r from-lime-600 to-emerald-400 transition-all duration-500"
+                        id="dashboard-refeicoes-fill" style="width:0%"></div>
                 </div>
                 <!-- Preview das próximas refeições -->
                 <div id="dashboard-proximas-refeicoes" class="space-y-1.5 mb-3 min-h-[48px]">
                     <p class="text-xs text-slate-500">Carregando...</p>
                 </div>
                 <!-- Strip de Metas Nutricionais de Macros no Dashboard -->
-                <div id="dashboard-macros-strip" class="mb-3 p-2.5 rounded-xl bg-slate-900/80 border border-lime-500/20 text-[11px] flex items-center justify-between hidden">
+                <div id="dashboard-macros-strip"
+                    class="mb-3 p-2.5 rounded-xl bg-slate-900/80 border border-lime-500/20 text-[11px] flex items-center justify-between hidden">
                     <span class="text-slate-400 font-bold flex items-center gap-1.5 shrink-0">
                         <i data-lucide="target" class="w-3.5 h-3.5 text-lime-400"></i>Metas:
                     </span>
                     <span id="dashboard-macros-valores" class="font-bold text-white truncate ml-2">--</span>
                 </div>
-                <a href="nutricao.html" class="flex items-center justify-between w-full bg-lime-500/10 hover:bg-lime-500/20 text-lime-400 hover:text-lime-300 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-lime-500/20 transition-all group-hover:border-lime-500/40">
+                <a href="nutricao.html"
+                    class="flex items-center justify-between w-full bg-lime-500/10 hover:bg-lime-500/20 text-lime-400 hover:text-lime-300 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-lime-500/20 transition-all group-hover:border-lime-500/40">
                     <span>Ver Plano Alimentar Completo</span>
                     <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                 </a>
             </div>
 
             <!-- Card Atalho: Meus Treinos -->
-            <div class="glass-panel p-5 rounded-2xl border border-slate-800 hover:border-orange-500/30 transition-all group">
+            <div
+                class="glass-panel p-5 rounded-2xl border border-slate-800 hover:border-orange-500/30 transition-all group">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center justify-center">
+                        <div
+                            class="w-9 h-9 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center justify-center">
                             <i data-lucide="dumbbell" class="w-4.5 h-4.5"></i>
                         </div>
                         <div>
@@ -511,9 +642,11 @@
                 </div>
                 <!-- Mini barra de progresso de treinos -->
                 <div class="h-1.5 rounded-full bg-slate-800/80 overflow-hidden mb-3">
-                    <div class="h-full rounded-full bg-gradient-to-r from-orange-600 to-amber-400 transition-all duration-500" id="dashboard-treinos-fill" style="width:0%"></div>
+                    <div class="h-full rounded-full bg-gradient-to-r from-orange-600 to-amber-400 transition-all duration-500"
+                        id="dashboard-treinos-fill" style="width:0%"></div>
                 </div>
-                <a href="treinos.html" class="flex items-center justify-between w-full bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 hover:text-orange-300 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-orange-500/20 transition-all group-hover:border-orange-500/40">
+                <a href="treinos.html"
+                    class="flex items-center justify-between w-full bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 hover:text-orange-300 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-orange-500/20 transition-all group-hover:border-orange-500/40">
                     <span>Ver Ficha de Treinos Completa</span>
                     <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                 </a>
@@ -522,19 +655,124 @@
         </div>
 
         <!-- HÁBITOS DIÁRIOS & STREAK (Item 12) -->
-        <div id="container-habitos-diarios"></div>
+        <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
+            <div onclick="toggleSecaoDashboard(this)"
+                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
+                        <i data-lucide="check-square" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-bold text-white">Hábitos Diários & Streak</h2>
+                        <p class="text-xs text-slate-400">Mantenha sua sequência de hábitos saudáveis</p>
+                    </div>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </div>
+            </div>
+            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
+                <div id="container-habitos-diarios"></div>
+            </div>
+        </div>
 
         <!-- CONTROLE COMPLETO DE HIDRATAÇÃO (Item 11) -->
-        <div id="container-hidratacao-completa"></div>
+        <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
+            <div onclick="toggleSecaoDashboard(this)"
+                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center">
+                        <i data-lucide="droplets" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-bold text-white">Controle de Hidratação</h2>
+                        <p class="text-xs text-slate-400">Monitorize seu consumo diário de água</p>
+                    </div>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </div>
+            </div>
+            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
+                <div id="container-hidratacao-completa"></div>
+            </div>
+        </div>
 
         <!-- MINHAS METAS (Item 19) -->
-        <div id="container-metas-aluno"></div>
+        <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
+            <div onclick="toggleSecaoDashboard(this)"
+                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center">
+                        <i data-lucide="target" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-bold text-white">Minhas Metas</h2>
+                        <p class="text-xs text-slate-400">Objetivos definidos para sua evolução</p>
+                    </div>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </div>
+            </div>
+            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
+                <div id="container-metas-aluno"></div>
+            </div>
+        </div>
 
         <!-- MEDIDAS CORPORAIS & ANTROPOMETRIA (Item 3) -->
-        <div id="container-medidas-corporais"></div>
+        <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
+            <div onclick="toggleSecaoDashboard(this)"
+                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center">
+                        <i data-lucide="activity" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-bold text-white">Medidas Corporais & Antropometria</h2>
+                        <p class="text-xs text-slate-400">Circunferências e dados físicos</p>
+                    </div>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </div>
+            </div>
+            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
+                <div id="container-medidas-corporais"></div>
+            </div>
+        </div>
 
         <!-- COMPARADOR DE FOTOS ANTES | DEPOIS (Itens 3 & 4) -->
-        <div id="container-comparador-fotos"></div>
+        <div class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden">
+            <div onclick="toggleSecaoDashboard(this)"
+                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center">
+                        <i data-lucide="columns" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-bold text-white">Comparador de Evolução: Antes & Depois</h2>
+                        <p class="text-xs text-slate-400">Analise seu progresso visualmente lado a lado</p>
+                    </div>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </div>
+            </div>
+            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
+                <div id="container-comparador-fotos"></div>
+            </div>
+        </div>
 
         <!-- ============================================================== -->
         <!-- 2. SEÇÃO: GALERIA DE EVOLUÇÃO CORPORAL (SEGUNDO)               -->
@@ -1352,7 +1590,7 @@
         async function carregarResumoTreinos(userId) {
             const key = 'apexfit_treino_check_' + userId;
             let feitos = {};
-            try { feitos = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
+            try { feitos = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) { }
 
             const badgeEl = document.getElementById('dashboard-treinos-badge');
             const fillEl = document.getElementById('dashboard-treinos-fill');
@@ -2754,8 +2992,7 @@
         class="hidden fixed bottom-24 right-6 w-80 sm:w-96 h-[480px] glass-panel border border-slate-800 rounded-3xl shadow-2xl flex flex-col z-50 overflow-hidden">
         <div class="bg-slate-900/90 p-4 flex justify-between items-center border-b border-slate-800">
             <div class="flex items-center gap-2.5">
-                <div
-                    class="w-8 h-8 rounded-xl bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold">
+                <div class="w-8 h-8 rounded-xl bg-gold-500/20 text-gold-400 flex items-center justify-center font-bold">
                     P</div>
                 <div>
                     <h3 class="text-xs font-bold text-white">Chat com o profissional</h3>
@@ -2770,7 +3007,8 @@
 
         <!-- Mensagens -->
         <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs bg-slate-950/40">
-            <div class="text-center text-slate-500 text-[11px] my-2">Envie sua mensagem ou dúvida sobre a rotina. Responderemos em breve!</div>
+            <div class="text-center text-slate-500 text-[11px] my-2">Envie sua mensagem ou dúvida sobre a rotina.
+                Responderemos em breve!</div>
         </div>
 
         <!-- Input de Envio -->
@@ -2891,19 +3129,19 @@
         });
     </script>
 
-<script>
-(async () => {
-  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  if (!session) return;
-  const uid = session.user.id, box = document.getElementById('container-treinos');
-  const key = 'apexfit_treino_check_' + uid;
-  let feitos = {}; try { feitos = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
-  const { data, error } = await supabaseClient.from('treinos').select('*').eq('aluno_id', uid).order('created_at');
-  if (error) { box.innerHTML = '<p class="text-sm text-slate-500">Os treinos ainda não estão disponíveis.</p>'; return; }
-  if (!data.length) { box.innerHTML = '<p class="text-sm text-slate-500">Seu personal ainda não montou seu treino.</p>'; return; }
-  const g = {}; data.forEach(t => (g[t.treino_nome] = g[t.treino_nome] || []).push(t));
-  box.innerHTML = Object.entries(g).map(([nome, ex]) => `
+    <script>
+        (async () => {
+            const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) return;
+            const uid = session.user.id, box = document.getElementById('container-treinos');
+            const key = 'apexfit_treino_check_' + uid;
+            let feitos = {}; try { feitos = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) { }
+            const { data, error } = await supabaseClient.from('treinos').select('*').eq('aluno_id', uid).order('created_at');
+            if (error) { box.innerHTML = '<p class="text-sm text-slate-500">Os treinos ainda não estão disponíveis.</p>'; return; }
+            if (!data.length) { box.innerHTML = '<p class="text-sm text-slate-500">Seu personal ainda não montou seu treino.</p>'; return; }
+            const g = {}; data.forEach(t => (g[t.treino_nome] = g[t.treino_nome] || []).push(t));
+            box.innerHTML = Object.entries(g).map(([nome, ex]) => `
     <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-5">
       <div class="flex items-center justify-between mb-3"><h3 class="font-bold text-white">${esc(nome)}</h3>
       <span class="text-xs text-orange-400 font-semibold">${esc(ex[0].dia_semana || '')} · ${esc(ex[0].grupo_muscular || '')}</span></div>
@@ -2914,13 +3152,14 @@
         ${e.observacoes ? `<p class="text-xs text-slate-500 mt-1">${esc(e.observacoes)}</p>` : ''}
         ${/^https?:\/\//.test(e.video_url || '') ? `<a href="${esc(e.video_url)}" target="_blank" rel="noopener" class="text-xs text-orange-400 underline">Ver demonstração</a>` : ''}</div></label>`).join('')}</div>
     </div>`).join('');
-  box.addEventListener('change', ev => { const c = ev.target; if (c.dataset.id) { feitos[c.dataset.id] = c.checked; localStorage.setItem(key, JSON.stringify(feitos)); } });
-})();
-</script>
-<script src="js/apexfit-core.js"></script>
-<script src="js/checkin-system.js"></script>
-<script src="js/evolution-tracker.js"></script>
-<script src="js/habits-hydration-gamification.js"></script>
+            box.addEventListener('change', ev => { const c = ev.target; if (c.dataset.id) { feitos[c.dataset.id] = c.checked; localStorage.setItem(key, JSON.stringify(feitos)); } });
+        })();
+
+    </script>
+    <script src="js/apexfit-core.js"></script>
+    <script src="js/checkin-system.js"></script>
+    <script src="js/evolution-tracker.js"></script>
+    <script src="js/habits-hydration-gamification.js"></script>
 </body>
 
 </html>
