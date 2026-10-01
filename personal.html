@@ -67,11 +67,13 @@
         }
 
         .collapse-arrow {
-            transition: transform 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, color 0.2s ease;
         }
 
         .collapse-header.active .collapse-arrow {
             transform: rotate(180deg);
+            color: #ffffff;
+            background-color: rgba(30, 41, 59, 1);
         }
 
         /* Símbolo de Notificação Pulsante (Vermelho e Branco) */
@@ -153,8 +155,8 @@
 
     <!-- Topo do Painel Admin -->
     <header class="bg-slate-900/90 border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-md">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-18 py-3.5 flex items-center justify-between">
-            <div class="flex items-center gap-3">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 min-h-[4.25rem] py-3 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
                 <a href="index.html" class="flex items-center gap-2 group" title="Ir para a página inicial">
                     <div
                         class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
@@ -165,18 +167,19 @@
                     </span>
                 </a>
                 <span
-                    class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full border border-amber-500/20 font-semibold flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                    Painel do Personal
+                    class="text-xs bg-amber-500/10 text-amber-400 px-2.5 sm:px-3 py-1 rounded-full border border-amber-500/20 font-semibold flex items-center gap-1.5 max-w-[130px] xs:max-w-none">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
+                    <span class="truncate">Painel do Personal</span>
                 </span>
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
 
-                <!-- Menu Suspenso de Ações Rápidas -->
-                <div class="relative group">
+                <!-- Menu Suspenso de Ações Rápidas (Suporte a Hover no PC e Clique no Touchscreen) -->
+                <div class="relative group" id="dropdown-acoes-rapidas">
                     <button type="button"
-                        class="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all relative">
+                        onclick="this.nextElementSibling.classList.toggle('hidden')"
+                        class="flex items-center gap-1.5 sm:gap-2 bg-slate-800/80 hover:bg-slate-700/80 active:scale-95 text-slate-300 hover:text-white text-xs font-semibold px-3 sm:px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all relative cursor-pointer shadow-sm">
                         <i data-lucide="layers" class="w-4 h-4 text-brand-400"></i>
                         <span class="hidden sm:inline">Ações Rápidas</span>
                         <i data-lucide="chevron-down"
@@ -191,7 +194,7 @@
 
                     <!-- Lista Oculta do Menu Suspenso -->
                     <div
-                        class="absolute right-0 mt-2 w-56 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
+                        class="hidden group-hover:block absolute right-0 mt-2 w-56 sm:w-64 max-w-[calc(100vw-2rem)] bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
                         <div class="p-1 space-y-0.5">
                             <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
                                 class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-orange-400 hover:bg-slate-800 transition-colors">
@@ -200,15 +203,15 @@
                             </button>
 
                             <button onclick="navegarParaSecao('secao-cadastrar-treino')"
-                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-brand-300 hover:bg-slate-800 transition-colors">
-                                <i data-lucide="dumbbell" class="w-4 h-4 text-brand-400"></i>
+                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-orange-400 hover:bg-slate-800 transition-colors">
+                                <i data-lucide="plus-circle" class="w-4 h-4 text-orange-400"></i>
                                 <span>Montar treino</span>
                             </button>
 
                             <button onclick="navegarParaSecao('secao-treino-atual')"
-                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-brand-300 hover:bg-slate-800 transition-colors">
-                                <i data-lucide="list-checks" class="w-4 h-4 text-brand-400"></i>
-                                <span>Treino atual</span>
+                                class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-orange-400 hover:bg-slate-800 transition-colors">
+                                <i data-lucide="clipboard-list" class="w-4 h-4 text-orange-400"></i>
+                                <span>Gerenciar treinos</span>
                             </button>
 
                             <button onclick="navegarParaSecao('secao-checkins')"
@@ -282,7 +285,7 @@
     <!-- Conteúdo Principal -->
     <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1 w-full">
         <div
-            class="bg-gradient-to-r from-slate-900/90 to-brand-950/20 p-6 rounded-3xl border border-slate-800 shadow-xl">
+            class="bg-gradient-to-r from-slate-900/90 to-orange-950/30 p-6 rounded-3xl border border-orange-500/20 shadow-xl">
             <span class="text-xs font-semibold uppercase tracking-wider text-orange-400 mb-1 inline-block">Espaço do
                 Personal Trainer</span>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
@@ -298,46 +301,57 @@
 
         <!-- SEÇÃO: Formulário para Cadastrar Aluno -->
         <section id="secao-cadastrar-aluno"
-            class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-6">
-                <div>
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i data-lucide="user-plus" class="w-5 h-5 text-orange-400"></i>
-                        Cadastrar Novo Aluno
-                    </h2>
-                    <p class="text-xs text-slate-400">Cria o acesso para o aluno entrar no portal com senha temporária
-                    </p>
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+            <div onclick="toggleSecaoDashboard(this)"
+                class="collapse-header active p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
+                    <div
+                        class="w-10 h-10 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/25 flex items-center justify-center shrink-0">
+                        <i data-lucide="user-plus" class="w-5 h-5"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                            Cadastrar Novo Aluno
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Cria o acesso para o aluno entrar no portal com senha temporária</p>
+                    </div>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
 
-            <form id="form-cadastrar-aluno" class="space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Nome do
-                            Aluno</label>
-                        <input type="text" id="novo-aluno-nome" placeholder="Ex: Maria Silva" required
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
+            <div class="collapse-content expanded px-5 sm:px-6 pb-6 pt-0">
+                <form id="form-cadastrar-aluno" class="space-y-4 pt-4 border-t border-slate-800/80">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Nome do
+                                Aluno</label>
+                            <input type="text" id="novo-aluno-nome" placeholder="Ex: Maria Silva" required
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">E-mail de
+                                Acesso</label>
+                            <input type="email" id="novo-aluno-email" placeholder="aluno@email.com" required
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Senha
+                                Inicial</label>
+                            <input type="text" id="novo-aluno-senha" placeholder="Mínimo 6 caracteres" required
+                                value="123456"
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">E-mail de
-                            Acesso</label>
-                        <input type="email" id="novo-aluno-email" placeholder="aluno@email.com" required
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Senha
-                            Inicial</label>
-                        <input type="text" id="novo-aluno-senha" placeholder="Mínimo 6 caracteres" required
-                            value="123456"
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
-                    </div>
-                </div>
-                <button type="submit" id="btn-cadastrar-aluno"
-                    class="w-full bg-slate-800 hover:bg-slate-700 text-orange-400 font-bold py-3 rounded-xl transition-all border border-slate-700 flex items-center justify-center gap-2 cursor-pointer">
-                    <i data-lucide="user-check" class="w-4 h-4"></i>
-                    <span>Cadastrar Aluno no Sistema</span>
-                </button>
-            </form>
+                    <button type="submit" id="btn-cadastrar-aluno"
+                        class="w-full bg-slate-800 hover:bg-slate-700 text-orange-400 hover:text-orange-300 font-bold py-3 rounded-xl transition-all border border-slate-700 hover:border-orange-500/30 flex items-center justify-center gap-2 cursor-pointer">
+                        <i data-lucide="user-check" class="w-4 h-4"></i>
+                        <span>Cadastrar Aluno no Sistema</span>
+                    </button>
+                </form>
+            </div>
         </section>
 
         <!-- SEÇÃO: Montar Treino do Aluno (Accordion) -->
@@ -345,20 +359,20 @@
             class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 flex items-center justify-center shrink-0">
-                        <i data-lucide="dumbbell" class="w-5 h-5"></i>
+                        class="w-10 h-10 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/25 flex items-center justify-center shrink-0">
+                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Montar Treino do Aluno
                         </h2>
-                        <p class="text-xs text-slate-400">Prescrição e sincronização instantânea dos treinos com o portal do aluno</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Prescrição e sincronização instantânea dos treinos com o portal do aluno</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -545,20 +559,20 @@
             class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center justify-center shrink-0">
-                        <i data-lucide="list-checks" class="w-5 h-5"></i>
+                        class="w-10 h-10 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/25 flex items-center justify-center shrink-0">
+                        <i data-lucide="clipboard-list" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white flex items-center gap-2">
-                            Treino atual do aluno
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                            Gerenciar Treinos do Aluno
                         </h2>
-                        <p class="text-xs text-slate-400">Visualize e gerencie os exercícios prescritos para o aluno selecionado</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Criar e editar rotinas de exercícios</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -573,21 +587,21 @@
         <section id="secao-fotos-alunos" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center shrink-0">
+                        class="w-10 h-10 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/25 flex items-center justify-center shrink-0">
                         <i data-lucide="camera" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Fotos de Evolução dos Alunos
-                            <span class="text-[10px] bg-purple-500/10 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30 font-semibold">Exclusivo</span>
+                            <span class="text-[10px] bg-orange-500/10 text-orange-400 px-2.5 py-0.5 rounded-full border border-orange-500/30 font-semibold">Exclusivo</span>
                         </h2>
-                        <p class="text-xs text-slate-400">Linha do tempo comparativa das fotos corporais (Frente, Perfil e Costas)</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Linha do tempo comparativa das fotos corporais (Frente, Perfil e Costas)</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -689,18 +703,20 @@
         <section id="secao-checkins" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center shrink-0">
+                        class="w-10 h-10 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/25 flex items-center justify-center shrink-0">
                         <i data-lucide="clipboard-check" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Central de Check-ins Semanais</h2>
-                        <p class="text-xs text-slate-400">Acompanhamento e respostas das avaliações e formulários periódicos</p>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                            Central de Check-ins Semanais
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Acompanhamento e respostas das avaliações e formulários periódicos</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0 pointer-events-none">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -713,18 +729,20 @@
         <section id="secao-agenda" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center shrink-0">
+                        class="w-10 h-10 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/25 flex items-center justify-center shrink-0">
                         <i data-lucide="calendar" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Agenda de Consultas & Treinos</h2>
-                        <p class="text-xs text-slate-400">Horários, sessões presenciais e avaliações agendadas</p>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                            Agenda de Consultas & Treinos
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Horários, sessões presenciais e avaliações agendadas</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0 pointer-events-none">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -737,18 +755,20 @@
         <section id="secao-financeiro" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                        class="w-10 h-10 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/25 flex items-center justify-center shrink-0">
                         <i data-lucide="badge-dollar-sign" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Painel Financeiro & Planos</h2>
-                        <p class="text-xs text-slate-400">Controle de faturamento, planos ativos e mensalidades</p>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                            Painel Financeiro & Planos
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Controle de faturamento, planos ativos e mensalidades</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0 pointer-events-none">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -761,18 +781,20 @@
         <section id="secao-ia" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center shrink-0">
+                        class="w-10 h-10 rounded-2xl bg-orange-500/10 text-orange-400 border border-orange-500/25 flex items-center justify-center shrink-0">
                         <i data-lucide="bot" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Assistente Clínico IA</h2>
-                        <p class="text-xs text-slate-400">Inteligência artificial para suporte na prescrição e análise de performance</p>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                            Assistente Clínico IA
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Inteligência artificial para suporte na prescrição e análise de performance</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0 pointer-events-none">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -792,9 +814,9 @@
 
     <!-- Botão Flutuante do Chat no Painel do Personal -->
     <button id="chat-toggle-btn" onclick="toggleChatFlutuante()"
-        class="fixed bottom-6 right-6 bg-brand-500 hover:bg-brand-400 text-slate-950 p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-50 group hover:scale-105 cursor-pointer"
+        class="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 bg-brand-500 hover:bg-brand-400 text-slate-950 p-3.5 sm:p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-50 group hover:scale-105 active:scale-95 cursor-pointer"
         title="Abrir Chat com Alunos">
-        <i data-lucide="message-square" class="w-6 h-6"></i>
+        <i data-lucide="message-square" class="w-5 h-5 sm:w-6 sm:h-6"></i>
         <!-- Símbolo de notificação pulsante em vermelho e branco -->
         <span id="chat-badge"
             class="hidden absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1 bg-red-600 text-white rounded-full text-[10px] font-black border-2 border-white flex items-center justify-center shadow-lg shadow-red-600/50 badge-pulsante-vermelho">0</span>
@@ -802,7 +824,7 @@
 
     <!-- Janela Deslizante do Chat Flutuante -->
     <div id="chat-window"
-        class="hidden fixed bottom-24 right-4 sm:right-6 w-[calc(100vw-32px)] sm:w-[540px] h-[520px] glass-panel border border-slate-800 rounded-3xl shadow-2xl flex flex-col z-50 overflow-hidden">
+        class="hidden fixed bottom-20 sm:bottom-24 right-3 sm:right-6 w-[calc(100vw-24px)] sm:w-[540px] max-h-[80vh] h-[520px] glass-panel border border-slate-800 rounded-3xl shadow-2xl flex flex-col z-50 overflow-hidden">
         <!-- Topo da Janela -->
         <div class="bg-slate-900/95 p-3.5 flex justify-between items-center border-b border-slate-800">
             <div class="flex items-center gap-2.5">
@@ -1555,10 +1577,10 @@
               <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
                 <div class="flex items-center justify-between mb-3"><h3 class="font-bold text-white text-sm">${esc(nome)}</h3>
                 <span class="text-[11px] text-slate-400">${esc(ex[0].dia_semana || '')} · ${esc(ex[0].grupo_muscular || '')}</span></div>
-                <div class="space-y-2">${ex.map(e => `<div class="flex items-center justify-between gap-3 text-xs bg-slate-950/60 rounded-xl px-3 py-2.5">
-                  <div><p class="font-semibold text-slate-100">${esc(e.exercicio)}</p>
-                  <p class="text-slate-400">${esc(e.series)}x${esc(e.repeticoes)}${e.carga ? ' · ' + esc(e.carga) : ''}${e.descanso ? ' · desc. ' + esc(e.descanso) : ''}</p></div>
-                  <button onclick="removerExercicio('${e.id}')" class="text-slate-500 hover:text-rose-400" title="Remover"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('')}</div>
+                <div class="space-y-2">${ex.map(e => `<div class="flex items-center justify-between gap-3 text-xs bg-slate-950/60 rounded-xl px-3.5 py-2.5 hover:bg-slate-950 transition-colors">
+                  <div class="min-w-0 flex-1"><p class="font-semibold text-slate-100 truncate">${esc(e.exercicio)}</p>
+                  <p class="text-slate-400 text-[11px]">${esc(e.series)}x${esc(e.repeticoes)}${e.carga ? ' · ' + esc(e.carga) : ''}${e.descanso ? ' · desc. ' + esc(e.descanso) : ''}</p></div>
+                  <button onclick="removerExercicio('${e.id}')" class="text-slate-500 hover:text-rose-400 shrink-0 p-1.5 rounded-lg hover:bg-slate-800/80 transition-colors cursor-pointer" title="Remover"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('')}</div>
               </div>`).join('');
             lucide.createIcons();
         }

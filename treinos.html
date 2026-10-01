@@ -111,18 +111,18 @@
                 <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Meus <span class="text-brand-400">Treinos</span> 🏋️</h1>
                 <p class="text-sm text-slate-400 mt-1">Fichas prescritas pelo seu personal. Marque cada exercício ao concluir.</p>
             </div>
-            <div class="flex items-center gap-3">
-                <div class="glass-panel px-4 py-3 rounded-2xl text-center min-w-[80px]">
-                    <div class="text-xl font-extrabold text-brand-400" id="stat-treinos-total">--</div>
-                    <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Treinos</div>
+            <div class="grid grid-cols-3 gap-2 sm:flex sm:items-center sm:gap-3 w-full sm:w-auto">
+                <div class="glass-panel px-3 py-2.5 sm:px-4 sm:py-3 rounded-2xl text-center flex-1 sm:min-w-[80px]">
+                    <div class="text-lg sm:text-xl font-extrabold text-brand-400" id="stat-treinos-total">--</div>
+                    <div class="text-[9px] sm:text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5 truncate">Treinos</div>
                 </div>
-                <div class="glass-panel px-4 py-3 rounded-2xl text-center min-w-[80px]">
-                    <div class="text-xl font-extrabold text-emerald-400" id="stat-exercicios-total">--</div>
-                    <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Exercícios</div>
+                <div class="glass-panel px-3 py-2.5 sm:px-4 sm:py-3 rounded-2xl text-center flex-1 sm:min-w-[80px]">
+                    <div class="text-lg sm:text-xl font-extrabold text-emerald-400" id="stat-exercicios-total">--</div>
+                    <div class="text-[9px] sm:text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5 truncate">Exercícios</div>
                 </div>
-                <div class="glass-panel px-4 py-3 rounded-2xl text-center min-w-[80px]">
-                    <div class="text-xl font-extrabold text-amber-400" id="stat-concluidos-hoje">0%</div>
-                    <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Hoje</div>
+                <div class="glass-panel px-3 py-2.5 sm:px-4 sm:py-3 rounded-2xl text-center flex-1 sm:min-w-[80px]">
+                    <div class="text-lg sm:text-xl font-extrabold text-amber-400" id="stat-concluidos-hoje">0%</div>
+                    <div class="text-[9px] sm:text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5 truncate">Hoje</div>
                 </div>
             </div>
         </div>
@@ -441,6 +441,10 @@
             await supabaseClient.auth.signOut();
             window.location.href = 'login.html';
         });
+
+        window.abrirModalFotoPerfil = function () {
+            window.location.href = 'dashboard.html';
+        };
 
         carregarTreinos();
     </script>

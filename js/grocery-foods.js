@@ -270,9 +270,13 @@
             return unicos;
         },
 
+        lastContainerId: 'modal-lista-compras-conteudo',
+
         // Renderiza a Lista de Compras dentro de nutricao.html ou modal
         renderModalListaCompras(containerId) {
-            let container = document.getElementById(containerId);
+            const targetId = containerId || this.lastContainerId || 'modal-lista-compras-conteudo';
+            this.lastContainerId = targetId;
+            let container = document.getElementById(targetId);
             if (!container) return;
 
             // Agrupa por categoria
@@ -330,7 +334,7 @@
         toggleComprado(nome, checked) {
             const item = this.listaCompras.find(i => i.nome === nome);
             if (item) item.comprado = checked;
-            this.renderModalListaCompras('container-lista-compras-box');
+            this.renderModalListaCompras(this.lastContainerId);
         },
 
         compartilharWhatsApp() {

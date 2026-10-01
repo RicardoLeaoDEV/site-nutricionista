@@ -167,7 +167,7 @@
             modal.id = 'modal-registro-medidas';
             modal.className = 'fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto';
             modal.innerHTML = `
-                <div class="bg-slate-900 border border-slate-700/80 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8 text-slate-100 relative">
+                <div class="bg-slate-900 border border-slate-700/80 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8 text-slate-100 relative max-h-[90vh] overflow-y-auto">
                     <button type="button" onclick="ApexEvolucao.fecharModalMedidas()" class="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 transition-colors">
                         <i data-lucide="x" class="w-4 h-4"></i>
                     </button>

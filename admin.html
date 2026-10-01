@@ -74,11 +74,13 @@
         }
 
         .collapse-arrow {
-            transition: transform 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, color 0.2s ease;
         }
 
         .collapse-header.active .collapse-arrow {
             transform: rotate(180deg);
+            color: #ffffff;
+            background-color: rgba(30, 41, 59, 1);
         }
 
         /* Símbolo de Notificação Pulsante (Vermelho e Branco) */
@@ -160,8 +162,8 @@
 
     <!-- Topo do Painel Admin -->
     <header class="bg-slate-900/90 border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-md">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-18 py-3.5 flex items-center justify-between">
-            <div class="flex items-center gap-3">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 min-h-[4.25rem] py-3 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
                 <a href="index.html" class="flex items-center gap-2 group" title="Ir para a página inicial">
                     <div
                         class="w-9 h-9 rounded-xl bg-gradient-to-tr from-lime-600 to-lime-400 flex items-center justify-center text-slate-950 shadow-md shadow-lime-500/20 group-hover:scale-105 transition-transform">
@@ -172,18 +174,19 @@
                     </span>
                 </a>
                 <span
-                    class="text-xs bg-lime-500/10 text-lime-400 px-3 py-1 rounded-full border border-lime-500/20 font-semibold flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse"></span>
-                    Painel do Nutricionista
+                    class="text-xs bg-lime-500/10 text-lime-400 px-2.5 sm:px-3 py-1 rounded-full border border-lime-500/20 font-semibold flex items-center gap-1.5 max-w-[130px] xs:max-w-none">
+                    <span class="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse shrink-0"></span>
+                    <span class="truncate">Painel do Nutricionista</span>
                 </span>
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
 
-                <!-- Menu Suspenso de Ações Rápidas -->
-                <div class="relative group">
+                <!-- Menu Suspenso de Ações Rápidas (Suporte a Hover no PC e Clique no Touchscreen) -->
+                <div class="relative group" id="dropdown-acoes-rapidas">
                     <button type="button"
-                        class="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all relative">
+                        onclick="this.nextElementSibling.classList.toggle('hidden')"
+                        class="flex items-center gap-1.5 sm:gap-2 bg-slate-800/80 hover:bg-slate-700/80 active:scale-95 text-slate-300 hover:text-white text-xs font-semibold px-3 sm:px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all relative cursor-pointer shadow-sm">
                         <i data-lucide="layers" class="w-4 h-4 text-brand-400"></i>
                         <span class="hidden sm:inline">Ações Rápidas</span>
                         <i data-lucide="chevron-down"
@@ -198,7 +201,7 @@
 
                     <!-- Lista Oculta do Menu Suspenso -->
                     <div
-                        class="absolute right-0 mt-2 w-56 bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
+                        class="hidden group-hover:block absolute right-0 mt-2 w-56 sm:w-64 max-w-[calc(100vw-2rem)] bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
                         <div class="p-1 space-y-0.5">
                             <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
                                 class="w-full text-left flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-lime-400 hover:bg-slate-800 transition-colors">
@@ -312,79 +315,86 @@
 
         <!-- SEÇÃO: Formulário para Cadastrar Aluno -->
         <section id="secao-cadastrar-aluno"
-            class="glass-panel border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-6">
-                <div>
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i data-lucide="user-plus" class="w-5 h-5 text-lime-400"></i>
-                        Cadastrar Novo Aluno
-                    </h2>
-                    <p class="text-xs text-slate-400">Cria o acesso para o aluno entrar no portal com senha temporária
-                    </p>
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+            <div onclick="toggleSecaoDashboard(this)"
+                class="collapse-header active p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
+                    <div
+                        class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center shrink-0">
+                        <i data-lucide="user-plus" class="w-5 h-5"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                            Cadastrar Novo Aluno
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Cria o acesso para o aluno entrar no portal com senha temporária</p>
+                    </div>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
 
-            <form id="form-cadastrar-aluno" class="space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Nome do
-                            Aluno</label>
-                        <input type="text" id="novo-aluno-nome" placeholder="Ex: Maria Silva" required
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-lime-500">
+            <div class="collapse-content expanded px-5 sm:px-6 pb-6 pt-0">
+                <form id="form-cadastrar-aluno" class="space-y-4 pt-4 border-t border-slate-800/80">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Nome do
+                                Aluno</label>
+                            <input type="text" id="novo-aluno-nome" placeholder="Ex: Maria Silva" required
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-lime-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">E-mail de
+                                Acesso</label>
+                            <input type="email" id="novo-aluno-email" placeholder="aluno@email.com" required
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-lime-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Senha
+                                Inicial</label>
+                            <input type="text" id="novo-aluno-senha" placeholder="Mínimo 6 caracteres" required
+                                value="123456"
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-lime-500">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">E-mail de
-                            Acesso</label>
-                        <input type="email" id="novo-aluno-email" placeholder="aluno@email.com" required
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-lime-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Senha
-                            Inicial</label>
-                        <input type="text" id="novo-aluno-senha" placeholder="Mínimo 6 caracteres" required
-                            value="123456"
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-lime-500">
-                    </div>
-                </div>
-                <button type="submit" id="btn-cadastrar-aluno"
-                    class="w-full bg-slate-800 hover:bg-slate-700 text-lime-400 hover:text-lime-300 font-bold py-3 rounded-xl transition-all border border-slate-700 hover:border-lime-500/30 flex items-center justify-center gap-2">
-                    <i data-lucide="user-check" class="w-4 h-4"></i>
-                    <span>Cadastrar Aluno no Sistema</span>
-                </button>
-            </form>
+                    <button type="submit" id="btn-cadastrar-aluno"
+                        class="w-full bg-slate-800 hover:bg-slate-700 text-lime-400 hover:text-lime-300 font-bold py-3 rounded-xl transition-all border border-slate-700 hover:border-lime-500/30 flex items-center justify-center gap-2 cursor-pointer">
+                        <i data-lucide="user-check" class="w-4 h-4"></i>
+                        <span>Cadastrar Aluno no Sistema</span>
+                    </button>
+                </form>
+            </div>
         </section>
 
         <!-- SEÇÃO: CALCULADORA AUTOMÁTICA DE MACROS (Accordion) -->
         <section id="secao-calculadora-macros"
-            class="glass-panel border border-brand-500/30 rounded-3xl shadow-2xl relative overflow-hidden scroll-mt-24">
-            <!-- Glow decorativo de fundo -->
-            <div class="absolute -top-24 -right-24 w-80 h-80 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <!-- Cabeçalho do Accordion -->
             <div onclick="toggleSecaoDashboard(this)"
-                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors relative z-10">
-                <div class="flex items-center gap-3">
+                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-brand-500/20 text-brand-400 border border-brand-500/40 flex items-center justify-center shrink-0">
-                        <i data-lucide="calculator" class="w-5 h-5"></i>
+                        class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center shrink-0">
+                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Calculadora de Macronutrientes & Gasto Energético
-                            <span class="text-[10px] bg-brand-500/10 text-brand-400 px-2 py-0.5 rounded-full border border-brand-500/30 font-semibold hidden sm:inline">Mifflin-St Jeor</span>
+                            <span class="text-[10px] bg-lime-500/10 text-lime-400 px-2.5 py-0.5 rounded-full border border-lime-500/30 font-semibold">Mifflin-St Jeor</span>
                         </h2>
-                        <p class="text-xs text-slate-400">Estimativa metabólica clínica, ajuste manual dos resultados e envio instantâneo ao aluno</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Prescrição e sincronização instantânea das refeições com o app do aluno</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
 
             <!-- Conteúdo Expansível da Calculadora -->
-            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0 relative z-10">
+            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between pt-2 pb-4 border-b border-slate-800/80 mb-6 gap-3">
                     <p class="text-xs text-slate-400">
                         Configure as variáveis clínicas e biométricas do aluno para o cálculo automático e individualizado.
@@ -702,21 +712,23 @@
 
         <!-- SEÇÃO: Cadastrar Refeição no Plano do Aluno (Accordion) -->
         <section id="secao-cadastrar-refeicao"
-            class="glass-panel border border-slate-800 rounded-3xl shadow-xl overflow-hidden scroll-mt-24">
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-brand-500/20 text-brand-400 border border-brand-500/40 flex items-center justify-center shrink-0">
+                        class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center shrink-0">
                         <i data-lucide="plus-circle" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Cadastrar Refeição no Plano do Aluno</h2>
-                        <p class="text-xs text-slate-400">Prescrição e sincronização instantânea das refeições com o app do aluno</p>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                            Cadastrar Refeição no Plano do Aluno
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Prescrição e sincronização instantânea das refeições com o app do aluno</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -1042,20 +1054,20 @@
             class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-lime-500/10 text-lime-400 border border-lime-500/20 flex items-center justify-center shrink-0">
+                        class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center shrink-0">
                         <i data-lucide="utensils" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Refeições Atuais do Aluno
                         </h2>
-                        <p class="text-xs text-slate-400">Visualize, gerencie e remova as refeições prescritas para o aluno selecionado</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Visualize, gerencie e remova as refeições prescritas para o aluno selecionado</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -1071,21 +1083,21 @@
         <section id="secao-fotos-alunos" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center shrink-0">
+                        class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center shrink-0">
                         <i data-lucide="camera" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Fotos de Evolução dos Alunos
-                            <span class="text-[10px] bg-purple-500/10 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30 font-semibold">Exclusivo</span>
+                            <span class="text-[10px] bg-lime-500/10 text-lime-400 px-2.5 py-0.5 rounded-full border border-lime-500/30 font-semibold">Exclusivo</span>
                         </h2>
-                        <p class="text-xs text-slate-400">Linha do tempo comparativa das fotos corporais (Frente, Perfil e Costas)</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Linha do tempo comparativa das fotos corporais (Frente, Perfil e Costas)</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -1186,18 +1198,20 @@
         <section id="secao-checkins-nutri" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center shrink-0">
+                        class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center shrink-0">
                         <i data-lucide="clipboard-check" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Central de Check-ins Semanais</h2>
-                        <p class="text-xs text-slate-400">Acompanhamento e respostas das avaliações e formulários periódicos</p>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                            Central de Check-ins Semanais
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Acompanhamento e respostas das avaliações e formulários periódicos</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -1211,18 +1225,20 @@
         <section id="secao-agenda-nutri" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center shrink-0">
+                        class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center shrink-0">
                         <i data-lucide="calendar" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Agenda de Consultas & Treinos</h2>
-                        <p class="text-xs text-slate-400">Horários, retornos clínicos e consultas agendadas</p>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                            Agenda de Consultas & Treinos
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Horários, retornos clínicos e consultas agendadas</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -1235,18 +1251,20 @@
         <section id="secao-financeiro-nutri" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                        class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center shrink-0">
                         <i data-lucide="badge-dollar-sign" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Painel Financeiro & Planos</h2>
-                        <p class="text-xs text-slate-400">Controle de faturamento, planos ativos e mensalidades</p>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                            Painel Financeiro & Planos
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Controle de faturamento, planos ativos e mensalidades</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -1259,18 +1277,20 @@
         <section id="secao-ia-nutri" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
                     <div
-                        class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center shrink-0">
+                        class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center shrink-0">
                         <i data-lucide="bot" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                        <h2 class="text-base font-bold text-white">Assistente Clínico IA</h2>
-                        <p class="text-xs text-slate-400">Inteligência artificial para suporte na conduta nutricional e dietoterapia</p>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                            Assistente Clínico IA
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Inteligência artificial para suporte na conduta nutricional e dietoterapia</p>
                     </div>
                 </div>
                 <div
-                    class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 collapse-arrow shrink-0">
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
                     <i data-lucide="chevron-down" class="w-4 h-4"></i>
                 </div>
             </div>
@@ -1290,9 +1310,9 @@
 
     <!-- Botão Flutuante do Chat no Painel do Nutricionista -->
     <button id="chat-toggle-btn" onclick="toggleChatFlutuante()"
-        class="fixed bottom-6 right-6 bg-lime-500 hover:bg-lime-400 text-slate-950 p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-50 group hover:scale-105 cursor-pointer"
+        class="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 bg-lime-500 hover:bg-lime-400 text-slate-950 p-3.5 sm:p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-50 group hover:scale-105 active:scale-95 cursor-pointer"
         title="Abrir Chat com Alunos">
-        <i data-lucide="message-square" class="w-6 h-6"></i>
+        <i data-lucide="message-square" class="w-5 h-5 sm:w-6 sm:h-6"></i>
         <!-- Símbolo de notificação pulsante em vermelho e branco -->
         <span id="chat-badge"
             class="hidden absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1 bg-red-600 text-white rounded-full text-[10px] font-black border-2 border-white flex items-center justify-center shadow-lg shadow-red-600/50 badge-pulsante-vermelho">0</span>
@@ -1300,7 +1320,7 @@
 
     <!-- Janela Deslizante do Chat Flutuante -->
     <div id="chat-window"
-        class="hidden fixed bottom-24 right-4 sm:right-6 w-[calc(100vw-32px)] sm:w-[540px] h-[520px] glass-panel border border-slate-800 rounded-3xl shadow-2xl flex flex-col z-50 overflow-hidden">
+        class="hidden fixed bottom-20 sm:bottom-24 right-3 sm:right-6 w-[calc(100vw-24px)] sm:w-[540px] max-h-[80vh] h-[520px] glass-panel border border-slate-800 rounded-3xl shadow-2xl flex flex-col z-50 overflow-hidden">
         <!-- Topo da Janela -->
         <div class="bg-slate-900/95 p-3.5 flex justify-between items-center border-b border-slate-800">
             <div class="flex items-center gap-2.5">
@@ -3988,19 +4008,19 @@ _Prescrição elaborada pelo seu nutricionista._`;
 
                 return `
                     <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 relative hover:border-slate-700 transition-all">
-                        <div class="flex items-center justify-between pb-2.5 mb-2.5 border-b border-slate-800 gap-2">
-                            <div class="flex items-center gap-2">
-                                <span class="w-6 h-6 rounded-lg bg-lime-500/20 text-lime-400 font-extrabold text-xs flex items-center justify-center">
+                        <div class="flex flex-wrap sm:flex-nowrap items-center justify-between pb-2.5 mb-2.5 border-b border-slate-800 gap-2">
+                            <div class="flex items-center gap-2 min-w-0 flex-1">
+                                <span class="w-6 h-6 rounded-lg bg-lime-500/20 text-lime-400 font-extrabold text-xs flex items-center justify-center shrink-0">
                                     ${idx + 1}
                                 </span>
-                                <h3 class="font-bold text-white text-sm">${d.refeicao}</h3>
+                                <h3 class="font-bold text-white text-sm truncate">${d.refeicao}</h3>
                             </div>
-                            <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
                                 <span class="text-[11px] font-bold text-lime-400 bg-lime-500/10 border border-lime-500/20 px-2.5 py-0.5 rounded-full">
                                     ⏰ ${horarioStr}
                                 </span>
                                 <button type="button" onclick="removerRefeicao('${d.id}')" title="Excluir refeição"
-                                    class="text-slate-500 hover:text-rose-400 p-1 rounded-lg hover:bg-slate-800 transition-all cursor-pointer">
+                                    class="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-800 transition-all cursor-pointer">
                                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                                 </button>
                             </div>

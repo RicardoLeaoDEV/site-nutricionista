@@ -294,6 +294,48 @@
                     </div>
                 </a>
             </div>
+
+            <!-- Botões de Ação para Celular / Tablet (Mobile) -->
+            <div class="flex items-center gap-2 lg:hidden">
+                <a href="login.html"
+                    class="flex items-center gap-1.5 text-xs font-bold text-gold-400 bg-gold-500/10 hover:bg-gold-500/20 border border-gold-500/30 px-3 py-2 rounded-xl transition-all">
+                    <i data-lucide="user" class="w-3.5 h-3.5"></i>
+                    <span>Entrar</span>
+                </a>
+                <button type="button" id="btn-mobile-menu" aria-label="Abrir Menu"
+                    class="w-10 h-10 rounded-xl bg-slate-900 border border-gold/20 flex items-center justify-center text-slate-200 hover:text-gold-400 transition-colors focus:outline-none">
+                    <i data-lucide="menu" id="icon-mobile-menu" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Suspenso Mobile (Gaveta Retrátil) -->
+        <div id="menu-mobile" class="hidden lg:hidden border-t border-gold/15 bg-navy-950/98 backdrop-blur-2xl px-5 py-6 space-y-4 shadow-2xl transition-all duration-300">
+            <nav class="flex flex-col space-y-3 text-sm font-semibold text-slate-200">
+                <a href="#plataforma" onclick="fecharMenuMobile()" class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                    <span>A Plataforma</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+                </a>
+                <a href="#sobre" onclick="fecharMenuMobile()" class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                    <span>Sobre os Profissionais</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+                </a>
+                <a href="#faq" onclick="fecharMenuMobile()" class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                    <span>Perguntas Frequentes</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+                </a>
+                <a href="login.html" class="flex items-center justify-between py-2 border-b border-white/5 text-gold-400 hover:text-gold-300 transition-colors">
+                    <span class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4"></i> Área do Aluno</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gold-500/60"></i>
+                </a>
+            </nav>
+            <div class="pt-2">
+                <a href="https://wa.me/5581997969058?text=Olá%2C%20gostaria%20de%20iniciar%20na%20ApexFit!" target="_blank"
+                    class="botaoDourado w-full text-center justify-center !h-[50px] !text-xs !py-1 !pl-5 !pr-[58px]">
+                    <span>Entrar na Consultoria</span>
+                    <div class="divSeta !w-[40px] !h-[40px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                </a>
+            </div>
         </div>
     </header>
 
@@ -632,6 +674,35 @@
                 answer.classList.add('open');
                 icon.classList.add('rotated');
             }
+        }
+
+        // Controle do Menu Mobile
+        const btnMobile = document.getElementById('btn-mobile-menu');
+        const menuMobile = document.getElementById('menu-mobile');
+        const iconMobile = document.getElementById('icon-mobile-menu');
+
+        function toggleMenuMobile() {
+            if (!menuMobile) return;
+            const estaOculto = menuMobile.classList.contains('hidden');
+            if (estaOculto) {
+                menuMobile.classList.remove('hidden');
+                if (iconMobile) iconMobile.setAttribute('data-lucide', 'x');
+            } else {
+                menuMobile.classList.add('hidden');
+                if (iconMobile) iconMobile.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        }
+
+        function fecharMenuMobile() {
+            if (!menuMobile) return;
+            menuMobile.classList.add('hidden');
+            if (iconMobile) iconMobile.setAttribute('data-lucide', 'menu');
+            lucide.createIcons();
+        }
+
+        if (btnMobile) {
+            btnMobile.addEventListener('click', toggleMenuMobile);
         }
     </script>
 </body>
