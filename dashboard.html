@@ -2669,6 +2669,7 @@
                                 aluno_id: galeriaUserId,
                                 data: data,
                                 tipo: tipo,
+                                angulo: tipo,
                                 imagem: fotosParaUpload[tipo]
                             }]);
                         } catch (eSupa) {
@@ -2694,6 +2695,9 @@
 
                 showToast('Registro Salvo! 📸', `${salvos} foto${salvos > 1 ? 's' : ''} de evolução ${salvos > 1 ? 'foram salvas' : 'foi salva'} com sucesso.`, 'success');
                 await renderizarGaleria();
+                if (window.ApexEvolucao && typeof window.ApexEvolucao.carregarFotosComparador === 'function') {
+                    window.ApexEvolucao.carregarFotosComparador();
+                }
             };
 
             // ===== RENDERIZAR GALERIA (TIMELINE) =====
@@ -2834,6 +2838,9 @@
                 fecharLightbox();
                 showToast('Foto Excluída', 'A foto foi removida da sua galeria.', 'success');
                 await renderizarGaleria();
+                if (window.ApexEvolucao && typeof window.ApexEvolucao.carregarFotosComparador === 'function') {
+                    window.ApexEvolucao.carregarFotosComparador();
+                }
             };
 
             // Fechar lightbox com Escape
@@ -2895,7 +2902,7 @@
     </div>
 
     <script>
-        // Script de Gestão do Chat no Aluno
+        // Script de Gestão do Chat no Aluno (Notificações, Visto & Double Checks WhatsApp)
         document.addEventListener('DOMContentLoaded', () => {
             const toggleBtn = document.getElementById('chat-toggle-btn');
             const closeBtn = document.getElementById('chat-close-btn');
@@ -2905,11 +2912,46 @@
             const chatMessages = document.getElementById('chat-messages');
             const chatBadge = document.getElementById('chat-badge');
 
-            toggleBtn.addEventListener('click', () => {
+            function escapeHtmlChat(str) {
+                if (!str) return '';
+                const p = document.createElement('p');
+                p.textContent = str;
+                return p.innerHTML.replace(/\n/g, '<br>');
+            }
+
+            async function marcarMensagensComoLidasAluno(alunoId) {
+                if (!alunoId || !window.supabaseClient) return;
+                try {
+                    // Esconde o badge imediatamente na interface
+                    if (chatBadge) {
+                        chatBadge.classList.add('hidden');
+                        chatBadge.textContent = '0';
+                    }
+
+                    // Atualiza no Supabase: mensagens do profissional passam a constar como lidas
+                    await supabaseClient
+                        .from('mensagens')
+                        .update({ lida: true })
+                        .eq('aluno_id', alunoId)
+                        .eq('remetente', 'admin')
+                        .eq('lida', false);
+
+                    localStorage.setItem('apexfit_chat_aluno_lido_' + alunoId, new Date().toISOString());
+                } catch (e) {
+                    console.error("Falha ao atualizar status de lida no Supabase:", e);
+                }
+            }
+
+            toggleBtn.addEventListener('click', async () => {
                 chatWindow.classList.toggle('hidden');
                 if (!chatWindow.classList.contains('hidden')) {
-                    chatBadge.classList.add('hidden');
-                    carregarMensagensAluno();
+                    if (chatBadge) chatBadge.classList.add('hidden');
+                    const { data: { session } } = await supabaseClient.auth.getSession();
+                    if (session?.user?.id) {
+                        await marcarMensagensComoLidasAluno(session.user.id);
+                    }
+                    await carregarMensagensAluno();
+                    chatInput.focus();
                 }
             });
 
@@ -2919,7 +2961,7 @@
 
             async function carregarMensagensAluno() {
                 const { data: { session } } = await supabaseClient.auth.getSession();
-                if (!session) return;
+                if (!session?.user?.id) return;
 
                 const { data: mensagens, error } = await supabaseClient
                     .from('mensagens')
@@ -2932,24 +2974,63 @@
                     return;
                 }
 
+                // Filtra mensagens de sistema/técnicas
+                const msgsChat = (mensagens || []).filter(m => !m.remetente?.startsWith('sistema_'));
+
                 chatMessages.innerHTML = '';
-                if (!mensagens || mensagens.length === 0) {
-                    chatMessages.innerHTML = '<div class="text-center text-slate-500 text-[11px] my-4">Nenhuma mensagem ainda. Tire sua dúvida!</div>';
+                if (msgsChat.length === 0) {
+                    chatMessages.innerHTML = '<div class="text-center text-slate-500 text-[11px] my-6">Nenhuma mensagem ainda. Tire suas dúvidas com o profissional!</div>';
                     return;
                 }
 
-                mensagens.forEach(m => {
+                // Se a janela estiver aberta e houver mensagem do admin não lida, marca no banco
+                if (!chatWindow.classList.contains('hidden')) {
+                    const temNaoLidaDoAdmin = msgsChat.some(m => m.remetente === 'admin' && m.lida === false);
+                    if (temNaoLidaDoAdmin) {
+                        marcarMensagensComoLidasAluno(session.user.id);
+                    }
+                }
+
+                msgsChat.forEach(m => {
                     const isAluno = m.remetente === 'aluno';
+                    const hora = new Date(m.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                     const div = document.createElement('div');
                     div.className = `flex ${isAluno ? 'justify-end' : 'justify-start'}`;
+
+                    // Indicador de Leitura (Visto / Checks do WhatsApp)
+                    let checksHtml = '';
+                    if (isAluno) {
+                        if (m.lida === true) {
+                            // Duplo Check Azul (Visualizado pelo profissional)
+                            checksHtml = `
+                                <span title="Visualizada pelo profissional" class="inline-flex items-center text-sky-400 ml-1 select-none">
+                                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M18 6L7 17l-5-5"></path>
+                                        <path d="m22 10-7.5 7.5L13 16"></path>
+                                    </svg>
+                                </span>
+                            `;
+                        } else {
+                            // Check Simples (Enviada, aguardando leitura)
+                            checksHtml = `
+                                <span title="Enviada (Aguardando leitura do profissional)" class="inline-flex items-center text-emerald-200/70 ml-1 select-none">
+                                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                            `;
+                        }
+                    }
+
                     div.innerHTML = `
-                    <div class="max-w-[80%] p-3 rounded-2xl ${isAluno ? 'bg-brand-600 text-white rounded-br-none' : 'bg-slate-800 text-slate-200 rounded-bl-none border border-slate-700'}">
-                        <p class="leading-relaxed">${m.mensagem}</p>
-                        <span class="block text-[9px] mt-1 text-right ${isAluno ? 'text-emerald-200' : 'text-slate-400'}">
-                            ${new Date(m.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                    </div>
-                `;
+                        <div class="max-w-[82%] p-3 rounded-2xl ${isAluno ? 'bg-brand-600 text-white rounded-br-none shadow-md' : 'bg-slate-800 text-slate-200 rounded-bl-none border border-slate-700/80 shadow-sm'}">
+                            <p class="leading-relaxed break-words text-xs">${escapeHtmlChat(m.mensagem)}</p>
+                            <div class="flex items-center justify-end gap-1 mt-1 text-[9px] ${isAluno ? 'text-emerald-100/80' : 'text-slate-400'}">
+                                <span>${hora}</span>
+                                ${checksHtml}
+                            </div>
+                        </div>
+                    `;
                     chatMessages.appendChild(div);
                 });
                 chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -2961,7 +3042,7 @@
                 if (!texto) return;
 
                 const { data: { session } } = await supabaseClient.auth.getSession();
-                if (!session) return;
+                if (!session?.user?.id) return;
 
                 const { error } = await supabaseClient
                     .from('mensagens')
@@ -2971,33 +3052,72 @@
                     showToast('Erro ao enviar', error.message, 'error');
                 } else {
                     chatInput.value = '';
-                    carregarMensagensAluno();
+                    await carregarMensagensAluno();
                 }
             });
 
-            // Verificar respostas do nutri para notificar aluno com badge vermelho e branco
+            // Verificar respostas do nutri para notificar aluno com badge ou marcar como lida se janela estiver aberta
             async function checarNovasDoNutri() {
                 const { data: { session } } = await supabaseClient.auth.getSession();
-                if (!session) return;
+                if (!session?.user?.id) return;
 
-                const { data: msgs } = await supabaseClient
+                const { data: naoLidas, error } = await supabaseClient
                     .from('mensagens')
-                    .select('id, remetente, created_at')
+                    .select('id, created_at')
                     .eq('aluno_id', session.user.id)
                     .eq('remetente', 'admin')
-                    .order('created_at', { ascending: false })
-                    .limit(1);
+                    .eq('lida', false);
 
-                if (msgs && msgs.length > 0 && chatWindow.classList.contains('hidden')) {
-                    const lastRead = localStorage.getItem('nutrilife_aluno_last_msg');
-                    if (lastRead !== msgs[0].id) {
-                        chatBadge.textContent = '1';
+                if (error) return;
+
+                const count = (naoLidas || []).length;
+
+                // Se o chat estiver aberto, o aluno está visualizando a conversa
+                if (!chatWindow.classList.contains('hidden')) {
+                    if (chatBadge) {
+                        chatBadge.classList.add('hidden');
+                        chatBadge.textContent = '0';
+                    }
+                    if (count > 0) {
+                        await marcarMensagensComoLidasAluno(session.user.id);
+                    }
+                    // Atualiza a lista para refletir os checks azuis quando o profissional ler
+                    await carregarMensagensAluno();
+                    return;
+                }
+
+                // Se o chat estiver fechado, controla o badge
+                if (count > 0) {
+                    if (chatBadge) {
+                        chatBadge.textContent = count > 9 ? '9+' : String(count);
                         chatBadge.classList.remove('hidden');
+                    }
+                } else {
+                    if (chatBadge) {
+                        chatBadge.classList.add('hidden');
+                        chatBadge.textContent = '0';
                     }
                 }
             }
 
-            setInterval(checarNovasDoNutri, 5000);
+            // Realtime listener para novas mensagens ou alterações de status (Visto)
+            try {
+                supabaseClient
+                    .channel('aluno-chat-status')
+                    .on('postgres_changes', { event: '*', schema: 'public', table: 'mensagens' }, payload => {
+                        checarNovasDoNutri();
+                        if (!chatWindow.classList.contains('hidden')) {
+                            carregarMensagensAluno();
+                        }
+                    })
+                    .subscribe();
+            } catch (err) {
+                console.log("Realtime chat aluno:", err);
+            }
+
+            // Polling a cada 3.5 segundos para garantir atualização viva e instantânea
+            setInterval(checarNovasDoNutri, 3500);
+            checarNovasDoNutri();
         });
     </script>
 

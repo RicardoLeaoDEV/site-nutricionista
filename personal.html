@@ -1305,6 +1305,19 @@
 
             if (error || !mensagens) return;
 
+            // Se há um aluno com conversa aberta agora, garante persistência imediata de lida no Supabase
+            if (alunoChatAtivoId) {
+                const pendentesAbertas = mensagens.filter(m => m.aluno_id === alunoChatAtivoId && m.lida !== true);
+                if (pendentesAbertas.length > 0) {
+                    supabaseClient
+                        .from('mensagens')
+                        .update({ lida: true })
+                        .eq('aluno_id', alunoChatAtivoId)
+                        .eq('remetente', 'aluno')
+                        .eq('lida', false);
+                }
+            }
+
             const lidasLocais = obterLidasLocais();
             const msgsNaoLidas = mensagens.filter(m => {
                 // Se já estiver na conversa aberta com este aluno, trata como lida
@@ -1443,7 +1456,7 @@
 
             delete contagemPorAlunoGlobal[alunoId];
 
-            // Tenta persistir no Supabase (coluna lida = true)
+            // Persiste no Supabase (coluna lida = true)
             try {
                 await supabaseClient
                     .from('mensagens')
@@ -1453,6 +1466,13 @@
             } catch (err) {
                 console.error("Falha ao atualizar lida no Supabase:", err);
             }
+        }
+
+        function escapeHtmlAdmin(str) {
+            if (!str) return '';
+            const p = document.createElement('p');
+            p.textContent = str;
+            return p.innerHTML.replace(/\n/g, '<br>');
         }
 
         async function carregarMensagensAdmin(alunoId) {
@@ -1468,7 +1488,7 @@
             box.innerHTML = '';
 
             // Filtra mensagens técnicas do sistema para não poluir o histórico do chat
-            const msgsChat = (msgs || []).filter(m => m.remetente !== 'sistema_perfil');
+            const msgsChat = (msgs || []).filter(m => !m.remetente?.startsWith('sistema_'));
 
             // Atualiza perfil no cache se houver mensagem de perfil recente
             const ultMsgPerfil = (msgs || []).slice().reverse().find(m => m.remetente === 'sistema_perfil');
@@ -1485,14 +1505,42 @@
 
             msgsChat.forEach(m => {
                 const isAdmin = m.remetente === 'admin';
+                const hora = new Date(m.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                 const div = document.createElement('div');
                 div.className = `flex ${isAdmin ? 'justify-end' : 'justify-start'}`;
+
+                // Indicador visual de visto (checks do WhatsApp) apenas nas mensagens enviadas pelo profissional
+                let checksHtml = '';
+                if (isAdmin) {
+                    if (m.lida === true) {
+                        // Duplo check azul (Visualizado pelo aluno)
+                        checksHtml = `
+                            <span title="Visualizada pelo aluno" class="inline-flex items-center text-sky-400 ml-1 select-none">
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 6L7 17l-5-5"></path>
+                                    <path d="m22 10-7.5 7.5L13 16"></path>
+                                </svg>
+                            </span>
+                        `;
+                    } else {
+                        // Check simples (Enviada, aguardando leitura do aluno)
+                        checksHtml = `
+                            <span title="Enviada (Aguardando leitura do aluno)" class="inline-flex items-center text-emerald-100/70 ml-1 select-none">
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
+                        `;
+                    }
+                }
+
                 div.innerHTML = `
-                <div class="max-w-[80%] p-2.5 rounded-xl ${isAdmin ? 'bg-brand-600 text-white rounded-br-none' : 'bg-slate-800 text-slate-200 rounded-bl-none border border-slate-700'}">
-                    <p class="leading-relaxed">${m.mensagem}</p>
-                    <span class="block text-[9px] mt-1 text-right opacity-75">
-                        ${new Date(m.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                    </span>
+                <div class="max-w-[80%] p-2.5 rounded-xl ${isAdmin ? 'bg-brand-600 text-white rounded-br-none shadow-md' : 'bg-slate-800 text-slate-200 rounded-bl-none border border-slate-700 shadow-sm'}">
+                    <p class="leading-relaxed break-words">${escapeHtmlAdmin(m.mensagem)}</p>
+                    <div class="flex items-center justify-end gap-1 mt-1 text-[9px] ${isAdmin ? 'text-emerald-100/80' : 'text-slate-400'}">
+                        <span>${hora}</span>
+                        ${checksHtml}
+                    </div>
                 </div>
             `;
                 box.appendChild(div);
@@ -1525,7 +1573,7 @@
             try {
                 supabaseClient
                     .channel('admin-chat-feed')
-                    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'mensagens' }, payload => {
+                    .on('postgres_changes', { event: '*', schema: 'public', table: 'mensagens' }, payload => {
                         const novaMsg = payload.new;
                         if (novaMsg && novaMsg.remetente === 'aluno') {
                             if (alunoChatAtivoId === novaMsg.aluno_id) {
@@ -1535,6 +1583,9 @@
                             } else {
                                 atualizarNotificacoesChat(true);
                             }
+                        } else if (novaMsg && novaMsg.remetente === 'admin' && alunoChatAtivoId === novaMsg.aluno_id) {
+                            // Se a mensagem do admin foi alterada (ex: marcada como lida pelo aluno), recarrega para atualizar checks azuis
+                            carregarMensagensAdmin(alunoChatAtivoId);
                         }
                     })
                     .subscribe();
@@ -1544,7 +1595,7 @@
 
             // Polling a cada 3.5 segundos para garantir atualização em tempo real
             setInterval(() => {
-                atualizarNotificacoesChat(true);
+                atualizarNotificacoesChat(false);
                 if (alunoChatAtivoId) {
                     carregarMensagensAdmin(alunoChatAtivoId);
                 }

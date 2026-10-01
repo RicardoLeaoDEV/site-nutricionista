@@ -197,6 +197,22 @@
         // ----------------------------------------------------------------------
         // COMPARADOR DE FOTOS ANTES | DEPOIS
         // ----------------------------------------------------------------------
+        getAnguloFoto(f) {
+            if (!f) return '';
+            const raw = (f.tipo || f.angulo || '').toString().toLowerCase().trim();
+            if (raw === 'perfil' || raw === 'lado' || raw === 'lateral') return 'lado';
+            if (raw === 'costas' || raw === 'costa') return 'costas';
+            if (raw === 'frente') return 'frente';
+            return raw;
+        },
+
+        normalizarAngulo(val) {
+            const raw = (val || '').toString().toLowerCase().trim();
+            if (raw === 'perfil' || raw === 'lado' || raw === 'lateral') return 'lado';
+            if (raw === 'costas' || raw === 'costa') return 'costas';
+            return 'frente';
+        },
+
         renderComparadorFotos() {
             const container = document.getElementById('container-comparador-fotos');
             if (!container) return;
@@ -212,10 +228,11 @@
                             <p class="text-xs text-slate-400">Compare lado a lado suas fotos de início com sua forma atual.</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <select id="filtro-angulo-comparador" onchange="ApexEvolucao.filtrarComparador()" class="bg-slate-950 border border-slate-700 text-xs font-semibold rounded-xl px-3 py-2 text-slate-200 focus:outline-none">
+                            <label for="filtro-angulo-comparador" class="text-xs font-semibold text-slate-400 hidden sm:inline">Ângulo:</label>
+                            <select id="filtro-angulo-comparador" onchange="ApexEvolucao.filtrarComparador()" class="bg-slate-950 border border-slate-700 text-xs font-semibold rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-purple-500 cursor-pointer transition-colors shadow-sm">
                                 <option value="frente">Frente</option>
+                                <option value="lado">Lado</option>
                                 <option value="costas">Costas</option>
-                                <option value="perfil">Lateral / Perfil</option>
                             </select>
                         </div>
                     </div>
@@ -223,22 +240,22 @@
                     <!-- Área de Comparação Visual -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="boxes-comparacao">
                         <!-- Card Antes / Início -->
-                        <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[300px] relative overflow-hidden group">
-                            <span class="absolute top-3 left-3 bg-slate-900/90 text-slate-300 font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border border-slate-700">
+                        <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[320px] relative overflow-hidden group">
+                            <span class="absolute top-3 left-3 bg-slate-900/95 text-slate-300 font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border border-slate-700 z-10 shadow-sm">
                                 🏁 Início da Jornada
                             </span>
-                            <div id="foto-antes-container" class="w-full h-full flex flex-col items-center justify-center text-slate-500 py-12">
+                            <div id="foto-antes-container" class="w-full h-full flex flex-col items-center justify-center text-slate-500 py-8">
                                 <i data-lucide="image" class="w-8 h-8 mb-2 opacity-50"></i>
                                 <span class="text-xs">Foto inicial não registrada</span>
                             </div>
                         </div>
 
-                        <!-- Card Atual / 30d, 60d, 90d -->
-                        <div class="bg-slate-950/70 border border-purple-500/30 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[300px] relative overflow-hidden group">
-                            <span class="absolute top-3 left-3 bg-purple-500/20 text-purple-300 font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border border-purple-500/40">
+                        <!-- Card Atual / Recente -->
+                        <div class="bg-slate-950/70 border border-purple-500/30 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[320px] relative overflow-hidden group">
+                            <span class="absolute top-3 left-3 bg-purple-500/20 text-purple-300 font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border border-purple-500/40 z-10 shadow-sm">
                                 ⭐ Foto Atual
                             </span>
-                            <div id="foto-depois-container" class="w-full h-full flex flex-col items-center justify-center text-slate-500 py-12">
+                            <div id="foto-depois-container" class="w-full h-full flex flex-col items-center justify-center text-slate-500 py-8">
                                 <i data-lucide="image" class="w-8 h-8 mb-2 opacity-50"></i>
                                 <span class="text-xs">Foto recente não registrada</span>
                             </div>
@@ -251,21 +268,38 @@
         },
 
         async carregarFotosComparador() {
-            // Busca fotos do banco / galeria
             try {
+                let fotos = [];
+                // 1. Busca do Supabase
                 if (window.supabaseClient && this.alunoIdAtual) {
-                    const { data } = await window.supabaseClient
+                    const { data, error } = await window.supabaseClient
                         .from('fotos_evolucao')
                         .select('*')
                         .eq('aluno_id', this.alunoIdAtual)
                         .order('data', { ascending: true });
 
-                    if (data && data.length > 0) {
-                        this.fotosCache = data;
-                        this.atualizarComparadorVisual('frente');
+                    if (!error && data && data.length > 0) {
+                        fotos = data;
                     }
                 }
-            } catch (e) { }
+
+                // 2. Se vazio ou offline, tenta buscar do IndexedDB local
+                if ((!fotos || fotos.length === 0) && typeof window.dbGetAll === 'function' && this.alunoIdAtual) {
+                    try {
+                        const locais = await window.dbGetAll(this.alunoIdAtual);
+                        if (locais && locais.length > 0) {
+                            fotos = locais;
+                        }
+                    } catch (eDb) { }
+                }
+
+                this.fotosCache = fotos;
+                const selectAngulo = document.getElementById('filtro-angulo-comparador');
+                const anguloAtual = selectAngulo?.value || 'frente';
+                this.atualizarComparadorVisual(anguloAtual);
+            } catch (e) {
+                console.error("Erro ao carregar fotos comparador:", e);
+            }
         },
 
         filtrarComparador() {
@@ -274,25 +308,113 @@
         },
 
         atualizarComparadorVisual(angulo) {
-            const fotosFiltradas = this.fotosCache.filter(f => (f.angulo || 'frente').toLowerCase() === angulo.toLowerCase());
+            const filtro = this.normalizarAngulo(angulo);
+            const labelMap = {
+                frente: 'Frente',
+                lado: 'Lado',
+                costas: 'Costas'
+            };
+            const labelAngulo = labelMap[filtro] || 'Frente';
+            const labelUpper = labelAngulo.toUpperCase();
+
+            // Sincroniza o select caso o valor tenha sido passado por parâmetro
+            const selectEl = document.getElementById('filtro-angulo-comparador');
+            if (selectEl && selectEl.value !== filtro) {
+                if (Array.from(selectEl.options).some(o => o.value === filtro)) {
+                    selectEl.value = filtro;
+                }
+            }
+
+            // Filtra estritamente pelo mesmo ângulo para ambos os cards
+            const fotosFiltradas = (this.fotosCache || []).filter(f => this.getAnguloFoto(f) === filtro);
+
+            // Ordena cronologicamente (da mais antiga para a mais recente)
+            fotosFiltradas.sort((a, b) => {
+                const dataA = a.data || a.criadoEm || a.created_at || '';
+                const dataB = b.data || b.criadoEm || b.created_at || '';
+                if (dataA !== dataB) return dataA.localeCompare(dataB);
+                return (a.id || 0) - (b.id || 0);
+            });
+
             const boxAntes = document.getElementById('foto-antes-container');
             const boxDepois = document.getElementById('foto-depois-container');
             if (!boxAntes || !boxDepois) return;
 
-            if (fotosFiltradas.length > 0) {
-                const primeira = fotosFiltradas[0];
-                const ultima = fotosFiltradas[fotosFiltradas.length - 1];
-
+            if (fotosFiltradas.length === 0) {
+                // Estado sem fotos para este ângulo específico
                 boxAntes.innerHTML = `
-                    <img src="${primeira.imagem}" class="max-h-72 w-auto object-contain rounded-xl shadow-lg" alt="Foto Início">
-                    <span class="text-[11px] text-slate-400 mt-2 font-medium">Registrado em ${new Date(primeira.data).toLocaleDateString('pt-BR')}</span>
+                    <div class="w-full h-full flex flex-col items-center justify-center text-slate-500 py-10 text-center px-4">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-3">
+                            <i data-lucide="image" class="w-6 h-6 text-slate-600"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-300">Sem foto inicial (${labelAngulo})</span>
+                        <span class="text-[11px] text-slate-500 mt-1 max-w-xs">Envie uma foto desse ângulo na seção de Galeria para iniciar sua comparação.</span>
+                    </div>
                 `;
 
                 boxDepois.innerHTML = `
-                    <img src="${ultima.imagem}" class="max-h-72 w-auto object-contain rounded-xl shadow-lg border border-purple-500/30" alt="Foto Atual">
-                    <span class="text-[11px] text-purple-300 mt-2 font-medium">Registrado em ${new Date(ultima.data).toLocaleDateString('pt-BR')}</span>
+                    <div class="w-full h-full flex flex-col items-center justify-center text-slate-500 py-10 text-center px-4">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-950/40 border border-purple-500/20 flex items-center justify-center mb-3">
+                            <i data-lucide="camera" class="w-6 h-6 text-purple-400"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-300">Sem foto atual (${labelAngulo})</span>
+                        <span class="text-[11px] text-slate-500 mt-1 max-w-xs">Fotos registradas de ${labelAngulo.toLowerCase()} aparecerão aqui lado a lado.</span>
+                    </div>
                 `;
+                if (window.lucide) window.lucide.createIcons();
+                return;
             }
+
+            const primeira = fotosFiltradas[0];
+            const ultima = fotosFiltradas[fotosFiltradas.length - 1];
+
+            const formatarData = (d) => {
+                if (!d) return '--';
+                if (typeof d === 'string' && d.includes('-') && !d.includes('T')) {
+                    const [y, m, dia] = d.split('-');
+                    return `${dia}/${m}/${y}`;
+                }
+                return new Date(d).toLocaleDateString('pt-BR');
+            };
+
+            const dataPrimeira = formatarData(primeira.data || primeira.criadoEm || primeira.created_at);
+            const dataUltima = formatarData(ultima.data || ultima.criadoEm || ultima.created_at);
+
+            // Card Início da Jornada (Foto mais antiga do ângulo selecionado)
+            boxAntes.innerHTML = `
+                <div class="w-full flex flex-col items-center pt-5">
+                    <div class="relative rounded-2xl overflow-hidden shadow-xl border border-slate-800 bg-slate-950 group flex items-center justify-center max-w-full">
+                        <img src="${primeira.imagem}" class="max-h-72 w-auto max-w-full object-contain rounded-xl" alt="Início - ${labelAngulo}">
+                        <div class="absolute top-2.5 left-2.5 bg-slate-900/90 backdrop-blur-md text-slate-200 border border-slate-700/80 text-[10px] font-extrabold px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-md">
+                            <i data-lucide="user" class="w-3 h-3 text-purple-400"></i>
+                            <span>${labelUpper}</span>
+                        </div>
+                    </div>
+                    <span class="text-[11px] text-slate-400 mt-3 font-medium flex items-center gap-1.5">
+                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-500"></i>
+                        Registrado em ${dataPrimeira}
+                    </span>
+                </div>
+            `;
+
+            // Card Foto Atual (Foto mais recente do MESMO ângulo selecionado)
+            boxDepois.innerHTML = `
+                <div class="w-full flex flex-col items-center pt-5">
+                    <div class="relative rounded-2xl overflow-hidden shadow-xl border border-purple-500/30 bg-slate-950 group flex items-center justify-center max-w-full">
+                        <img src="${ultima.imagem}" class="max-h-72 w-auto max-w-full object-contain rounded-xl" alt="Atual - ${labelAngulo}">
+                        <div class="absolute top-2.5 left-2.5 bg-purple-950/90 backdrop-blur-md text-purple-200 border border-purple-500/50 text-[10px] font-extrabold px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-md">
+                            <i data-lucide="user" class="w-3 h-3 text-purple-300"></i>
+                            <span>${labelUpper}</span>
+                        </div>
+                    </div>
+                    <span class="text-[11px] text-purple-300 mt-3 font-medium flex items-center gap-1.5">
+                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-purple-400"></i>
+                        Registrado em ${dataUltima}
+                    </span>
+                </div>
+            `;
+
+            if (window.lucide) window.lucide.createIcons();
         }
     };
 
