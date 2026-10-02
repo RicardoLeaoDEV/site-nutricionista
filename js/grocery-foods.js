@@ -227,9 +227,11 @@
             const itens = [];
             dietas.forEach(d => {
                 const texto = (d.alimentos || '') + '\n' + (d.substituicoes || '');
-                const linhas = texto.split(/[\n,;•-]+/);
+                // Divide por quebras de linha, ponto e vírgula, marcadores de lista ou hífen precedido/sucedido de espaço
+                // Preserva palavras compostas como Grão-de-bico, Couve-flor, Pré-treino
+                const linhas = texto.split(/(?:\r?\n|;|\s*•\s*|\s*[*]\s*|^\s*-\s+|\s+-\s+)/);
                 linhas.forEach(linha => {
-                    const l = linha.trim();
+                    let l = linha.trim().replace(/^[-•*]\s*/, '').trim();
                     if (!l || l.length < 3) return;
 
                     // Tenta categorizar o item
@@ -237,7 +239,7 @@
                     const lLower = l.toLowerCase();
                     if (lLower.includes('frango') || lLower.includes('carne') || lLower.includes('ovo') || lLower.includes('peixe') || lLower.includes('whey') || lLower.includes('queijo') || lLower.includes('atum') || lLower.includes('patinho') || lLower.includes('tilápia')) {
                         categoria = 'Proteínas';
-                    } else if (lLower.includes('arroz') || lLower.includes('batata') || lLower.includes('aveia') || lLower.includes('pão') || lLower.includes('tapioca') || lLower.includes('cuscuz') || lLower.includes('macarrão') || lLower.includes('feijão') || lLower.includes('mandioca')) {
+                    } else if (lLower.includes('arroz') || lLower.includes('batata') || lLower.includes('aveia') || lLower.includes('pão') || lLower.includes('tapioca') || lLower.includes('cuscuz') || lLower.includes('macarrão') || lLower.includes('feijão') || lLower.includes('mandioca') || lLower.includes('grão') || lLower.includes('lentilha')) {
                         categoria = 'Carboidratos';
                     } else if (lLower.includes('banana') || lLower.includes('maçã') || lLower.includes('mamão') || lLower.includes('morango') || lLower.includes('laranja') || lLower.includes('abacaxi') || lLower.includes('uva') || lLower.includes('fruta')) {
                         categoria = 'Frutas';
@@ -290,38 +292,51 @@
             const comprados = this.listaCompras.filter(i => i.comprado).length;
 
             container.innerHTML = `
-                <div class="glass-panel p-6 rounded-3xl border border-lime-500/20 space-y-6">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
-                        <div>
+                <div class="glass-panel p-5 sm:p-6 md:p-8 rounded-3xl border border-lime-500/20 space-y-5 shadow-2xl relative">
+                    <!-- Topo do Modal com Fechar Seguro e Ações -->
+                    <div class="flex items-start justify-between pb-4 border-b border-slate-800 gap-3">
+                        <div class="min-w-0 flex-1">
                             <span class="text-xs font-bold uppercase tracking-wider text-lime-400 flex items-center gap-1.5 mb-1">
-                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i>Organização & Economia
+                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5 shrink-0"></i>Organização & Economia
                             </span>
-                            <h2 class="text-lg font-bold text-white">Lista de Compras Inteligente 🛒</h2>
-                            <p class="text-xs text-slate-400">Gerada automaticamente a partir do seu cardápio semanal.</p>
+                            <h2 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Lista de Compras Inteligente 🛒</h2>
+                            <p class="text-xs text-slate-400 mt-0.5">Gerada automaticamente a partir do seu cardápio prescrito.</p>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button type="button" onclick="ApexAlimentos.compartilharWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-md transition-all cursor-pointer">
-                                <i data-lucide="share-2" class="w-3.5 h-3.5"></i>Copiar p/ WhatsApp
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button type="button" onclick="ApexAlimentos.compartilharWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3 sm:px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-md transition-all cursor-pointer hover:scale-[1.02] active:scale-95">
+                                <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+                                <span class="hidden sm:inline">Copiar p/ WhatsApp</span>
+                                <span class="sm:hidden">WhatsApp</span>
+                            </button>
+                            <button type="button" onclick="fecharListaCompras()" class="text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 transition-all cursor-pointer active:scale-95" title="Fechar" aria-label="Fechar">
+                                <i data-lucide="x" class="w-4 h-4"></i>
                             </button>
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-between text-xs text-slate-400">
-                        <span>${comprados} de ${total} itens comprados</span>
-                        <span class="font-bold text-lime-400">${total > 0 ? Math.round((comprados / total) * 100) : 0}% concluído</span>
+                    <!-- Barra de Progresso e Métricas -->
+                    <div class="flex items-center justify-between text-xs text-slate-400 bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+                        <span class="font-medium">${comprados} de ${total} itens marcados</span>
+                        <span class="font-extrabold text-lime-400">${total > 0 ? Math.round((comprados / total) * 100) : 0}% concluído</span>
                     </div>
 
-                    <div class="space-y-4">
+                    <!-- Categorias em Grid Responsivo (2 colunas em telas maiores) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                         ${Object.keys(categorias).map(cat => `
-                            <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 space-y-2.5">
-                                <span class="text-xs font-black uppercase text-lime-400 tracking-wider">${cat}</span>
-                                <div class="space-y-1.5">
-                                    ${categorias[cat].map((item) => `
-                                        <label class="flex items-center gap-2.5 text-xs text-slate-200 cursor-pointer hover:text-white py-1">
-                                            <input type="checkbox" ${item.comprado ? 'checked' : ''} onchange="ApexAlimentos.toggleComprado('${item.nome}', this.checked)" class="w-4 h-4 rounded accent-lime-500">
-                                            <span class="${item.comprado ? 'line-through text-slate-500' : ''}">${item.nome}</span>
-                                        </label>
-                                    `).join('')}
+                            <div class="bg-slate-950/70 p-4 rounded-2xl border border-slate-800/90 space-y-2.5 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-center justify-between border-b border-slate-800/60 pb-1.5 mb-2">
+                                        <span class="text-xs font-black uppercase text-lime-400 tracking-wider">${cat}</span>
+                                        <span class="text-[10px] text-slate-500 font-semibold">${categorias[cat].length} itens</span>
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        ${categorias[cat].map((item) => `
+                                            <label class="flex items-start gap-2.5 text-xs text-slate-200 cursor-pointer hover:text-white py-1 group select-none transition-colors">
+                                                <input type="checkbox" ${item.comprado ? 'checked' : ''} onchange="ApexAlimentos.toggleComprado('${item.nome.replace(/'/g, "\\'")}', this.checked)" class="mt-0.5 w-4 h-4 rounded accent-lime-500 shrink-0 cursor-pointer">
+                                                <span class="break-words min-w-0 flex-1 leading-relaxed ${item.comprado ? 'line-through text-slate-500' : 'group-hover:text-lime-200'}">${item.nome}</span>
+                                            </label>
+                                        `).join('')}
+                                    </div>
                                 </div>
                             </div>
                         `).join('')}
