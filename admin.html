@@ -1074,8 +1074,15 @@
 
             <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
                 <div id="resumo-diario-macros-aluno" class="hidden mb-4 p-3 rounded-2xl bg-slate-900/80 border border-slate-800"></div>
-                <p class="text-xs text-slate-400 mb-4 pt-2">Selecione um aluno acima para carregar o plano alimentar completo.</p>
-                <div id="lista-refeicoes-aluno" class="space-y-4"></div>
+                <div id="lista-refeicoes-aluno" class="space-y-4">
+                    <div class="text-center py-8 border border-dashed border-slate-800 rounded-2xl bg-slate-900/40 text-xs text-slate-400">
+                        <div class="w-10 h-10 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 mx-auto mb-3">
+                            <i data-lucide="user-check" class="w-5 h-5"></i>
+                        </div>
+                        <p class="font-bold text-slate-300 text-sm">Selecione um aluno acima</p>
+                        <p class="text-slate-500 mt-1 max-w-sm mx-auto text-xs">Escolha um aluno no menu suspenso para visualizar suas refeições cadastradas e o plano alimentar completo.</p>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -1449,23 +1456,33 @@
         function renderizarSecaoProfissionalAoAbrir(header, content) {
             if (!content) return;
 
+            // 0. Refeições Atuais do Aluno
+            if (content.querySelector('#lista-refeicoes-aluno') || (header && header.closest('#secao-refeicoes-atuais'))) {
+                const currentAlunoId = (typeof estadoCalculadora !== 'undefined' && estadoCalculadora.alunoId)
+                    || document.getElementById('aluno-select')?.value
+                    || document.getElementById('calc-aluno-select')?.value;
+                if (currentAlunoId && typeof carregarRefeicoesAlunoAdmin === 'function') {
+                    carregarRefeicoesAlunoAdmin(currentAlunoId);
+                }
+            }
+
             // 1. Central de Check-ins Semanais
-            if (content.querySelector('#conteudo-checkins-nutri') || header.closest('#secao-checkins-nutri')) {
+            if (content.querySelector('#conteudo-checkins-nutri') || (header && header.closest('#secao-checkins-nutri'))) {
                 renderizarSecaoCheckinsNutri();
             }
 
             // 2. Agenda de Consultas & Treinos
-            if (content.querySelector('#conteudo-agenda-nutri') || header.closest('#secao-agenda-nutri')) {
+            if (content.querySelector('#conteudo-agenda-nutri') || (header && header.closest('#secao-agenda-nutri'))) {
                 renderizarSecaoAgendaNutri();
             }
 
             // 3. Painel Financeiro & Planos
-            if (content.querySelector('#conteudo-financeiro-nutri') || header.closest('#secao-financeiro-nutri')) {
+            if (content.querySelector('#conteudo-financeiro-nutri') || (header && header.closest('#secao-financeiro-nutri'))) {
                 renderizarSecaoFinanceiroNutri();
             }
 
             // 4. Assistente Clínico IA
-            if (content.querySelector('#conteudo-ia-nutri') || header.closest('#secao-ia-nutri')) {
+            if (content.querySelector('#conteudo-ia-nutri') || (header && header.closest('#secao-ia-nutri'))) {
                 renderizarSecaoIANutri();
             }
         }
@@ -2068,9 +2085,9 @@
         // Cálculo Automático de Macros
         function recalcularMacros() {
             const diag = atualizarMetabolismoDiagnostico();
-            const peso = diag.peso;
-            const vet = diag.vetAlvo;
-            const objetivo = estadoCalculadora.objetivo;
+            const peso = diag.peso || 75;
+            const vet = diag.vetAlvo || 2000;
+            const objetivo = (estadoCalculadora.objetivo || 'deficit_moderado').toLowerCase();
 
             // 1. Proteínas: 2.2 g/kg em déficit calórico; 2.0 g/kg em manutenção ou superávit
             const protFator = objetivo.startsWith('deficit') ? 2.2 : 2.0;
@@ -2245,98 +2262,124 @@
             showToast('Fórmula Restaurada', 'Os macronutrientes foram recalculados pelo protocolo científico Mifflin-St Jeor.', 'info');
         }
 
-        // Sincronização Bidirecional do Aluno Selecionado
+        // Sincronização Bidirecional do Aluno Selecionado (Resiliente & Paralela)
         async function sincronizarSelecaoAluno(alunoId, origem = '') {
-            if (!alunoId) return;
+            if (!alunoId) {
+                estadoCalculadora.alunoId = null;
+                estadoCalculadora.alunoNome = '';
+                const cardEl = document.getElementById('card-aluno-clinico');
+                if (cardEl) cardEl.classList.add('hidden');
+                await carregarRefeicoesAlunoAdmin(null);
+                return;
+            }
 
             estadoCalculadora.alunoId = alunoId;
             const alunoObj = listaAlunosCache.find(a => a.id === alunoId);
             estadoCalculadora.alunoNome = alunoObj ? (alunoObj.nome || 'Aluno') : 'Aluno';
 
-            // Sincroniza os selects
+            // Sincroniza todos os selects de aluno na página
             const selDieta = document.getElementById('aluno-select');
             const selCalc = document.getElementById('calc-aluno-select');
+            const selFotos = document.getElementById('fotos-aluno-select');
             if (selDieta && selDieta.value !== alunoId) selDieta.value = alunoId;
             if (selCalc && selCalc.value !== alunoId) selCalc.value = alunoId;
+            if (selFotos && selFotos.value !== alunoId) selFotos.value = alunoId;
 
-            // Atualiza o Card Clínico
-            await atualizarCardAlunoClinico(alunoId);
-
-            // Carrega metas já salvas ou calcula novas
-            await carregarOuInicializarMacrosAluno(alunoId);
-
-            // Carrega as refeições já cadastradas do aluno
-            await carregarRefeicoesAlunoAdmin(alunoId);
+            // Execução paralela e desacoplada: falha em biometria ou cálculo NÃO impede as refeições de carregarem
+            await Promise.allSettled([
+                atualizarCardAlunoClinico(alunoId).catch(err => console.error("Erro ao atualizar card clínico:", err)),
+                carregarOuInicializarMacrosAluno(alunoId).catch(err => console.error("Erro ao carregar macros do aluno:", err)),
+                carregarRefeicoesAlunoAdmin(alunoId).catch(err => console.error("Erro ao carregar refeições do aluno:", err))
+            ]);
         }
 
         async function carregarOuInicializarMacrosAluno(alunoId) {
             const infoEl = document.getElementById('calc-aluno-dados-info');
 
-            // 1. Tenta buscar metas já salvas no localStorage ou Supabase
-            let macrosSalvos = null;
             try {
-                const cache = localStorage.getItem('nutrilife_macros_' + alunoId);
-                if (cache) macrosSalvos = JSON.parse(cache);
-            } catch (e) { }
-
-            if (!macrosSalvos) {
+                // 1. Tenta buscar metas já salvas no localStorage ou Supabase
+                let macrosSalvos = null;
                 try {
-                    const { data: msgs } = await supabaseClient
-                        .from('mensagens')
-                        .select('mensagem')
-                        .eq('aluno_id', alunoId)
-                        .eq('remetente', 'sistema_macros')
-                        .order('created_at', { ascending: false })
-                        .limit(1);
-
-                    if (msgs && msgs.length > 0) {
-                        macrosSalvos = JSON.parse(msgs[0].mensagem);
-                        localStorage.setItem('nutrilife_macros_' + alunoId, JSON.stringify(macrosSalvos));
-                    }
-                } catch (e) { }
-            }
-
-            if (macrosSalvos && macrosSalvos.calorias) {
-                // Aluno já possui metas cadastradas: preenche os campos
-                if (macrosSalvos.idade) document.getElementById('calc-idade').value = macrosSalvos.idade;
-                if (macrosSalvos.peso) document.getElementById('calc-peso').value = macrosSalvos.peso;
-                if (macrosSalvos.altura) document.getElementById('calc-altura').value = macrosSalvos.altura;
-                if (macrosSalvos.objetivo) document.getElementById('calc-objetivo').value = macrosSalvos.objetivo;
-                if (macrosSalvos.atividade) document.getElementById('calc-atividade').value = macrosSalvos.atividade;
-                if (macrosSalvos.sexo) selecionarSexo(macrosSalvos.sexo);
-
-                document.getElementById('calc-res-calorias').value = macrosSalvos.calorias;
-                document.getElementById('calc-res-proteinas').value = macrosSalvos.proteinas;
-                document.getElementById('calc-res-carboidratos').value = macrosSalvos.carboidratos;
-                document.getElementById('calc-res-gorduras').value = macrosSalvos.gorduras;
-
-                estadoCalculadora = { ...estadoCalculadora, ...macrosSalvos };
-                atualizarMetabolismoDiagnostico();
-                atualizarUIProporcoesMacros();
-                atualizarBadgeModo(!!macrosSalvos.modo_manual);
-
-                if (infoEl) infoEl.innerHTML = `<span class="text-lime-400 font-semibold">✓ Metas carregadas (${macrosSalvos.calorias} kcal)</span>`;
-            } else {
-                // Aluno novo: busca biometria registrada no perfil e faz cálculo inicial
-                let perfil = {};
-                try {
-                    const { data: aDb } = await supabaseClient
-                        .from('alunos')
-                        .select('altura, peso, idade')
-                        .eq('id', alunoId)
-                        .single();
-                    if (aDb) perfil = aDb;
+                    const cache = localStorage.getItem('nutrilife_macros_' + alunoId);
+                    if (cache) macrosSalvos = JSON.parse(cache);
                 } catch (e) { }
 
-                if (perfil.peso) document.getElementById('calc-peso').value = parseFloat(perfil.peso);
-                if (perfil.idade) document.getElementById('calc-idade').value = parseInt(perfil.idade, 10);
-                if (perfil.altura) {
-                    const altNum = parseFloat(perfil.altura);
-                    document.getElementById('calc-altura').value = altNum > 3 ? Math.round(altNum) : Math.round(altNum * 100);
+                if (!macrosSalvos) {
+                    try {
+                        const { data: msgs } = await supabaseClient
+                            .from('mensagens')
+                            .select('mensagem')
+                            .eq('aluno_id', alunoId)
+                            .eq('remetente', 'sistema_macros')
+                            .order('created_at', { ascending: false })
+                            .limit(1);
+
+                        if (msgs && msgs.length > 0) {
+                            macrosSalvos = JSON.parse(msgs[0].mensagem);
+                            localStorage.setItem('nutrilife_macros_' + alunoId, JSON.stringify(macrosSalvos));
+                        }
+                    } catch (e) { }
                 }
 
-                recalcularMacros();
-                if (infoEl) infoEl.innerHTML = `<span class="text-slate-300">Biometria importada • Cálculo pronto para salvar</span>`;
+                if (macrosSalvos && macrosSalvos.calorias) {
+                    // Aluno já possui metas cadastradas: preenche os campos
+                    if (macrosSalvos.idade) document.getElementById('calc-idade').value = macrosSalvos.idade;
+                    if (macrosSalvos.peso) document.getElementById('calc-peso').value = macrosSalvos.peso;
+                    if (macrosSalvos.altura) document.getElementById('calc-altura').value = macrosSalvos.altura;
+                    if (macrosSalvos.objetivo) document.getElementById('calc-objetivo').value = macrosSalvos.objetivo;
+                    if (macrosSalvos.atividade) document.getElementById('calc-atividade').value = macrosSalvos.atividade;
+
+                    estadoCalculadora = { ...estadoCalculadora, ...macrosSalvos };
+
+                    if (macrosSalvos.sexo) {
+                        estadoCalculadora.sexo = macrosSalvos.sexo;
+                        const btnM = document.getElementById('calc-sexo-m');
+                        const btnF = document.getElementById('calc-sexo-f');
+                        if (btnM && btnF) {
+                            if (macrosSalvos.sexo === 'masculino') {
+                                btnM.className = 'py-1.5 text-xs font-bold rounded-lg transition-all text-center bg-brand-500 text-slate-950 shadow-sm';
+                                btnF.className = 'py-1.5 text-xs font-bold rounded-lg transition-all text-center text-slate-400 hover:text-white';
+                            } else {
+                                btnF.className = 'py-1.5 text-xs font-bold rounded-lg transition-all text-center bg-brand-500 text-slate-950 shadow-sm';
+                                btnM.className = 'py-1.5 text-xs font-bold rounded-lg transition-all text-center text-slate-400 hover:text-white';
+                            }
+                        }
+                    }
+
+                    document.getElementById('calc-res-calorias').value = macrosSalvos.calorias;
+                    document.getElementById('calc-res-proteinas').value = macrosSalvos.proteinas;
+                    document.getElementById('calc-res-carboidratos').value = macrosSalvos.carboidratos;
+                    document.getElementById('calc-res-gorduras').value = macrosSalvos.gorduras;
+
+                    atualizarMetabolismoDiagnostico();
+                    atualizarUIProporcoesMacros();
+                    atualizarBadgeModo(!!macrosSalvos.modo_manual);
+
+                    if (infoEl) infoEl.innerHTML = `<span class="text-lime-400 font-semibold">✓ Metas carregadas (${macrosSalvos.calorias} kcal)</span>`;
+                } else {
+                    // Aluno novo: busca biometria registrada no perfil e faz cálculo inicial
+                    let perfil = {};
+                    try {
+                        const { data: aDb } = await supabaseClient
+                            .from('alunos')
+                            .select('altura, peso, idade')
+                            .eq('id', alunoId)
+                            .single();
+                        if (aDb) perfil = aDb;
+                    } catch (e) { }
+
+                    if (perfil.peso) document.getElementById('calc-peso').value = parseFloat(perfil.peso);
+                    if (perfil.idade) document.getElementById('calc-idade').value = parseInt(perfil.idade, 10);
+                    if (perfil.altura) {
+                        const altNum = parseFloat(perfil.altura);
+                        document.getElementById('calc-altura').value = altNum > 3 ? Math.round(altNum) : Math.round(altNum * 100);
+                    }
+
+                    recalcularMacros();
+                    if (infoEl) infoEl.innerHTML = `<span class="text-slate-300">Biometria importada • Cálculo pronto para salvar</span>`;
+                }
+            } catch (err) {
+                console.error("Erro inesperado ao carregar/inicializar metas do aluno:", err);
             }
         }
 
@@ -3616,8 +3659,7 @@ _Prescrição elaborada pelo seu nutricionista._`;
 
         function irParaDietaComAlunoAtual() {
             if (!alunoFotosSelecionadoId) return;
-            const sel = document.getElementById('aluno-select');
-            if (sel) sel.value = alunoFotosSelecionadoId;
+            sincronizarSelecaoAluno(alunoFotosSelecionadoId, 'fotos');
             navegarParaSecao('secao-cadastrar-refeicao');
         }
 
@@ -3905,19 +3947,31 @@ _Prescrição elaborada pelo seu nutricionista._`;
         // GESTÃO DE REFEIÇÕES ATUAIS DO ALUNO NO PAINEL ADMIN
         // ==============================================================
         let dietasAlunoAtual = [];
+        let ultimaRequisicaoRefeicoesId = 0;
 
         async function carregarRefeicoesAlunoAdmin(alunoId) {
             if (!alunoId) {
-                alunoId = document.getElementById('aluno-select')?.value;
+                alunoId = document.getElementById('aluno-select')?.value
+                    || document.getElementById('calc-aluno-select')?.value
+                    || (typeof estadoCalculadora !== 'undefined' ? estadoCalculadora.alunoId : null);
             }
             const box = document.getElementById('lista-refeicoes-aluno');
             const resumoBox = document.getElementById('resumo-diario-macros-aluno');
             if (!box) return;
 
             if (!alunoId) {
-                box.innerHTML = '<p class="text-xs text-slate-500">Selecione um aluno acima para visualizar suas refeições cadastradas.</p>';
+                box.innerHTML = `
+                    <div class="text-center py-8 border border-dashed border-slate-800 rounded-2xl bg-slate-900/40 text-xs text-slate-400">
+                        <div class="w-10 h-10 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 mx-auto mb-3">
+                            <i data-lucide="user-check" class="w-5 h-5"></i>
+                        </div>
+                        <p class="font-bold text-slate-300 text-sm">Selecione um aluno acima</p>
+                        <p class="text-slate-500 mt-1 max-w-sm mx-auto text-xs">Escolha um aluno no menu suspenso para visualizar suas refeições cadastradas e o plano alimentar completo.</p>
+                    </div>
+                `;
                 if (resumoBox) resumoBox.classList.add('hidden');
                 dietasAlunoAtual = [];
+                if (window.lucide) lucide.createIcons();
                 return;
             }
 
@@ -3932,139 +3986,169 @@ _Prescrição elaborada pelo seu nutricionista._`;
                 }
             }
 
-            box.innerHTML = '<div class="py-4 text-center text-xs text-slate-400"><div class="w-5 h-5 border-2 border-lime-400 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>Carregando refeições do aluno...</div>';
+            box.innerHTML = `
+                <div class="py-8 text-center text-xs text-slate-400">
+                    <div class="w-6 h-6 border-2 border-lime-400 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                    <span>Carregando plano alimentar do aluno...</span>
+                </div>
+            `;
 
-            const { data, error } = await supabaseClient
-                .from('dietas')
-                .select('*')
-                .eq('aluno_id', alunoId);
+            const reqId = ++ultimaRequisicaoRefeicoesId;
 
-            if (error) {
-                box.innerHTML = `<p class="text-xs text-rose-400">Erro ao carregar refeições: ${error.message}</p>`;
-                return;
-            }
+            try {
+                const { data, error } = await supabaseClient
+                    .from('dietas')
+                    .select('*')
+                    .eq('aluno_id', alunoId);
 
-            // Ordena as refeições pelo horário (ou ID como critério secundário)
-            dietasAlunoAtual = (data || []).sort((a, b) => {
-                const hA = (a.horario || '').trim();
-                const hB = (b.horario || '').trim();
-                if (hA && hB) return hA.localeCompare(hB);
-                if (hA) return -1;
-                if (hB) return 1;
-                return (a.id || 0) > (b.id || 0) ? 1 : -1;
-            });
+                // Se outra requisição mais recente foi disparada pelo usuário, descarta esta resposta
+                if (reqId !== ultimaRequisicaoRefeicoesId) return;
 
-            if (dietasAlunoAtual.length === 0) {
-                box.innerHTML = `
-                    <div class="text-center py-8 border border-dashed border-slate-800 rounded-2xl bg-slate-900/40 text-xs text-slate-400">
-                        <i data-lucide="utensils" class="w-8 h-8 text-slate-600 mx-auto mb-2"></i>
-                        <p class="font-bold text-slate-300">Nenhuma refeição cadastrada para este aluno ainda.</p>
-                        <p class="text-slate-500 mt-1">Utilize o formulário de prescrição acima com o Banco de Alimentos.</p>
-                    </div>
-                `;
-                if (resumoBox) resumoBox.classList.add('hidden');
-                if (window.lucide) lucide.createIcons();
-                return;
-            }
-
-            // Extrai macros de cada refeição para gerar resumo diário total
-            let somaCal = 0;
-            let somaProt = 0;
-            let somaCarb = 0;
-            let somaGord = 0;
-
-            box.innerHTML = dietasAlunoAtual.map((d, idx) => {
-                const horarioStr = d.horario || 'Horário flexível';
-                const alimentosLinhas = (d.alimentos || '')
-                    .split('\n')
-                    .map(l => l.trim())
-                    .filter(l => l.length > 0)
-                    .map(l => {
-                        const mCal = l.match(/(\d+)\s*kcal/i);
-                        if (mCal) somaCal += parseInt(mCal[1], 10);
-                        const mP = l.match(/P:\s*(\d+(?:\.\d+)?)\s*g/i);
-                        if (mP) somaProt += parseFloat(mP[1]);
-                        const mC = l.match(/C:\s*(\d+(?:\.\d+)?)\s*g/i);
-                        if (mC) somaCarb += parseFloat(mC[1]);
-                        const mG = l.match(/G:\s*(\d+(?:\.\d+)?)\s*g/i);
-                        if (mG) somaGord += parseFloat(mG[1]);
-
-                        const isTotalLine = l.toLowerCase().startsWith('total');
-                        if (isTotalLine) {
-                            return `<li class="font-extrabold text-lime-400 mt-1.5 pt-1.5 border-t border-slate-800 text-[11px] list-none">${l}</li>`;
-                        }
-                        return `<li class="text-xs text-slate-200">${l}</li>`;
-                    }).join('');
-
-                let subsHtml = '';
-                if (d.substituicoes && d.substituicoes.trim().length > 0) {
-                    subsHtml = `
-                        <div class="mt-2.5 p-2 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-0.5">Substituições:</span>
-                            <p class="text-slate-300 text-[11px] leading-relaxed whitespace-pre-line">${d.substituicoes}</p>
+                if (error) {
+                    box.innerHTML = `
+                        <div class="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-3">
+                            <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
+                            <div>
+                                <span class="font-bold block">Falha ao buscar refeições</span>
+                                <span class="text-[11px] opacity-90">${error.message}</span>
+                            </div>
                         </div>
                     `;
+                    if (resumoBox) resumoBox.classList.add('hidden');
+                    if (window.lucide) lucide.createIcons();
+                    return;
                 }
 
-                return `
-                    <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 relative hover:border-slate-700 transition-all">
-                        <div class="flex flex-wrap sm:flex-nowrap items-center justify-between pb-2.5 mb-2.5 border-b border-slate-800 gap-2">
-                            <div class="flex items-center gap-2 min-w-0 flex-1">
-                                <span class="w-6 h-6 rounded-lg bg-lime-500/20 text-lime-400 font-extrabold text-xs flex items-center justify-center shrink-0">
-                                    ${idx + 1}
-                                </span>
-                                <h3 class="font-bold text-white text-sm truncate">${d.refeicao}</h3>
+                // Ordena as refeições pelo horário (ou ID como critério secundário)
+                dietasAlunoAtual = (data || []).sort((a, b) => {
+                    const hA = (a.horario || '').trim();
+                    const hB = (b.horario || '').trim();
+                    if (hA && hB) return hA.localeCompare(hB);
+                    if (hA) return -1;
+                    if (hB) return 1;
+                    return (a.id || 0) > (b.id || 0) ? 1 : -1;
+                });
+
+                if (dietasAlunoAtual.length === 0) {
+                    box.innerHTML = `
+                        <div class="text-center py-8 border border-dashed border-slate-800 rounded-2xl bg-slate-900/40 text-xs text-slate-400">
+                            <div class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/20 flex items-center justify-center mx-auto mb-3">
+                                <i data-lucide="utensils" class="w-5 h-5"></i>
                             </div>
-                            <div class="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
-                                <span class="text-[11px] font-bold text-lime-400 bg-lime-500/10 border border-lime-500/20 px-2.5 py-0.5 rounded-full">
-                                    ⏰ ${horarioStr}
+                            <p class="font-bold text-slate-200 text-sm">Nenhuma refeição cadastrada para este aluno ainda.</p>
+                            <p class="text-slate-500 mt-1 max-w-sm mx-auto text-xs">Utilize o formulário de prescrição acima com o Banco de Alimentos para montar o plano deste aluno.</p>
+                        </div>
+                    `;
+                    if (resumoBox) resumoBox.classList.add('hidden');
+                    if (window.lucide) lucide.createIcons();
+                    return;
+                }
+
+                // Extrai macros de cada refeição para gerar resumo diário total
+                let somaCal = 0;
+                let somaProt = 0;
+                let somaCarb = 0;
+                let somaGord = 0;
+
+                box.innerHTML = dietasAlunoAtual.map((d, idx) => {
+                    const horarioStr = d.horario || 'Horário flexível';
+                    const alimentosLinhas = (d.alimentos || '')
+                        .split('\n')
+                        .map(l => l.trim())
+                        .filter(l => l.length > 0)
+                        .map(l => {
+                            const isTotalLine = l.toLowerCase().startsWith('total');
+                            if (isTotalLine) {
+                                return `<li class="font-extrabold text-lime-400 mt-1.5 pt-1.5 border-t border-slate-800 text-[11px] list-none">${l}</li>`;
+                            }
+
+                            const mCal = l.match(/(\d+)\s*kcal/i);
+                            if (mCal) somaCal += parseInt(mCal[1], 10);
+                            const mP = l.match(/P:\s*(\d+(?:\.\d+)?)\s*g/i);
+                            if (mP) somaProt += parseFloat(mP[1]);
+                            const mC = l.match(/C:\s*(\d+(?:\.\d+)?)\s*g/i);
+                            if (mC) somaCarb += parseFloat(mC[1]);
+                            const mG = l.match(/G:\s*(\d+(?:\.\d+)?)\s*g/i);
+                            if (mG) somaGord += parseFloat(mG[1]);
+
+                            return `<li class="text-xs text-slate-200">${l}</li>`;
+                        }).join('');
+
+                    let subsHtml = '';
+                    if (d.substituicoes && d.substituicoes.trim().length > 0) {
+                        subsHtml = `
+                            <div class="mt-2.5 p-2 rounded-xl bg-amber-500/5 border border-amber-500/20 text-xs">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-0.5">Substituições:</span>
+                                <p class="text-slate-300 text-[11px] leading-relaxed whitespace-pre-line">${d.substituicoes}</p>
+                            </div>
+                        `;
+                    }
+
+                    return `
+                        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 relative hover:border-slate-700 transition-all">
+                            <div class="flex flex-wrap sm:flex-nowrap items-center justify-between pb-2.5 mb-2.5 border-b border-slate-800 gap-2">
+                                <div class="flex items-center gap-2 min-w-0 flex-1">
+                                    <span class="w-6 h-6 rounded-lg bg-lime-500/20 text-lime-400 font-extrabold text-xs flex items-center justify-center shrink-0">
+                                        ${idx + 1}
+                                    </span>
+                                    <h3 class="font-bold text-white text-sm truncate">${d.refeicao}</h3>
+                                </div>
+                                <div class="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
+                                    <span class="text-[11px] font-bold text-lime-400 bg-lime-500/10 border border-lime-500/20 px-2.5 py-0.5 rounded-full">
+                                        ⏰ ${horarioStr}
+                                    </span>
+                                    <button type="button" onclick="removerRefeicao('${d.id}')" title="Excluir refeição"
+                                        class="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-800 transition-all cursor-pointer">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <ul class="space-y-1 pl-4 list-disc marker:text-lime-500">
+                                ${alimentosLinhas}
+                            </ul>
+
+                            ${subsHtml}
+                        </div>
+                    `;
+                }).join('');
+
+                // Atualiza resumo diário se houver dados
+                if (resumoBox && somaCal > 0) {
+                    resumoBox.classList.remove('hidden');
+                    resumoBox.innerHTML = `
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-lime-400 block">Total Nutricional do Cardápio</span>
+                                <div class="text-xs text-slate-300 font-semibold">${dietasAlunoAtual.length} refeições prescritas</div>
+                            </div>
+                            <div class="flex items-center gap-3 text-xs flex-wrap font-bold">
+                                <span class="bg-lime-500/10 text-lime-400 border border-lime-500/30 px-2.5 py-1 rounded-xl font-black">
+                                    🔥 ${somaCal} kcal
                                 </span>
-                                <button type="button" onclick="removerRefeicao('${d.id}')" title="Excluir refeição"
-                                    class="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-800 transition-all cursor-pointer">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                </button>
+                                <span class="bg-blue-500/10 text-blue-400 border border-blue-500/30 px-2.5 py-1 rounded-xl">
+                                    🥩 P: ${somaProt.toFixed(1)}g
+                                </span>
+                                <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-xl">
+                                    🍚 C: ${somaCarb.toFixed(1)}g
+                                </span>
+                                <span class="bg-rose-500/10 text-rose-400 border border-rose-500/30 px-2.5 py-1 rounded-xl">
+                                    🥑 G: ${somaGord.toFixed(1)}g
+                                </span>
                             </div>
                         </div>
+                    `;
+                } else if (resumoBox) {
+                    resumoBox.classList.add('hidden');
+                }
 
-                        <ul class="space-y-1 pl-4 list-disc marker:text-lime-500">
-                            ${alimentosLinhas}
-                        </ul>
-
-                        ${subsHtml}
-                    </div>
-                `;
-            }).join('');
-
-            // Atualiza resumo diário se houver dados
-            if (resumoBox && somaCal > 0) {
-                resumoBox.classList.remove('hidden');
-                resumoBox.innerHTML = `
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div>
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-lime-400 block">Total Nutricional do Cardápio</span>
-                            <div class="text-xs text-slate-300 font-semibold">${dietasAlunoAtual.length} refeições prescritas</div>
-                        </div>
-                        <div class="flex items-center gap-3 text-xs flex-wrap font-bold">
-                            <span class="bg-lime-500/10 text-lime-400 border border-lime-500/30 px-2.5 py-1 rounded-xl font-black">
-                                🔥 ${somaCal} kcal
-                            </span>
-                            <span class="bg-blue-500/10 text-blue-400 border border-blue-500/30 px-2.5 py-1 rounded-xl">
-                                🥩 P: ${somaProt.toFixed(1)}g
-                            </span>
-                            <span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-xl">
-                                🍚 C: ${somaCarb.toFixed(1)}g
-                            </span>
-                            <span class="bg-rose-500/10 text-rose-400 border border-rose-500/30 px-2.5 py-1 rounded-xl">
-                                🥑 G: ${somaGord.toFixed(1)}g
-                            </span>
-                        </div>
-                    </div>
-                `;
-            } else if (resumoBox) {
-                resumoBox.classList.add('hidden');
+                if (window.lucide) lucide.createIcons();
+            } catch (err) {
+                console.error("Erro inesperado ao carregar refeições:", err);
+                if (box) {
+                    box.innerHTML = `<p class="text-xs text-rose-400">Erro ao carregar refeições: ${err.message || err}</p>`;
+                }
             }
-
-            if (window.lucide) lucide.createIcons();
         }
 
         async function removerRefeicao(id) {
