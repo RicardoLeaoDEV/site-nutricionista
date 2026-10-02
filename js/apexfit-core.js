@@ -589,14 +589,19 @@
 
     if (installBtnMobile) {
         installBtnMobile.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') {
-                console.log('Utilizador instalou o ApexFit com sucesso!');
+            if (deferredPrompt) {
+                // Dispara o prompt nativo se estiver disponível
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('Utilizador instalou o ApexFit!');
+                }
+                deferredPrompt = null;
+            } else {
+                // Fallback: Se o navegador ainda não disparou o prompt automático, 
+                // avisa o utilizador para usar os três pontinhos do Chrome para instalar
+                alert('Para instalar o ApexFit, toque nos três pontinhos (...) no canto superior direito do seu navegador e selecione "Instalar aplicativo" ou "Adicionar à tela inicial".');
             }
-            deferredPrompt = null;
-            installBtnMobile.classList.add('hidden');
         });
     }
 
