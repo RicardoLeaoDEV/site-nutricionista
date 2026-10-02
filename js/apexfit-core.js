@@ -574,6 +574,38 @@
         supabaseClient
     };
 
+    // --- Lógica de Instalação do PWA (ApexFit) ---
+    let deferredPrompt;
+    const installBtnMobile = document.getElementById('install-btn-mobile');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (installBtnMobile) {
+            installBtnMobile.classList.remove('hidden');
+            installBtnMobile.classList.add('flex');
+        }
+    });
+
+    if (installBtnMobile) {
+        installBtnMobile.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('Utilizador instalou o ApexFit com sucesso!');
+            }
+            deferredPrompt = null;
+            installBtnMobile.classList.add('hidden');
+        });
+    }
+
+    window.addEventListener('appinstalled', () => {
+        if (installBtnMobile) {
+            installBtnMobile.classList.add('hidden');
+        }
+    });
+
     // Auto-inicialização quando a página estiver carregada
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => ApexAuth.injectRoleSwitcher());
