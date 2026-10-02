@@ -728,6 +728,33 @@
             btnMobile.addEventListener('click', toggleMenuMobile);
         }
     </script>
+
+    <!-- Modal de Instruções de Instalação PWA -->
+    <div id="install-modal"
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-stone-950/80 backdrop-blur-sm p-4">
+        <div
+            class="bg-stone-900 border border-amber-500/40 rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl relative">
+            <div
+                class="w-12 h-12 bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center mx-auto mb-4 text-amber-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold text-amber-400 mb-2">Instalar o ApexFit</h3>
+            <p class="text-stone-300 text-xs sm:text-sm mb-6 leading-relaxed">
+                Para ter a melhor experiência de aplicativo no telemóvel, toque nos **três pontinhos (...)** no canto
+                superior direito do seu navegador e selecione <strong class="text-amber-400">"Instalar
+                    aplicativo"</strong> ou <strong class="text-amber-400">"Adicionar à tela inicial"</strong>.
+            </p>
+            <button id="close-modal-btn"
+                class="w-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold py-2.5 rounded-xl text-sm transition-colors">
+                Entendido
+            </button>
+        </div>
+    </div>
+
 </body>
 
 </html>

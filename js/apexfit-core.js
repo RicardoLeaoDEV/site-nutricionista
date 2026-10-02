@@ -577,31 +577,41 @@
     // --- Lógica de Instalação do PWA (ApexFit) ---
     let deferredPrompt;
     const installBtnMobile = document.getElementById('install-btn-mobile');
+    const installModal = document.getElementById('install-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+
+    // Força o botão a ficar sempre visível para o utilizador poder clicar
+    if (installBtnMobile) {
+        installBtnMobile.classList.remove('hidden');
+        installBtnMobile.classList.add('flex');
+    }
 
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        if (installBtnMobile) {
-            installBtnMobile.classList.remove('hidden');
-            installBtnMobile.classList.add('flex');
-        }
     });
 
     if (installBtnMobile) {
         installBtnMobile.addEventListener('click', async () => {
             if (deferredPrompt) {
-                // Dispara o prompt nativo se estiver disponível
+                // Se o Chrome permitir o nativo, usa-o
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    console.log('Utilizador instalou o ApexFit!');
-                }
                 deferredPrompt = null;
             } else {
-                // Fallback: Se o navegador ainda não disparou o prompt automático, 
-                // avisa o utilizador para usar os três pontinhos do Chrome para instalar
-                alert('Para instalar o ApexFit, toque nos três pontinhos (...) no canto superior direito do seu navegador e selecione "Instalar aplicativo" ou "Adicionar à tela inicial".');
+                // Se o Chrome bloquear o automático, abre o modal personalizado com o passo a passo
+                if (installModal) {
+                    installModal.classList.remove('hidden');
+                    installModal.classList.add('flex');
+                }
             }
+        });
+    }
+
+    if (closeModalBtn && installModal) {
+        closeModalBtn.addEventListener('click', () => {
+            installModal.classList.add('hidden');
+            installModal.classList.remove('flex');
         });
     }
 
