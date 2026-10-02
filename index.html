@@ -4,11 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApexFit | Nutrição & Training — Plataforma Digital</title>
-    <meta name="description"
-        content="A plataforma definitiva de acompanhamento nutricional e treinos de alta performance.">
+    <title>Apex</title>
+    <meta name="description" content="A plataforma definitiva de acompanhamento nutricional e treino da Apex">
     <meta name="theme-color" content="#060911">
 
+    <!-- Configurações do PWA e Apple -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Apex">
+    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@300,400,500,600,700&display=swap" rel="stylesheet">
@@ -310,30 +315,38 @@
         </div>
 
         <!-- Menu Suspenso Mobile (Gaveta Retrátil) -->
-        <div id="menu-mobile" class="hidden lg:hidden border-t border-gold/15 bg-navy-950/98 backdrop-blur-2xl px-5 py-6 space-y-4 shadow-2xl transition-all duration-300">
+        <div id="menu-mobile"
+            class="hidden lg:hidden border-t border-gold/15 bg-navy-950/98 backdrop-blur-2xl px-5 py-6 space-y-4 shadow-2xl transition-all duration-300">
             <nav class="flex flex-col space-y-3 text-sm font-semibold text-slate-200">
-                <a href="#plataforma" onclick="fecharMenuMobile()" class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                <a href="#plataforma" onclick="fecharMenuMobile()"
+                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
                     <span>A Plataforma</span>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
                 </a>
-                <a href="#sobre" onclick="fecharMenuMobile()" class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                <a href="#sobre" onclick="fecharMenuMobile()"
+                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
                     <span>Sobre os Profissionais</span>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
                 </a>
-                <a href="#faq" onclick="fecharMenuMobile()" class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                <a href="#faq" onclick="fecharMenuMobile()"
+                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
                     <span>Perguntas Frequentes</span>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
                 </a>
-                <a href="login.html" class="flex items-center justify-between py-2 border-b border-white/5 text-gold-400 hover:text-gold-300 transition-colors">
-                    <span class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4"></i> Área do Aluno</span>
+                <a href="login.html"
+                    class="flex items-center justify-between py-2 border-b border-white/5 text-gold-400 hover:text-gold-300 transition-colors">
+                    <span class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4"></i> Área do
+                        Aluno</span>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-gold-500/60"></i>
                 </a>
             </nav>
             <div class="pt-2">
-                <a href="https://wa.me/5581997969058?text=Olá%2C%20gostaria%20de%20iniciar%20na%20ApexFit!" target="_blank"
+                <a href="https://wa.me/5581997969058?text=Olá%2C%20gostaria%20de%20iniciar%20na%20ApexFit!"
+                    target="_blank"
                     class="botaoDourado w-full text-center justify-center !h-[50px] !text-xs !py-1 !pl-5 !pr-[58px]">
                     <span>Entrar na Consultoria</span>
-                    <div class="divSeta !w-[40px] !h-[40px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                    <div class="divSeta !w-[40px] !h-[40px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </div>
                 </a>
             </div>
         </div>
@@ -406,7 +419,8 @@
                         <div class="icone-corner">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
-                                <i data-lucide="utensils" class="w-6 h-6"></i></div>
+                                <i data-lucide="utensils" class="w-6 h-6"></i>
+                            </div>
                         </div>
                         <div class="text-xs font-bold text-gold-400 uppercase tracking-wider mb-2">Nutrição Clínica
                         </div>
@@ -421,7 +435,8 @@
                         <div class="icone-corner">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
-                                <i data-lucide="dumbbell" class="w-6 h-6"></i></div>
+                                <i data-lucide="dumbbell" class="w-6 h-6"></i>
+                            </div>
                         </div>
                         <div class="text-xs font-bold text-gold-400 uppercase tracking-wider mb-2">Personal Trainer
                         </div>
@@ -436,7 +451,8 @@
                         <div class="icone-corner">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
-                                <i data-lucide="trending-up" class="w-6 h-6"></i></div>
+                                <i data-lucide="trending-up" class="w-6 h-6"></i>
+                            </div>
                         </div>
                         <div class="text-xs font-bold text-gold-400 uppercase tracking-wider mb-2">Métricas e Evolução
                         </div>
@@ -451,7 +467,8 @@
                         <div class="icone-corner">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
-                                <i data-lucide="message-square" class="w-6 h-6"></i></div>
+                                <i data-lucide="message-square" class="w-6 h-6"></i>
+                            </div>
                         </div>
                         <div class="text-xs font-bold text-gold-400 uppercase tracking-wider mb-2">Comunicação Direta
                         </div>

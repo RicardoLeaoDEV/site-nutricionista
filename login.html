@@ -4,7 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApexFit - Acesso à Área do Aluno</title>
+    <title>Apex - Acesso</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Apex">
+    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
@@ -165,24 +170,30 @@
                             class="w-8 h-8 rounded-xl bg-gradient-to-tr from-gold-600 to-amber-300 flex items-center justify-center text-navy-950 font-bold shadow-md shadow-gold-500/20">
                             <i data-lucide="zap" class="w-4 h-4"></i>
                         </div>
-                        <span class="text-lg font-bold text-white tracking-tight">APEX<span class="text-gold-400">FIT</span></span>
+                        <span class="text-lg font-bold text-white tracking-tight">APEX<span
+                                class="text-gold-400">FIT</span></span>
                     </a>
-                    <a href="index.html" class="text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-1.5 py-1.5 px-3 rounded-lg bg-white/5 border border-white/10 transition-colors">
+                    <a href="index.html"
+                        class="text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-1.5 py-1.5 px-3 rounded-lg bg-white/5 border border-white/10 transition-colors">
                         <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Voltar
                     </a>
                 </div>
 
                 <div class="max-w-md w-full mx-auto">
                     <div class="mb-6 sm:mb-8">
-                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/20 text-gold-400 text-[11px] font-bold uppercase tracking-wider mb-3">
+                        <div
+                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/20 text-gold-400 text-[11px] font-bold uppercase tracking-wider mb-3">
                             <span class="w-1.5 h-1.5 rounded-full bg-gold-400 animate-pulse"></span>
                             Acesso Seguro
                         </div>
-                        <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">Bem-vindo(a) de volta! 👋</h1>
-                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Insira as suas credenciais para aceder ao seu portal unificado.</p>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">Bem-vindo(a) de
+                            volta! 👋</h1>
+                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Insira as suas credenciais para
+                            aceder ao seu portal unificado.</p>
                     </div>
 
-                    <div id="alert-box" class="hidden mb-6 p-4 rounded-xl text-sm flex items-start gap-3 transition-all duration-300">
+                    <div id="alert-box"
+                        class="hidden mb-6 p-4 rounded-xl text-sm flex items-start gap-3 transition-all duration-300">
                         <i id="alert-icon" data-lucide="alert-circle" class="w-5 h-5 shrink-0 mt-0.5"></i>
                         <span id="alert-text"></span>
                     </div>
@@ -208,7 +219,8 @@
                                 <label for="password"
                                     class="block text-xs font-bold uppercase tracking-wider text-slate-300">Palavra-passe</label>
                                 <a href="https://wa.me/5581997969058?text=Olá%2C%20esqueci%20minha%20senha%20de%20acesso%20ao%20portal%20ApexFit."
-                                    target="_blank" class="text-xs font-semibold text-gold-400 hover:text-gold-300 transition-colors">
+                                    target="_blank"
+                                    class="text-xs font-semibold text-gold-400 hover:text-gold-300 transition-colors">
                                     Esqueceu a senha?
                                 </a>
                             </div>
@@ -228,7 +240,8 @@
                             </div>
                         </div>
 
-                        <button type="submit" id="btn-submit" class="botaoDourado w-full text-center justify-center !min-h-[52px]">
+                        <button type="submit" id="btn-submit"
+                            class="botaoDourado w-full text-center justify-center !min-h-[52px]">
                             <span id="btn-text">ENTRAR NA PLATAFORMA</span>
                             <div class="divSeta">
                                 <i data-lucide="arrow-right" id="btn-arrow" class="w-4 h-4"></i>
@@ -247,95 +260,95 @@
                             <i data-lucide="message-circle" class="w-4 h-4"></i>
                             Solicitar acesso via WhatsApp
                         </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        lucide.createIcons();
-
-        const SUPABASE_URL = 'https://dnlqkozlaqizhqsexcei.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
-
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        function redirecionarPorPapel(session) {
-            if (!session || !session.user) {
-                window.location.href = 'dashboard.html';
-                return;
-            }
-            const ADMIN_UID = '04fb83ed-ec6b-4a56-9993-e99f32ededee';
-            const papel = session.user.user_metadata?.papel;
-            if (session.user.id === ADMIN_UID) {
-                window.location.href = 'admin.html';
-            } else if (papel === 'personal') {
-                window.location.href = 'personal.html';
-            } else if (papel === 'nutricionista') {
-                window.location.href = 'admin.html';
-            } else {
-                window.location.href = 'dashboard.html';
-            }
-        }
-
-        supabaseClient.auth.getSession().then(({ data: { session } }) => {
-            if (session) { redirecionarPorPapel(session); }
-        });
-
-        const passwordInput = document.getElementById('password');
-        const toggleBtn = document.getElementById('toggle-password');
-        const eyeIcon = document.getElementById('eye-icon');
-
-        toggleBtn.addEventListener('click', () => {
-            const isPassword = passwordInput.getAttribute('type') === 'password';
-            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
-            eyeIcon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+        <script>
             lucide.createIcons();
-        });
 
-        function showAlert(message, type = 'error') {
-            const box = document.getElementById('alert-box');
-            const text = document.getElementById('alert-text');
-            const icon = document.getElementById('alert-icon');
+            const SUPABASE_URL = 'https://dnlqkozlaqizhqsexcei.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
 
-            box.className = 'mb-6 p-4 rounded-xl text-sm flex items-start gap-3 transition-all duration-300 ' +
-                (type === 'error' ? 'bg-rose-500/10 border border-rose-500/30 text-rose-300' : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300');
+            const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-            icon.setAttribute('data-lucide', type === 'error' ? 'alert-triangle' : 'check-circle-2');
-            lucide.createIcons();
-            text.textContent = message;
-            box.classList.remove('hidden');
-        }
-
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const btnSubmit = document.getElementById('btn-submit');
-            const btnText = document.getElementById('btn-text');
-            const btnArrow = document.getElementById('btn-arrow');
-            const btnSpinner = document.getElementById('btn-spinner');
-
-            btnSubmit.disabled = true;
-            btnText.textContent = 'A verificar dados...';
-            btnArrow.classList.add('hidden');
-            btnSpinner.classList.remove('hidden');
-
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
-            if (error) {
-                showAlert('E-mail ou palavra-passe incorretos. Por favor, verifique os seus dados.', 'error');
-                btnSubmit.disabled = false;
-                btnText.textContent = 'Entrar na Plataforma';
-                btnArrow.classList.remove('hidden');
-                btnSpinner.classList.add('hidden');
-            } else {
-                showAlert('Autenticado com sucesso! Redirecionando...', 'success');
-                setTimeout(() => { redirecionarPorPapel(data?.session); }, 800);
+            function redirecionarPorPapel(session) {
+                if (!session || !session.user) {
+                    window.location.href = 'dashboard.html';
+                    return;
+                }
+                const ADMIN_UID = '04fb83ed-ec6b-4a56-9993-e99f32ededee';
+                const papel = session.user.user_metadata?.papel;
+                if (session.user.id === ADMIN_UID) {
+                    window.location.href = 'admin.html';
+                } else if (papel === 'personal') {
+                    window.location.href = 'personal.html';
+                } else if (papel === 'nutricionista') {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
             }
-        });
-    </script>
-    <script src="js/apexfit-core.js"></script>
+
+            supabaseClient.auth.getSession().then(({ data: { session } }) => {
+                if (session) { redirecionarPorPapel(session); }
+            });
+
+            const passwordInput = document.getElementById('password');
+            const toggleBtn = document.getElementById('toggle-password');
+            const eyeIcon = document.getElementById('eye-icon');
+
+            toggleBtn.addEventListener('click', () => {
+                const isPassword = passwordInput.getAttribute('type') === 'password';
+                passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+                eyeIcon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+                lucide.createIcons();
+            });
+
+            function showAlert(message, type = 'error') {
+                const box = document.getElementById('alert-box');
+                const text = document.getElementById('alert-text');
+                const icon = document.getElementById('alert-icon');
+
+                box.className = 'mb-6 p-4 rounded-xl text-sm flex items-start gap-3 transition-all duration-300 ' +
+                    (type === 'error' ? 'bg-rose-500/10 border border-rose-500/30 text-rose-300' : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300');
+
+                icon.setAttribute('data-lucide', type === 'error' ? 'alert-triangle' : 'check-circle-2');
+                lucide.createIcons();
+                text.textContent = message;
+                box.classList.remove('hidden');
+            }
+
+            document.getElementById('login-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const btnSubmit = document.getElementById('btn-submit');
+                const btnText = document.getElementById('btn-text');
+                const btnArrow = document.getElementById('btn-arrow');
+                const btnSpinner = document.getElementById('btn-spinner');
+
+                btnSubmit.disabled = true;
+                btnText.textContent = 'A verificar dados...';
+                btnArrow.classList.add('hidden');
+                btnSpinner.classList.remove('hidden');
+
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+                if (error) {
+                    showAlert('E-mail ou palavra-passe incorretos. Por favor, verifique os seus dados.', 'error');
+                    btnSubmit.disabled = false;
+                    btnText.textContent = 'Entrar na Plataforma';
+                    btnArrow.classList.remove('hidden');
+                    btnSpinner.classList.add('hidden');
+                } else {
+                    showAlert('Autenticado com sucesso! Redirecionando...', 'success');
+                    setTimeout(() => { redirecionarPorPapel(data?.session); }, 800);
+                }
+            });
+        </script>
+        <script src="js/apexfit-core.js"></script>
 </body>
 
 </html>

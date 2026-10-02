@@ -4,7 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApexFit - Painel do Personal</title>
+    <title>Apex - Painel do Personal</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Apex">
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,9 +90,11 @@
             0% {
                 box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8);
             }
+
             70% {
                 box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
             }
+
             100% {
                 box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
             }
@@ -182,12 +188,8 @@
 
                 <!-- Menu Suspenso de Ações Rápidas (Toggle JS + Overlay Escuro no Mobile/Desktop) -->
                 <div class="relative" id="dropdown-acoes-rapidas">
-                    <button type="button"
-                        id="btn-acoes-rapidas"
-                        onclick="toggleMenuAcoesRapidas(event)"
-                        aria-expanded="false"
-                        aria-haspopup="true"
-                        aria-label="Abrir menu de ações rápidas"
+                    <button type="button" id="btn-acoes-rapidas" onclick="toggleMenuAcoesRapidas(event)"
+                        aria-expanded="false" aria-haspopup="true" aria-label="Abrir menu de ações rápidas"
                         class="flex items-center gap-1.5 sm:gap-2 bg-slate-800/80 hover:bg-slate-700/80 active:scale-95 text-slate-300 hover:text-white text-xs font-semibold px-3 sm:px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all relative cursor-pointer shadow-sm select-none">
                         <i data-lucide="layers" class="w-4 h-4 text-brand-400"></i>
                         <span class="hidden sm:inline">Ações Rápidas</span>
@@ -204,14 +206,18 @@
                     <!-- Lista Suspensa do Menu de Atalhos -->
                     <div id="menu-acoes-rapidas-lista"
                         class="hidden absolute right-0 mt-2 w-72 sm:w-64 max-w-[calc(100vw-1.5rem)] bg-slate-900/98 sm:bg-slate-900 border border-slate-700/90 rounded-2xl shadow-2xl transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
-                        
+
                         <!-- Cabeçalho do Menu Mobile -->
-                        <div class="flex sm:hidden items-center justify-between px-3.5 py-2.5 border-b border-slate-800/90 bg-slate-950/60">
+                        <div
+                            class="flex sm:hidden items-center justify-between px-3.5 py-2.5 border-b border-slate-800/90 bg-slate-950/60">
                             <div class="flex items-center gap-2">
                                 <i data-lucide="layers" class="w-3.5 h-3.5 text-orange-400"></i>
-                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Atalhos do Personal</span>
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Atalhos do
+                                    Personal</span>
                             </div>
-                            <button type="button" onclick="fecharMenuAcoesRapidas()" class="p-1 text-slate-400 hover:text-white rounded-lg active:scale-90 transition-transform" title="Fechar menu">
+                            <button type="button" onclick="fecharMenuAcoesRapidas()"
+                                class="p-1 text-slate-400 hover:text-white rounded-lg active:scale-90 transition-transform"
+                                title="Fechar menu">
                                 <i data-lucide="x" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -220,7 +226,8 @@
                             <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-orange-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-orange-500/10 flex items-center justify-center shrink-0 border border-orange-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-orange-500/10 flex items-center justify-center shrink-0 border border-orange-500/20">
                                         <i data-lucide="user-plus" class="w-4 h-4 text-orange-400"></i>
                                     </div>
                                     <span class="truncate">Cadastrar novo aluno</span>
@@ -231,7 +238,8 @@
                             <button onclick="navegarParaSecao('secao-cadastrar-treino')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-orange-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-orange-500/10 flex items-center justify-center shrink-0 border border-orange-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-orange-500/10 flex items-center justify-center shrink-0 border border-orange-500/20">
                                         <i data-lucide="plus-circle" class="w-4 h-4 text-orange-400"></i>
                                     </div>
                                     <span class="truncate">Montar treino</span>
@@ -242,7 +250,8 @@
                             <button onclick="navegarParaSecao('secao-treino-atual')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-orange-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-orange-500/10 flex items-center justify-center shrink-0 border border-orange-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-orange-500/10 flex items-center justify-center shrink-0 border border-orange-500/20">
                                         <i data-lucide="clipboard-list" class="w-4 h-4 text-orange-400"></i>
                                     </div>
                                     <span class="truncate">Gerenciar treinos</span>
@@ -253,7 +262,8 @@
                             <button onclick="navegarParaSecao('secao-checkins')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-amber-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20">
                                         <i data-lucide="clipboard-check" class="w-4 h-4 text-amber-400"></i>
                                     </div>
                                     <span class="truncate">Check-ins dos Alunos</span>
@@ -264,7 +274,8 @@
                             <button onclick="navegarParaSecao('secao-agenda')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-cyan-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-cyan-500/10 flex items-center justify-center shrink-0 border border-cyan-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-cyan-500/10 flex items-center justify-center shrink-0 border border-cyan-500/20">
                                         <i data-lucide="calendar" class="w-4 h-4 text-cyan-400"></i>
                                     </div>
                                     <span class="truncate">Agenda de Treinos</span>
@@ -275,7 +286,8 @@
                             <button onclick="navegarParaSecao('secao-financeiro')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20">
                                         <i data-lucide="badge-dollar-sign" class="w-4 h-4 text-emerald-400"></i>
                                     </div>
                                     <span class="truncate">Painel Financeiro</span>
@@ -286,7 +298,8 @@
                             <button onclick="navegarParaSecao('secao-ia')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20">
                                         <i data-lucide="bot" class="w-4 h-4 text-purple-400"></i>
                                     </div>
                                     <span class="truncate">Assistente Clínico IA</span>
@@ -298,7 +311,8 @@
                             <button id="btn-header-duvidas" onclick="navegarParaSecao('canal-duvidas')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-orange-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-orange-500/10 flex items-center justify-center shrink-0 border border-orange-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-orange-500/10 flex items-center justify-center shrink-0 border border-orange-500/20">
                                         <i data-lucide="message-square" class="w-4 h-4 text-orange-400"></i>
                                     </div>
                                     <span class="truncate">Chat com alunos</span>
@@ -316,7 +330,8 @@
                             <button onclick="navegarParaSecao('secao-fotos-alunos')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-300 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20">
                                         <i data-lucide="camera" class="w-4 h-4 text-purple-400"></i>
                                     </div>
                                     <span class="truncate">Fotos dos Alunos</span>
@@ -358,7 +373,8 @@
                 Gestão de Alunos, Treinos e Performance 🏋️
             </h1>
             <p class="text-sm text-slate-400 mt-1">
-                Cadastre novos alunos, monte treinos focados por objetivo, acompanhe check-ins semanais, tire dúvidas no chat e avalie a evolução física.
+                Cadastre novos alunos, monte treinos focados por objetivo, acompanhe check-ins semanais, tire dúvidas no
+                chat e avalie a evolução física.
             </p>
         </div>
 
@@ -379,7 +395,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Cadastrar Novo Aluno
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Cria o acesso para o aluno entrar no portal com senha temporária</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Cria o acesso para o aluno
+                            entrar no portal com senha temporária</p>
                     </div>
                 </div>
                 <div
@@ -398,7 +415,8 @@
                                 class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">E-mail de
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">E-mail
+                                de
                                 Acesso</label>
                             <input type="email" id="novo-aluno-email" placeholder="aluno@email.com" required
                                 class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
@@ -434,7 +452,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Montar Treino do Aluno
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Prescrição e sincronização instantânea dos treinos com o portal do aluno</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Prescrição e sincronização
+                            instantânea dos treinos com o portal do aluno</p>
                     </div>
                 </div>
                 <div
@@ -505,13 +524,15 @@
                                         <span
                                             class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Peso
                                             Atual</span>
-                                        <span class="text-xs font-extrabold text-orange-400" id="clinico-peso">-- kg</span>
+                                        <span class="text-xs font-extrabold text-orange-400" id="clinico-peso">--
+                                            kg</span>
                                     </div>
                                     <div
                                         class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
                                         <span
                                             class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Idade</span>
-                                        <span class="text-xs font-extrabold text-white" id="clinico-idade">-- anos</span>
+                                        <span class="text-xs font-extrabold text-white" id="clinico-idade">--
+                                            anos</span>
                                     </div>
                                     <div
                                         class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[75px]">
@@ -523,7 +544,8 @@
                             </div>
 
                             <!-- Barra de Ações Clínicas: Medidas & Antropometria -->
-                            <div class="mt-3 pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
+                            <div
+                                class="mt-3 pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
                                 <div class="text-[11px] text-slate-400 flex items-center gap-1.5">
                                     <i data-lucide="ruler" class="w-3.5 h-3.5 text-blue-400"></i>
                                     <span>Avaliação Antropométrica & Circunferências Corporais</span>
@@ -603,7 +625,8 @@
                             placeholder="Cadência, técnica, pontos de atenção..."
                             class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></textarea>
                     </div>
-                    <div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Link de vídeo
+                    <div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Link de
+                            vídeo
                             demonstrativo (opcional)</label><input type="text" id="exercicio-video"
                             placeholder="https://youtube.com/..."
                             class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
@@ -614,7 +637,8 @@
                         <i data-lucide="check" class="w-4 h-4" id="btn-icon"></i>
                         <span id="btn-text">Adicionar Exercício ao Treino</span>
                         <div id="btn-spinner"
-                            class="hidden w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            class="hidden w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin">
+                        </div>
                     </button>
                 </form>
             </div>
@@ -634,7 +658,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Gerenciar Treinos do Aluno
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Criar e editar rotinas de exercícios</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Criar e editar rotinas de
+                            exercícios</p>
                     </div>
                 </div>
                 <div
@@ -644,13 +669,15 @@
             </div>
 
             <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
-                <p class="text-xs text-slate-400 mb-5 pt-2">Selecione um aluno acima para ver e editar os exercícios prescritos.</p>
+                <p class="text-xs text-slate-400 mb-5 pt-2">Selecione um aluno acima para ver e editar os exercícios
+                    prescritos.</p>
                 <div id="lista-treino-aluno" class="space-y-4"></div>
             </div>
         </section>
 
         <!-- SEÇÃO: Fotos de Evolução Corporal dos Alunos (Accordion) -->
-        <section id="secao-fotos-alunos" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+        <section id="secao-fotos-alunos"
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -661,9 +688,11 @@
                     <div class="min-w-0 flex-1">
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Fotos de Evolução dos Alunos
-                            <span class="text-[10px] bg-orange-500/10 text-orange-400 px-2.5 py-0.5 rounded-full border border-orange-500/30 font-semibold">Exclusivo</span>
+                            <span
+                                class="text-[10px] bg-orange-500/10 text-orange-400 px-2.5 py-0.5 rounded-full border border-orange-500/30 font-semibold">Exclusivo</span>
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Linha do tempo comparativa das fotos corporais (Frente, Perfil e Costas)</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Linha do tempo comparativa
+                            das fotos corporais (Frente, Perfil e Costas)</p>
                     </div>
                 </div>
                 <div
@@ -706,7 +735,8 @@
                         <div class="md:col-span-5 flex items-end gap-2">
                             <!-- Filtro por Posição/Ângulo -->
                             <div class="w-full">
-                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Filtrar
+                                <label
+                                    class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Filtrar
                                     Ângulo</label>
                                 <select id="filtro-angulo-fotos" onchange="filtrarFotosExibidas()"
                                     class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-3 text-sm text-slate-100 focus:outline-none focus:border-purple-500 transition-all">
@@ -758,7 +788,8 @@
                         </div>
                         <h3 class="text-sm font-bold text-white mb-1">Selecione um Aluno</h3>
                         <p class="text-xs text-slate-400 max-w-sm mx-auto">
-                            Escolha um aluno no menu acima para carregar o histórico de fotos corporais (Frente, Perfil e Costas).
+                            Escolha um aluno no menu acima para carregar o histórico de fotos corporais (Frente, Perfil
+                            e Costas).
                         </p>
                     </div>
                 </div>
@@ -766,7 +797,8 @@
         </section>
 
         <!-- SEÇÃO: Central de Check-ins Semanais (Accordion) -->
-        <section id="secao-checkins" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+        <section id="secao-checkins"
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -778,7 +810,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Central de Check-ins Semanais
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Acompanhamento e respostas das avaliações e formulários periódicos</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Acompanhamento e respostas
+                            das avaliações e formulários periódicos</p>
                     </div>
                 </div>
                 <div
@@ -792,7 +825,8 @@
         </section>
 
         <!-- SEÇÃO: Agenda de Consultas & Treinos (Accordion) -->
-        <section id="secao-agenda" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+        <section id="secao-agenda"
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -804,7 +838,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Agenda de Consultas & Treinos
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Horários, sessões presenciais e avaliações agendadas</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Horários, sessões
+                            presenciais e avaliações agendadas</p>
                     </div>
                 </div>
                 <div
@@ -818,7 +853,8 @@
         </section>
 
         <!-- SEÇÃO: Painel Financeiro & Planos (Accordion) -->
-        <section id="secao-financeiro" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+        <section id="secao-financeiro"
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -830,7 +866,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Painel Financeiro & Planos
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Controle de faturamento, planos ativos e mensalidades</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Controle de faturamento,
+                            planos ativos e mensalidades</p>
                     </div>
                 </div>
                 <div
@@ -844,7 +881,8 @@
         </section>
 
         <!-- SEÇÃO: Assistente Clínico IA (Accordion) -->
-        <section id="secao-ia" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+        <section id="secao-ia"
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -856,7 +894,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Assistente Clínico IA
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Inteligência artificial para suporte na prescrição e análise de performance</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Inteligência artificial
+                            para suporte na prescrição e análise de performance</p>
                     </div>
                 </div>
                 <div
@@ -920,7 +959,8 @@
         <div class="flex-1 flex overflow-hidden">
             <!-- Sidebar com Lista de Alunos -->
             <div class="w-40 sm:w-48 border-r border-slate-800 bg-slate-950/60 flex flex-col shrink-0">
-                <div class="p-2 border-b border-slate-800/80 bg-slate-900/50 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <div
+                    class="p-2 border-b border-slate-800/80 bg-slate-900/50 text-[10px] font-bold uppercase tracking-wider text-slate-400">
                     Alunos
                 </div>
                 <div class="flex-1 overflow-y-auto p-1.5 space-y-1" id="admin-chat-alunos-list">
@@ -937,8 +977,7 @@
                 <div id="admin-chat-messages" class="flex-1 p-3 overflow-y-auto space-y-2 text-xs bg-slate-950/30">
                     <div class="text-center text-slate-500 mt-20">Nenhuma conversa selecionada.</div>
                 </div>
-                <form id="admin-chat-form"
-                    class="p-2.5 bg-slate-900/90 border-t border-slate-800 flex gap-2 hidden">
+                <form id="admin-chat-form" class="p-2.5 bg-slate-900/90 border-t border-slate-800 flex gap-2 hidden">
                     <input type="text" id="admin-chat-input" placeholder="Digite sua resposta..." required
                         class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
                     <button type="submit"

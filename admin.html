@@ -4,7 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApexFit - Painel do Nutricionista</title>
+    <title>Apex - Painel do Nutricionista</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Apex">
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -93,9 +97,11 @@
             0% {
                 box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8);
             }
+
             70% {
                 box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
             }
+
             100% {
                 box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
             }
@@ -189,12 +195,8 @@
 
                 <!-- Menu Suspenso de Ações Rápidas (Toggle JS + Overlay Escuro no Mobile/Desktop) -->
                 <div class="relative" id="dropdown-acoes-rapidas">
-                    <button type="button"
-                        id="btn-acoes-rapidas"
-                        onclick="toggleMenuAcoesRapidas(event)"
-                        aria-expanded="false"
-                        aria-haspopup="true"
-                        aria-label="Abrir menu de ações rápidas"
+                    <button type="button" id="btn-acoes-rapidas" onclick="toggleMenuAcoesRapidas(event)"
+                        aria-expanded="false" aria-haspopup="true" aria-label="Abrir menu de ações rápidas"
                         class="flex items-center gap-1.5 sm:gap-2 bg-slate-800/80 hover:bg-slate-700/80 active:scale-95 text-slate-300 hover:text-white text-xs font-semibold px-3 sm:px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all relative cursor-pointer shadow-sm select-none">
                         <i data-lucide="layers" class="w-4 h-4 text-brand-400"></i>
                         <span class="hidden sm:inline">Ações Rápidas</span>
@@ -211,14 +213,18 @@
                     <!-- Lista Suspensa do Menu de Atalhos -->
                     <div id="menu-acoes-rapidas-lista"
                         class="hidden absolute right-0 mt-2 w-72 sm:w-64 max-w-[calc(100vw-1.5rem)] bg-slate-900/98 sm:bg-slate-900 border border-slate-700/90 rounded-2xl shadow-2xl transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
-                        
+
                         <!-- Cabeçalho do Menu Mobile -->
-                        <div class="flex sm:hidden items-center justify-between px-3.5 py-2.5 border-b border-slate-800/90 bg-slate-950/60">
+                        <div
+                            class="flex sm:hidden items-center justify-between px-3.5 py-2.5 border-b border-slate-800/90 bg-slate-950/60">
                             <div class="flex items-center gap-2">
                                 <i data-lucide="layers" class="w-3.5 h-3.5 text-lime-400"></i>
-                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Atalhos do Nutricionista</span>
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Atalhos do
+                                    Nutricionista</span>
                             </div>
-                            <button type="button" onclick="fecharMenuAcoesRapidas()" class="p-1 text-slate-400 hover:text-white rounded-lg active:scale-90 transition-transform" title="Fechar menu">
+                            <button type="button" onclick="fecharMenuAcoesRapidas()"
+                                class="p-1 text-slate-400 hover:text-white rounded-lg active:scale-90 transition-transform"
+                                title="Fechar menu">
                                 <i data-lucide="x" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -227,7 +233,8 @@
                             <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-lime-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-lime-500/10 flex items-center justify-center shrink-0 border border-lime-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-lime-500/10 flex items-center justify-center shrink-0 border border-lime-500/20">
                                         <i data-lucide="user-plus" class="w-4 h-4 text-lime-400"></i>
                                     </div>
                                     <span class="truncate">Cadastrar novo aluno</span>
@@ -238,7 +245,8 @@
                             <button onclick="navegarParaSecao('secao-calculadora-macros')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-brand-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-brand-500/10 flex items-center justify-center shrink-0 border border-brand-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-brand-500/10 flex items-center justify-center shrink-0 border border-brand-500/20">
                                         <i data-lucide="calculator" class="w-4 h-4 text-brand-400"></i>
                                     </div>
                                     <span class="truncate">Calculadora de Macros</span>
@@ -249,7 +257,8 @@
                             <button onclick="navegarParaSecao('secao-cadastrar-refeicao')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-lime-300 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-lime-500/10 flex items-center justify-center shrink-0 border border-lime-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-lime-500/10 flex items-center justify-center shrink-0 border border-lime-500/20">
                                         <i data-lucide="utensils" class="w-4 h-4 text-lime-400"></i>
                                     </div>
                                     <span class="truncate">Cadastrar refeição</span>
@@ -260,7 +269,8 @@
                             <button onclick="navegarParaSecao('secao-refeicoes-atuais')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-lime-300 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-lime-500/10 flex items-center justify-center shrink-0 border border-lime-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-lime-500/10 flex items-center justify-center shrink-0 border border-lime-500/20">
                                         <i data-lucide="list-ordered" class="w-4 h-4 text-lime-400"></i>
                                     </div>
                                     <span class="truncate">Refeições atuais</span>
@@ -271,7 +281,8 @@
                             <button onclick="navegarParaSecao('secao-checkins-nutri')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-amber-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20">
                                         <i data-lucide="clipboard-check" class="w-4 h-4 text-amber-400"></i>
                                     </div>
                                     <span class="truncate">Check-ins dos Alunos</span>
@@ -282,7 +293,8 @@
                             <button onclick="navegarParaSecao('secao-agenda-nutri')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-cyan-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-cyan-500/10 flex items-center justify-center shrink-0 border border-cyan-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-cyan-500/10 flex items-center justify-center shrink-0 border border-cyan-500/20">
                                         <i data-lucide="calendar" class="w-4 h-4 text-cyan-400"></i>
                                     </div>
                                     <span class="truncate">Agenda de Consultas</span>
@@ -293,7 +305,8 @@
                             <button onclick="navegarParaSecao('secao-financeiro-nutri')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20">
                                         <i data-lucide="badge-dollar-sign" class="w-4 h-4 text-emerald-400"></i>
                                     </div>
                                     <span class="truncate">Painel Financeiro</span>
@@ -304,7 +317,8 @@
                             <button onclick="navegarParaSecao('secao-ia-nutri')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20">
                                         <i data-lucide="bot" class="w-4 h-4 text-purple-400"></i>
                                     </div>
                                     <span class="truncate">Assistente Clínico IA</span>
@@ -316,7 +330,8 @@
                             <button id="btn-header-duvidas" onclick="navegarParaSecao('canal-duvidas')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-lime-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-lime-500/10 flex items-center justify-center shrink-0 border border-lime-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-lime-500/10 flex items-center justify-center shrink-0 border border-lime-500/20">
                                         <i data-lucide="message-square" class="w-4 h-4 text-lime-400"></i>
                                     </div>
                                     <span class="truncate">Chat com alunos</span>
@@ -334,7 +349,8 @@
                             <button onclick="navegarParaSecao('secao-fotos-alunos')"
                                 class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-300 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
                                 <div class="flex items-center gap-2.5 truncate">
-                                    <div class="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20">
+                                    <div
+                                        class="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20">
                                         <i data-lucide="camera" class="w-4 h-4 text-purple-400"></i>
                                     </div>
                                     <span class="truncate">Fotos dos Alunos</span>
@@ -376,7 +392,8 @@
                 Gestão de Alunos, Dietas e Nutrição Clínica 📋
             </h1>
             <p class="text-sm text-slate-400 mt-1">
-                Cadastre novos alunos, calcule macronutrientes, prescreva cardápios, acompanhe check-ins e avalie a evolução física.
+                Cadastre novos alunos, calcule macronutrientes, prescreva cardápios, acompanhe check-ins e avalie a
+                evolução física.
             </p>
         </div>
 
@@ -397,7 +414,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Cadastrar Novo Aluno
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Cria o acesso para o aluno entrar no portal com senha temporária</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Cria o acesso para o aluno
+                            entrar no portal com senha temporária</p>
                     </div>
                 </div>
                 <div
@@ -416,7 +434,8 @@
                                 class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-lime-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">E-mail de
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">E-mail
+                                de
                                 Acesso</label>
                             <input type="email" id="novo-aluno-email" placeholder="aluno@email.com" required
                                 class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-lime-500">
@@ -452,9 +471,12 @@
                     <div class="min-w-0 flex-1">
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Calculadora de Macronutrientes & Gasto Energético
-                            <span class="text-[10px] bg-lime-500/10 text-lime-400 px-2.5 py-0.5 rounded-full border border-lime-500/30 font-semibold">Mifflin-St Jeor</span>
+                            <span
+                                class="text-[10px] bg-lime-500/10 text-lime-400 px-2.5 py-0.5 rounded-full border border-lime-500/30 font-semibold">Mifflin-St
+                                Jeor</span>
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Prescrição e sincronização instantânea das refeições com o app do aluno</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Prescrição e sincronização
+                            instantânea das refeições com o app do aluno</p>
                     </div>
                 </div>
                 <div
@@ -465,9 +487,11 @@
 
             <!-- Conteúdo Expansível da Calculadora -->
             <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between pt-2 pb-4 border-b border-slate-800/80 mb-6 gap-3">
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between pt-2 pb-4 border-b border-slate-800/80 mb-6 gap-3">
                     <p class="text-xs text-slate-400">
-                        Configure as variáveis clínicas e biométricas do aluno para o cálculo automático e individualizado.
+                        Configure as variáveis clínicas e biométricas do aluno para o cálculo automático e
+                        individualizado.
                     </p>
                     <div class="flex items-center gap-2 flex-wrap">
                         <span id="calc-modo-badge"
@@ -486,12 +510,14 @@
                 <div class="mb-6 p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div class="w-full sm:max-w-md">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5 flex items-center gap-1.5">
+                            <label
+                                class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5 flex items-center gap-1.5">
                                 <i data-lucide="user-check" class="w-3.5 h-3.5 text-brand-400"></i>
                                 Aluno para Prescrição das Metas
                             </label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                                <div
+                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                                     <i data-lucide="users" class="w-4 h-4"></i>
                                 </div>
                                 <select id="calc-aluno-select"
@@ -502,7 +528,8 @@
                         </div>
 
                         <div id="calc-aluno-status-box" class="text-xs text-slate-400 flex items-center gap-2 shrink-0">
-                            <span id="calc-aluno-dados-info" class="italic">Selecione um aluno para importar biometria</span>
+                            <span id="calc-aluno-dados-info" class="italic">Selecione um aluno para importar
+                                biometria</span>
                         </div>
                     </div>
                 </div>
@@ -540,7 +567,8 @@
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                             Peso (kg)
                         </label>
-                        <input type="number" id="calc-peso" step="0.1" min="30" max="300" value="75.0" placeholder="Ex: 78.5"
+                        <input type="number" id="calc-peso" step="0.1" min="30" max="300" value="75.0"
+                            placeholder="Ex: 78.5"
                             class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 font-bold focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
                     </div>
 
@@ -576,33 +604,42 @@
                     </label>
                     <select id="calc-atividade"
                         class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition-all">
-                        <option value="sedentario">🛋️ Sedentário (Trabalho sentado, pouco ou nenhum exercício) — Fator × 1.20</option>
-                        <option value="leve">🚶 Levemente Ativo (Exercícios leves ou caminhadas 1 a 3 dias/semana) — Fator × 1.375</option>
-                        <option value="moderado" selected>🏋️ Moderadamente Ativo (Treinos regulares 3 a 5 dias/semana) — Fator × 1.55</option>
-                        <option value="intenso">⚡ Muito Ativo (Treinos pesados ou intensos 6 a 7 dias/semana) — Fator × 1.725</option>
-                        <option value="extremo">🏆 Extremamente Ativo (Atleta de elite / 2 treinos ao dia / trabalho braçal) — Fator × 1.90</option>
+                        <option value="sedentario">🛋️ Sedentário (Trabalho sentado, pouco ou nenhum exercício) — Fator
+                            × 1.20</option>
+                        <option value="leve">🚶 Levemente Ativo (Exercícios leves ou caminhadas 1 a 3 dias/semana) —
+                            Fator × 1.375</option>
+                        <option value="moderado" selected>🏋️ Moderadamente Ativo (Treinos regulares 3 a 5 dias/semana)
+                            — Fator × 1.55</option>
+                        <option value="intenso">⚡ Muito Ativo (Treinos pesados ou intensos 6 a 7 dias/semana) — Fator ×
+                            1.725</option>
+                        <option value="extremo">🏆 Extremamente Ativo (Atleta de elite / 2 treinos ao dia / trabalho
+                            braçal) — Fator × 1.90</option>
                     </select>
                 </div>
 
                 <!-- Painel Diagnóstico: TMB, TDEE, Balanço, Água -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
                     <div class="bg-slate-950/70 border border-slate-800 p-3 rounded-2xl text-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">TMB (Basal)</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">TMB
+                            (Basal)</span>
                         <div class="text-base font-extrabold text-slate-200" id="calc-diag-tmb">-- kcal</div>
                         <span class="text-[10px] text-slate-500">Mifflin-St Jeor</span>
                     </div>
                     <div class="bg-slate-950/70 border border-slate-800 p-3 rounded-2xl text-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">GET / TDEE (Gasto Total)</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">GET /
+                            TDEE (Gasto Total)</span>
                         <div class="text-base font-extrabold text-blue-400" id="calc-diag-tdee">-- kcal</div>
                         <span class="text-[10px] text-slate-500">Basal × Atividade</span>
                     </div>
                     <div class="bg-slate-950/70 border border-slate-800 p-3 rounded-2xl text-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Balanço Energético</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Balanço
+                            Energético</span>
                         <div class="text-base font-extrabold text-brand-400" id="calc-diag-delta">-- kcal</div>
                         <span class="text-[10px] text-slate-500" id="calc-diag-delta-desc">Déficit planejado</span>
                     </div>
                     <div class="bg-slate-950/70 border border-slate-800 p-3 rounded-2xl text-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Meta Hídrica Mínima</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Meta
+                            Hídrica Mínima</span>
                         <div class="text-base font-extrabold text-cyan-400" id="calc-diag-agua">-- L</div>
                         <span class="text-[10px] text-slate-500">35ml por kg</span>
                     </div>
@@ -622,13 +659,16 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <!-- CARD 1: CALORIAS TOTAIS (VET) -->
-                        <div class="p-4 rounded-2xl bg-gradient-to-b from-brand-950/30 to-slate-900 border border-brand-500/40 relative">
+                        <div
+                            class="p-4 rounded-2xl bg-gradient-to-b from-brand-950/30 to-slate-900 border border-brand-500/40 relative">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs font-bold uppercase tracking-wider text-brand-400 flex items-center gap-1.5">
+                                <span
+                                    class="text-xs font-bold uppercase tracking-wider text-brand-400 flex items-center gap-1.5">
                                     <i data-lucide="flame" class="w-3.5 h-3.5"></i>
                                     Calorias Diárias
                                 </span>
-                                <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/30">
+                                <span
+                                    class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/30">
                                     Meta VET
                                 </span>
                             </div>
@@ -643,20 +683,25 @@
                         </div>
 
                         <!-- CARD 2: PROTEÍNAS -->
-                        <div class="p-4 rounded-2xl bg-gradient-to-b from-emerald-950/30 to-slate-900 border border-emerald-500/30">
+                        <div
+                            class="p-4 rounded-2xl bg-gradient-to-b from-emerald-950/30 to-slate-900 border border-emerald-500/30">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                                <span
+                                    class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
                                     <i data-lucide="beef" class="w-3.5 h-3.5"></i>
                                     Proteínas
                                 </span>
-                                <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" id="calc-res-prot-pct">
+                                <span
+                                    class="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                                    id="calc-res-prot-pct">
                                     --%
                                 </span>
                             </div>
                             <div class="flex items-center gap-1.5 my-1">
                                 <button type="button" onclick="alterarMacroStep('calc-res-proteinas', -5)"
                                     class="w-7 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-black text-sm flex items-center justify-center transition-colors active:scale-95 cursor-pointer">−</button>
-                                <div class="flex-1 flex items-baseline justify-center bg-slate-950/80 border border-slate-700 rounded-xl px-2 py-1.5">
+                                <div
+                                    class="flex-1 flex items-baseline justify-center bg-slate-950/80 border border-slate-700 rounded-xl px-2 py-1.5">
                                     <input type="number" id="calc-res-proteinas" step="1"
                                         class="w-16 text-2xl font-black text-emerald-400 bg-transparent focus:outline-none text-center">
                                     <span class="text-xs font-bold text-slate-400 ml-0.5">g</span>
@@ -671,20 +716,25 @@
                         </div>
 
                         <!-- CARD 3: CARBOIDRATOS -->
-                        <div class="p-4 rounded-2xl bg-gradient-to-b from-sky-950/30 to-slate-900 border border-sky-500/30">
+                        <div
+                            class="p-4 rounded-2xl bg-gradient-to-b from-sky-950/30 to-slate-900 border border-sky-500/30">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs font-bold uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
+                                <span
+                                    class="text-xs font-bold uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
                                     <i data-lucide="wheat" class="w-3.5 h-3.5"></i>
                                     Carboidratos
                                 </span>
-                                <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-sky-500/10 text-sky-400 border border-sky-500/20" id="calc-res-carb-pct">
+                                <span
+                                    class="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-sky-500/10 text-sky-400 border border-sky-500/20"
+                                    id="calc-res-carb-pct">
                                     --%
                                 </span>
                             </div>
                             <div class="flex items-center gap-1.5 my-1">
                                 <button type="button" onclick="alterarMacroStep('calc-res-carboidratos', -5)"
                                     class="w-7 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-black text-sm flex items-center justify-center transition-colors active:scale-95 cursor-pointer">−</button>
-                                <div class="flex-1 flex items-baseline justify-center bg-slate-950/80 border border-slate-700 rounded-xl px-2 py-1.5">
+                                <div
+                                    class="flex-1 flex items-baseline justify-center bg-slate-950/80 border border-slate-700 rounded-xl px-2 py-1.5">
                                     <input type="number" id="calc-res-carboidratos" step="1"
                                         class="w-16 text-2xl font-black text-sky-400 bg-transparent focus:outline-none text-center">
                                     <span class="text-xs font-bold text-slate-400 ml-0.5">g</span>
@@ -699,20 +749,25 @@
                         </div>
 
                         <!-- CARD 4: GORDURAS -->
-                        <div class="p-4 rounded-2xl bg-gradient-to-b from-amber-950/30 to-slate-900 border border-amber-500/30">
+                        <div
+                            class="p-4 rounded-2xl bg-gradient-to-b from-amber-950/30 to-slate-900 border border-amber-500/30">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                                <span
+                                    class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
                                     <i data-lucide="droplet" class="w-3.5 h-3.5"></i>
                                     Gorduras
                                 </span>
-                                <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20" id="calc-res-gord-pct">
+                                <span
+                                    class="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                                    id="calc-res-gord-pct">
                                     --%
                                 </span>
                             </div>
                             <div class="flex items-center gap-1.5 my-1">
                                 <button type="button" onclick="alterarMacroStep('calc-res-gorduras', -2)"
                                     class="w-7 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-black text-sm flex items-center justify-center transition-colors active:scale-95 cursor-pointer">−</button>
-                                <div class="flex-1 flex items-baseline justify-center bg-slate-950/80 border border-slate-700 rounded-xl px-2 py-1.5">
+                                <div
+                                    class="flex-1 flex items-baseline justify-center bg-slate-950/80 border border-slate-700 rounded-xl px-2 py-1.5">
                                     <input type="number" id="calc-res-gorduras" step="1"
                                         class="w-16 text-2xl font-black text-amber-400 bg-transparent focus:outline-none text-center">
                                     <span class="text-xs font-bold text-slate-400 ml-0.5">g</span>
@@ -732,12 +787,18 @@
                 <div class="mb-6 p-4 rounded-2xl bg-slate-950/70 border border-slate-800">
                     <div class="flex items-center justify-between text-xs font-semibold mb-2">
                         <span class="text-slate-300">Proporção Calórica dos Macronutrientes</span>
-                        <span class="text-[11px] text-slate-400" id="calc-distribuicao-texto">P 30% • C 45% • G 25%</span>
+                        <span class="text-[11px] text-slate-400" id="calc-distribuicao-texto">P 30% • C 45% • G
+                            25%</span>
                     </div>
                     <div class="h-3 rounded-full bg-slate-800 flex overflow-hidden p-0.5 gap-0.5">
-                        <div id="bar-progresso-prot" class="h-full rounded-l-full bg-emerald-500 transition-all duration-300" style="width: 30%" title="Proteína"></div>
-                        <div id="bar-progresso-carb" class="h-full bg-sky-500 transition-all duration-300" style="width: 45%" title="Carboidrato"></div>
-                        <div id="bar-progresso-gord" class="h-full rounded-r-full bg-amber-500 transition-all duration-300" style="width: 25%" title="Gordura"></div>
+                        <div id="bar-progresso-prot"
+                            class="h-full rounded-l-full bg-emerald-500 transition-all duration-300" style="width: 30%"
+                            title="Proteína"></div>
+                        <div id="bar-progresso-carb" class="h-full bg-sky-500 transition-all duration-300"
+                            style="width: 45%" title="Carboidrato"></div>
+                        <div id="bar-progresso-gord"
+                            class="h-full rounded-r-full bg-amber-500 transition-all duration-300" style="width: 25%"
+                            title="Gordura"></div>
                     </div>
                     <div class="flex items-center justify-center gap-6 mt-3 text-[11px] flex-wrap font-medium">
                         <div class="flex items-center gap-1.5">
@@ -762,7 +823,8 @@
                         <i data-lucide="save" class="w-4 h-4" id="btn-calc-salvar-icon"></i>
                         <span id="btn-calc-salvar-text">Salvar Metas no Portal do Aluno</span>
                         <div id="btn-calc-salvar-spinner"
-                            class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin">
+                        </div>
                     </button>
 
                     <button type="button" onclick="copiarResumoMacrosWhatsApp()"
@@ -794,7 +856,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Cadastrar Refeição no Plano do Aluno
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Prescrição e sincronização instantânea das refeições com o app do aluno</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Prescrição e sincronização
+                            instantânea das refeições com o app do aluno</p>
                     </div>
                 </div>
                 <div
@@ -865,13 +928,15 @@
                                         <span
                                             class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Peso
                                             Atual</span>
-                                        <span class="text-xs font-extrabold text-lime-400" id="clinico-peso">-- kg</span>
+                                        <span class="text-xs font-extrabold text-lime-400" id="clinico-peso">--
+                                            kg</span>
                                     </div>
                                     <div
                                         class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
                                         <span
                                             class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Idade</span>
-                                        <span class="text-xs font-extrabold text-white" id="clinico-idade">-- anos</span>
+                                        <span class="text-xs font-extrabold text-white" id="clinico-idade">--
+                                            anos</span>
                                     </div>
                                     <div
                                         class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[75px]">
@@ -883,9 +948,11 @@
                             </div>
 
                             <!-- Resumo dos Macros Prescritos no Card Clínico -->
-                            <div id="clinico-macros-row" class="mt-3 pt-3 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                            <div id="clinico-macros-row"
+                                class="mt-3 pt-3 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Metas Nutricionais:</span>
+                                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Metas
+                                        Nutricionais:</span>
                                     <span id="clinico-macros-resumo" class="text-xs font-semibold text-slate-300">
                                         Nenhuma meta salva ainda
                                     </span>
@@ -898,7 +965,8 @@
                             </div>
 
                             <!-- Barra de Ações Clínicas: Medidas & Antropometria -->
-                            <div class="mt-3 pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
+                            <div
+                                class="mt-3 pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
                                 <div class="text-[11px] text-slate-400 flex items-center gap-1.5">
                                     <i data-lucide="ruler" class="w-3.5 h-3.5 text-lime-400"></i>
                                     <span>Avaliação Antropométrica & Circunferências Corporais</span>
@@ -922,7 +990,8 @@
                                     class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                                     <i data-lucide="utensils" class="w-4 h-4"></i>
                                 </div>
-                                <input type="text" id="refeicao-nome" placeholder="Ex: Café da Manhã, Almoço..." required
+                                <input type="text" id="refeicao-nome" placeholder="Ex: Café da Manhã, Almoço..."
+                                    required
                                     class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
                             </div>
                         </div>
@@ -935,21 +1004,27 @@
                                     class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                                     <i data-lucide="clock" class="w-4 h-4"></i>
                                 </div>
-                                <input type="text" id="refeicao-horario" placeholder="Ex: 08:00, 12:30 ou Flexível" required
+                                <input type="text" id="refeicao-horario" placeholder="Ex: 08:00, 12:30 ou Flexível"
+                                    required
                                     class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
                             </div>
                         </div>
                     </div>
 
                     <!-- BANCO DE ALIMENTOS INTEGRADO & CALCULADORA AUTOMÁTICA DE MACROS -->
-                    <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/70 border border-lime-500/30 space-y-4 shadow-inner">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800 gap-2">
+                    <div
+                        class="p-4 sm:p-5 rounded-2xl bg-slate-950/70 border border-lime-500/30 space-y-4 shadow-inner">
+                        <div
+                            class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800 gap-2">
                             <div>
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-lime-500/10 text-lime-400 border border-lime-500/30">
+                                <span
+                                    class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-lime-500/10 text-lime-400 border border-lime-500/30">
                                     <i data-lucide="scale" class="w-3 h-3"></i>Banco de Alimentos & Gramaturas Integrado
                                 </span>
-                                <h3 class="text-sm font-bold text-white mt-1">Selecione o Alimento e Digite a Gramatura</h3>
-                                <p class="text-xs text-slate-400">Os macronutrientes (proteínas, carboidratos, gorduras e calorias) são calculados em tempo real.</p>
+                                <h3 class="text-sm font-bold text-white mt-1">Selecione o Alimento e Digite a Gramatura
+                                </h3>
+                                <p class="text-xs text-slate-400">Os macronutrientes (proteínas, carboidratos, gorduras
+                                    e calorias) são calculados em tempo real.</p>
                             </div>
                             <button type="button" onclick="abrirModalNovoAlimento()"
                                 class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-lime-400 border border-slate-700 text-xs font-bold transition-all cursor-pointer self-start sm:self-auto active:scale-95 shadow-sm">
@@ -961,7 +1036,8 @@
                         <!-- Filtros e Busca de Alimentos -->
                         <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
                             <div class="sm:col-span-4">
-                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Categoria</label>
+                                <label
+                                    class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Categoria</label>
                                 <select id="builder-categoria" onchange="atualizarOpcoesAlimentosBuilder()"
                                     class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-lime-500">
                                     <option value="todos">Todas as Categorias</option>
@@ -974,9 +1050,12 @@
                                 </select>
                             </div>
                             <div class="sm:col-span-8">
-                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Buscar Alimento (TACO/IBGE)</label>
+                                <label
+                                    class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Buscar
+                                    Alimento (TACO/IBGE)</label>
                                 <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                                    <div
+                                        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                                         <i data-lucide="search" class="w-3.5 h-3.5"></i>
                                     </div>
                                     <input type="text" id="builder-busca" oninput="filtrarAlimentosBuilder()"
@@ -988,7 +1067,9 @@
 
                         <!-- Seletor de Alimento -->
                         <div>
-                            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Alimento Selecionado</label>
+                            <label
+                                class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Alimento
+                                Selecionado</label>
                             <select id="builder-alimento-select" onchange="aoMudarAlimentoBuilder()"
                                 class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-lime-500 font-semibold">
                                 <option value="" disabled selected>A carregar alimentos...</option>
@@ -999,23 +1080,31 @@
                         <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                 <div>
-                                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">
+                                    <label
+                                        class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">
                                         Gramatura da Porção:
                                     </label>
                                     <div class="flex items-center gap-2">
                                         <div class="relative w-36">
-                                            <input type="number" id="builder-gramas" min="1" max="2500" step="5" value="100"
-                                                oninput="calcularMacrosPreviewBuilder()"
+                                            <input type="number" id="builder-gramas" min="1" max="2500" step="5"
+                                                value="100" oninput="calcularMacrosPreviewBuilder()"
                                                 class="w-full bg-slate-950 border border-lime-500/60 rounded-xl px-3 py-2 text-sm font-black text-lime-400 focus:outline-none focus:ring-1 focus:ring-lime-500 text-center shadow-inner">
-                                            <span class="absolute right-3.5 top-2 text-xs text-slate-400 font-extrabold pointer-events-none">g</span>
+                                            <span
+                                                class="absolute right-3.5 top-2 text-xs text-slate-400 font-extrabold pointer-events-none">g</span>
                                         </div>
                                         <div class="flex items-center gap-1.5 flex-wrap">
-                                            <button type="button" onclick="setGramasBuilder(30)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-bold border border-slate-700 transition-all cursor-pointer">30g</button>
-                                            <button type="button" onclick="setGramasBuilder(50)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-bold border border-slate-700 transition-all cursor-pointer">50g</button>
-                                            <button type="button" onclick="setGramasBuilder(100)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-bold border border-slate-700 transition-all cursor-pointer">100g</button>
-                                            <button type="button" onclick="setGramasBuilder(150)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-bold border border-slate-700 transition-all cursor-pointer">150g</button>
-                                            <button type="button" onclick="setGramasBuilder(200)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-bold border border-slate-700 transition-all cursor-pointer">200g</button>
-                                            <button type="button" onclick="setGramasBuilder(250)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-bold border border-slate-700 transition-all cursor-pointer">250g</button>
+                                            <button type="button" onclick="setGramasBuilder(30)"
+                                                class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-bold border border-slate-700 transition-all cursor-pointer">30g</button>
+                                            <button type="button" onclick="setGramasBuilder(50)"
+                                                class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-bold border border-slate-700 transition-all cursor-pointer">50g</button>
+                                            <button type="button" onclick="setGramasBuilder(100)"
+                                                class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-bold border border-slate-700 transition-all cursor-pointer">100g</button>
+                                            <button type="button" onclick="setGramasBuilder(150)"
+                                                class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-bold border border-slate-700 transition-all cursor-pointer">150g</button>
+                                            <button type="button" onclick="setGramasBuilder(200)"
+                                                class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-bold border border-slate-700 transition-all cursor-pointer">200g</button>
+                                            <button type="button" onclick="setGramasBuilder(250)"
+                                                class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] font-bold border border-slate-700 transition-all cursor-pointer">250g</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1030,19 +1119,25 @@
                             <!-- Cartões de Macronutrientes Calculados em Tempo Real -->
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
                                 <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-center">
-                                    <span class="text-[9px] font-bold uppercase text-slate-400 tracking-wider block">Calorias</span>
-                                    <span id="prev-cal" class="text-xs sm:text-sm font-black text-lime-400">-- kcal</span>
+                                    <span
+                                        class="text-[9px] font-bold uppercase text-slate-400 tracking-wider block">Calorias</span>
+                                    <span id="prev-cal" class="text-xs sm:text-sm font-black text-lime-400">--
+                                        kcal</span>
                                 </div>
                                 <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-center">
-                                    <span class="text-[9px] font-bold uppercase text-slate-400 tracking-wider block">Proteínas</span>
+                                    <span
+                                        class="text-[9px] font-bold uppercase text-slate-400 tracking-wider block">Proteínas</span>
                                     <span id="prev-prot" class="text-xs sm:text-sm font-black text-blue-400">-- g</span>
                                 </div>
                                 <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-center">
-                                    <span class="text-[9px] font-bold uppercase text-slate-400 tracking-wider block">Carboidratos</span>
-                                    <span id="prev-carb" class="text-xs sm:text-sm font-black text-amber-400">-- g</span>
+                                    <span
+                                        class="text-[9px] font-bold uppercase text-slate-400 tracking-wider block">Carboidratos</span>
+                                    <span id="prev-carb" class="text-xs sm:text-sm font-black text-amber-400">--
+                                        g</span>
                                 </div>
                                 <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-center">
-                                    <span class="text-[9px] font-bold uppercase text-slate-400 tracking-wider block">Gorduras</span>
+                                    <span
+                                        class="text-[9px] font-bold uppercase text-slate-400 tracking-wider block">Gorduras</span>
                                     <span id="prev-gord" class="text-xs sm:text-sm font-black text-rose-400">-- g</span>
                                 </div>
                             </div>
@@ -1051,7 +1146,8 @@
                         <!-- Lista de Alimentos Inseridos nesta Refeição -->
                         <div class="space-y-2 pt-1">
                             <div class="flex items-center justify-between">
-                                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                                <span
+                                    class="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
                                     <i data-lucide="list" class="w-3.5 h-3.5 text-lime-400"></i>
                                     Alimentos Inseridos na Refeição (<span id="contagem-alimentos-refeicao">0</span>)
                                 </span>
@@ -1062,19 +1158,23 @@
                             </div>
 
                             <div id="lista-alimentos-adicionados" class="space-y-1.5">
-                                <div class="text-center py-4 px-3 border border-dashed border-slate-800 rounded-xl bg-slate-900/30 text-xs text-slate-500">
+                                <div
+                                    class="text-center py-4 px-3 border border-dashed border-slate-800 rounded-xl bg-slate-900/30 text-xs text-slate-500">
                                     Nenhum alimento adicionado ainda. Selecione um alimento e digite a gramatura acima.
                                 </div>
                             </div>
 
                             <!-- Totais Nutricionais da Refeição (Calculados Automaticamente) -->
-                            <div id="painel-totais-refeicao" class="hidden p-3 rounded-xl bg-lime-950/20 border border-lime-500/30 mt-3">
+                            <div id="painel-totais-refeicao"
+                                class="hidden p-3 rounded-xl bg-lime-950/20 border border-lime-500/30 mt-3">
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                                    <span class="text-[11px] font-black uppercase tracking-wider text-lime-400 flex items-center gap-1">
+                                    <span
+                                        class="text-[11px] font-black uppercase tracking-wider text-lime-400 flex items-center gap-1">
                                         <i data-lucide="zap" class="w-3.5 h-3.5"></i>Total da Refeição
                                     </span>
                                     <div class="flex items-center gap-3 text-xs flex-wrap font-bold">
-                                        <span class="text-lime-300 font-black"><span id="total-ref-cal">0</span> kcal</span>
+                                        <span class="text-lime-300 font-black"><span id="total-ref-cal">0</span>
+                                            kcal</span>
                                         <span class="text-blue-400">P: <span id="total-ref-prot">0</span>g</span>
                                         <span class="text-amber-400">C: <span id="total-ref-carb">0</span>g</span>
                                         <span class="text-rose-400">G: <span id="total-ref-gord">0</span>g</span>
@@ -1086,14 +1186,17 @@
                         <!-- Campo de Texto Prescrito (Sincronizado Automaticamente) -->
                         <div class="pt-2 border-t border-slate-800/80">
                             <div class="flex items-center justify-between mb-1.5">
-                                <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
+                                <label
+                                    class="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
                                     <span>Texto Final da Prescrição</span>
-                                    <span class="text-lime-400 lowercase font-normal">(sincronizado automaticamente)</span>
+                                    <span class="text-lime-400 lowercase font-normal">(sincronizado
+                                        automaticamente)</span>
                                 </label>
-                                <span class="text-[10px] text-slate-500">Você pode ajustar ou adicionar observações livres</span>
+                                <span class="text-[10px] text-slate-500">Você pode ajustar ou adicionar observações
+                                    livres</span>
                             </div>
-                            <textarea id="refeicao-alimentos" rows="3" placeholder="Os alimentos e macronutrientes aparecerão aqui automaticamente..."
-                                required
+                            <textarea id="refeicao-alimentos" rows="3"
+                                placeholder="Os alimentos e macronutrientes aparecerão aqui automaticamente..." required
                                 class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all leading-relaxed"></textarea>
                         </div>
                     </div>
@@ -1113,7 +1216,8 @@
                         <i data-lucide="check" class="w-4 h-4" id="btn-icon"></i>
                         <span id="btn-text">Guardar Refeição na Dieta do Aluno</span>
                         <div id="btn-spinner"
-                            class="hidden w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            class="hidden w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin">
+                        </div>
                     </button>
                 </form>
             </div>
@@ -1133,7 +1237,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Refeições Atuais do Aluno
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Visualize, gerencie e remova as refeições prescritas para o aluno selecionado</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Visualize, gerencie e
+                            remova as refeições prescritas para o aluno selecionado</p>
                     </div>
                 </div>
                 <div
@@ -1143,21 +1248,26 @@
             </div>
 
             <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
-                <div id="resumo-diario-macros-aluno" class="hidden mb-4 p-3 rounded-2xl bg-slate-900/80 border border-slate-800"></div>
+                <div id="resumo-diario-macros-aluno"
+                    class="hidden mb-4 p-3 rounded-2xl bg-slate-900/80 border border-slate-800"></div>
                 <div id="lista-refeicoes-aluno" class="space-y-4">
-                    <div class="text-center py-8 border border-dashed border-slate-800 rounded-2xl bg-slate-900/40 text-xs text-slate-400">
-                        <div class="w-10 h-10 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 mx-auto mb-3">
+                    <div
+                        class="text-center py-8 border border-dashed border-slate-800 rounded-2xl bg-slate-900/40 text-xs text-slate-400">
+                        <div
+                            class="w-10 h-10 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 mx-auto mb-3">
                             <i data-lucide="user-check" class="w-5 h-5"></i>
                         </div>
                         <p class="font-bold text-slate-300 text-sm">Selecione um aluno acima</p>
-                        <p class="text-slate-500 mt-1 max-w-sm mx-auto text-xs">Escolha um aluno no menu suspenso para visualizar suas refeições cadastradas e o plano alimentar completo.</p>
+                        <p class="text-slate-500 mt-1 max-w-sm mx-auto text-xs">Escolha um aluno no menu suspenso para
+                            visualizar suas refeições cadastradas e o plano alimentar completo.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- SEÇÃO: Fotos de Evolução Corporal dos Alunos (Accordion) -->
-        <section id="secao-fotos-alunos" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+        <section id="secao-fotos-alunos"
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -1168,9 +1278,11 @@
                     <div class="min-w-0 flex-1">
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Fotos de Evolução dos Alunos
-                            <span class="text-[10px] bg-lime-500/10 text-lime-400 px-2.5 py-0.5 rounded-full border border-lime-500/30 font-semibold">Exclusivo</span>
+                            <span
+                                class="text-[10px] bg-lime-500/10 text-lime-400 px-2.5 py-0.5 rounded-full border border-lime-500/30 font-semibold">Exclusivo</span>
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Linha do tempo comparativa das fotos corporais (Frente, Perfil e Costas)</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Linha do tempo comparativa
+                            das fotos corporais (Frente, Perfil e Costas)</p>
                     </div>
                 </div>
                 <div
@@ -1212,7 +1324,8 @@
                         <div class="md:col-span-5 flex items-end gap-2">
                             <!-- Filtro por Posição/Ângulo -->
                             <div class="w-full">
-                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Filtrar
+                                <label
+                                    class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Filtrar
                                     Ângulo</label>
                                 <select id="filtro-angulo-fotos" onchange="filtrarFotosExibidas()"
                                     class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-3 text-sm text-slate-100 focus:outline-none focus:border-purple-500 transition-all">
@@ -1264,7 +1377,8 @@
                         </div>
                         <h3 class="text-sm font-bold text-white mb-1">Selecione um Aluno</h3>
                         <p class="text-xs text-slate-400 max-w-sm mx-auto">
-                            Escolha um aluno no menu acima para carregar o histórico de fotos corporais (Frente, Perfil e Costas).
+                            Escolha um aluno no menu acima para carregar o histórico de fotos corporais (Frente, Perfil
+                            e Costas).
                         </p>
                     </div>
                 </div>
@@ -1272,7 +1386,8 @@
         </section>
 
         <!-- SEÇÃO: Check-ins dos Alunos (Accordion) -->
-        <section id="secao-checkins-nutri" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+        <section id="secao-checkins-nutri"
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -1284,7 +1399,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Central de Check-ins Semanais
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Acompanhamento e respostas das avaliações e formulários periódicos</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Acompanhamento e respostas
+                            das avaliações e formulários periódicos</p>
                     </div>
                 </div>
                 <div
@@ -1299,7 +1415,8 @@
 
 
         <!-- SEÇÃO: Agenda de Consultas & Retornos (Accordion) -->
-        <section id="secao-agenda-nutri" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+        <section id="secao-agenda-nutri"
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -1311,7 +1428,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Agenda de Consultas & Treinos
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Horários, retornos clínicos e consultas agendadas</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Horários, retornos
+                            clínicos e consultas agendadas</p>
                     </div>
                 </div>
                 <div
@@ -1325,7 +1443,8 @@
         </section>
 
         <!-- SEÇÃO: Painel Financeiro & Planos (Accordion) -->
-        <section id="secao-financeiro-nutri" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+        <section id="secao-financeiro-nutri"
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -1337,7 +1456,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Painel Financeiro & Planos
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Controle de faturamento, planos ativos e mensalidades</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Controle de faturamento,
+                            planos ativos e mensalidades</p>
                     </div>
                 </div>
                 <div
@@ -1351,7 +1471,8 @@
         </section>
 
         <!-- SEÇÃO: Assistente Clínico IA (Accordion) -->
-        <section id="secao-ia-nutri" class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+        <section id="secao-ia-nutri"
+            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -1363,7 +1484,8 @@
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Assistente Clínico IA
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Inteligência artificial para suporte na conduta nutricional e dietoterapia</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Inteligência artificial
+                            para suporte na conduta nutricional e dietoterapia</p>
                     </div>
                 </div>
                 <div
@@ -1427,7 +1549,8 @@
         <div class="flex-1 flex overflow-hidden">
             <!-- Sidebar com Lista de Alunos -->
             <div class="w-40 sm:w-48 border-r border-slate-800 bg-slate-950/60 flex flex-col shrink-0">
-                <div class="p-2 border-b border-slate-800/80 bg-slate-900/50 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <div
+                    class="p-2 border-b border-slate-800/80 bg-slate-900/50 text-[10px] font-bold uppercase tracking-wider text-slate-400">
                     Alunos
                 </div>
                 <div class="flex-1 overflow-y-auto p-1.5 space-y-1" id="admin-chat-alunos-list">
@@ -1444,8 +1567,7 @@
                 <div id="admin-chat-messages" class="flex-1 p-3 overflow-y-auto space-y-2 text-xs bg-slate-950/30">
                     <div class="text-center text-slate-500 mt-20">Nenhuma conversa selecionada.</div>
                 </div>
-                <form id="admin-chat-form"
-                    class="p-2.5 bg-slate-900/90 border-t border-slate-800 flex gap-2 hidden">
+                <form id="admin-chat-form" class="p-2.5 bg-slate-900/90 border-t border-slate-800 flex gap-2 hidden">
                     <input type="text" id="admin-chat-input" placeholder="Digite sua resposta..." required
                         class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-lime-500">
                     <button type="submit"
@@ -4375,11 +4497,14 @@ _Prescrição elaborada pelo seu nutricionista._`;
     </div>
 
     <!-- Modal: Cadastrar Novo Alimento no Banco -->
-    <div id="modal-novo-alimento" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-lg rounded-3xl border border-lime-500/30 p-6 space-y-5 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+    <div id="modal-novo-alimento"
+        class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+            class="glass-panel w-full max-w-lg rounded-3xl border border-lime-500/30 p-6 space-y-5 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-lime-500/10 text-lime-400 border border-lime-500/20 flex items-center justify-center">
+                    <div
+                        class="w-8 h-8 rounded-xl bg-lime-500/10 text-lime-400 border border-lime-500/20 flex items-center justify-center">
                         <i data-lucide="plus-circle" class="w-4 h-4"></i>
                     </div>
                     <div>
@@ -4387,21 +4512,25 @@ _Prescrição elaborada pelo seu nutricionista._`;
                         <p class="text-[11px] text-slate-400">Adicione à tabela com os valores nutricionais por 100g</p>
                     </div>
                 </div>
-                <button type="button" onclick="fecharModalNovoAlimento()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+                <button type="button" onclick="fecharModalNovoAlimento()"
+                    class="text-slate-400 hover:text-white p-1 rounded-lg">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
 
             <form id="form-novo-alimento-banco" onsubmit="salvarNovoAlimentoBanco(event)" class="space-y-4">
                 <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Nome do Alimento *</label>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Nome do
+                        Alimento *</label>
                     <input type="text" id="novo-alim-nome" placeholder="Ex: Panqueca de Aveia com Banana" required
                         class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-lime-500">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Categoria *</label>
+                        <label
+                            class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Categoria
+                            *</label>
                         <select id="novo-alim-cat" required
                             class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-lime-500">
                             <option value="Proteínas">Proteínas</option>
@@ -4413,7 +4542,8 @@ _Prescrição elaborada pelo seu nutricionista._`;
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Porção Referência</label>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Porção
+                            Referência</label>
                         <input type="text" id="novo-alim-porcao" value="100g"
                             class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-lime-500">
                     </div>
@@ -4421,22 +4551,27 @@ _Prescrição elaborada pelo seu nutricionista._`;
 
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider text-lime-400 mb-1">Calorias (kcal)</label>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-lime-400 mb-1">Calorias
+                            (kcal)</label>
                         <input type="number" id="novo-alim-cal" placeholder="0" min="0" step="1" required
                             class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white text-center font-bold focus:outline-none focus:border-lime-500">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider text-blue-400 mb-1">Proteína (g)</label>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-blue-400 mb-1">Proteína
+                            (g)</label>
                         <input type="number" id="novo-alim-prot" placeholder="0.0" min="0" step="0.1" required
                             class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white text-center font-bold focus:outline-none focus:border-lime-500">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider text-amber-400 mb-1">Carboidrato (g)</label>
+                        <label
+                            class="block text-[10px] font-bold uppercase tracking-wider text-amber-400 mb-1">Carboidrato
+                            (g)</label>
                         <input type="number" id="novo-alim-carb" placeholder="0.0" min="0" step="0.1" required
                             class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white text-center font-bold focus:outline-none focus:border-lime-500">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider text-rose-400 mb-1">Gordura (g)</label>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-rose-400 mb-1">Gordura
+                            (g)</label>
                         <input type="number" id="novo-alim-gord" placeholder="0.0" min="0" step="0.1" required
                             class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white text-center font-bold focus:outline-none focus:border-lime-500">
                     </div>
