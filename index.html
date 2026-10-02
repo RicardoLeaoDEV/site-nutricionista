@@ -302,11 +302,10 @@
 
             <!-- Botões de Ação para Celular / Tablet (Mobile) -->
             <div class="flex items-center gap-2 lg:hidden">
-                <!-- Botão de Instalação do App (Começa oculto e aparece automaticamente via JS) -->
-                <button type="button" id="install-btn-mobile"
-                    class="flex items-center gap-1.5 text-xs font-bold text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 px-3 py-2 rounded-xl transition-all">
-                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                    <span>Instalar</span>
+                <!-- Botão de Instalação Compacto (Apenas Ícone com Tooltip ou Dourado Elegante) -->
+                <button type="button" id="install-btn-mobile" title="Instalar Aplicativo"
+                    class="flex items-center justify-center w-9 h-9 text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded-xl transition-all">
+                    <i data-lucide="download" class="w-4 h-4"></i>
                 </button>
 
                 <a href="login.html"
