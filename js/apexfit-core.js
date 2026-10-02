@@ -574,50 +574,53 @@
         supabaseClient
     };
 
-    // --- Lógica de Instalação do PWA (ApexFit) ---
-    let deferredPrompt;
-    const installBtnMobile = document.getElementById('install-btn-mobile');
-    const installModal = document.getElementById('install-modal');
-    const closeModalBtn = document.getElementById('close-modal-btn');
+    // --- Lógica de Instalação do PWA (ApexFit Definitiva) ---
+    document.addEventListener('DOMContentLoaded', () => {
+        let deferredPrompt;
+        const installBtnMobile = document.getElementById('install-btn-mobile');
+        const installModal = document.getElementById('install-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
 
-    // Força o botão a ficar sempre visível para o utilizador poder clicar
-    if (installBtnMobile) {
-        installBtnMobile.classList.remove('hidden');
-        installBtnMobile.classList.add('flex');
-    }
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-    });
-
-    if (installBtnMobile) {
-        installBtnMobile.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                // Se o Chrome permitir o nativo, usa-o
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
-            } else {
-                // Se o Chrome bloquear o automático, abre o modal personalizado com o passo a passo
-                if (installModal) {
-                    installModal.classList.remove('hidden');
-                    installModal.classList.add('flex');
-                }
-            }
-        });
-    }
-
-    if (closeModalBtn && installModal) {
-        closeModalBtn.addEventListener('click', () => {
-            installModal.classList.add('hidden');
-            installModal.classList.remove('flex');
-        });
-    }
-
-    window.addEventListener('appinstalled', () => {
+        // Torna o botão visível de imediato
         if (installBtnMobile) {
-            installBtnMobile.classList.add('hidden');
+            installBtnMobile.classList.remove('hidden');
+            installBtnMobile.classList.add('flex');
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        if (installBtnMobile) {
+            installBtnMobile.addEventListener('click', () => {
+                console.log('Botão de instalação clicado!'); // Para verificar na consola se o evento dispara
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('Utilizador aceitou instalar');
+                        }
+                        deferredPrompt = null;
+                    });
+                } else {
+                    // Se não houver prompt nativo, abre obrigatoriamente o modal
+                    if (installModal) {
+                        installModal.classList.remove('hidden');
+                        installModal.classList.add('flex');
+                    } else {
+                        // Fallback extremo caso o modal não seja encontrado
+                        alert('Para instalar, toque nos três pontinhos (...) do seu navegador e escolha "Instalar aplicativo".');
+                    }
+                }
+            });
+        }
+
+        if (closeModalBtn && installModal) {
+            closeModalBtn.addEventListener('click', () => {
+                installModal.classList.add('hidden');
+                installModal.classList.remove('flex');
+            });
         }
     });
 
