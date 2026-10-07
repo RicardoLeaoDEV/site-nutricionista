@@ -2013,9 +2013,10 @@
                 return;
             }
 
-            const ADMIN_UID = '04fb83ed-ec6b-4a56-9993-e99f32ededee';
+            const meta = session.user.user_metadata || {};
+            const isAuthorized = meta.role === 'profissional' && meta.especialidade !== 'personal' || meta.papel === 'nutricionista';
 
-            if (session.user.id !== ADMIN_UID) {
+            if (!isAuthorized) {
                 alert('Acesso negado. Esta área é restrita ao nutricionista.');
                 window.location.href = 'dashboard.html';
                 return;

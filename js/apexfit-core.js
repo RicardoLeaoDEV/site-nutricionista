@@ -13,7 +13,6 @@
 
     const SUPABASE_URL = 'https://dnlqkozlaqizhqsexcei.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
-    const ADMIN_UID = '04fb83ed-ec6b-4a56-9993-e99f32ededee';
 
     // Inicializa cliente Supabase se ainda não estiver disponível
     let supabaseClient = window.supabaseClient;
@@ -261,9 +260,16 @@
             // Recompensa de Gamificação: +10 XP pelo check-in!
             await this.addXP(alunoId, 10, 'Check-in Semanal Enviado! 📋');
 
-            // Cria notificação para os profissionais
+            // Recupera o profissional logado para enviar a notificação
+            let profId = null;
+            if (supabaseClient) {
+                const { data: profData } = await supabaseClient.from('alunos').select('profissional_id').eq('id', alunoId).single();
+                profId = profData?.profissional_id;
+            }
+
+            // Cria notificação para o profissional
             await this.createNotification({
-                usuario_id: ADMIN_UID,
+                usuario_id: profId,
                 titulo: 'Novo Check-in Semanal Recebido!',
                 mensagem: `Aluno enviou o check-in da semana. Status: ${indicador === 'verde' ? '🟢 Tudo Certo' : (indicador === 'amarelo' ? '🟡 Atenção' : '🔴 Precisa de Atenção')}`,
                 tipo: 'checkin',
@@ -488,7 +494,7 @@
         // ----------------------------------------------------------------------
         async createNotification({ usuario_id, titulo, mensagem, tipo = 'info', link = null }) {
             const record = {
-                usuario_id: usuario_id || ADMIN_UID,
+                usuario_id: usuario_id,
                 titulo,
                 mensagem,
                 tipo,
@@ -515,8 +521,6 @@
     // 3. AUTH & ROLE ROUTING
     // --------------------------------------------------------------------------
     const ApexAuth = {
-        ADMIN_UID,
-
         async getSession() {
             if (!supabaseClient) return null;
             const { data: { session } } = await supabaseClient.auth.getSession();
@@ -525,8 +529,8 @@
 
         getUserRole(session) {
             if (!session || !session.user) return 'visitante';
-            if (session.user.id === ADMIN_UID) return 'admin';
             const meta = session.user.user_metadata || {};
+            if (meta.role === 'profissional') return meta.especialidade || 'admin';
             if (meta.papel) return meta.papel;
             return 'aluno';
         },

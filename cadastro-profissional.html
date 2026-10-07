@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Fit Hub - Criar Conta Profissional</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="RF Hub">
+
+    <!-- Tipografia Oficial -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        clash: ['"Clash Display"', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
+                    },
+                    colors: {
+                        navy: { 900: '#030712', 950: '#020408' },
+                        gold: { 400: '#facc15', 500: '#eab308', 600: '#ca8a04' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html,
+        body {
+            background-color: #020408;
+            color: rgba(255, 255, 255, 0.95);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+        }
+
+        .radial-bg {
+            background:
+                radial-gradient(circle at 85% 15%, rgba(234, 179, 8, 0.12), transparent 45%),
+                radial-gradient(circle at 10% 85%, rgba(202, 138, 4, 0.08), transparent 45%),
+                #020408;
+        }
+
+        .cardSubtitulo {
+            display: inline-flex;
+            padding: 6px 14px;
+            align-items: center;
+            gap: 8px;
+            border-radius: 9999px;
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.28);
+        }
+
+        .botaoDourado {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            height: 52px;
+            text-decoration: none;
+            color: #020408;
+            background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
+            border: none;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 6px 4px 22px;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.35);
+            transition: all 0.3s ease;
+            position: relative;
+            padding-right: 60px;
+            letter-spacing: 0.02em;
+        }
+
+        .botaoDourado:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px -5px rgba(234, 179, 8, 0.5);
+        }
+
+        .botaoDourado .divSeta {
+            background-color: #020408;
+            color: #facc15;
+            border-radius: 9999px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: absolute;
+            right: 6px;
+        }
+
+        .botaoDourado:hover .divSeta {
+            width: calc(100% - 12px);
+            background-color: #facc15;
+            color: #020408;
+        }
+
+        .role-card input[type="radio"]:checked+.role-box {
+            border-color: #facc15;
+            background: rgba(234, 179, 8, 0.12);
+            box-shadow: 0 0 20px -3px rgba(234, 179, 8, 0.35);
+        }
+
+        .role-card input[type="radio"]:checked+.role-box .role-icon-wrap {
+            background: rgba(234, 179, 8, 0.25);
+            color: #facc15;
+            border-color: rgba(234, 179, 8, 0.5);
+        }
+    </style>
+</head>
+
+<body class="radial-bg flex items-center justify-center p-4 sm:p-6 lg:p-8">
+
+    <div class="w-full max-w-5xl my-auto">
+        <div
+            class="grid grid-cols-1 lg:grid-cols-12 bg-[#050a14]/95 border border-gold/25 rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] overflow-hidden backdrop-blur-2xl">
+
+            <!-- COLUNA ESQUERDA: Apresentação e Benefícios -->
+            <div
+                class="hidden lg:flex lg:col-span-5 bg-gradient-to-br from-[#060c18] via-[#040812] to-amber-950/25 p-8 flex-col justify-between border-r border-gold/15 relative">
+
+                <div>
+                    <!-- Logo Real Fit Hub -->
+                    <a href="index.html" class="flex items-center gap-3 mb-6 group">
+                        <div
+                            class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-gold-600 to-amber-300 flex items-center justify-center text-navy-950 font-black shadow-md shadow-gold-500/25">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                        </div>
+                        <span class="font-clash text-2xl font-bold tracking-tight text-white">
+                            <span class="font-black">R</span>eal <span class="font-black">F</span>it<span
+                                class="text-gold-400"> HUB</span>
+                        </span>
+                    </a>
+
+                    <div class="cardSubtitulo mb-4">
+                        <svg class="w-3.5 h-3.5 text-gold-400" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                            </polygon>
+                        </svg>
+                        <h3 class="text-[11px] font-bold uppercase tracking-wider text-gold-400">7 DIAS DE TESTE GRÁTIS
+                        </h3>
+                    </div>
+
+                    <h1 class="font-clash text-2xl xl:text-3xl font-bold text-white leading-tight mb-3">
+                        A plataforma definitiva para elevar o seu <span class="text-gold-400">negócio fitness.</span>
+                    </h1>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Unifique prescrição clínica, treinamento de alto rendimento, controle de cargas e métricas em um
+                        só painel moderno.
+                    </p>
+                </div>
+
+                <!-- Lista de Benefícios -->
+                <div class="space-y-3.5 py-6 border-y border-gold/15 my-6">
+                    <div class="flex items-start gap-3 text-xs text-slate-300">
+                        <div
+                            class="w-6 h-6 rounded-lg bg-gold-500/15 border border-gold/30 flex items-center justify-center text-gold-400 shrink-0 mt-0.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5"
+                                viewBox="0 0 24 24">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <span><strong>Multi-Tenant Blindado:</strong> Seus alunos e prescrições isolados com total
+                            privacidade.</span>
+                    </div>
+
+                    <div class="flex items-start gap-3 text-xs text-slate-300">
+                        <div
+                            class="w-6 h-6 rounded-lg bg-gold-500/15 border border-gold/30 flex items-center justify-center text-gold-400 shrink-0 mt-0.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5"
+                                viewBox="0 0 24 24">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <span><strong>Convite Inteligente:</strong> O aluno define a própria senha pelo WhatsApp.</span>
+                    </div>
+
+                    <div class="flex items-start gap-3 text-xs text-slate-300">
+                        <div
+                            class="w-6 h-6 rounded-lg bg-gold-500/15 border border-gold/30 flex items-center justify-center text-gold-400 shrink-0 mt-0.5">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5"
+                                viewBox="0 0 24 24">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <span><strong>Sem fidelidade:</strong> Comece agora sem precisar cadastrar cartão de
+                            crédito.</span>
+                    </div>
+                </div>
+
+                <div class="text-[11px] text-slate-500">
+                    © 2026 Real Fit Hub Enterprise Platform.
+                </div>
+            </div>
+
+            <!-- COLUNA DIREITA: Formulário de Cadastro -->
+            <div class="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-center bg-[#03060d]">
+
+                <!-- Topo Mobile -->
+                <div class="flex items-center justify-between mb-5 lg:hidden">
+                    <a href="index.html" class="flex items-center gap-2">
+                        <div
+                            class="w-8 h-8 rounded-xl bg-gradient-to-tr from-gold-600 to-amber-300 flex items-center justify-center text-navy-950 font-bold shadow-md">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                        </div>
+                        <span class="font-clash text-lg font-bold text-white">
+                            <span class="font-black">R</span>eal <span class="font-black">F</span>it<span
+                                class="text-gold-400"> HUB</span>
+                        </span>
+                    </a>
+                    <a href="login.html" class="text-xs text-slate-400 hover:text-white flex items-center gap-1">
+                        Já tem conta? <span class="text-gold-400 font-bold ml-1">Entrar</span>
+                    </a>
+                </div>
+
+                <div class="w-full">
+                    <div class="mb-5">
+                        <div
+                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/25 text-gold-400 text-[10px] font-bold uppercase tracking-wider mb-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-gold-400 animate-pulse"></span>
+                            Cadastro de Profissional
+                        </div>
+                        <h2 class="font-clash text-2xl font-extrabold text-white tracking-tight">Crie seu Hub em
+                            segundos 🚀</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Preencha seus dados para ter acesso imediato ao painel administrativo.
+                        </p>
+                    </div>
+
+                    <div id="alert-box"
+                        class="hidden mb-4 p-3.5 rounded-2xl text-xs flex items-start gap-2.5 transition-all duration-300">
+                        <span id="alert-text"></span>
+                    </div>
+
+                    <form id="form-cadastro-pro" class="space-y-3.5">
+                        <!-- Seletores de Especialidade -->
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                                Qual é a sua especialidade profissional? <span class="text-gold-400">*</span>
+                            </label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <label class="role-card relative cursor-pointer block">
+                                    <input type="radio" name="especialidade" value="personal" class="sr-only" checked>
+                                    <div
+                                        class="role-box p-3 rounded-2xl bg-[#091122] border border-slate-700/80 hover:border-gold/50 transition-all flex flex-col items-center text-center gap-1">
+                                        <div
+                                            class="role-icon-wrap w-8 h-8 rounded-xl bg-slate-800 text-orange-400 border border-slate-700 flex items-center justify-center transition-colors">
+                                            <!-- Halter -->
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                                viewBox="0 0 24 24">
+                                                <path d="M6 5v14M18 5v14M3 9h3M3 15h3M18 9h3M18 15h3M6 12h12"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="text-xs font-bold text-white">Personal</span>
+                                        <span class="text-[9px] text-slate-400">Treinos & Cargas</span>
+                                    </div>
+                                </label>
+
+                                <label class="role-card relative cursor-pointer block">
+                                    <input type="radio" name="especialidade" value="nutricionista" class="sr-only">
+                                    <div
+                                        class="role-box p-3 rounded-2xl bg-[#091122] border border-slate-700/80 hover:border-gold/50 transition-all flex flex-col items-center text-center gap-1">
+                                        <div
+                                            class="role-icon-wrap w-8 h-8 rounded-xl bg-slate-800 text-lime-400 border border-slate-700 flex items-center justify-center transition-colors">
+                                            <!-- Folha / Nutri -->
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                                viewBox="0 0 24 24">
+                                                <path
+                                                    d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z">
+                                                </path>
+                                                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="text-xs font-bold text-white">Nutricionista</span>
+                                        <span class="text-[9px] text-slate-400">Dietas & Macros</span>
+                                    </div>
+                                </label>
+
+                                <label class="role-card relative cursor-pointer block">
+                                    <input type="radio" name="especialidade" value="ambos" class="sr-only">
+                                    <div
+                                        class="role-box p-3 rounded-2xl bg-[#091122] border border-slate-700/80 hover:border-gold/50 transition-all flex flex-col items-center text-center gap-1">
+                                        <div
+                                            class="role-icon-wrap w-8 h-8 rounded-xl bg-slate-800 text-gold-400 border border-slate-700 flex items-center justify-center transition-colors">
+                                            <!-- Ambos / Camadas -->
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                                viewBox="0 0 24 24">
+                                                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                                <polyline points="2 17 12 22 22 17"></polyline>
+                                                <polyline points="2 12 12 17 22 12"></polyline>
+                                            </svg>
+                                        </div>
+                                        <span class="text-xs font-bold text-white">Ambos</span>
+                                        <span class="text-[9px] text-slate-400">Ecossistema Total</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Nome Completo -->
+                        <div>
+                            <label for="nome"
+                                class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">
+                                Nome Completo ou da Consultoria <span class="text-gold-400">*</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </span>
+                                <input type="text" id="nome" required
+                                    placeholder="Ex: Lucas Andrade / Andrade Consultoria"
+                                    class="w-full bg-[#091122] border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-500 transition-all">
+                            </div>
+                        </div>
+
+                        <!-- E-mail e Telefone lado a lado -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label for="email"
+                                    class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">
+                                    Seu Melhor E-mail <span class="text-gold-400">*</span>
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                            viewBox="0 0 24 24">
+                                            <path
+                                                d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                            </path>
+                                            <polyline points="22,6 12,13 2,6"></polyline>
+                                        </svg>
+                                    </span>
+                                    <input type="email" id="email" required placeholder="lucas@consultoria.com"
+                                        class="w-full bg-[#091122] border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-500 transition-all">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="telefone"
+                                    class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">
+                                    WhatsApp Profissional <span class="text-gold-400">*</span>
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                            viewBox="0 0 24 24">
+                                            <path
+                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    <input type="tel" id="telefone" required placeholder="(81) 99999-9999"
+                                        class="w-full bg-[#091122] border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-500 transition-all">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Senha -->
+                        <div>
+                            <label for="password"
+                                class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">
+                                Crie sua Senha <span class="text-gold-400">*</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                </span>
+                                <input type="password" id="password" required minlength="6"
+                                    placeholder="Mínimo 6 caracteres"
+                                    class="w-full bg-[#091122] border border-slate-700 rounded-xl pl-10 pr-10 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-500 transition-all">
+                                <button type="button" id="toggle-password"
+                                    class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-200">
+                                    <svg id="eye-icon" class="w-4 h-4" fill="none" stroke="currentColor"
+                                        stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Termos e LGPD -->
+                        <div class="pt-0.5">
+                            <label class="flex items-start gap-2.5 cursor-pointer text-[11px] text-slate-400">
+                                <input type="checkbox" id="concordo-termos" required
+                                    class="mt-0.5 rounded border-slate-700 text-gold-500 focus:ring-gold-500">
+                                <span>Li e concordo com os <a href="termos-de-uso.html" target="_blank"
+                                        class="text-gold-400 underline hover:text-gold-300">Termos de Uso</a> e <a
+                                        href="privacidade.html" target="_blank"
+                                        class="text-gold-400 underline hover:text-gold-300">Privacidade</a>.</span>
+                            </label>
+                        </div>
+
+                        <!-- Botão com seta -->
+                        <div class="pt-2">
+                            <button type="submit" id="btn-submit"
+                                class="botaoDourado w-full text-center justify-center">
+                                <span id="btn-text">INICIAR TESTE GRÁTIS DE 7 DIAS</span>
+                                <div class="divSeta">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5"
+                                        viewBox="0 0 24 24">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </div>
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="mt-5 pt-4 border-t border-slate-800 text-center">
+                        <p class="text-xs text-slate-400">
+                            Já possui uma conta?
+                            <a href="login.html" class="text-gold-400 font-bold hover:text-gold-300 ml-1">Fazer
+                                login</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de Processamento Supabase -->
+    <script>
+        const SUPABASE_URL = 'https://dnlqkozlaqizhqsexcei.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
+
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Toggle visibilidade de senha
+        const passwordInput = document.getElementById('password');
+        const toggleBtn = document.getElementById('toggle-password');
+        const eyeIcon = document.getElementById('eye-icon');
+
+        toggleBtn.addEventListener('click', () => {
+            const isPassword = passwordInput.getAttribute('type') === 'password';
+            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+            if (isPassword) {
+                eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+            } else {
+                eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+            }
+        });
+
+        function showAlert(message, type = 'error') {
+            const box = document.getElementById('alert-box');
+            const text = document.getElementById('alert-text');
+
+            box.className = 'mb-4 p-3.5 rounded-2xl text-xs flex items-start gap-2.5 transition-all duration-300 ' +
+                (type === 'error' ? 'bg-rose-500/10 border border-rose-500/30 text-rose-300' : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300');
+
+            text.textContent = message;
+            box.classList.remove('hidden');
+        }
+
+        // Submissão do Cadastro
+        document.getElementById('form-cadastro-pro').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const especialidade = document.querySelector('input[name="especialidade"]:checked')?.value || 'personal';
+            const nome = document.getElementById('nome').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const password = document.getElementById('password').value;
+
+            const btn = document.getElementById('btn-submit');
+            const btnText = document.getElementById('btn-text');
+
+            btn.disabled = true;
+            btnText.textContent = 'Criando seu Hub...';
+
+            try {
+                const { data, error: authError } = await supabaseClient.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            nome: nome,
+                            telefone: telefone,
+                            papel: 'profissional',
+                            especialidade: especialidade
+                        }
+                    }
+                });
+
+                if (authError) throw authError;
+
+                if (data && data.user) {
+                    const userId = data.user.id;
+                    const trialExpira = new Date();
+                    trialExpira.setDate(trialExpira.getDate() + 7);
+
+                    const { error: proError } = await supabaseClient
+                        .from('profissionais')
+                        .insert([{
+                            id: userId,
+                            nome: nome,
+                            email: email,
+                            telefone: telefone,
+                            especialidade: especialidade,
+                            plano: 'trial',
+                            status_assinatura: 'ativa',
+                            limite_alunos: 3,
+                            trial_ate: trialExpira.toISOString()
+                        }]);
+
+                    if (proError && !proError.message.includes('duplicate key')) {
+                        console.warn("Aviso ao salvar na tabela profissionais:", proError);
+                    }
+
+                    showAlert('Conta criada com sucesso! Entrando no portal...', 'success');
+
+                    setTimeout(() => {
+                        if (especialidade === 'nutricionista') {
+                            window.location.href = 'admin.html';
+                        } else {
+                            window.location.href = 'personal.html';
+                        }
+                    }, 1200);
+                }
+            } catch (err) {
+                showAlert(err.message || 'Erro ao realizar cadastro. Tente novamente.', 'error');
+                btn.disabled = false;
+                btnText.textContent = 'INICIAR TESTE GRÁTIS DE 7 DIAS';
+            }
+        });
+    </script>
+</body>
+
+</html>

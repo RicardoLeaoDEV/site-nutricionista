@@ -1413,12 +1413,11 @@
                 return;
             }
 
-            const ADMIN_UID = '04fb83ed-ec6b-4a56-9993-e99f32ededee';
-
             const _m = session.user.user_metadata || {};
             window.nomeProfissionalLogado = _m.nome || 'Personal Trainer';
 
-            if (session.user.id !== ADMIN_UID && _m.papel !== 'personal') {
+            const isAuthorized = (_m.role === 'profissional' && _m.especialidade !== 'nutricionista') || _m.papel === 'personal';
+            if (!isAuthorized) {
                 alert('Acesso negado. Esta área é restrita ao personal trainer.');
                 window.location.href = 'dashboard.html';
                 return;

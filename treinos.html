@@ -187,12 +187,18 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <a href="dashboard.html" class="flex items-center gap-2 group" title="Voltar ao Painel">
-                    <div
-                        class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-amber-400 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
-                        <i data-lucide="dumbbell" class="w-5 h-5"></i>
+                    <div id="brand-logo-container" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-amber-400 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform overflow-hidden">
+                        <img id="brand-logo-img" src="" class="w-full h-full object-cover hidden" alt="Logo Assessoria">
+                        <i id="brand-logo-icon" data-lucide="dumbbell" class="w-5 h-5"></i>
                     </div>
-                    <span class="text-xl font-medium tracking-tight text-white hidden sm:inline whitespace-nowrap"><strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span
-                            class="text-brand-400 font-extrabold"> HUB</span></span>
+                    <div class="flex flex-col">
+                        <span id="brand-name" class="text-xl font-extrabold tracking-tight text-white hidden sm:block whitespace-nowrap leading-none">
+                            Real Fit Hub
+                        </span>
+                        <span class="text-[10px] font-medium text-slate-400 uppercase tracking-wider hidden sm:block mt-0.5">
+                            Powered by Real Fit Hub
+                        </span>
+                    </div>
                 </a>
                 <nav class="hidden md:flex items-center gap-1 ml-2">
                     <a href="dashboard.html" class="nav-link"><i data-lucide="layout-dashboard"
@@ -385,7 +391,7 @@
             if (!session) { window.location.href = 'login.html'; return; }
             const uid = session.user.id;
 
-            if (uid === '04fb83ed-ec6b-4a56-9993-e99f32ededee') document.getElementById('link-admin')?.classList.remove('hidden');
+            if (session.user.user_metadata?.role === 'profissional' || session.user.user_metadata?.papel === 'nutricionista' || session.user.user_metadata?.papel === 'personal') document.getElementById('link-admin')?.classList.remove('hidden');
 
             // Avatar
             try {

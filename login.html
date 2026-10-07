@@ -279,13 +279,17 @@
                     window.location.href = 'dashboard.html';
                     return;
                 }
-                const ADMIN_UID = '04fb83ed-ec6b-4a56-9993-e99f32ededee';
-                const papel = session.user.user_metadata?.papel;
-                if (session.user.id === ADMIN_UID) {
-                    window.location.href = 'admin.html';
-                } else if (papel === 'personal') {
+                const meta = session.user.user_metadata || {};
+                
+                if (meta.role === 'profissional') {
+                    if (meta.especialidade === 'personal') {
+                        window.location.href = 'personal.html';
+                    } else {
+                        window.location.href = 'admin.html';
+                    }
+                } else if (meta.papel === 'personal') {
                     window.location.href = 'personal.html';
-                } else if (papel === 'nutricionista') {
+                } else if (meta.papel === 'nutricionista') {
                     window.location.href = 'admin.html';
                 } else {
                     window.location.href = 'dashboard.html';
