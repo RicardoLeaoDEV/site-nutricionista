@@ -1,5 +1,7 @@
+html
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -9,26 +11,40 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
-        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
     </style>
 </head>
+
 <body class="min-h-screen flex items-center justify-center p-4 bg-[url('assets/bg-pattern.svg')] bg-cover bg-center">
 
     <div class="glass-panel w-full max-w-md rounded-2xl shadow-2xl p-8 relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
-        
+
         <div class="text-center mb-6">
-            <div class="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+            <div
+                class="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
                 <i data-lucide="mail-open" class="w-8 h-8 text-emerald-400"></i>
             </div>
             <h1 class="text-2xl font-bold text-white mb-2">Você foi convidado!</h1>
-            <p class="text-slate-400 text-sm">Seu profissional de saúde enviou um convite exclusivo para você acessar o Real Fit Hub.</p>
+            <p class="text-slate-400 text-sm">Seu profissional de saúde enviou um convite exclusivo para você acessar o
+                Real Fit Hub.</p>
         </div>
 
         <form id="form-convite" class="space-y-4">
             <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">Nome Completo</label>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">Nome
+                    Completo</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i data-lucide="user" class="w-5 h-5 text-slate-500"></i>
@@ -52,7 +68,8 @@
             </div>
 
             <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">Crie sua Senha</label>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">Crie sua
+                    Senha</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i data-lucide="lock" class="w-5 h-5 text-slate-500"></i>
@@ -64,9 +81,12 @@
             </div>
 
             <div class="flex items-start gap-3 mt-4">
-                <input type="checkbox" id="termos" required class="mt-1 w-4 h-4 text-emerald-500 bg-slate-800 border-slate-600 rounded focus:ring-emerald-500">
+                <input type="checkbox" id="termos" required
+                    class="mt-1 w-4 h-4 text-emerald-500 bg-slate-800 border-slate-600 rounded focus:ring-emerald-500">
                 <label for="termos" class="text-xs text-slate-400 leading-tight">
-                    Autorizo o tratamento dos meus dados de saúde e imagens pelo profissional, conforme a <a href="privacidade.html" class="text-emerald-400 hover:underline">Política de Privacidade (LGPD)</a>.
+                    Autorizo o tratamento dos meus dados de saúde e imagens pelo profissional, conforme a <a
+                        href="privacidade.html" class="text-emerald-400 hover:underline">Política de Privacidade
+                        (LGPD)</a>.
                 </label>
             </div>
 
@@ -77,7 +97,9 @@
             </button>
         </form>
 
-        <div id="toast" class="absolute bottom-4 left-4 right-4 bg-red-500/10 border border-red-500/50 text-red-200 p-3 rounded-lg text-sm text-center hidden backdrop-blur-md"></div>
+        <div id="toast"
+            class="absolute bottom-4 left-4 right-4 bg-red-500/10 border border-red-500/50 text-red-200 p-3 rounded-lg text-sm text-center hidden backdrop-blur-md">
+        </div>
     </div>
 
     <script>
@@ -87,11 +109,11 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Pega o token (aluno_id) da URL
+        // Suporta tanto ?prof= (novo padrão) quanto ?token=
         const urlParams = new URLSearchParams(window.location.search);
-        const alunoId = urlParams.get('token');
+        const profissionalId = urlParams.get('prof') || urlParams.get('token');
 
-        if (!alunoId) {
+        if (!profissionalId) {
             document.querySelector('.glass-panel').innerHTML = '<div class="text-center py-8"><i data-lucide="alert-circle" class="w-16 h-16 text-red-500 mx-auto mb-4"></i><h2 class="text-xl font-bold text-white mb-2">Convite Inválido</h2><p class="text-slate-400">O link fornecido está incompleto ou inválido. Solicite um novo link ao seu profissional.</p></div>';
             lucide.createIcons();
         }
@@ -116,23 +138,41 @@
             const senha = document.getElementById('senha').value;
 
             try {
-                const { data, error } = await supabaseClient.auth.signUp({
+                // 1. Cria utilizador no Supabase Auth
+                const { data, error: authError } = await supabaseClient.auth.signUp({
                     email,
                     password: senha,
                     options: {
                         data: {
                             role: 'aluno',
+                            papel: 'aluno',
                             nome,
-                            aluno_id: alunoId
+                            profissional_id: profissionalId
                         }
                     }
                 });
 
-                if (error) throw error;
+                if (authError) throw authError;
+
+                // 2. Insere na tabela alunos associando o profissional
+                if (data && data.user) {
+                    const novoAlunoId = data.user.id;
+                    const { error: insertError } = await supabaseClient
+                        .from('alunos')
+                        .insert([{
+                            id: novoAlunoId,
+                            nome: nome,
+                            email: email,
+                            profissional_id: profissionalId
+                        }]);
+
+                    if (insertError && !insertError.message.includes('duplicate key')) {
+                        console.warn("Aviso ao inserir na tabela alunos:", insertError);
+                    }
+                }
 
                 showToast('Acesso criado com sucesso! Redirecionando...', false);
 
-                // O usuário acabou de ser criado e já está logado na sessão local.
                 setTimeout(() => {
                     window.location.href = 'dashboard.html';
                 }, 1500);
@@ -147,4 +187,5 @@
         });
     </script>
 </body>
+
 </html>
