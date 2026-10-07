@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Fit Hub PRO | Plataforma para Profissionais</title>
+    <meta name="description" content="Escale sua consultoria de treinos e nutrição com o Real Fit Hub PRO. Centralize gestão, planilhas e atendimento em um painel premium.">
+    <meta name="theme-color" content="#060911">
+
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@300,400,500,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        clash: ['"Clash Display"', '"Plus Jakarta Sans"', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        poppins: ['"Poppins"', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            900: '#030712',
+                            950: '#020408',
+                        },
+                        gold: {
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script>
+        (function () {
+            var docEl = document.documentElement;
+            var reduzMovimento = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if ('IntersectionObserver' in window && !reduzMovimento) {
+                docEl.classList.add('js-reveal');
+                setTimeout(function () {
+                    if (!window.__rfRevealReady) docEl.classList.remove('js-reveal');
+                }, 2500);
+            }
+        })();
+    </script>
+
+    <style>
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        * { box-sizing: border-box; }
+        body {
+            background-color: #020408;
+            color: rgba(255, 255, 255, 0.95);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        ::selection {
+            background-color: #eab308;
+            color: #020408;
+        }
+        .text-gold { color: #eab308; }
+        .bg-gold-gradient { background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%); }
+        .border-gold { border-color: rgba(234, 179, 8, 0.3); }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(234, 179, 8, 0.15);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+        }
+
+        .cardBordaInterna {
+            position: relative;
+            background: linear-gradient(135deg, rgba(11, 15, 25, 0.9) 0%, rgba(3, 7, 18, 0.98) 100%);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            border-radius: 32px;
+            padding: 36px 30px;
+            transition: all 0.35s ease;
+            overflow: hidden;
+        }
+        .cardBordaInterna:hover {
+            transform: translateY(-6px);
+            border-color: rgba(234, 179, 8, 0.6);
+            box-shadow: 0 30px 60px -15px rgba(234, 179, 8, 0.15);
+        }
+        .cardBordaInterna .icone-corner {
+            position: absolute;
+            right: 0;
+            top: 0;
+            background-color: #020408;
+            width: 74px;
+            height: 74px;
+            border-radius: 0 0 0 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .botaoDourado {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            height: 60px;
+            text-decoration: none;
+            color: #020408;
+            background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
+            border: none;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 6px 6px 28px;
+            gap: 12px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px -5px rgba(234, 179, 8, 0.35);
+            transition: all 0.35s ease;
+            position: relative;
+            padding-right: 70px;
+        }
+        .botaoDourado:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -5px rgba(234, 179, 8, 0.5);
+        }
+        .botaoDourado .divSeta {
+            background-color: #020408;
+            color: #facc15;
+            border-radius: 9999px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.35s ease;
+            position: absolute;
+            right: 6px;
+        }
+        .botaoDourado:hover .divSeta {
+            width: calc(100% - 12px);
+            background-color: #facc15;
+            color: #020408;
+        }
+
+        .cardSubtitulo {
+            width: max-content;
+            display: inline-flex;
+            padding: 7px 16px;
+            align-items: center;
+            gap: 8px;
+            border-radius: 9999px;
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+        .cardSubtitulo h3 {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #facc15;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+        .faq-answer.open {
+            max-height: 300px;
+            opacity: 1;
+        }
+        .faq-icon { transition: transform 0.35s ease; }
+        .faq-icon.rotated { transform: rotate(180deg); }
+
+        .marquee-wrapper {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+        .marquee-content {
+            display: inline-flex;
+            gap: 2rem;
+            animation: marqueeScroll 32s linear infinite;
+        }
+        @keyframes marqueeScroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        .rf-logo { font-weight: 400; white-space: nowrap; }
+        .rf-logo strong { font-weight: 700; }
+        .rf-logo .rf-hub { font-weight: 700; letter-spacing: 0.04em; }
+
+        .js-reveal .reveal {
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            transition-delay: var(--reveal-delay, 0ms);
+            will-change: opacity, transform;
+        }
+        .js-reveal .reveal:not(.is-visible) {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        main { overflow-x: hidden; overflow-x: clip; }
+    </style>
+</head>
+
+<body class="relative">
+
+    <!-- Preloader -->
+    <div id="preloader" class="fixed inset-0 z-50 bg-navy-950 flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="rf-logo text-3xl font-clash text-white mb-2 flex items-center gap-2">
+            <span><strong>R</strong>eal <strong>F</strong>it<span class="rf-hub text-gold-400"> HUB</span></span>
+            <span class="bg-gold-500 text-navy-950 text-xs font-black px-1.5 py-0.5 rounded tracking-widest uppercase">PRO</span>
+        </div>
+        <div class="text-xs uppercase tracking-widest text-slate-400">Carregando painel profissional...</div>
+    </div>
+
+    <!-- Header Fixo -->
+    <header class="fixed top-0 left-0 w-full bg-navy-950/90 backdrop-blur-2xl border-b border-gold/20 z-40">
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+            <a href="pro.html" class="inline-flex items-center gap-2.5 sm:gap-3 group" title="Real Fit Hub PRO">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform flex items-center justify-center shrink-0">
+                    <img src="assets/icon-192.png" alt="Real Fit Hub" class="w-full h-full object-cover rounded-[15px]" onerror="this.onerror=null; this.src='icon-192.png';">
+                </div>
+                <span class="text-xl font-bold tracking-tight text-white whitespace-nowrap font-clash flex items-center gap-2">
+                    <span><strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span class="text-amber-400 font-extrabold"> HUB</span></span>
+                    <span class="bg-gold-500 text-navy-950 text-[10px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest hidden sm:inline-block">PRO</span>
+                </span>
+            </a>
+
+            <nav class="hidden lg:flex items-center gap-7 text-xs uppercase tracking-wider font-bold text-slate-300">
+                <a href="#ecossistema" class="hover:text-gold-400 transition-colors">Ecossistema</a>
+                <a href="#planos" class="hover:text-gold-400 transition-colors">Planos</a>
+                <a href="#faq" class="hover:text-gold-400 transition-colors">Perguntas Frequentes</a>
+            </nav>
+
+            <div class="hidden lg:flex items-center gap-3.5">
+                <a href="login.html" class="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-slate-300 hover:text-white px-4 py-2.5 rounded-full hover:bg-white/5 border border-white/10 transition-all">
+                    <i data-lucide="lock" class="w-4 h-4 text-gold-400"></i> Área do Profissional
+                </a>
+                <a href="cadastro-profissional.html" class="botaoDourado !h-[48px] !text-xs !py-1 !pl-5 !pr-[58px]">
+                    <span>Começar Grátis</span>
+                    <div class="divSeta !w-[38px] !h-[38px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                </a>
+            </div>
+
+            <!-- Botões de Ação Mobile -->
+            <div class="flex items-center gap-2 lg:hidden">
+                <a href="login.html" class="flex items-center justify-center w-8 h-8 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 transition-all" title="Área do Profissional">
+                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                </a>
+                <a href="cadastro-profissional.html" class="flex items-center gap-1.5 text-xs font-bold text-navy-950 bg-gold-400 hover:bg-gold-500 px-3 py-2 rounded-xl transition-all">
+                    <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                    <span>Começar</span>
+                </a>
+                <button type="button" id="btn-mobile-menu" aria-label="Abrir Menu" class="w-10 h-10 rounded-xl bg-slate-900 border border-gold/20 flex items-center justify-center text-slate-200 hover:text-gold-400 transition-colors focus:outline-none">
+                    <i data-lucide="menu" id="icon-mobile-menu" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Suspenso Mobile -->
+        <div id="menu-mobile" class="hidden lg:hidden border-t border-gold/15 bg-navy-950/98 backdrop-blur-2xl px-5 py-6 space-y-4 shadow-2xl transition-all duration-300">
+            <nav class="flex flex-col space-y-3 text-sm font-semibold text-slate-200">
+                <a href="#ecossistema" onclick="fecharMenuMobile()" class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                    <span>Ecossistema B2B</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+                </a>
+                <a href="#planos" onclick="fecharMenuMobile()" class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                    <span>Planos e Preços</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+                </a>
+                <a href="#faq" onclick="fecharMenuMobile()" class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                    <span>Perguntas Frequentes</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+                </a>
+                <a href="login.html" class="flex items-center justify-between py-2 border-b border-white/5 text-slate-300 hover:text-white transition-colors">
+                    <span class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4 text-gold-400"></i> Área do Profissional</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+                </a>
+            </nav>
+            <div class="pt-2">
+                <a href="cadastro-profissional.html" class="botaoDourado w-full text-center justify-center !h-[50px] !text-xs !py-1 !pl-5 !pr-[58px]">
+                    <span>Começar Teste Grátis</span>
+                    <div class="divSeta !w-[40px] !h-[40px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section B2B -->
+        <section class="pt-32 pb-20 md:pt-44 md:pb-32 px-4 sm:px-6 relative bg-cover bg-center" style="background-image: linear-gradient(to right bottom, rgba(2, 4, 8, 0.95), rgba(3, 7, 18, 0.90)), url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=1920');">
+            <div class="max-w-7xl mx-auto text-center">
+                <div class="cardSubtitulo mx-auto mb-6 reveal" style="--reveal-delay: 0ms">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-gold-400"></i>
+                    <h3>ECOSSISTEMA PROFISSIONAL DE ALTO PADRÃO</h3>
+                </div>
+                <h1 class="font-clash text-3xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-8 text-white reveal" style="--reveal-delay: 120ms">
+                    ESCALABILIDADE E REFINAMENTO PARA A SUA <span class="text-gold-400">CONSULTORIA FITNESS</span>
+                </h1>
+                <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-300 mb-10 leading-relaxed reveal" style="--reveal-delay: 240ms">
+                    Elimine de vez as planilhas confusas, PDFs soltos e conversas perdidas no WhatsApp. Centralize prescrições inteligentes de dieta, treinos com vídeos, acompanhamento de fotos e gestão de alunos em um único painel de alta performance.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-[500px] mx-auto reveal" style="--reveal-delay: 360ms">
+                    <a href="cadastro-profissional.html" class="botaoDourado w-full sm:w-auto">
+                        <span>COMEÇAR TESTE GRÁTIS DE 7 DIAS</span>
+                        <div class="divSeta"><i data-lucide="arrow-right" class="w-5 h-5"></i></div>
+                    </a>
+                    <a href="login.html" class="flex items-center justify-center gap-2 w-full sm:w-auto h-[60px] px-8 rounded-full bg-white/5 border border-gold/30 text-white font-bold text-sm hover:bg-white/10 transition-all">
+                        <i data-lucide="lock" class="w-4 h-4 text-gold-400"></i> Acessar Plataforma
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marquee Dinâmico B2B -->
+        <section class="py-3 border-y border-gold/20 bg-navy-950 relative overflow-hidden">
+            <div class="marquee-wrapper">
+                <div class="marquee-content font-clash text-lg sm:text-xl font-semibold tracking-wider text-slate-300 uppercase items-center">
+                    <span>✦ BANCO DE ALIMENTOS TACO/IBGE</span> <span class="text-gold-400 font-bold">✦ PRESCRIÇÃO DE TREINOS COM VÍDEOS</span>
+                    <span>✦ ACOMPANHAMENTO DE FOTOS</span> <span class="text-amber-300 font-bold">✦ CÁLCULO AUTOMÁTICO DE MACROS</span>
+                    <span>✦ CHAT DIRETO E SEGURO</span> <span class="text-gold-400 font-bold">✦ APLICATIVO INSTALÁVEL PWA</span>
+                    <span>✦ GESTÃO FINANCEIRA E RETENÇÃO</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: A Plataforma para Profissionais -->
+        <section id="ecossistema" class="py-24 px-6 bg-navy-950 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                    <div class="cardSubtitulo mx-auto mb-4">
+                        <h3>A FERRAMENTA DEFINITIVA</h3>
+                    </div>
+                    <h2 class="font-clash text-3xl sm:text-5xl font-bold tracking-tight mb-4 text-white">
+                        CONTROLE ABSOLUTO <span class="text-gold-400">NA PALMA DA MÃO</span>
+                    </h2>
+                    <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+                        Gerencie todos os aspetos da sua consultoria com segurança, velocidade e a melhor experiência para você e seus alunos.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8" data-reveal-stagger="130">
+                    <div class="cardBordaInterna reveal">
+                        <div class="icone-corner">
+                            <div class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
+                                <i data-lucide="utensils" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <div class="text-xs font-bold text-gold-400 uppercase tracking-wider mb-2">Nutrição Clínica Avançada</div>
+                        <h3 class="font-clash text-xl font-bold mb-3 text-white">Gestão Dietética</h3>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Cálculo instantâneo Mifflin-St Jeor, banco TACO, lista inteligente de substituições e exportação de PDF personalizada com a sua marca e registro (CRN).
+                        </p>
+                    </div>
+
+                    <div class="cardBordaInterna reveal">
+                        <div class="icone-corner">
+                            <div class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
+                                <i data-lucide="dumbbell" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <div class="text-xs font-bold text-gold-400 uppercase tracking-wider mb-2">Prescrição de Treinamento</div>
+                        <h3 class="font-clash text-xl font-bold mb-3 text-white">Montagem de Fichas</h3>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Divisão de rotinas por grupos musculares, controle rigoroso de séries, repetições, tempos de descanso e links de execução direta em vídeo para o aluno.
+                        </p>
+                    </div>
+
+                    <div class="cardBordaInterna reveal">
+                        <div class="icone-corner">
+                            <div class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
+                                <i data-lucide="camera" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <div class="text-xs font-bold text-gold-400 uppercase tracking-wider mb-2">Avaliação Física</div>
+                        <h3 class="font-clash text-xl font-bold mb-3 text-white">Galeria Comparativa de Fotos</h3>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Timeline com fotos corporais criptografadas e seguras (frente, costas, perfil) organizadas automaticamente por data para a melhor avaliação de resultados.
+                        </p>
+                    </div>
+
+                    <div class="cardBordaInterna reveal">
+                        <div class="icone-corner">
+                            <div class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
+                                <i data-lucide="users" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <div class="text-xs font-bold text-gold-400 uppercase tracking-wider mb-2">Comunicação & Retenção</div>
+                        <h3 class="font-clash text-xl font-bold mb-3 text-white">Central de Atendimento</h3>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Central de chat exclusiva para tirar dúvidas rápidas dos alunos, mantendo a sua vida pessoal no WhatsApp isolada da sua atuação profissional.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Tabela de Planos e Preços -->
+        <section id="planos" class="py-24 px-6 border-t border-gold/20 bg-navy-950/80 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                    <div class="cardSubtitulo mx-auto mb-4">
+                        <h3>TRANSPARÊNCIA SEM SURPRESAS</h3>
+                    </div>
+                    <h2 class="font-clash text-3xl sm:text-5xl font-bold tracking-tight mb-4 text-white">
+                        ESCOLHA O PLANO QUE ACOMPANHA <span class="text-gold-400">A SUA ESCALA</span>
+                    </h2>
+                    <p class="text-sm sm:text-base text-slate-300">
+                        Todos os planos incluem a sua própria landing page de conversão e link direto de pagamento.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-center" data-reveal-stagger="150">
+                    <!-- Starter -->
+                    <div class="glass-card rounded-3xl p-8 hover:-translate-y-2 transition-transform duration-300 reveal">
+                        <div class="text-slate-400 font-bold tracking-wider text-sm mb-2 uppercase">Starter</div>
+                        <div class="flex items-baseline gap-1 mb-6">
+                            <span class="text-2xl font-bold text-white">R$</span>
+                            <span class="text-5xl font-clash font-extrabold text-white">69</span>
+                            <span class="text-slate-400">/mês</span>
+                        </div>
+                        <p class="text-sm text-slate-300 mb-8 h-10">Ideal para quem está a iniciar e pretende organizar os primeiros alunos.</p>
+                        
+                        <div class="space-y-4 mb-8 text-sm text-slate-300">
+                            <div class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-gold-400"></i> Até 15 alunos ativos</div>
+                            <div class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-gold-400"></i> Módulos Completos (Treino & Dieta)</div>
+                            <div class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-gold-400"></i> Suporte Padrão</div>
+                        </div>
+                        
+                        <a href="cadastro-profissional.html?plano=starter" class="block w-full text-center py-4 rounded-xl border-2 border-gold/30 text-gold-400 font-bold hover:bg-gold-500/10 transition-colors">Testar Starter Grátis</a>
+                    </div>
+
+                    <!-- Pro (Destaque) -->
+                    <div class="glass-card rounded-3xl p-8 border border-gold-400 shadow-2xl shadow-gold-500/20 transform md:scale-105 hover:-translate-y-2 transition-transform duration-300 relative reveal z-10">
+                        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gold-gradient text-navy-950 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg">
+                            MAIS ESCOLHIDO
+                        </div>
+                        <div class="text-gold-400 font-bold tracking-wider text-sm mb-2 uppercase">Pro</div>
+                        <div class="flex items-baseline gap-1 mb-6">
+                            <span class="text-2xl font-bold text-white">R$</span>
+                            <span class="text-5xl font-clash font-extrabold text-white">139</span>
+                            <span class="text-slate-400">/mês</span>
+                        </div>
+                        <p class="text-sm text-slate-300 mb-8 h-10">Acelere os seus resultados com ferramentas avançadas de retenção.</p>
+                        
+                        <div class="space-y-4 mb-8 text-sm text-slate-300">
+                            <div class="flex items-center gap-3 font-semibold text-white"><i data-lucide="check" class="w-5 h-5 text-gold-400"></i> Até 50 alunos ativos</div>
+                            <div class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-gold-400"></i> Todos os recursos Starter</div>
+                            <div class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-gold-400"></i> Assistente Clínico IA</div>
+                            <div class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-gold-400"></i> Check-ins automáticos</div>
+                        </div>
+                        
+                        <a href="cadastro-profissional.html?plano=pro" class="botaoDourado w-full text-center justify-center !h-[56px] !px-0">
+                            <span>Começar Teste Pro</span>
+                            <div class="divSeta !w-[44px] !h-[44px] !right-1.5"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                        </a>
+                    </div>
+
+                    <!-- Elite -->
+                    <div class="glass-card rounded-3xl p-8 hover:-translate-y-2 transition-transform duration-300 reveal">
+                        <div class="text-slate-400 font-bold tracking-wider text-sm mb-2 uppercase">Elite</div>
+                        <div class="flex items-baseline gap-1 mb-6">
+                            <span class="text-2xl font-bold text-white">R$</span>
+                            <span class="text-5xl font-clash font-extrabold text-white">229</span>
+                            <span class="text-slate-400">/mês</span>
+                        </div>
+                        <p class="text-sm text-slate-300 mb-8 h-10">Para mentorias consolidadas e agências de assessoria esportiva.</p>
+                        
+                        <div class="space-y-4 mb-8 text-sm text-slate-300">
+                            <div class="flex items-center gap-3 font-semibold text-white"><i data-lucide="check" class="w-5 h-5 text-gold-400"></i> Alunos ilimitados</div>
+                            <div class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-gold-400"></i> Gestão Multi-profissionais</div>
+                            <div class="flex items-center gap-3"><i data-lucide="check" class="w-5 h-5 text-gold-400"></i> Suporte WhatsApp Prioritário</div>
+                        </div>
+                        
+                        <a href="cadastro-profissional.html?plano=elite" class="block w-full text-center py-4 rounded-xl border-2 border-gold/30 text-gold-400 font-bold hover:bg-gold-500/10 transition-colors">Testar Elite Grátis</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Perguntas Frequentes -->
+        <section id="faq" class="py-24 px-6 border-t border-gold/20 bg-navy-950 relative">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-16 reveal">
+                    <div class="cardSubtitulo mx-auto mb-4">
+                        <h3>DÚVIDAS COMUNS</h3>
+                    </div>
+                    <h2 class="font-clash text-3xl sm:text-5xl font-bold tracking-tight mb-3 text-white">
+                        PERGUNTAS FREQUENTES <span class="text-gold-400">DO ASSINANTE</span>
+                    </h2>
+                </div>
+
+                <div class="space-y-4" id="faq-container" data-reveal-stagger="110">
+                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all reveal" onclick="toggleFaq(this)">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-base font-bold text-white">Preciso cadastrar cartão de crédito para o teste de 7 dias?</h3>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gold-400 faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p class="pt-4 text-sm text-slate-300 leading-relaxed">
+                                Não! O seu período de teste é liberado imediatamente sem necessidade de informações de pagamento. Queremos que experimente a plataforma por completo antes de tomar uma decisão.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all reveal" onclick="toggleFaq(this)">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-base font-bold text-white">Como os meus alunos acessam os treinos e dietas?</h3>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gold-400 faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p class="pt-4 text-sm text-slate-300 leading-relaxed">
+                                Você gera um "Link Único de Convite" no seu painel e envia para o aluno (via WhatsApp, por exemplo). O aluno clica no link, cria a sua própria conta, cadastra uma senha e acede ao portal PWA (que pode ser instalado como app no telemóvel).
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all reveal" onclick="toggleFaq(this)">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-base font-bold text-white">Meus relatórios em PDF saem com meu nome e registro (CRN/CREF)?</h3>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gold-400 faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p class="pt-4 text-sm text-slate-300 leading-relaxed">
+                                Sim. As dietas e treinos exportados em PDF contam com um cabeçalho e rodapé personalizados com o seu nome, registro profissional, logótipo e contactos oficiais.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all reveal" onclick="toggleFaq(this)">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-base font-bold text-white">Posso alterar meu plano conforme minha consultoria for crescendo?</h3>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gold-400 faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p class="pt-4 text-sm text-slate-300 leading-relaxed">
+                                Com certeza. Pode fazer upgrade ou downgrade de planos a qualquer momento de forma autónoma diretamente pelo painel de cobranças, sem taxas ocultas.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gold/20 bg-navy-950 py-16 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+            <a href="pro.html" class="inline-flex items-center gap-2.5 sm:gap-3 group" title="Real Fit Hub PRO">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 shadow-md shadow-amber-500/20 flex items-center justify-center shrink-0">
+                    <img src="assets/icon-192.png" alt="Real Fit Hub" class="w-full h-full object-cover rounded-[15px]" onerror="this.onerror=null; this.src='icon-192.png';">
+                </div>
+                <span class="text-xl font-bold tracking-tight text-white whitespace-nowrap font-clash flex items-center gap-2">
+                    <span><strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span class="text-amber-400 font-extrabold"> HUB</span></span>
+                    <span class="bg-gold-500 text-navy-950 text-[10px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest hidden sm:inline-block">PRO</span>
+                </span>
+            </a>
+
+            <div class="flex flex-wrap items-center justify-center gap-8 text-xs font-bold uppercase tracking-wider text-slate-300">
+                <a href="#ecossistema" class="hover:text-gold-400 transition-colors">Ecossistema</a>
+                <a href="#planos" class="hover:text-gold-400 transition-colors">Planos</a>
+                <a href="termos.html" class="hover:text-gold-400 transition-colors">Termos de Uso</a>
+                <a href="privacidade.html" class="hover:text-gold-400 transition-colors">Privacidade</a>
+            </div>
+
+            <div class="text-xs text-center md:text-right font-medium text-slate-400">
+                © 2026 Real Fit Hub PRO.<br>
+                Consultoria Fitness de Alta Performance.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                setTimeout(() => preloader.style.display = 'none', 500);
+            }
+        });
+
+        // Intersection Observer para animações de Reveal on Scroll
+        if ('IntersectionObserver' in window) {
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach((el, index) => {
+                // Adiciona um delay em escada para itens de grid baseados no atributo data-reveal-stagger
+                const parentStagger = el.closest('[data-reveal-stagger]');
+                if (parentStagger && !el.style.getPropertyValue('--reveal-delay')) {
+                    const delayMs = parseInt(parentStagger.getAttribute('data-reveal-stagger')) || 100;
+                    const children = Array.from(parentStagger.querySelectorAll('.reveal'));
+                    const myIndex = children.indexOf(el);
+                    if (myIndex !== -1) {
+                        el.style.setProperty('--reveal-delay', `${myIndex * delayMs}ms`);
+                    }
+                }
+                observer.observe(el);
+            });
+            window.__rfRevealReady = true;
+        }
+
+        function toggleFaq(card) {
+            const answer = card.querySelector('.faq-answer');
+            const icon = card.querySelector('.faq-icon');
+            const isOpen = answer.classList.contains('open');
+
+            document.querySelectorAll('.faq-answer').forEach(el => el.classList.remove('open'));
+            document.querySelectorAll('.faq-icon').forEach(el => el.classList.remove('rotated'));
+
+            if (!isOpen) {
+                answer.classList.add('open');
+                icon.classList.add('rotated');
+            }
+        }
+
+        // Controle do Menu Mobile
+        const btnMobile = document.getElementById('btn-mobile-menu');
+        const menuMobile = document.getElementById('menu-mobile');
+        const iconMobile = document.getElementById('icon-mobile-menu');
+
+        function toggleMenuMobile() {
+            if (!menuMobile) return;
+            const estaOculto = menuMobile.classList.contains('hidden');
+            if (estaOculto) {
+                menuMobile.classList.remove('hidden');
+                if (iconMobile) iconMobile.setAttribute('data-lucide', 'x');
+            } else {
+                menuMobile.classList.add('hidden');
+                if (iconMobile) iconMobile.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        }
+
+        function fecharMenuMobile() {
+            if (!menuMobile) return;
+            menuMobile.classList.add('hidden');
+            if (iconMobile) iconMobile.setAttribute('data-lucide', 'menu');
+            lucide.createIcons();
+        }
+
+        if (btnMobile) {
+            btnMobile.addEventListener('click', toggleMenuMobile);
+        }
+    </script>
+</body>
+</html>
