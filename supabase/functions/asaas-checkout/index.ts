@@ -26,20 +26,70 @@ serve(async (req) => {
     if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
     try {
-        const { profissionalId, planoEscolhido } = await req.json();
+        const body = await req.json();
 
-        if (!profissionalId || !PRECOS_PLANOS[planoEscolhido]) {
-            return new Response(JSON.stringify({ error: "Dados inválidos." }), { status: 400, headers: corsHeaders });
+        const profissionalId = body.profissionalId || body.userId;
+        const planoEscolhido = body.planoEscolhido || body.plan;
+        const nomeProfissional = body.nome || "Profissional Real Fit Hub";
+        const emailProfissional = body.email;
+        const telefoneProfissional = body.telefone;
+        const cpfProfissional = body.cpf;
+        const papelProfissional = body.papel || "profissional";
+        const especialidade = body.especialidade || "Ambos";
+
+        if (!profissionalId || !planoEscolhido || !PRECOS_PLANOS[planoEscolhido]) {
+            return new Response(JSON.stringify({
+                error: "Dados inválidos.",
+                detalhes: { profissionalId, planoEscolhido }
+            }), {
+                status: 400,
+                headers: { ...corsHeaders, "Content-Type": "application/json" }
+            });
         }
 
-        const { data: prof, error: errProf } = await supabase
+        let { data: prof, error: errProf } = await supabase
             .from("profissionais")
             .select("id, nome, email, asaas_customer_id")
-            .eq("id", profissionalId)
-            .single();
+            .or(`id.eq.${profissionalId},user_id.eq.${profissionalId}`)
+            .maybeSingle();
 
-        if (errProf || !prof) {
-            return new Response(JSON.stringify({ error: "Profissional não encontrado." }), { status: 404, headers: corsHeaders });
+        if (!prof) {
+            const { data: novoProf, error: errInsert } = await supabase
+                .from("profissionais")
+                .upsert({
+                    id: profissionalId,
+                    nome: nomeProfissional,
+                    email: emailProfissional,
+                    telefone: telefoneProfissional,
+                    papel: papelProfissional,
+                    especialidade: especialidade
+                    // Removido: plano: planoEscolhido
+                })
+                .select("id, nome, email, asaas_customer_id")
+                .single();
+
+            if (errInsert || !novoProf) {
+                const { data: retryProf, error: errRetry } = await supabase
+                    .from("profissionais")
+                    .upsert({
+                        user_id: profissionalId,
+                        nome: nomeProfissional,
+                        email: emailProfissional,
+                        telefone: telefoneProfissional,
+                        papel: papelProfissional,
+                        especialidade: especialidade
+                        // Removido: plano: planoEscolhido
+                    })
+                    .select("id, nome, email, asaas_customer_id")
+                    .single();
+
+                if (errRetry || !retryProf) {
+                    throw new Error("Não foi possível localizar nem criar o profissional: " + (errInsert?.message || errRetry?.message));
+                }
+                prof = retryProf;
+            } else {
+                prof = novoProf;
+            }
         }
 
         let customerId = prof.asaas_customer_id;
@@ -52,8 +102,10 @@ serve(async (req) => {
                     "access_token": ASAAS_API_KEY
                 },
                 body: JSON.stringify({
-                    name: prof.nome || "Profissional Real Fit Hub",
-                    email: prof.email,
+                    name: prof.nome || nomeProfissional,
+                    email: prof.email || emailProfissional,
+                    phone: telefoneProfissional,
+                    cpfCnpj: cpfProfissional,
                     externalReference: prof.id
                 })
             });
@@ -101,6 +153,7 @@ serve(async (req) => {
 
         await supabase.from("profissionais").update({
             asaas_subscription_id: dataSub.id
+            // Removido: plano: planoEscolhido
         }).eq("id", prof.id);
 
         return new Response(JSON.stringify({
