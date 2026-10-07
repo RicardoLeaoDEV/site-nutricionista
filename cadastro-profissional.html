@@ -159,8 +159,8 @@
                                 points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
                             </polygon>
                         </svg>
-                        <h3 class="text-[11px] font-bold uppercase tracking-wider text-gold-400">7 DIAS DE TESTE GRÁTIS
-                        </h3>
+                        <h3 class="text-[11px] font-bold uppercase tracking-wider text-gold-400" id="badge-trial-texto">
+                            3 DIAS DE TESTE NO STARTER</h3>
                     </div>
 
                     <h1 class="font-clash text-2xl xl:text-3xl font-bold text-white leading-tight mb-3">
@@ -205,8 +205,7 @@
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </div>
-                        <span><strong>Sem fidelidade:</strong> Comece agora sem precisar cadastrar cartão de
-                            crédito.</span>
+                        <span><strong>Sem fidelidade:</strong> Cancele ou mude de plano a qualquer momento.</span>
                     </div>
                 </div>
 
@@ -251,6 +250,7 @@
                             Preencha seus dados para ter acesso imediato ao painel administrativo.
                         </p>
                     </div>
+
                     <!-- Badge do Plano Selecionado -->
                     <div id="badge-plano-selecionado"
                         class="my-5 p-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 flex items-center justify-between">
@@ -276,6 +276,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div id="alert-box"
                         class="hidden mb-4 p-3.5 rounded-2xl text-xs flex items-start gap-2.5 transition-all duration-300">
                         <span id="alert-text"></span>
@@ -294,7 +295,6 @@
                                         class="role-box p-3 rounded-2xl bg-[#091122] border border-slate-700/80 hover:border-gold/50 transition-all flex flex-col items-center text-center gap-1">
                                         <div
                                             class="role-icon-wrap w-8 h-8 rounded-xl bg-slate-800 text-orange-400 border border-slate-700 flex items-center justify-center transition-colors">
-                                            <!-- Halter -->
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
                                                 viewBox="0 0 24 24">
                                                 <path d="M6 5v14M18 5v14M3 9h3M3 15h3M18 9h3M18 15h3M6 12h12"></path>
@@ -311,7 +311,6 @@
                                         class="role-box p-3 rounded-2xl bg-[#091122] border border-slate-700/80 hover:border-gold/50 transition-all flex flex-col items-center text-center gap-1">
                                         <div
                                             class="role-icon-wrap w-8 h-8 rounded-xl bg-slate-800 text-lime-400 border border-slate-700 flex items-center justify-center transition-colors">
-                                            <!-- Folha / Nutri -->
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
                                                 viewBox="0 0 24 24">
                                                 <path
@@ -331,7 +330,6 @@
                                         class="role-box p-3 rounded-2xl bg-[#091122] border border-slate-700/80 hover:border-gold/50 transition-all flex flex-col items-center text-center gap-1">
                                         <div
                                             class="role-icon-wrap w-8 h-8 rounded-xl bg-slate-800 text-gold-400 border border-slate-700 flex items-center justify-center transition-colors">
-                                            <!-- Ambos / Camadas -->
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
                                                 viewBox="0 0 24 24">
                                                 <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
@@ -452,7 +450,7 @@
                         <div class="pt-2">
                             <button type="submit" id="btn-submit"
                                 class="botaoDourado w-full text-center justify-center">
-                                <span id="btn-text">INICIAR TESTE GRÁTIS DE 7 DIAS</span>
+                                <span id="btn-text">INICIAR TESTE DE 3 DIAS GRÁTIS</span>
                                 <div class="divSeta">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5"
                                         viewBox="0 0 24 24">
@@ -541,10 +539,14 @@
             const elNome = document.getElementById('nome-plano');
             const elCondicao = document.getElementById('condicao-plano');
             const btnText = document.getElementById('btn-text');
+            const badgeTrial = document.getElementById('badge-trial-texto');
 
             if (elNome) elNome.textContent = dadosPlanoAtual.nome;
             if (elCondicao) elCondicao.textContent = dadosPlanoAtual.condicao;
             if (btnText) btnText.textContent = dadosPlanoAtual.textoBotao;
+            if (badgeTrial && planoSelecionado !== 'starter') {
+                badgeTrial.textContent = 'ACESSO PROFISSIONAL EXCLUSIVO';
+            }
         });
 
         // 2. Submissão do Cadastro
@@ -554,7 +556,8 @@
             const especialidade = document.querySelector('input[name="especialidade"]:checked')?.value || 'personal';
             const nome = document.getElementById('nome').value.trim();
             const email = document.getElementById('email').value.trim();
-            const telefone = document.getElementById('telefone').value.trim();
+            const telefoneCru = document.getElementById('telefone').value.trim();
+            const telefoneLimpo = telefoneCru.replace(/\D/g, '');
             const password = document.getElementById('password').value;
 
             const btn = document.getElementById('btn-submit');
@@ -573,7 +576,7 @@
                     options: {
                         data: {
                             nome: nome,
-                            telefone: telefone,
+                            telefone: telefoneLimpo,
                             papel: 'profissional',
                             especialidade: especialidade,
                             plano_inicial: planoSelecionado
@@ -587,40 +590,28 @@
                     const userId = data.user.id;
                     const session = data.session;
 
-                    let statusAssinatura = 'trial';
-                    let trialAte = null;
+                    // Montagem limpa do payload de dados do profissional
+                    const dadosProfissional = {
+                        id: userId,
+                        nome: nome,
+                        email: email,
+                        telefone: telefoneLimpo,
+                        especialidade: especialidade,
+                        plano: planoSelecionado,
+                        status_assinatura: planoSelecionado === 'starter' ? 'trial' : 'pendente',
+                        limite_alunos: dadosPlanoAtual.limiteAlunos
+                    };
 
-                    // REGRA: Apenas Starter tem teste (3 dias)
-                    if (planoSelecionado === 'starter') {
-                        const trialExpira = new Date();
-                        trialExpira.setDate(trialExpira.getDate() + 3);
-                        trialAte = trialExpira.toISOString();
-                        statusAssinatura = 'trial';
-                    } else {
-                        // Pro e Elite começam aguardando pagamento
-                        statusAssinatura = 'pendente';
-                    }
-
-                    // 2. Gravar os dados do profissional
+                    // Inserção resiliente no banco
                     const { error: proError } = await supabaseClient
                         .from('profissionais')
-                        .insert([{
-                            id: userId,
-                            nome: nome,
-                            email: email,
-                            telefone: telefone,
-                            especialidade: especialidade,
-                            plano: planoSelecionado,
-                            status_assinatura: statusAssinatura,
-                            limite_alunos: dadosPlanoAtual.limiteAlunos,
-                            trial_ate: trialAte
-                        }]);
+                        .upsert([dadosProfissional], { onConflict: 'id' });
 
-                    if (proError && !proError.message.includes('duplicate key')) {
+                    if (proError) {
                         console.warn("Aviso ao salvar na tabela profissionais:", proError);
                     }
 
-                    // FLUXO A: Starter (Teste Grátis) -> Redireciona direto para o painel
+                    // FLUXO A: Starter (Teste Grátis 3 dias) -> Vai direto para o painel
                     if (planoSelecionado === 'starter') {
                         showAlert('Conta criada com sucesso! Seu teste de 3 dias está liberado.', 'success');
 
@@ -635,7 +626,7 @@
                     }
 
                     // FLUXO B: Pro ou Elite -> Chamar Edge Function Asaas Checkout
-                    showAlert('Conta criada! Redirecionando para o pagamento seguro...', 'success');
+                    showAlert('Conta criada! Conectando ao Asaas para gerar o pagamento...', 'success');
 
                     const tokenAuth = session?.access_token;
 
@@ -650,14 +641,15 @@
                             userId: userId,
                             email: email,
                             nome: nome,
-                            telefone: telefone
+                            telefone: telefoneLimpo
                         })
                     });
 
                     const checkoutData = await respostaCheckout.json();
 
                     if (!respostaCheckout.ok) {
-                        throw new Error(checkoutData.error || 'Erro ao gerar fatura no Asaas.');
+                        const msgErro = checkoutData.error || (checkoutData.errors && checkoutData.errors[0]?.description) || 'Erro ao gerar fatura no Asaas.';
+                        throw new Error(msgErro);
                     }
 
                     const linkPagamento = checkoutData.invoiceUrl || checkoutData.paymentUrl || checkoutData.bankSlipUrl;
