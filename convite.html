@@ -1,144 +1,373 @@
-html
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="h-full">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Convite de Acesso - Real Fit Hub</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Real Fit Hub - Convite de Acesso</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="RF Hub">
+
+    <!-- Tipografia Oficial do Index -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- SDKs e Estilização -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        clash: ['"Clash Display"', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
+                    },
+                    colors: {
+                        navy: { 900: '#030712', 950: '#020408' },
+                        gold: { 400: '#facc15', 500: '#eab308', 600: '#ca8a04' }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
+        html,
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
+            background-color: #020408;
+            color: rgba(255, 255, 255, 0.95);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
         }
 
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .radial-bg {
+            background:
+                radial-gradient(circle at 50% 10%, rgba(234, 179, 8, 0.12), transparent 50%),
+                radial-gradient(circle at 10% 90%, rgba(202, 138, 4, 0.08), transparent 45%),
+                #020408;
+        }
+
+        .cardSubtitulo {
+            display: inline-flex;
+            padding: 6px 14px;
+            align-items: center;
+            gap: 8px;
+            border-radius: 9999px;
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.28);
+        }
+
+        .botaoDourado {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            height: 52px;
+            text-decoration: none;
+            color: #020408;
+            background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
+            border: none;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 6px 4px 22px;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.35);
+            transition: all 0.3s ease;
+            position: relative;
+            padding-right: 60px;
+            letter-spacing: 0.02em;
+        }
+
+        .botaoDourado:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px -5px rgba(234, 179, 8, 0.5);
+        }
+
+        .botaoDourado .divSeta {
+            background-color: #020408;
+            color: #facc15;
+            border-radius: 9999px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: absolute;
+            right: 6px;
+        }
+
+        .botaoDourado:hover .divSeta {
+            width: calc(100% - 12px);
+            background-color: #facc15;
+            color: #020408;
         }
     </style>
 </head>
 
-<body class="min-h-screen flex items-center justify-center p-4 bg-[url('assets/bg-pattern.svg')] bg-cover bg-center">
+<body class="radial-bg flex items-center justify-center p-4 sm:p-6 selection:bg-gold-500 selection:text-navy-950">
 
-    <div class="glass-panel w-full max-w-md rounded-2xl shadow-2xl p-8 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
+    <div class="w-full max-w-md my-auto">
+        <div id="card-principal"
+            class="bg-[#050a14]/95 border border-gold/25 rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] p-6 sm:p-8 backdrop-blur-2xl relative overflow-hidden">
 
-        <div class="text-center mb-6">
-            <div
-                class="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-                <i data-lucide="mail-open" class="w-8 h-8 text-emerald-400"></i>
+            <!-- Linha decorativa dourada superior -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold-500 via-amber-300 to-gold-600">
             </div>
-            <h1 class="text-2xl font-bold text-white mb-2">Você foi convidado!</h1>
-            <p class="text-slate-400 text-sm">Seu profissional de saúde enviou um convite exclusivo para você acessar o
-                Real Fit Hub.</p>
-        </div>
 
-        <form id="form-convite" class="space-y-4">
-            <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">Nome
-                    Completo</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i data-lucide="user" class="w-5 h-5 text-slate-500"></i>
+            <!-- Cabeçalho do Card -->
+            <div class="text-center mb-6">
+                <!-- Logotipo Oficial -->
+                <a href="index.html" class="inline-flex items-center gap-2.5 mb-5 group">
+                    <div
+                        class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-gold-600 to-amber-300 flex items-center justify-center text-navy-950 font-black shadow-md shadow-gold-500/25 group-hover:scale-105 transition-transform">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
                     </div>
-                    <input type="text" id="nome" required
-                        class="w-full bg-slate-800/50 border border-slate-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent block pl-10 p-3 transition-all"
-                        placeholder="Seu nome completo">
+                    <span class="font-clash text-xl font-bold tracking-tight text-white">
+                        <span class="font-black">R</span>eal <span class="font-black">F</span>it<span
+                            class="text-gold-400"> HUB</span>
+                    </span>
+                </a>
+
+                <div class="cardSubtitulo mb-3">
+                    <svg class="w-3.5 h-3.5 text-gold-400" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path d="M22 10.5V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h12"></path>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                        <path d="M18 14v4h4"></path>
+                        <circle cx="18" cy="18" r="3"></circle>
+                    </svg>
+                    <h3 class="text-[10px] font-bold uppercase tracking-wider text-gold-400">CONVITE EXCLUSIVO</h3>
                 </div>
+
+                <h1 class="font-clash text-2xl font-bold text-white tracking-tight">Você foi convidado! 🎯</h1>
+                <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+                    <span id="texto-origem-convite">O seu treinador preparou o seu acesso à plataforma.</span> Crie a
+                    sua conta para aceder aos seus treinos e dietas.
+                </p>
             </div>
 
-            <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">E-mail</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i data-lucide="mail" class="w-5 h-5 text-slate-500"></i>
+            <!-- Caixa de Alerta -->
+            <div id="toast"
+                class="hidden mb-4 p-3 rounded-2xl text-xs flex items-center justify-center transition-all text-center">
+            </div>
+
+            <!-- Formulário de Registro -->
+            <form id="form-convite" class="space-y-3.5">
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">
+                        Nome Completo <span class="text-gold-400">*</span>
+                    </label>
+                    <div class="relative">
+                        <span
+                            class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </span>
+                        <input type="text" id="nome" required placeholder="O seu nome completo"
+                            class="w-full bg-[#091122] border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-500 transition-all">
                     </div>
-                    <input type="email" id="email" required
-                        class="w-full bg-slate-800/50 border border-slate-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent block pl-10 p-3 transition-all"
-                        placeholder="seu@email.com">
                 </div>
-            </div>
 
-            <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">Crie sua
-                    Senha</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i data-lucide="lock" class="w-5 h-5 text-slate-500"></i>
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">
+                        O seu Melhor E-mail <span class="text-gold-400">*</span>
+                    </label>
+                    <div class="relative">
+                        <span
+                            class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                </path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </span>
+                        <input type="email" id="email" required placeholder="aluno@email.com"
+                            class="w-full bg-[#091122] border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-500 transition-all">
                     </div>
-                    <input type="password" id="senha" required minlength="6"
-                        class="w-full bg-slate-800/50 border border-slate-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent block pl-10 p-3 transition-all"
-                        placeholder="Mínimo 6 caracteres">
                 </div>
+
+                <!-- Campo de Senha com Botão de Visualizar / Ocultar -->
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">
+                        Crie a sua Senha <span class="text-gold-400">*</span>
+                    </label>
+                    <div class="relative">
+                        <span
+                            class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </span>
+                        <input type="password" id="senha" required minlength="6" placeholder="Mínimo 6 caracteres"
+                            class="w-full bg-[#091122] border border-slate-700 rounded-xl pl-10 pr-11 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-500 transition-all">
+
+                        <!-- Botão com Ícone Dinâmico -->
+                        <button type="button" id="btn-toggle-senha" aria-label="Mostrar ou ocultar senha"
+                            class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-gold-400 transition-colors focus:outline-none cursor-pointer">
+                            <svg id="icone-olho" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <!-- Olho Aberto Inicial -->
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Checkbox LGPD -->
+                <div class="pt-1">
+                    <label class="flex items-start gap-2.5 cursor-pointer text-[11px] text-slate-400 leading-tight">
+                        <input type="checkbox" id="termos" required
+                            class="mt-0.5 rounded border-slate-700 text-gold-500 focus:ring-gold-500">
+                        <span>Autorizo o tratamento dos meus dados e fotos pela assessoria, conforme a <a
+                                href="privacidade.html" target="_blank"
+                                class="text-gold-400 underline hover:text-gold-300">Política de Privacidade
+                                (LGPD)</a>.</span>
+                    </label>
+                </div>
+
+                <!-- Botão de Ação Dourado -->
+                <div class="pt-2">
+                    <button type="submit" id="btn-submit" class="botaoDourado w-full text-center justify-center">
+                        <span id="btn-text">CRIAR MEU ACESSO</span>
+                        <div class="divSeta">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5"
+                                viewBox="0 0 24 24">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-5 pt-4 border-t border-slate-800 text-center">
+                <p class="text-xs text-slate-400">
+                    Já possui conta ativa?
+                    <a href="login.html" class="text-gold-400 font-bold hover:text-gold-300 ml-1">Fazer login</a>
+                </p>
             </div>
-
-            <div class="flex items-start gap-3 mt-4">
-                <input type="checkbox" id="termos" required
-                    class="mt-1 w-4 h-4 text-emerald-500 bg-slate-800 border-slate-600 rounded focus:ring-emerald-500">
-                <label for="termos" class="text-xs text-slate-400 leading-tight">
-                    Autorizo o tratamento dos meus dados de saúde e imagens pelo profissional, conforme a <a
-                        href="privacidade.html" class="text-emerald-400 hover:underline">Política de Privacidade
-                        (LGPD)</a>.
-                </label>
-            </div>
-
-            <button type="submit" id="btn-submit"
-                class="w-full mt-6 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold py-3.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-emerald-500/25">
-                <span>Criar Meu Acesso</span>
-                <i data-lucide="arrow-right" class="w-5 h-5"></i>
-            </button>
-        </form>
-
-        <div id="toast"
-            class="absolute bottom-4 left-4 right-4 bg-red-500/10 border border-red-500/50 text-red-200 p-3 rounded-lg text-sm text-center hidden backdrop-blur-md">
         </div>
     </div>
 
+    <!-- Script de Processamento e Visualização da Senha -->
     <script>
-        lucide.createIcons();
-
         const SUPABASE_URL = 'https://dnlqkozlaqizhqsexcei.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRubHFrb3psYXFpemhxc2V4Y2VpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODk3MjksImV4cCI6MjEwNTc2NTcyOX0.-YEYBVHYcIBoe5taFgcC1jO2AbIYdnfI_srwif9dd7I';
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Suporta tanto ?prof= (novo padrão) quanto ?token=
+        // LÓGICA DE VISUALIZAR E OCULTAR SENHA
+        const campoSenha = document.getElementById('senha');
+        const btnToggleSenha = document.getElementById('btn-toggle-senha');
+        const iconeOlho = document.getElementById('icone-olho');
+
+        const SVG_OLHO_ABERTO = `
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+        `;
+
+        const SVG_OLHO_RISCADO = `
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+        `;
+
+        btnToggleSenha.addEventListener('click', () => {
+            const estaOculto = campoSenha.getAttribute('type') === 'password';
+
+            if (estaOculto) {
+                campoSenha.setAttribute('type', 'text');
+                iconeOlho.innerHTML = SVG_OLHO_RISCADO;
+            } else {
+                campoSenha.setAttribute('type', 'password');
+                iconeOlho.innerHTML = SVG_OLHO_ABERTO;
+            }
+        });
+
+        // Captura do parâmetro de URL (compatível com ?prof= e ?token=)
         const urlParams = new URLSearchParams(window.location.search);
         const profissionalId = urlParams.get('prof') || urlParams.get('token');
-
-        if (!profissionalId) {
-            document.querySelector('.glass-panel').innerHTML = '<div class="text-center py-8"><i data-lucide="alert-circle" class="w-16 h-16 text-red-500 mx-auto mb-4"></i><h2 class="text-xl font-bold text-white mb-2">Convite Inválido</h2><p class="text-slate-400">O link fornecido está incompleto ou inválido. Solicite um novo link ao seu profissional.</p></div>';
-            lucide.createIcons();
-        }
 
         function showToast(msg, isError = true) {
             const toast = document.getElementById('toast');
             toast.textContent = msg;
-            toast.className = `absolute bottom-4 left-4 right-4 p-3 rounded-lg text-sm text-center backdrop-blur-md transition-all ${isError ? 'bg-red-500/10 border border-red-500/50 text-red-200' : 'bg-emerald-500/10 border border-emerald-500/50 text-emerald-200'}`;
+            toast.className = `mb-4 p-3 rounded-2xl text-xs flex items-center justify-center transition-all text-center ${isError
+                    ? 'bg-rose-500/10 border border-rose-500/30 text-rose-300'
+                    : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
+                }`;
             toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 5000);
         }
 
+        // Validação inicial do link de convite
+        if (!profissionalId) {
+            const card = document.getElementById('card-principal');
+            card.innerHTML = `
+                <div class="text-center py-6">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center mb-4 text-rose-400">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <h2 class="font-clash text-xl font-bold text-white mb-2">Convite Inválido</h2>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-6">
+                        O link fornecido está incompleto ou expirado. Peça ao seu treinador para gerar um novo convite.
+                    </p>
+                    <a href="login.html" class="inline-flex items-center justify-center text-xs font-bold text-gold-400 hover:text-gold-300 underline">
+                        Voltar para a Área de Login
+                    </a>
+                </div>
+            `;
+        } else {
+            // Busca o nome do profissional para personalizar a tela
+            (async function obterNomeProfissional() {
+                try {
+                    const { data: prof } = await supabaseClient
+                        .from('profissionais')
+                        .select('nome')
+                        .eq('id', profissionalId)
+                        .maybeSingle();
+
+                    if (prof && prof.nome) {
+                        const elementoTexto = document.getElementById('texto-origem-convite');
+                        if (elementoTexto) {
+                            elementoTexto.innerHTML = `A assessoria de <strong class="text-gold-400">${prof.nome}</strong> enviou este convite exclusivo.`;
+                        }
+                    }
+                } catch (e) { }
+            })();
+        }
+
+        // Submissão do Registro do Aluno
         document.getElementById('form-convite')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit');
+            const btnText = document.getElementById('btn-text');
+
             btn.disabled = true;
-            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Aguarde...</span>';
-            lucide.createIcons();
+            btnText.textContent = 'CRIANDO SEU ACESSO...';
 
             const nome = document.getElementById('nome').value.trim();
             const email = document.getElementById('email').value.trim();
             const senha = document.getElementById('senha').value;
 
             try {
-                // 1. Cria utilizador no Supabase Auth
+                // 1. Cria a conta no Supabase Auth
                 const { data, error: authError } = await supabaseClient.auth.signUp({
                     email,
                     password: senha,
@@ -154,7 +383,7 @@ html
 
                 if (authError) throw authError;
 
-                // 2. Insere na tabela alunos associando o profissional
+                // 2. Insere na tabela alunos associando o id do profissional
                 if (data && data.user) {
                     const novoAlunoId = data.user.id;
                     const { error: insertError } = await supabaseClient
@@ -167,22 +396,21 @@ html
                         }]);
 
                     if (insertError && !insertError.message.includes('duplicate key')) {
-                        console.warn("Aviso ao inserir na tabela alunos:", insertError);
+                        console.warn("Aviso ao vincular tabela alunos:", insertError);
                     }
                 }
 
-                showToast('Acesso criado com sucesso! Redirecionando...', false);
+                showToast('Acesso criado com sucesso! Entrando na sua área...', false);
 
                 setTimeout(() => {
                     window.location.href = 'dashboard.html';
-                }, 1500);
+                }, 1400);
 
             } catch (error) {
                 console.error(error);
-                showToast(error.message === 'User already registered' ? 'Este e-mail já possui cadastro.' : 'Erro ao criar acesso: ' + error.message);
+                showToast(error.message === 'User already registered' ? 'Este e-mail já possui cadastro. Faça login.' : 'Erro ao criar conta: ' + error.message, true);
                 btn.disabled = false;
-                btn.innerHTML = '<span>Criar Meu Acesso</span><i data-lucide="arrow-right" class="w-5 h-5"></i>';
-                lucide.createIcons();
+                btnText.textContent = 'CRIAR MEU ACESSO';
             }
         });
     </script>
