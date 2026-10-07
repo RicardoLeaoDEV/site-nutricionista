@@ -362,15 +362,10 @@
                     </div>
                 </div>
 
-                <a href="personal.html"
-                    class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all"><i
+                <a href="personal.html" id="btn-atalho-personal"
+                    class="hidden items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all"><i
                         data-lucide="dumbbell" class="w-4 h-4 text-orange-400"></i><span class="hidden lg:inline">Espaço
                         do Personal</span></a>
-                <a href="dashboard.html"
-                    class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all">
-                    <i data-lucide="eye" class="w-4 h-4 text-brand-400"></i>
-                    <span class="hidden lg:inline">Ver como Aluno</span>
-                </a>
 
                 <div class="h-6 w-px bg-slate-800"></div>
 
@@ -2030,6 +2025,17 @@
                 alert('Acesso negado. Esta área é restrita ao nutricionista.');
                 window.location.href = 'dashboard.html';
                 return;
+            }
+
+            const btnPersonal = document.getElementById('btn-atalho-personal');
+            if (btnPersonal) {
+                if (_m.especialidade === 'ambos' || session.user.id === ADMIN_UID) {
+                    btnPersonal.classList.remove('hidden');
+                    btnPersonal.classList.add('flex');
+                } else {
+                    btnPersonal.classList.add('hidden');
+                    btnPersonal.classList.remove('flex');
+                }
             }
 
             await carregarPerfisAlunosAdmin();
