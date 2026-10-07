@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real Fit Hub - Acesso</title>
-    <meta name="description" content="Acesse o portal Real Fit Hub: plano alimentar, fichas de treino e evolução em um só lugar.">
+    <meta name="description"
+        content="Acesse o portal Real Fit Hub: plano alimentar, fichas de treino e evolução em um só lugar.">
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -121,15 +122,18 @@
                 </div>
 
                 <div>
-                    <a href="index.html" class="inline-flex items-center gap-2.5 sm:gap-3 group mb-10" title="Real Fit Hub">
-                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform flex items-center justify-center shrink-0">
-                            <img src="assets/icon-192.png" 
-                                 alt="Real Fit Hub" 
-                                 class="w-full h-full object-cover rounded-[15px]"
-                                 onerror="this.onerror=null; this.src='icon-192.png';">
+                    <a href="index.html" class="inline-flex items-center gap-2.5 sm:gap-3 group mb-10"
+                        title="Real Fit Hub">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform flex items-center justify-center shrink-0">
+                            <img src="assets/icon-192.png" alt="Real Fit Hub"
+                                class="w-full h-full object-cover rounded-[15px]"
+                                onerror="this.onerror=null; this.src='icon-192.png';">
                         </div>
                         <span class="text-xl font-bold tracking-tight text-white whitespace-nowrap">
-                            <strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span class="text-amber-400 font-extrabold"> HUB</span>
+                            <strong class="font-extrabold">R</strong>eal <strong
+                                class="font-extrabold">F</strong>it<span class="text-amber-400 font-extrabold">
+                                HUB</span>
                         </span>
                     </a>
 
@@ -169,14 +173,16 @@
             <div class="lg:col-span-7 p-5 sm:p-8 lg:p-10 flex flex-col justify-center">
                 <div class="flex items-center justify-between mb-6 lg:hidden">
                     <a href="index.html" class="inline-flex items-center gap-2.5 sm:gap-3 group" title="Real Fit Hub">
-                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform flex items-center justify-center shrink-0">
-                            <img src="assets/icon-192.png" 
-                                 alt="Real Fit Hub" 
-                                 class="w-full h-full object-cover rounded-[15px]"
-                                 onerror="this.onerror=null; this.src='icon-192.png';">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform flex items-center justify-center shrink-0">
+                            <img src="assets/icon-192.png" alt="Real Fit Hub"
+                                class="w-full h-full object-cover rounded-[15px]"
+                                onerror="this.onerror=null; this.src='icon-192.png';">
                         </div>
                         <span class="text-xl font-bold tracking-tight text-white whitespace-nowrap">
-                            <strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span class="text-amber-400 font-extrabold"> HUB</span>
+                            <strong class="font-extrabold">R</strong>eal <strong
+                                class="font-extrabold">F</strong>it<span class="text-amber-400 font-extrabold">
+                                HUB</span>
                         </span>
                     </a>
                     <a href="index.html"
@@ -279,32 +285,72 @@
 
             const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-            function redirecionarPorPapel(session) {
+            const ADMIN_UID = '04fb83ed-ec6b-4a56-9993-e99f32ededee';
+
+            // Direcionamento dinâmico e flexível por especialidade e perfil
+            async function redirecionarPorPapel(session) {
                 if (!session || !session.user) {
                     window.location.href = 'dashboard.html';
                     return;
                 }
-                const meta = session.user.user_metadata || {};
-                
-                if (meta.role === 'profissional') {
-                    if (meta.especialidade === 'personal') {
-                        window.location.href = 'personal.html';
-                    } else {
-                        window.location.href = 'admin.html';
-                    }
-                } else if (meta.papel === 'personal') {
+
+                const user = session.user;
+                const meta = user.user_metadata || {};
+                const papel = meta.papel || meta.role || '';
+                let especialidade = meta.especialidade || '';
+
+                // 1. Admin Geral
+                if (user.id === ADMIN_UID) {
                     window.location.href = 'personal.html';
-                } else if (meta.papel === 'nutricionista') {
-                    window.location.href = 'admin.html';
-                } else {
+                    return;
+                }
+
+                // 2. Aluno
+                if (papel === 'aluno') {
                     window.location.href = 'dashboard.html';
+                    return;
+                }
+
+                // 3. Profissional: se a especialidade não estiver no metadata do JWT, consulta a tabela profissionais
+                if (!especialidade && (papel === 'profissional' || papel === 'personal' || papel === 'nutricionista')) {
+                    try {
+                        const { data: prof } = await supabaseClient
+                            .from('profissionais')
+                            .select('especialidade')
+                            .eq('id', user.id)
+                            .maybeSingle();
+
+                        if (prof && prof.especialidade) {
+                            especialidade = prof.especialidade;
+                        }
+                    } catch (e) {
+                        console.warn("Aviso ao buscar tabela profissionais:", e);
+                    }
+                }
+
+                const esp = (especialidade || papel || '').toLowerCase().trim();
+
+                // 4. Roteamento exato
+                if (esp === 'personal') {
+                    window.location.href = 'personal.html';
+                } else if (esp === 'nutricionista') {
+                    window.location.href = 'admin.html';
+                } else if (esp === 'ambos') {
+                    // Profissionais com as duas frentes iniciam no painel do personal com acesso liberado a admin.html
+                    window.location.href = 'personal.html';
+                } else {
+                    window.location.href = 'admin.html';
                 }
             }
 
-            supabaseClient.auth.getSession().then(({ data: { session } }) => {
-                if (session) { redirecionarPorPapel(session); }
+            // Checagem imediata caso já exista uma sessão salva no navegador
+            supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
+                if (session) {
+                    await redirecionarPorPapel(session);
+                }
             });
 
+            // Toggle para exibir/ocultar senha
             const passwordInput = document.getElementById('password');
             const toggleBtn = document.getElementById('toggle-password');
             const eyeIcon = document.getElementById('eye-icon');
@@ -330,6 +376,7 @@
                 box.classList.remove('hidden');
             }
 
+            // Submissão do login com redirecionamento assíncrono
             document.getElementById('login-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const email = document.getElementById('email').value.trim();
@@ -354,7 +401,9 @@
                     btnSpinner.classList.add('hidden');
                 } else {
                     showAlert('Autenticado com sucesso! Redirecionando...', 'success');
-                    setTimeout(() => { redirecionarPorPapel(data?.session); }, 800);
+                    setTimeout(async () => {
+                        await redirecionarPorPapel(data?.session);
+                    }, 800);
                 }
             });
         </script>
