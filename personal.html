@@ -169,14 +169,15 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 min-h-[4.25rem] py-3 flex items-center justify-between gap-3">
             <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
                 <a href="index.html" class="inline-flex items-center gap-2.5 sm:gap-3 group" title="Real Fit Hub">
-                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-orange-500 via-orange-400 to-orange-600 shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform flex items-center justify-center shrink-0">
-                        <img src="assets/icon-192.png" 
-                             alt="Real Fit Hub" 
-                             class="w-full h-full object-cover rounded-[15px]"
-                             onerror="this.onerror=null; this.src='icon-192.png';">
+                    <div
+                        class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-orange-500 via-orange-400 to-orange-600 shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform flex items-center justify-center shrink-0">
+                        <img src="assets/icon-192.png" alt="Real Fit Hub"
+                            class="w-full h-full object-cover rounded-[15px]"
+                            onerror="this.onerror=null; this.src='icon-192.png';">
                     </div>
                     <span class="text-xl font-bold tracking-tight text-white whitespace-nowrap">
-                        <strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span class="text-orange-400 font-extrabold"> HUB</span>
+                        <strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span
+                            class="text-orange-400 font-extrabold"> HUB</span>
                     </span>
                 </a>
                 <span
@@ -2495,6 +2496,13 @@
 
             window.open(urlFormatada, '_blank');
         }
+
+        document.getElementById('btn-logout').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-logout');
+            btn.innerHTML = '<div class="w-3.5 h-3.5 border-2 border-slate-400 border-t-white rounded-full animate-spin"></div>';
+            await supabaseClient.auth.signOut();
+            window.location.href = 'login.html';
+        });
 
         verificarSessao().then(() => {
             inicializarGeradorConvite();
