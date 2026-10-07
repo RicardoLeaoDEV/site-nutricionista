@@ -2019,6 +2019,7 @@
             const ADMIN_UID = '04fb83ed-ec6b-4a56-9993-e99f32ededee';
             const _m = session.user.user_metadata || {};
             window.nomeProfissionalLogado = _m.nome || session.user.user_metadata?.full_name || 'Nutricionista';
+            window.registroProfissionalLogado = _m.registro || '';
 
             // Aceita admin legado OU perfil/papel profissional com especialidade adequada
             const isAuthorized = session.user.id === ADMIN_UID ||
@@ -2064,7 +2065,7 @@
                 showToast('Selecione um Aluno', 'Escolha um aluno no menu acima para registrar ou atualizar as medidas.', 'warning');
                 return;
             }
-            const nomeProf = window.nomeProfissionalLogado || 'Dr. Ricardo Leão (Nutricionista)';
+            const nomeProf = window.nomeProfissionalLogado || 'Nutricionista';
 
             if (window.ApexEvolucao) {
                 ApexEvolucao.init(alunoId, {
@@ -3192,7 +3193,7 @@ _Prescrição elaborada pelo seu nutricionista._`;
                         </div>
                         <div>
                             <div style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 700;">Nutricionista Responsável:</div>
-                            <div style="font-size: 12px; font-weight: 700; color: #059669; margin-top: 2px;">Ricardo Leão (Nutri)</div>
+                            <div style="font-size: 12px; font-weight: 700; color: #059669; margin-top: 2px;">${window.nomeProfissionalLogado || 'Nutricionista'}${window.registroProfissionalLogado ? ' - CRN: ' + window.registroProfissionalLogado : ''}</div>
                         </div>
                         <div>
                             <div style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 700;">Meta de Hidratação Diária:</div>
@@ -4457,7 +4458,6 @@ _Prescrição elaborada pelo seu nutricionista._`;
                 const linkConvite = `${baseUrl}/convite.html?prof=${userId}`;
 
                 const inputConvite = document.getElementById('input-link-convite');
-                if (inputConvite) inputConvite.value = linkConvite;
 
                 // Contar alunos
                 const { count: alunosAtivos, error: erroAlunos } = await supabaseClient
@@ -4472,19 +4472,43 @@ _Prescrição elaborada pelo seu nutricionista._`;
                     .eq('id', userId)
                     .single();
 
+                const limite = profData?.limite_alunos;
+                const bloqueado = (limite !== null && limite !== undefined && alunosAtivos >= limite);
+                
+                if (inputConvite) {
+                    if (bloqueado) {
+                        inputConvite.value = 'LIMITE DE ALUNOS ATINGIDO';
+                        inputConvite.disabled = true;
+                    } else {
+                        inputConvite.value = linkConvite;
+                        inputConvite.disabled = false;
+                    }
+                }
+
                 const contadorElement = document.getElementById('contador-alunos-limite');
                 if (contadorElement && !erroAlunos && !erroProf) {
-                    const limite = profData?.limite_alunos || '∞';
-                    contadorElement.innerText = `Alunos ativos: ${alunosAtivos ?? 0} / Limite do plano: ${limite}`;
+                    const limiteTexto = profData?.limite_alunos || '∞';
+                    contadorElement.innerText = `Alunos ativos: ${alunosAtivos ?? 0} / Limite do plano: ${limiteTexto}`;
+                    if (bloqueado) {
+                       contadorElement.innerHTML += `<br><span class="text-red-400 font-bold">Faça upgrade do seu plano para continuar a convidar.</span>`;
+                    }
                 }
+                
+                // Store blocked status globally for copy function
+                window.limiteAlunosAtingido = bloqueado;
+
             } catch (err) {
                 console.error("Erro ao inicializar convite:", err);
             }
         }
 
         function copiarLinkConvite() {
+            if (window.limiteAlunosAtingido) {
+                showToast('Limite Atingido', 'Faça upgrade do seu plano para continuar a convidar.', 'error');
+                return;
+            }
             const inputConvite = document.getElementById('input-link-convite');
-            if (!inputConvite || !inputConvite.value || inputConvite.value === 'Carregando link...') return;
+            if (!inputConvite || !inputConvite.value || inputConvite.value === 'Carregando link...' || inputConvite.value === 'LIMITE DE ALUNOS ATINGIDO') return;
 
             navigator.clipboard.writeText(inputConvite.value).then(() => {
                 const btnIcon = document.getElementById('icone-copiar-convite');

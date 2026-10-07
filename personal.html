@@ -2431,7 +2431,6 @@
                 const linkConvite = `${baseUrl}/convite.html?prof=${userId}`;
 
                 const inputConvite = document.getElementById('input-link-convite');
-                if (inputConvite) inputConvite.value = linkConvite;
 
                 // Contar alunos vinculados ao profissional
                 const { count: alunosAtivos, error: erroAlunos } = await supabaseClient
@@ -2446,19 +2445,42 @@
                     .eq('id', userId)
                     .single();
 
+                const limite = profData?.limite_alunos;
+                const bloqueado = (limite !== null && limite !== undefined && alunosAtivos >= limite);
+
+                if (inputConvite) {
+                    if (bloqueado) {
+                        inputConvite.value = 'LIMITE DE ALUNOS ATINGIDO';
+                        inputConvite.disabled = true;
+                    } else {
+                        inputConvite.value = linkConvite;
+                        inputConvite.disabled = false;
+                    }
+                }
+
                 const contadorElement = document.getElementById('contador-alunos-limite');
                 if (contadorElement && !erroAlunos && !erroProf) {
-                    const limite = profData?.limite_alunos || '∞';
-                    contadorElement.innerText = `Alunos ativos: ${alunosAtivos ?? 0} / Limite do plano: ${limite}`;
+                    const limiteTexto = profData?.limite_alunos || '∞';
+                    contadorElement.innerText = `Alunos ativos: ${alunosAtivos ?? 0} / Limite do plano: ${limiteTexto}`;
+                    if (bloqueado) {
+                       contadorElement.innerHTML += `<br><span class="text-red-400 font-bold">Faça upgrade do seu plano para continuar a convidar.</span>`;
+                    }
                 }
+
+                window.limiteAlunosAtingido = bloqueado;
+
             } catch (err) {
                 console.error("Erro ao inicializar convite:", err);
             }
         }
 
         function copiarLinkConvite() {
+            if (window.limiteAlunosAtingido) {
+                showToast('Limite Atingido', 'Faça upgrade do seu plano para continuar a convidar.', 'error');
+                return;
+            }
             const inputConvite = document.getElementById('input-link-convite');
-            if (!inputConvite || !inputConvite.value || inputConvite.value === 'Carregando link...') return;
+            if (!inputConvite || !inputConvite.value || inputConvite.value === 'Carregando link...' || inputConvite.value === 'LIMITE DE ALUNOS ATINGIDO') return;
 
             navigator.clipboard.writeText(inputConvite.value).then(() => {
                 const btnIcon = document.getElementById('icone-copiar-convite');
