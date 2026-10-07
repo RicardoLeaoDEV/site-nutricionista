@@ -137,15 +137,18 @@
 
                 <div>
                     <!-- Logo Real Fit Hub -->
-                    <a href="index.html" class="inline-flex items-center gap-2.5 sm:gap-3 group mb-6" title="Real Fit Hub">
-                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform flex items-center justify-center shrink-0">
-                            <img src="assets/icon-192.png" 
-                                 alt="Real Fit Hub" 
-                                 class="w-full h-full object-cover rounded-[15px]"
-                                 onerror="this.onerror=null; this.src='icon-192.png';">
+                    <a href="index.html" class="inline-flex items-center gap-2.5 sm:gap-3 group mb-6"
+                        title="Real Fit Hub">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform flex items-center justify-center shrink-0">
+                            <img src="assets/icon-192.png" alt="Real Fit Hub"
+                                class="w-full h-full object-cover rounded-[15px]"
+                                onerror="this.onerror=null; this.src='icon-192.png';">
                         </div>
                         <span class="text-xl font-bold tracking-tight text-white whitespace-nowrap">
-                            <strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span class="text-amber-400 font-extrabold"> HUB</span>
+                            <strong class="font-extrabold">R</strong>eal <strong
+                                class="font-extrabold">F</strong>it<span class="text-amber-400 font-extrabold">
+                                HUB</span>
                         </span>
                     </a>
 
@@ -218,14 +221,16 @@
                 <!-- Topo Mobile -->
                 <div class="flex items-center justify-between mb-5 lg:hidden">
                     <a href="index.html" class="inline-flex items-center gap-2.5 sm:gap-3 group" title="Real Fit Hub">
-                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform flex items-center justify-center shrink-0">
-                            <img src="assets/icon-192.png" 
-                                 alt="Real Fit Hub" 
-                                 class="w-full h-full object-cover rounded-[15px]"
-                                 onerror="this.onerror=null; this.src='icon-192.png';">
+                        <div
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform flex items-center justify-center shrink-0">
+                            <img src="assets/icon-192.png" alt="Real Fit Hub"
+                                class="w-full h-full object-cover rounded-[15px]"
+                                onerror="this.onerror=null; this.src='icon-192.png';">
                         </div>
                         <span class="text-xl font-bold tracking-tight text-white whitespace-nowrap">
-                            <strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span class="text-amber-400 font-extrabold"> HUB</span>
+                            <strong class="font-extrabold">R</strong>eal <strong
+                                class="font-extrabold">F</strong>it<span class="text-amber-400 font-extrabold">
+                                HUB</span>
                         </span>
                     </a>
                     <a href="login.html" class="text-xs text-slate-400 hover:text-white flex items-center gap-1">
@@ -246,7 +251,31 @@
                             Preencha seus dados para ter acesso imediato ao painel administrativo.
                         </p>
                     </div>
-
+                    <!-- Badge do Plano Selecionado -->
+                    <div id="badge-plano-selecionado"
+                        class="my-5 p-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-400 flex items-center justify-center font-bold text-lg">
+                                ★
+                            </div>
+                            <div>
+                                <div class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Plano
+                                    Selecionado</div>
+                                <div class="text-base font-bold text-white capitalize" id="nome-plano">Starter</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span
+                                class="text-xs font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded-full border border-amber-400/20"
+                                id="condicao-plano">
+                                3 Dias Grátis
+                            </span>
+                            <div class="text-[11px] text-slate-400 mt-1">
+                                <a href="pro.html" class="underline hover:text-white">Trocar plano</a>
+                            </div>
+                        </div>
+                    </div>
                     <div id="alert-box"
                         class="hidden mb-4 p-3.5 rounded-2xl text-xs flex items-start gap-2.5 transition-all duration-300">
                         <span id="alert-text"></span>
@@ -480,7 +509,45 @@
             box.classList.remove('hidden');
         }
 
-        // Submissão do Cadastro
+        // 1. Identificar o Plano Selecionado via URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const planoSelecionado = (urlParams.get('plano') || 'starter').toLowerCase();
+
+        const configPlanos = {
+            starter: {
+                nome: 'Starter (R$ 69/mês)',
+                condicao: '3 Dias Grátis',
+                limiteAlunos: 15,
+                textoBotao: 'INICIAR TESTE DE 3 DIAS GRÁTIS'
+            },
+            pro: {
+                nome: 'Pro (R$ 139/mês)',
+                condicao: 'Assinatura Imediata',
+                limiteAlunos: 50,
+                textoBotao: 'IR PARA O PAGAMENTO (PRO)'
+            },
+            elite: {
+                nome: 'Elite (R$ 229/mês)',
+                condicao: 'Assinatura Imediata',
+                limiteAlunos: 9999,
+                textoBotao: 'IR PARA O PAGAMENTO (ELITE)'
+            }
+        };
+
+        const dadosPlanoAtual = configPlanos[planoSelecionado] || configPlanos.starter;
+
+        // Atualizar textos e badge ao carregar a página
+        document.addEventListener('DOMContentLoaded', () => {
+            const elNome = document.getElementById('nome-plano');
+            const elCondicao = document.getElementById('condicao-plano');
+            const btnText = document.getElementById('btn-text');
+
+            if (elNome) elNome.textContent = dadosPlanoAtual.nome;
+            if (elCondicao) elCondicao.textContent = dadosPlanoAtual.condicao;
+            if (btnText) btnText.textContent = dadosPlanoAtual.textoBotao;
+        });
+
+        // 2. Submissão do Cadastro
         document.getElementById('form-cadastro-pro').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -494,9 +561,12 @@
             const btnText = document.getElementById('btn-text');
 
             btn.disabled = true;
-            btnText.textContent = 'Criando seu Hub...';
+            btnText.textContent = planoSelecionado === 'starter'
+                ? 'Criando seu Hub...'
+                : 'Criando conta e gerando pagamento...';
 
             try {
+                // 1. Criar o usuário no Supabase Auth
                 const { data, error: authError } = await supabaseClient.auth.signUp({
                     email: email,
                     password: password,
@@ -505,7 +575,8 @@
                             nome: nome,
                             telefone: telefone,
                             papel: 'profissional',
-                            especialidade: especialidade
+                            especialidade: especialidade,
+                            plano_inicial: planoSelecionado
                         }
                     }
                 });
@@ -514,9 +585,23 @@
 
                 if (data && data.user) {
                     const userId = data.user.id;
-                    const trialExpira = new Date();
-                    trialExpira.setDate(trialExpira.getDate() + 7);
+                    const session = data.session;
 
+                    let statusAssinatura = 'trial';
+                    let trialAte = null;
+
+                    // REGRA: Apenas Starter tem teste (3 dias)
+                    if (planoSelecionado === 'starter') {
+                        const trialExpira = new Date();
+                        trialExpira.setDate(trialExpira.getDate() + 3);
+                        trialAte = trialExpira.toISOString();
+                        statusAssinatura = 'trial';
+                    } else {
+                        // Pro e Elite começam aguardando pagamento
+                        statusAssinatura = 'pendente';
+                    }
+
+                    // 2. Gravar os dados do profissional
                     const { error: proError } = await supabaseClient
                         .from('profissionais')
                         .insert([{
@@ -525,30 +610,72 @@
                             email: email,
                             telefone: telefone,
                             especialidade: especialidade,
-                            plano: 'trial',
-                            status_assinatura: 'ativa',
-                            limite_alunos: 3,
-                            trial_ate: trialExpira.toISOString()
+                            plano: planoSelecionado,
+                            status_assinatura: statusAssinatura,
+                            limite_alunos: dadosPlanoAtual.limiteAlunos,
+                            trial_ate: trialAte
                         }]);
 
                     if (proError && !proError.message.includes('duplicate key')) {
                         console.warn("Aviso ao salvar na tabela profissionais:", proError);
                     }
 
-                    showAlert('Conta criada com sucesso! Entrando no portal...', 'success');
+                    // FLUXO A: Starter (Teste Grátis) -> Redireciona direto para o painel
+                    if (planoSelecionado === 'starter') {
+                        showAlert('Conta criada com sucesso! Seu teste de 3 dias está liberado.', 'success');
 
-                    setTimeout(() => {
-                        if (especialidade === 'nutricionista') {
-                            window.location.href = 'admin.html';
-                        } else {
-                            window.location.href = 'personal.html';
-                        }
-                    }, 1200);
+                        setTimeout(() => {
+                            if (especialidade === 'nutricionista') {
+                                window.location.href = 'admin.html';
+                            } else {
+                                window.location.href = 'personal.html';
+                            }
+                        }, 1200);
+                        return;
+                    }
+
+                    // FLUXO B: Pro ou Elite -> Chamar Edge Function Asaas Checkout
+                    showAlert('Conta criada! Redirecionando para o pagamento seguro...', 'success');
+
+                    const tokenAuth = session?.access_token;
+
+                    const respostaCheckout = await fetch('https://dnlqkozlaqizhqsexcei.supabase.co/functions/v1/asaas-checkout', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(tokenAuth ? { 'Authorization': `Bearer ${tokenAuth}` } : {})
+                        },
+                        body: JSON.stringify({
+                            plan: planoSelecionado,
+                            userId: userId,
+                            email: email,
+                            nome: nome,
+                            telefone: telefone
+                        })
+                    });
+
+                    const checkoutData = await respostaCheckout.json();
+
+                    if (!respostaCheckout.ok) {
+                        throw new Error(checkoutData.error || 'Erro ao gerar fatura no Asaas.');
+                    }
+
+                    const linkPagamento = checkoutData.invoiceUrl || checkoutData.paymentUrl || checkoutData.bankSlipUrl;
+
+                    if (linkPagamento) {
+                        window.location.href = linkPagamento;
+                    } else {
+                        showAlert('Assinatura criada com sucesso! Redirecionando...', 'success');
+                        setTimeout(() => {
+                            window.location.href = especialidade === 'nutricionista' ? 'admin.html' : 'personal.html';
+                        }, 1500);
+                    }
                 }
             } catch (err) {
+                console.error("Erro no cadastro:", err);
                 showAlert(err.message || 'Erro ao realizar cadastro. Tente novamente.', 'error');
                 btn.disabled = false;
-                btnText.textContent = 'INICIAR TESTE GRÁTIS DE 7 DIAS';
+                btnText.textContent = dadosPlanoAtual.textoBotao;
             }
         });
     </script>
