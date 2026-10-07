@@ -409,9 +409,11 @@
                     <div class="min-w-0 flex-1">
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
                             Convidar Novo Aluno
-                            <span class="text-[10px] bg-lime-500/10 text-lime-400 px-2.5 py-0.5 rounded-full border border-lime-500/30 font-semibold">Self-Service</span>
+                            <span
+                                class="text-[10px] bg-lime-500/10 text-lime-400 px-2.5 py-0.5 rounded-full border border-lime-500/30 font-semibold">Self-Service</span>
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Envie um link exclusivo para o aluno criar o próprio acesso e preencher os dados iniciais</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Envie um link exclusivo
+                            para o aluno criar o próprio acesso e preencher os dados iniciais</p>
                     </div>
                 </div>
                 <div
@@ -424,7 +426,8 @@
                 <div class="space-y-4 pt-4 border-t border-slate-800/80">
                     <div class="flex flex-col sm:flex-row gap-4 items-end">
                         <div class="w-full flex-1">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Link de Convite Único</label>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Link de
+                                Convite Único</label>
                             <input type="text" id="input-link-convite" readonly value="Carregando link..."
                                 class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-400 focus:outline-none focus:border-lime-500 font-mono select-all">
                         </div>
@@ -446,7 +449,8 @@
                             <i data-lucide="info" class="w-3.5 h-3.5 text-blue-400"></i>
                             O aluno definirá a própria senha no primeiro acesso.
                         </div>
-                        <div class="font-semibold text-slate-300 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-800" id="contador-alunos-limite">
+                        <div class="font-semibold text-slate-300 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-800"
+                            id="contador-alunos-limite">
                             Alunos ativos: -- / Limite do plano: --
                         </div>
                     </div>
@@ -2950,51 +2954,7 @@ _Prescrição elaborada pelo seu nutricionista._`;
             recalcularMacros();
         }
 
-        // Formulário de Cadastro de Novo Aluno
-        document.getElementById('form-cadastrar-aluno').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const nome = document.getElementById('novo-aluno-nome').value.trim();
-            const email = document.getElementById('novo-aluno-email').value.trim();
-            const password = document.getElementById('novo-aluno-senha').value.trim();
 
-            const btn = document.getElementById('btn-cadastrar-aluno');
-            btn.disabled = true;
-            btn.innerHTML = `<div class="w-4 h-4 border-2 border-lime-400 border-t-transparent rounded-full animate-spin"></div> Cadastrando...`;
-
-            const { data, error: authError } = await supabaseClient.auth.signUp({
-                email: email,
-                password: password,
-                options: { data: { nome: nome } }
-            });
-
-            if (authError) {
-                showToast('Erro no cadastro', authError.message, 'error');
-                btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="user-check" class="w-4 h-4"></i><span>Cadastrar Aluno no Sistema</span>`;
-                lucide.createIcons();
-                return;
-            }
-
-            if (data && data.user) {
-                const { error: insertError } = await supabaseClient
-                    .from('alunos')
-                    .insert([{ id: data.user.id, nome: nome, email: email }]);
-
-                if (insertError && !insertError.message.includes('duplicate key')) {
-                    showToast('Aviso', 'Conta criada, mas houve erro ao gravar na tabela alunos: ' + insertError.message, 'error');
-                } else {
-                    showToast('Aluno Cadastrado! 🎉', `O aluno ${nome} foi criado com sucesso.`, 'success');
-                    document.getElementById('form-cadastrar-aluno').reset();
-                    document.getElementById('novo-aluno-senha').value = '123456';
-                    await carregarAlunosSelect();
-                    await carregarListaAlunosChat();
-                }
-            }
-
-            btn.disabled = false;
-            btn.innerHTML = `<i data-lucide="user-check" class="w-4 h-4"></i><span>Cadastrar Aluno no Sistema</span>`;
-            lucide.createIcons();
-        });
 
         // Submeter nova refeição na dieta
         document.getElementById('form-dieta').addEventListener('submit', async (e) => {
@@ -4480,30 +4440,40 @@ _Prescrição elaborada pelo seu nutricionista._`;
             try {
                 const { data: { session } } = await supabaseClient.auth.getSession();
                 if (!session) return;
-                
+
                 const userId = session.user.id;
-                const linkConvite = window.location.origin + '/convite.html?prof=' + userId;
-                
+
+                // Garante que nunca use "file://" ou "null" ao testar em arquivo local
+                const isLocalFile = !window.location.origin ||
+                    window.location.origin === 'null' ||
+                    window.location.origin.startsWith('file:');
+
+                const baseUrl = isLocalFile
+                    ? 'https://appapexfit.vercel.app'
+                    : window.location.origin;
+
+                const linkConvite = `${baseUrl}/convite.html?prof=${userId}`;
+
                 const inputConvite = document.getElementById('input-link-convite');
                 if (inputConvite) inputConvite.value = linkConvite;
 
                 // Contar alunos
                 const { count: alunosAtivos, error: erroAlunos } = await supabaseClient
-                    .from('perfis')
+                    .from('alunos')
                     .select('*', { count: 'exact', head: true })
                     .eq('profissional_id', userId);
-                    
+
                 // Buscar limite do plano do profissional
                 const { data: profData, error: erroProf } = await supabaseClient
                     .from('profissionais')
                     .select('limite_alunos')
                     .eq('id', userId)
                     .single();
-                
+
                 const contadorElement = document.getElementById('contador-alunos-limite');
                 if (contadorElement && !erroAlunos && !erroProf) {
                     const limite = profData?.limite_alunos || '∞';
-                    contadorElement.innerText = `Alunos ativos: ${alunosAtivos} / Limite do plano: ${limite}`;
+                    contadorElement.innerText = `Alunos ativos: ${alunosAtivos ?? 0} / Limite do plano: ${limite}`;
                 }
             } catch (err) {
                 console.error("Erro ao inicializar convite:", err);
@@ -4513,28 +4483,28 @@ _Prescrição elaborada pelo seu nutricionista._`;
         function copiarLinkConvite() {
             const inputConvite = document.getElementById('input-link-convite');
             if (!inputConvite || !inputConvite.value || inputConvite.value === 'Carregando link...') return;
-            
+
             navigator.clipboard.writeText(inputConvite.value).then(() => {
                 const btnIcon = document.getElementById('icone-copiar-convite');
                 const btnText = document.getElementById('texto-copiar-convite');
                 const btn = document.getElementById('btn-copiar-convite');
-                
-                const originalIcon = btnIcon.getAttribute('data-lucide');
-                const originalText = btnText.innerText;
-                
-                btnIcon.setAttribute('data-lucide', 'check');
-                btnText.innerText = 'Link Copiado!';
-                btn.classList.add('bg-green-600/30', 'text-green-300', 'border-green-500/50');
+
+                const originalIcon = btnIcon ? btnIcon.getAttribute('data-lucide') : 'copy';
+                const originalText = btnText ? btnText.innerText : 'Copiar Link';
+
+                if (btnIcon) btnIcon.setAttribute('data-lucide', 'check');
+                if (btnText) btnText.innerText = 'Link Copiado!';
+                if (btn) btn.classList.add('bg-green-600/30', 'text-green-300', 'border-green-500/50');
                 if (window.lucide) lucide.createIcons();
-                
+
                 if (typeof showToast === 'function') {
                     showToast('Copiado!', 'Link de convite copiado para a área de transferência.', 'success');
                 }
-                
+
                 setTimeout(() => {
-                    btnIcon.setAttribute('data-lucide', originalIcon);
-                    btnText.innerText = originalText;
-                    btn.classList.remove('bg-green-600/30', 'text-green-300', 'border-green-500/50');
+                    if (btnIcon) btnIcon.setAttribute('data-lucide', originalIcon);
+                    if (btnText) btnText.innerText = originalText;
+                    if (btn) btn.classList.remove('bg-green-600/30', 'text-green-300', 'border-green-500/50');
                     if (window.lucide) lucide.createIcons();
                 }, 2000);
             });
@@ -4543,15 +4513,18 @@ _Prescrição elaborada pelo seu nutricionista._`;
         function compartilharWhatsAppConvite() {
             const inputConvite = document.getElementById('input-link-convite');
             if (!inputConvite || !inputConvite.value || inputConvite.value === 'Carregando link...') return;
-            
+
             const link = inputConvite.value;
             const mensagem = `Olá! Aqui está o seu link de acesso exclusivo para a nossa consultoria no Real Fit Hub. Crie a sua conta e defina a sua senha para começarmos: ${link}`;
-            const urlFormatada = \`https://api.whatsapp.com/send?text=\${encodeURIComponent(mensagem)}\`;
-            
+            const urlFormatada = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
+
             window.open(urlFormatada, '_blank');
         }
 
-        verificarSessao();
+        // Executa a verificação e dispara a inicialização do convite na sequência
+        verificarSessao().then(() => {
+            inicializarGeradorConvite();
+        });
     </script>
 
     <!-- Lightbox de Fotos do Admin (Alta Resolução com Download Clínico) -->
