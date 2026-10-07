@@ -251,28 +251,19 @@
                         </p>
                     </div>
 
-                    <!-- Badge do Plano Selecionado -->
-                    <div id="badge-plano-selecionado"
-                        class="my-5 p-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-400 flex items-center justify-center font-bold text-lg">
-                                ★
-                            </div>
-                            <div>
-                                <div class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Plano
-                                    Selecionado</div>
-                                <div class="text-base font-bold text-white capitalize" id="nome-plano">Starter</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span
-                                class="text-xs font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded-full border border-amber-400/20"
-                                id="condicao-plano">
-                                3 Dias Grátis
-                            </span>
-                            <div class="text-[11px] text-slate-400 mt-1">
-                                <a href="pro.html" class="underline hover:text-white">Trocar plano</a>
+                    <!-- Seletor de Plano -->
+                    <div class="my-5">
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                            Qual plano você deseja? <span class="text-gold-400">*</span>
+                        </label>
+                        <div class="relative">
+                            <select id="select-plano" class="w-full bg-[#091122] border border-amber-500/30 hover:border-amber-400/50 rounded-2xl p-4 text-white font-bold outline-none appearance-none cursor-pointer transition-all focus:border-amber-500 focus:ring-1 focus:ring-amber-500">
+                                <option value="starter">Starter (R$ 69/mês) - 3 Dias Grátis</option>
+                                <option value="pro">Pro (R$ 139/mês) - Assinatura Imediata</option>
+                                <option value="elite">Elite (R$ 229/mês) - Assinatura Imediata</option>
+                            </select>
+                            <div class="absolute right-4 top-1/2 -translate-y-1/2 text-amber-400 pointer-events-none">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                         </div>
                     </div>
@@ -528,9 +519,9 @@
             box.classList.remove('hidden');
         }
 
-        // 1. Identificar o Plano Selecionado via URL
+        // 1. Identificar o Plano Selecionado via URL ou default
         const urlParams = new URLSearchParams(window.location.search);
-        const planoSelecionado = (urlParams.get('plano') || 'starter').toLowerCase();
+        let planoSelecionado = (urlParams.get('plano') || urlParams.get('plan') || 'starter').toLowerCase();
 
         const configPlanos = {
             starter: {
@@ -553,18 +544,31 @@
             }
         };
 
-        const dadosPlanoAtual = configPlanos[planoSelecionado] || configPlanos.starter;
+        if (!configPlanos[planoSelecionado]) {
+            planoSelecionado = 'starter';
+        }
 
         // Atualizar textos e badge ao carregar a página
         document.addEventListener('DOMContentLoaded', () => {
-            const elNome = document.getElementById('nome-plano');
-            const elCondicao = document.getElementById('condicao-plano');
+            const selectPlano = document.getElementById('select-plano');
             const btnText = document.getElementById('btn-text');
             const badgeTrial = document.getElementById('badge-trial-texto');
 
-            if (elNome) elNome.textContent = dadosPlanoAtual.nome;
-            if (elCondicao) elCondicao.textContent = dadosPlanoAtual.condicao;
-            if (btnText) btnText.textContent = dadosPlanoAtual.textoBotao;
+            if (selectPlano) {
+                selectPlano.value = planoSelecionado;
+                
+                selectPlano.addEventListener('change', (e) => {
+                    planoSelecionado = e.target.value;
+                    const dados = configPlanos[planoSelecionado];
+                    if (btnText) btnText.textContent = dados.textoBotao;
+                    if (badgeTrial) {
+                        badgeTrial.textContent = planoSelecionado === 'starter' ? '3 DIAS DE TESTE NO STARTER' : 'ACESSO PROFISSIONAL EXCLUSIVO';
+                    }
+                });
+            }
+
+            const dadosIniciais = configPlanos[planoSelecionado];
+            if (btnText) btnText.textContent = dadosIniciais.textoBotao;
             if (badgeTrial && planoSelecionado !== 'starter') {
                 badgeTrial.textContent = 'ACESSO PROFISSIONAL EXCLUSIVO';
             }
