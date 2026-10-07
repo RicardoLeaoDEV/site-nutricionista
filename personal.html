@@ -174,7 +174,8 @@
                         <i data-lucide="leaf" class="w-5 h-5"></i>
                     </div>
                     <span class="text-xl font-medium tracking-tight text-white hidden sm:inline whitespace-nowrap">
-                        <strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span class="text-brand-400 font-extrabold"> HUB</span>
+                        <strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span
+                            class="text-brand-400 font-extrabold"> HUB</span>
                     </span>
                 </a>
                 <span
@@ -1413,10 +1414,18 @@
                 return;
             }
 
+            const ADMIN_UID = '04fb83ed-ec6b-4a56-9993-e99f32ededee';
             const _m = session.user.user_metadata || {};
             window.nomeProfissionalLogado = _m.nome || 'Personal Trainer';
 
-            const isAuthorized = (_m.role === 'profissional' && _m.especialidade !== 'nutricionista') || _m.papel === 'personal';
+            // Aceita admin legado OU perfil/papel profissional com especialidade adequada
+            const isAuthorized = session.user.id === ADMIN_UID ||
+                _m.papel === 'personal' ||
+                _m.role === 'personal' ||
+                ((_m.papel === 'profissional' || _m.role === 'profissional') && _m.especialidade !== 'nutricionista') ||
+                _m.especialidade === 'personal' ||
+                _m.especialidade === 'ambos';
+
             if (!isAuthorized) {
                 alert('Acesso negado. Esta área é restrita ao personal trainer.');
                 window.location.href = 'dashboard.html';

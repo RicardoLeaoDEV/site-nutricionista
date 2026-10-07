@@ -181,7 +181,8 @@
                         <i data-lucide="leaf" class="w-5 h-5"></i>
                     </div>
                     <span class="text-xl font-medium tracking-tight text-white hidden sm:inline whitespace-nowrap">
-                        <strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span class="text-lime-400 font-extrabold"> HUB</span>
+                        <strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span
+                            class="text-lime-400 font-extrabold"> HUB</span>
                     </span>
                 </a>
                 <span
@@ -2013,17 +2014,23 @@
                 return;
             }
 
-            const meta = session.user.user_metadata || {};
-            const isAuthorized = meta.role === 'profissional' && meta.especialidade !== 'personal' || meta.papel === 'nutricionista';
+            const ADMIN_UID = '04fb83ed-ec6b-4a56-9993-e99f32ededee';
+            const _m = session.user.user_metadata || {};
+            window.nomeProfissionalLogado = _m.nome || session.user.user_metadata?.full_name || 'Nutricionista';
+
+            // Aceita admin legado OU perfil/papel profissional com especialidade adequada
+            const isAuthorized = session.user.id === ADMIN_UID ||
+                _m.papel === 'nutricionista' ||
+                _m.role === 'nutricionista' ||
+                ((_m.papel === 'profissional' || _m.role === 'profissional') && _m.especialidade !== 'personal') ||
+                _m.especialidade === 'nutricionista' ||
+                _m.especialidade === 'ambos';
 
             if (!isAuthorized) {
                 alert('Acesso negado. Esta área é restrita ao nutricionista.');
                 window.location.href = 'dashboard.html';
                 return;
             }
-
-            const nomeAdmin = session.user.user_metadata?.nome || session.user.user_metadata?.full_name || 'Dr. Ricardo Leão (Nutricionista)';
-            window.nomeProfissionalLogado = nomeAdmin;
 
             await carregarPerfisAlunosAdmin();
             await carregarAlunosSelect();
