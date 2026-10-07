@@ -893,12 +893,12 @@
     <!-- Script Splash Screen Entrada -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const hasChosen = localStorage.getItem('rfhub_entry_choice');
             const splash = document.getElementById('splash-entry');
             
-            // Só exibe se for a primeira vez e se não for uma URL de checkout ou afim
             const isHome = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '';
-            if (!hasChosen && isHome) {
+            
+            // Exibe a tela sempre que a página principal for acessada ou atualizada
+            if (isHome) {
                 splash.classList.remove('hidden');
                 setTimeout(() => {
                     splash.classList.remove('opacity-0');
@@ -908,17 +908,18 @@
         });
 
         function escolherTipoUsuario(tipo) {
-            localStorage.setItem('rfhub_entry_choice', tipo);
             const splash = document.getElementById('splash-entry');
             
             if (tipo === 'aluno') {
-                window.location.href = 'login.html';
-            } else if (tipo === 'profissional') {
+                // Fica na página atual (index.html) ocultando o splash
                 splash.classList.remove('opacity-100');
                 splash.classList.add('opacity-0');
                 setTimeout(() => {
                     splash.classList.add('hidden');
                 }, 500);
+            } else if (tipo === 'profissional') {
+                // Redireciona para a página pro
+                window.location.href = 'pro.html';
             }
         }
     </script>
