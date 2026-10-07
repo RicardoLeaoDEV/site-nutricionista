@@ -180,7 +180,7 @@
                 'Atleta Constante',
                 'Alta Performance',
                 'Máquina Imparável',
-                'Elite ApexFit 🏆'
+                'Elite Real Fit Hub 🏆'
             ];
             const tituloAtual = titulosNiveis[Math.min(gam.nivel - 1, titulosNiveis.length - 1)];
             const streakDias = this.calcularStreakDias();

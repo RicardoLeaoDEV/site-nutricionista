@@ -181,7 +181,7 @@
                             <span>Integração de Pagamentos (PIX / Cartão / Gateway)</span>
                         </div>
                         <p class="text-slate-400">
-                            A arquitetura do ApexFit está preparada para receber cobranças via <strong>PIX Copia e Cola</strong>, <strong>Mercado Pago</strong>, <strong>Asaas</strong> ou <strong>Stripe</strong>.
+                            A arquitetura do Real Fit Hub está preparada para receber cobranças via <strong>PIX Copia e Cola</strong>, <strong>Mercado Pago</strong>, <strong>Asaas</strong> ou <strong>Stripe</strong>.
                             Para ativar cobranças automáticas em produção, basta inserir sua chave de API ou Chave PIX nos parâmetros da plataforma.
                         </p>
                     </div>

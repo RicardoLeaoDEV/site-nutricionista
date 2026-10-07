@@ -353,7 +353,7 @@
         },
 
         compartilharWhatsApp() {
-            let texto = '*🛒 LISTA DE COMPRAS APEXFIT*\n\n';
+            let texto = '*🛒 LISTA DE COMPRAS REAL FIT HUB*\n\n';
             const categorias = {};
             this.listaCompras.forEach(item => {
                 categorias[item.categoria] = categorias[item.categoria] || [];

@@ -1,6 +1,6 @@
 {
-    "name": "APEXFIT",
-    "short_name": "APEXFIT",
+    "name": "Real Fit Hub",
+    "short_name": "RF Hub",
     "start_url": "/index.html",
     "display": "standalone",
     "background_color": "#ffffff",

@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APEXFIT - Painel do Personal</title>
+    <title>Real Fit Hub - Painel do Personal</title>
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Apex">
+    <meta name="apple-mobile-web-app-title" content="RF Hub">
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -173,8 +173,8 @@
                         class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
                         <i data-lucide="leaf" class="w-5 h-5"></i>
                     </div>
-                    <span class="text-xl font-extrabold tracking-tight text-white hidden sm:inline">
-                        APEX<span class="text-brand-400">FIT</span>
+                    <span class="text-xl font-medium tracking-tight text-white hidden sm:inline whitespace-nowrap">
+                        <strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span class="text-brand-400 font-extrabold"> HUB</span>
                     </span>
                 </a>
                 <span
@@ -914,7 +914,7 @@
 
     <!-- Rodapé Discreto -->
     <footer class="border-t border-slate-900 bg-slate-950/80 py-6 px-6 text-center text-xs text-slate-500">
-        ApexFit Platform • Painel Administrativo de Nutrição Clínica & Esportiva
+        Real Fit Hub Platform • Painel Administrativo de Nutrição Clínica & Esportiva
     </footer>
 
     <!-- Botão Flutuante do Chat no Painel do Personal -->
@@ -1788,7 +1788,7 @@
             if (!treinosAluno.length) return showToast('Sem treino', 'Este aluno ainda não tem exercícios.', 'error');
             const nome = sel.options[sel.selectedIndex].text;
             const g = {}; treinosAluno.forEach(t => (g[t.treino_nome] = g[t.treino_nome] || []).push(t));
-            const html = `<div style="font-family:Arial;padding:24px;color:#111"><h1 style="color:#ea580c;margin:0">ApexFit</h1><p>Treino de <b>${esc(nome)}</b></p>` +
+            const html = `<div style="font-family:Arial;padding:24px;color:#111"><h1 style="color:#111;margin:0;font-weight:500"><strong style="font-weight:900">R</strong>EAL <strong style="font-weight:900">F</strong>IT<span style="color:#eab308;font-weight:900"> HUB</span></h1><p>Treino de <b>${esc(nome)}</b></p>` +
                 Object.entries(g).map(([n, ex]) => `<h3 style="margin:18px 0 6px">${esc(n)} <small style="color:#666">${esc(ex[0].dia_semana || '')}</small></h3><table style="width:100%;border-collapse:collapse;font-size:12px">` +
                     ex.map(e => `<tr><td style="border-bottom:1px solid #ddd;padding:6px"><b>${esc(e.exercicio)}</b><br><span style="color:#666">${esc(e.observacoes || '')}</span></td><td style="border-bottom:1px solid #ddd;padding:6px;white-space:nowrap">${esc(e.series)}x${esc(e.repeticoes)} ${esc(e.carga || '')}</td><td style="border-bottom:1px solid #ddd;padding:6px">${esc(e.descanso || '')}</td></tr>`).join('') + '</table>').join('') + '</div>';
             html2pdf().set({ margin: 8, filename: 'treino-' + nome.replace(/\s+/g, '-') + '.pdf', html2canvas: { scale: 2 } }).from(html, 'string').save();

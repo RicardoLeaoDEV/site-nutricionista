@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APEXFIT</title>
-    <meta name="description" content="A plataforma definitiva de acompanhamento nutricional e treino da Apex">
+    <title>Real Fit Hub | Nutrição & Treino de Alta Performance</title>
+    <meta name="description" content="Real Fit Hub: a plataforma definitiva de acompanhamento nutricional e prescrição de treinos com especialistas.">
     <meta name="theme-color" content="#060911">
 
     <!-- Configurações do PWA e Apple -->
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Apex">
+    <meta name="apple-mobile-web-app-title" content="RF Hub">
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,6 +63,22 @@
                     }
                 } catch (e) { }
             })();
+    </script>
+
+    <!-- Reveal on Scroll: progressive enhancement.
+         Os elementos só ficam ocultos se o JS rodar E o navegador suportar IntersectionObserver.
+         Failsafe: se o observer não inicializar em 2.5s, a classe é removida e tudo fica visível. -->
+    <script>
+        (function () {
+            var docEl = document.documentElement;
+            var reduzMovimento = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if ('IntersectionObserver' in window && !reduzMovimento) {
+                docEl.classList.add('js-reveal');
+                setTimeout(function () {
+                    if (!window.__rfRevealReady) docEl.classList.remove('js-reveal');
+                }, 2500);
+            }
+        })();
     </script>
 
     <style>
@@ -256,6 +272,42 @@
                 transform: translateX(-50%);
             }
         }
+
+        /* ───────── Logo Real Fit Hub (R e F em destaque) ───────── */
+        .rf-logo {
+            font-weight: 400;
+            white-space: nowrap;
+        }
+
+        .rf-logo strong {
+            font-weight: 700;
+        }
+
+        .rf-logo .rf-hub {
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        /* ───────── Reveal on Scroll ─────────
+           Estado oculto aplicado SOMENTE quando <html> tem .js-reveal (adicionada via JS).
+           Sem JS => conteúdo 100% visível. */
+        .js-reveal .reveal {
+            transition:
+                opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            transition-delay: var(--reveal-delay, 0ms);
+            will-change: opacity, transform;
+        }
+
+        .js-reveal .reveal:not(.is-visible) {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        main {
+            overflow-x: hidden;
+            overflow-x: clip;
+        }
     </style>
 </head>
 
@@ -264,7 +316,7 @@
     <!-- Preloader -->
     <div id="preloader"
         class="fixed inset-0 z-50 bg-navy-950 flex flex-col items-center justify-center transition-opacity duration-700">
-        <div class="text-3xl font-clash font-bold text-gold-400 mb-2">APEX<span class="text-white">FIT</span></div>
+        <div class="rf-logo text-3xl font-clash text-white mb-2"><strong>R</strong>eal <strong>F</strong>it<span class="rf-hub text-gold-400"> HUB</span></div>
         <div class="text-xs uppercase tracking-widest text-slate-400">Carregando plataforma...</div>
     </div>
 
@@ -276,8 +328,8 @@
                     class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-gold-600 to-amber-300 flex items-center justify-center text-navy-950 shadow-lg shadow-gold-500/20">
                     <i data-lucide="zap" class="w-5 h-5"></i>
                 </div>
-                <div class="font-clash text-2xl font-bold tracking-tight text-white">
-                    APEX<span class="text-gold-400">FIT</span>
+                <div class="rf-logo font-clash text-xl sm:text-2xl tracking-tight text-white">
+                    <strong>R</strong>eal <strong>F</strong>it<span class="rf-hub text-gold-400"> HUB</span>
                 </div>
             </a>
 
@@ -292,7 +344,7 @@
                     class="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-slate-300 hover:text-white px-4 py-2.5 rounded-full hover:bg-white/5 border border-white/10 transition-all">
                     <i data-lucide="user" class="w-4 h-4 text-gold-400"></i> Área do Aluno
                 </a>
-                <a href="https://wa.me/5581997969058?text=Olá%2C%20gostaria%20de%20iniciar%20na%20ApexFit!"
+                <a href="https://wa.me/5581997969058?text=Olá%2C%20gostaria%20de%20iniciar%20no%20Real%20Fit%20Hub!"
                     target="_blank" class="botaoDourado !h-[48px] !text-xs !py-1 !pl-5 !pr-[58px]">
                     <span>Entrar na Consultoria</span>
                     <div class="divSeta !w-[38px] !h-[38px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i>
@@ -304,7 +356,7 @@
             <div class="flex items-center gap-2 lg:hidden">
                 <!-- Botão de Instalação Mobile Infalível -->
                 <button type="button" id="install-btn-mobile"
-                    onclick="alert('Para instalar o ApexFit na sua tela inicial, toque nos três pontinhos (...) no canto superior direito do seu Chrome e selecione \'Instalar aplicativo\' ou \'Adicionar à tela inicial\'.')"
+                    onclick="alert('Para instalar o Real Fit Hub na sua tela inicial, toque nos três pontinhos (...) no canto superior direito do seu Chrome e selecione \'Instalar aplicativo\' ou \'Adicionar à tela inicial\'.')"
                     class="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 hover:bg-amber-500/20 transition-all cursor-pointer">
                     <i data-lucide="download" class="w-4 h-4"></i>
                 </button>
@@ -348,7 +400,7 @@
                 </a>
             </nav>
             <div class="pt-2">
-                <a href="https://wa.me/5581997969058?text=Olá%2C%20gostaria%20de%20iniciar%20na%20ApexFit!"
+                <a href="https://wa.me/5581997969058?text=Olá%2C%20gostaria%20de%20iniciar%20no%20Real%20Fit%20Hub!"
                     target="_blank"
                     class="botaoDourado w-full text-center justify-center !h-[50px] !text-xs !py-1 !pl-5 !pr-[58px]">
                     <span>Entrar na Consultoria</span>
@@ -364,20 +416,20 @@
         <section class="pt-32 pb-20 md:pt-44 md:pb-32 px-4 sm:px-6 relative bg-cover bg-center"
             style="background-image: linear-gradient(to right bottom, rgba(2, 4, 8, 0.95), rgba(3, 7, 18, 0.90)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1920');">
             <div class="max-w-7xl mx-auto text-center">
-                <div class="cardSubtitulo mx-auto mb-6">
+                <div class="cardSubtitulo mx-auto mb-6 reveal" style="--reveal-delay: 0ms">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5 text-gold-400"></i>
                     <h3>NUTRIÇÃO & TRAINING EM ALTO PADRÃO</h3>
                 </div>
                 <h1
-                    class="font-clash text-3xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-8 text-white">
+                    class="font-clash text-3xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-8 text-white reveal" style="--reveal-delay: 120ms">
                     A EVOLUÇÃO DO SEU CORPO <span class="text-gold-400">DIRECIONADA POR ESPECIALISTAS</span>
                 </h1>
-                <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-300 mb-10 leading-relaxed">
+                <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-300 mb-10 leading-relaxed reveal" style="--reveal-delay: 240ms">
                     A única plataforma que une o acompanhamento clínico nutricional e a prescrição avançada de treinos
                     em um único painel exclusivo para resultados de alta performance.
                 </p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
-                    <a href="https://wa.me/5581997969058?text=Olá%2C%20quero%20começar%20na%20ApexFit!" target="_blank"
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto reveal" style="--reveal-delay: 360ms">
+                    <a href="https://wa.me/5581997969058?text=Olá%2C%20quero%20começar%20no%20Real%20Fit%20Hub!" target="_blank"
                         class="botaoDourado w-full sm:w-auto">
                         <span>COMEÇAR AGORA</span>
                         <div class="divSeta"><i data-lucide="arrow-right" class="w-5 h-5"></i></div>
@@ -399,7 +451,7 @@
                         PERFORMANCE</span>
                     <span>✦ SUPORTE DIRETO COM PROFISSIONAIS</span> <span class="text-amber-300 font-bold">✦
                         ACOMPANHAMENTO DE CARGAS E PESO</span>
-                    <span>✦ GALERIA DE EVOLUÇÃO SEGURA</span> <span class="text-gold-400 font-bold">✦ APEXFIT
+                    <span>✦ GALERIA DE EVOLUÇÃO SEGURA</span> <span class="text-gold-400 font-bold">✦ REAL FIT HUB
                         ECOSYSTEM</span>
                 </div>
             </div>
@@ -408,7 +460,7 @@
         <!-- ───────── SEÇÃO: A PLATAFORMA (TUDO SOBRE NUTRIÇÃO E PERSONAL) ───────── -->
         <section id="plataforma" class="py-24 px-6 bg-navy-950 relative">
             <div class="max-w-7xl mx-auto">
-                <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="text-center max-w-2xl mx-auto mb-16 reveal">
                     <div class="cardSubtitulo mx-auto mb-4">
                         <h3>ECOSSISTEMA COMPLETO</h3>
                     </div>
@@ -416,13 +468,13 @@
                         O PODER DA NUTRIÇÃO E DO TREINO <span class="text-gold-400">EM SINERGIA</span>
                     </h2>
                     <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
-                        Esqueça aplicativos separados e planilhas confusas. Na ApexFit, o seu nutricionista e o seu
+                        Esqueça aplicativos separados e planilhas confusas. No Real Fit Hub, o seu nutricionista e o seu
                         personal trainer trabalham integrados na mesma plataforma.
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="cardBordaInterna">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-reveal-stagger="130">
+                    <div class="cardBordaInterna reveal">
                         <div class="icone-corner">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
@@ -438,7 +490,7 @@
                         </p>
                     </div>
 
-                    <div class="cardBordaInterna">
+                    <div class="cardBordaInterna reveal">
                         <div class="icone-corner">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
@@ -454,7 +506,7 @@
                         </p>
                     </div>
 
-                    <div class="cardBordaInterna">
+                    <div class="cardBordaInterna reveal">
                         <div class="icone-corner">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
@@ -470,7 +522,7 @@
                         </p>
                     </div>
 
-                    <div class="cardBordaInterna">
+                    <div class="cardBordaInterna reveal">
                         <div class="icone-corner">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-gold-500/15 text-gold-400 flex items-center justify-center">
@@ -493,12 +545,12 @@
         <section id="sobre" class="py-24 px-6 border-t border-gold/20 bg-navy-950/80 relative">
             <div class="max-w-6xl mx-auto">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-                    <div class="lg:col-span-5 text-center lg:text-left">
+                    <div class="lg:col-span-5 text-center lg:text-left reveal">
                         <div class="relative inline-block">
                             <div
                                 class="w-64 h-80 sm:w-80 sm:h-[420px] rounded-3xl overflow-hidden border-2 border-gold-500/40 shadow-2xl relative mx-auto bg-slate-900">
                                 <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800"
-                                    alt="Profissionais ApexFit"
+                                    alt="Profissionais Real Fit Hub"
                                     class="w-full h-full object-cover grayscale contrast-125">
                             </div>
                             <div
@@ -515,7 +567,7 @@
                         </div>
                     </div>
 
-                    <div class="lg:col-span-7">
+                    <div class="lg:col-span-7 reveal" style="--reveal-delay: 150ms">
                         <div class="cardSubtitulo mb-4">
                             <h3>COMO FUNCIONA O ACOMPANHAMENTO</h3>
                         </div>
@@ -524,7 +576,7 @@
                             SUPORTE INDIVIDUALIZADO COM <span class="text-gold-400">O NUTRICIONISTA E O PERSONAL</span>.
                         </h2>
                         <p class="text-sm sm:text-base text-slate-300 leading-relaxed mb-5">
-                            Na ApexFit, você não é apenas mais um número. O nosso ecossistema foi pensado para estreitar
+                            No Real Fit Hub, você não é apenas mais um número. O nosso ecossistema foi pensado para estreitar
                             a relação entre você e os seus profissionais de saúde e treino.
                         </p>
                         <div class="space-y-4 mb-8 text-sm text-slate-300">
@@ -552,7 +604,7 @@
                             </div>
                         </div>
 
-                        <a href="https://wa.me/5581997969058?text=Olá%2C%20gostaria%20de%20falar%20com%20a%20equipa%20ApexFit!"
+                        <a href="https://wa.me/5581997969058?text=Olá%2C%20gostaria%20de%20falar%20com%20a%20equipa%20Real%20Fit%20Hub!"
                             target="_blank" class="botaoDourado">
                             <span>FALAR COM A EQUIPA</span>
                             <div class="divSeta"><i data-lucide="message-circle" class="w-5 h-5"></i></div>
@@ -565,20 +617,20 @@
         <!-- ───────── SEÇÃO: NOVO BLOCO DE FAQ (DÚVIDAS) ───────── -->
         <section id="faq" class="py-24 px-6 border-t border-gold/20 bg-navy-950 relative">
             <div class="max-w-3xl mx-auto">
-                <div class="text-center mb-16">
+                <div class="text-center mb-16 reveal">
                     <div class="cardSubtitulo mx-auto mb-4">
                         <h3>ESCLARECIMENTOS</h3>
                     </div>
                     <h2 class="font-clash text-3xl sm:text-5xl font-bold tracking-tight mb-3 text-white">
-                        PERGUNTAS FREQUENTES <span class="text-gold-400">SOBRE A APEXFIT</span>
+                        PERGUNTAS FREQUENTES <span class="text-gold-400">SOBRE O REAL FIT HUB</span>
                     </h2>
                     <p class="text-sm sm:text-base text-slate-300">
                         Tudo o que você precisa de saber sobre o funcionamento unificado de treino e nutrição.
                     </p>
                 </div>
 
-                <div class="space-y-4" id="faq-container">
-                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all"
+                <div class="space-y-4" id="faq-container" data-reveal-stagger="110">
+                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all reveal"
                         onclick="toggleFaq(this)">
                         <div class="flex items-center justify-between">
                             <h3 class="text-base font-bold text-white">Como é feito o acesso conjuto à nutrição e ao
@@ -594,7 +646,7 @@
                         </div>
                     </div>
 
-                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all"
+                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all reveal"
                         onclick="toggleFaq(this)">
                         <div class="flex items-center justify-between">
                             <h3 class="text-base font-bold text-white">Posso contratar apenas o treino ou apenas a
@@ -610,7 +662,7 @@
                         </div>
                     </div>
 
-                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all"
+                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all reveal"
                         onclick="toggleFaq(this)">
                         <div class="flex items-center justify-between">
                             <h3 class="text-base font-bold text-white">Como envio fotos e atualizo o meu peso para os
@@ -626,7 +678,7 @@
                         </div>
                     </div>
 
-                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all"
+                    <div class="glass-card rounded-2xl p-6 border border-gold/20 cursor-pointer faq-item hover:border-gold-400 transition-all reveal"
                         onclick="toggleFaq(this)">
                         <div class="flex items-center justify-between">
                             <h3 class="text-base font-bold text-white">O que acontece se eu precisar de alterar um
@@ -654,8 +706,8 @@
                     class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-gold-600 to-amber-300 flex items-center justify-center text-navy-950">
                     <i data-lucide="zap" class="w-5 h-5"></i>
                 </div>
-                <div class="font-clash text-2xl font-bold tracking-tight text-white">
-                    APEX<span class="text-gold-400">FIT</span>
+                <div class="rf-logo font-clash text-2xl tracking-tight text-white">
+                    <strong>R</strong>eal <strong>F</strong>it<span class="rf-hub text-gold-400"> HUB</span>
                 </div>
             </div>
 
@@ -669,7 +721,7 @@
             </div>
 
             <div class="text-xs text-center md:text-right font-medium text-slate-400">
-                © 2026 ApexFit Digital Platform.<br>
+                © 2026 Real Fit Hub Digital Platform.<br>
                 Nutrição & Training de Alta Performance.
             </div>
         </div>
@@ -728,6 +780,52 @@
         if (btnMobile) {
             btnMobile.addEventListener('click', toggleMenuMobile);
         }
+
+        // ───────── Reveal on Scroll (IntersectionObserver nativo) ─────────
+        (function initRevealOnScroll() {
+            const docEl = document.documentElement;
+            const elementos = document.querySelectorAll('.reveal');
+
+            // Sem suporte / movimento reduzido: a classe .js-reveal nunca foi aplicada => tudo já visível.
+            if (!docEl.classList.contains('js-reveal') || !elementos.length) return;
+
+            // Delays escalonados (stagger) para grupos marcados com data-reveal-stagger="ms"
+            document.querySelectorAll('[data-reveal-stagger]').forEach(grupo => {
+                const passo = parseInt(grupo.getAttribute('data-reveal-stagger'), 10) || 120;
+                grupo.querySelectorAll(':scope > .reveal').forEach((el, i) => {
+                    el.style.setProperty('--reveal-delay', (i * passo) + 'ms');
+                });
+            });
+
+            // Após a animação, remove as classes de reveal para devolver ao elemento
+            // suas transições/hover originais (ex.: .cardBordaInterna:hover, transition-all do FAQ).
+            const finalizar = (el) => {
+                el.classList.remove('reveal', 'is-visible');
+                el.style.removeProperty('--reveal-delay');
+            };
+
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    const el = entry.target;
+                    el.classList.add('is-visible');
+                    obs.unobserve(el);
+
+                    const onEnd = (ev) => {
+                        if (ev.target !== el || ev.propertyName !== 'opacity') return;
+                        el.removeEventListener('transitionend', onEnd);
+                        finalizar(el);
+                    };
+                    el.addEventListener('transitionend', onEnd);
+                    // Segurança caso transitionend não dispare (aba em background etc.)
+                    const delay = parseInt(getComputedStyle(el).getPropertyValue('--reveal-delay'), 10) || 0;
+                    setTimeout(() => { if (el.classList.contains('is-visible')) finalizar(el); }, delay + 1200);
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+            elementos.forEach(el => observer.observe(el));
+            window.__rfRevealReady = true;
+        })();
     </script>
 
     <!-- Modal de Instruções de Instalação PWA -->
@@ -743,7 +841,7 @@
                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
             </div>
-            <h3 class="text-lg font-bold text-amber-400 mb-2">Instalar o ApexFit</h3>
+            <h3 class="text-lg font-bold text-amber-400 mb-2">Instalar o Real Fit Hub</h3>
             <p class="text-stone-300 text-xs sm:text-sm mb-6 leading-relaxed">
                 Para ter a melhor experiência de aplicativo no telemóvel, toque nos **três pontinhos (...)** no canto
                 superior direito do seu navegador e selecione <strong class="text-amber-400">"Instalar

@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APEXFIT - Painel do Nutricionista</title>
+    <title>Real Fit Hub - Painel do Nutricionista</title>
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Apex">
+    <meta name="apple-mobile-web-app-title" content="RF Hub">
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -180,8 +180,8 @@
                         class="w-9 h-9 rounded-xl bg-gradient-to-tr from-lime-600 to-lime-400 flex items-center justify-center text-slate-950 shadow-md shadow-lime-500/20 group-hover:scale-105 transition-transform">
                         <i data-lucide="leaf" class="w-5 h-5"></i>
                     </div>
-                    <span class="text-xl font-extrabold tracking-tight text-white hidden sm:inline">
-                        APEX<span class="text-lime-400">FIT</span>
+                    <span class="text-xl font-medium tracking-tight text-white hidden sm:inline whitespace-nowrap">
+                        <strong class="font-extrabold">R</strong>eal <strong class="font-extrabold">F</strong>it<span class="text-lime-400 font-extrabold"> HUB</span>
                     </span>
                 </a>
                 <span
@@ -1504,7 +1504,7 @@
 
     <!-- Rodapé Discreto -->
     <footer class="border-t border-slate-900 bg-slate-950/80 py-6 px-6 text-center text-xs text-slate-500">
-        ApexFit Platform • Painel Administrativo de Nutrição Clínica & Esportiva
+        Real Fit Hub Platform • Painel Administrativo de Nutrição Clínica & Esportiva
     </footer>
 
     <!-- Botão Flutuante do Chat no Painel do Nutricionista -->
@@ -2775,7 +2775,15 @@
             };
             const nomeObj = objetivosNomes[estadoCalculadora.objetivo] || 'Planejamento Nutricional';
 
-            const texto = `🥗 *PLANEJAMENTO NUTRICIONAL - APEXFIT*
+            // URL oficial da aplicação: usa o domínio onde o painel está publicado (sem link legado hardcoded).
+            const urlPortalAluno = /^https?:$/.test(window.location.protocol)
+                ? `${window.location.origin}/nutricao.html`
+                : '';
+            const linhaPortal = urlPortalAluno
+                ? `Consulte suas refeições detalhadas no seu Portal Real Fit Hub:\n${urlPortalAluno}`
+                : 'Consulte suas refeições detalhadas no seu Portal Real Fit Hub.';
+
+            const texto = `🥗 *PLANEJAMENTO NUTRICIONAL - REAL FIT HUB*
 👤 *Aluno(a):* ${nomeAluno}
 🎯 *Objetivo:* ${nomeObj}
 ⚖️ *Peso Base:* ${estadoCalculadora.peso} kg
@@ -2787,8 +2795,7 @@
 • *Gorduras:* ${estadoCalculadora.gorduras}g (${(estadoCalculadora.gorduras / estadoCalculadora.peso).toFixed(1)} g/kg) • ${estadoCalculadora.pctGord}%
 💧 *Meta de Água:* ${estadoCalculadora.aguaLitros} Litros / dia
 
-Consulte suas refeições detalhadas no seu Portal ApexFit:
-https://nutrilife-delta.vercel.app/nutricao.html
+${linhaPortal}
 
 _Prescrição elaborada pelo seu nutricionista._`;
 
@@ -3183,8 +3190,8 @@ _Prescrição elaborada pelo seu nutricionista._`;
                 <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; color: #0f172a; max-width: 800px; margin: 0 auto; background: #ffffff; padding: 24px;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #10b981; padding-bottom: 14px; margin-bottom: 18px;">
                         <div>
-                            <div style="font-size: 24px; font-weight: 900; letter-spacing: -0.02em; color: #0f172a;">
-                                NUTRI<span style="color: #10b981;">LIFE</span>
+                            <div style="font-size: 24px; font-weight: 500; letter-spacing: -0.02em; color: #0f172a;">
+                                <strong style="font-weight: 900;">R</strong>EAL <strong style="font-weight: 900;">F</strong>IT<span style="color: #eab308; font-weight: 900;"> HUB</span>
                             </div>
                             <div style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px;">
                                 Nutrição Clínica & Alta Performance
@@ -3222,12 +3229,12 @@ _Prescrição elaborada pelo seu nutricionista._`;
                     </div>
 
                     <div style="background-color: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 10px; color: #475569; line-height: 1.4;">
-                        <strong style="color: #0f172a;">Recomendações ApexFit:</strong>
+                        <strong style="color: #0f172a;">Recomendações Real Fit Hub:</strong>
                         Mastigue devagar e mantenha a consistência. Beba água ao longo do dia e evite grandes volumes de líquidos junto às refeições principais. Em caso de dúvidas, utilize o canal de suporte com o nutricionista.
                     </div>
 
                     <div style="border-top: 1px solid #e2e8f0; padding-top: 10px; display: flex; justify-content: space-between; font-size: 9px; color: #94a3b8;">
-                        <span>ApexFit Digital Platform • Transformando rotinas através da nutrição consciente</span>
+                        <span>Real Fit Hub Digital Platform • Transformando rotinas através da nutrição consciente</span>
                         <span>Documento emitido digitalmente para uso pessoal</span>
                     </div>
                 </div>
@@ -3240,7 +3247,7 @@ _Prescrição elaborada pelo seu nutricionista._`;
             containerPdf.style.width = '800px';
             containerPdf.classList.remove('hidden');
 
-            const nomeArquivo = `Plano_Alimentar_${nomeAluno.replace(/[^a-zA-Z0-9]/g, '_')}_ApexFit.pdf`;
+            const nomeArquivo = `Plano_Alimentar_${nomeAluno.replace(/[^a-zA-Z0-9]/g, '_')}_RealFitHub.pdf`;
 
             try {
                 if (typeof html2pdf !== 'undefined') {
