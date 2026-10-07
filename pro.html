@@ -338,7 +338,8 @@
                 </a>
                 <button type="button" id="btn-mobile-menu" aria-label="Abrir Menu"
                     class="w-10 h-10 rounded-xl bg-slate-900 border border-gold/20 flex items-center justify-center text-slate-200 hover:text-gold-400 transition-colors focus:outline-none">
-                    <i data-lucide="menu" id="icon-mobile-menu" class="w-5 h-5"></i>
+                    <i data-lucide="menu" id="icon-menu-open" class="w-5 h-5"></i>
+                    <i data-lucide="x" id="icon-menu-close" class="w-5 h-5 hidden"></i>
                 </button>
             </div>
         </div>
@@ -393,11 +394,9 @@
                     style="--reveal-delay: 120ms">
                     ESCALABILIDADE E REFINAMENTO PARA A SUA <span class="text-gold-400">CONSULTORIA FITNESS</span>
                 </h1>
-                <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-300 mb-10 leading-relaxed reveal"
+                <p class="max-w-xl mx-auto text-sm sm:text-base text-slate-300 mb-10 leading-relaxed reveal"
                     style="--reveal-delay: 240ms">
-                    Elimine de vez as planilhas confusas, PDFs soltos e conversas perdidas no WhatsApp. Centralize
-                    prescrições inteligentes de dieta, treinos com vídeos, acompanhamento de fotos e gestão de alunos em
-                    um único painel de alta performance.
+                    Centralize a prescrição de dietas, treinos e acompanhamento de alunos em um painel único de alta performance.
                 </p>
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-[500px] mx-auto reveal"
                     style="--reveal-delay: 360ms">
@@ -788,26 +787,28 @@
         // Controle do Menu Mobile
         const btnMobile = document.getElementById('btn-mobile-menu');
         const menuMobile = document.getElementById('menu-mobile');
-        const iconMobile = document.getElementById('icon-mobile-menu');
+        const iconMenuOpen = document.getElementById('icon-menu-open');
+        const iconMenuClose = document.getElementById('icon-menu-close');
 
         function toggleMenuMobile() {
             if (!menuMobile) return;
             const estaOculto = menuMobile.classList.contains('hidden');
             if (estaOculto) {
                 menuMobile.classList.remove('hidden');
-                if (iconMobile) iconMobile.setAttribute('data-lucide', 'x');
+                if (iconMenuOpen) iconMenuOpen.classList.add('hidden');
+                if (iconMenuClose) iconMenuClose.classList.remove('hidden');
             } else {
                 menuMobile.classList.add('hidden');
-                if (iconMobile) iconMobile.setAttribute('data-lucide', 'menu');
+                if (iconMenuOpen) iconMenuOpen.classList.remove('hidden');
+                if (iconMenuClose) iconMenuClose.classList.add('hidden');
             }
-            lucide.createIcons();
         }
 
         function fecharMenuMobile() {
             if (!menuMobile) return;
             menuMobile.classList.add('hidden');
-            if (iconMobile) iconMobile.setAttribute('data-lucide', 'menu');
-            lucide.createIcons();
+            if (iconMenuOpen) iconMenuOpen.classList.remove('hidden');
+            if (iconMenuClose) iconMenuClose.classList.add('hidden');
         }
 
         if (btnMobile) {
