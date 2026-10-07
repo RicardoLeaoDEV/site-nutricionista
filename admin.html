@@ -2035,6 +2035,28 @@
                 return;
             }
 
+            // GUARDIÃO DE ASSINATURA (Asaas Guard)
+            if (session.user.id !== ADMIN_UID) {
+                try {
+                    const { data: profGuard } = await supabaseClient
+                        .from('profissionais')
+                        .select('status_assinatura')
+                        .eq('id', session.user.id)
+                        .maybeSingle();
+
+                    if (profGuard) {
+                        const status = profGuard.status_assinatura;
+                        if (status !== 'active' && status !== 'trial' && status !== 'ativa') {
+                            alert('A sua assinatura encontra-se pendente ou inativa. Verifique o seu pagamento.');
+                            window.location.href = 'login.html';
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Erro ao verificar assinatura:', e);
+                }
+            }
+
             const btnPersonal = document.getElementById('btn-atalho-personal');
             if (btnPersonal) {
                 if (_m.especialidade === 'ambos' || session.user.id === ADMIN_UID) {

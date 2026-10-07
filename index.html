@@ -322,6 +322,34 @@
         <div class="text-xs uppercase tracking-widest text-slate-400">Carregando plataforma...</div>
     </div>
 
+    <!-- Entry Splash Screen Modal -->
+    <div id="splash-entry" class="fixed inset-0 z-[10000] bg-navy-950 flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-500">
+        <div class="relative w-full max-w-lg px-6 py-10 z-10 text-center">
+            <div class="rf-logo text-4xl font-clash text-white mb-8"><strong>R</strong>eal <strong>F</strong>it<span class="text-gold-400"> HUB</span></div>
+            <h1 class="text-2xl sm:text-3xl font-clash font-bold text-white mb-4">Como você deseja acessar?</h1>
+            <p class="text-sm text-slate-400 mb-10">Escolha o seu perfil para ser direcionado corretamente.</p>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+                <button onclick="escolherTipoUsuario('aluno')" class="group relative bg-[#091122] border border-slate-800 hover:border-brand-500 rounded-2xl p-6 text-left transition-all hover:shadow-2xl hover:shadow-brand-500/20">
+                    <div class="w-12 h-12 bg-brand-500/10 rounded-full flex items-center justify-center text-brand-400 mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="user" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-100 mb-1">Sou Aluno</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Quero acessar meus treinos e dietas.</p>
+                </button>
+
+                <button onclick="escolherTipoUsuario('profissional')" class="group relative bg-[#091122] border border-slate-800 hover:border-gold-400 rounded-2xl p-6 text-left transition-all hover:shadow-2xl hover:shadow-gold-500/20">
+                    <div class="w-12 h-12 bg-gold-500/10 rounded-full flex items-center justify-center text-gold-400 mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="briefcase" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-100 mb-1">Sou Profissional</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Sou Nutricionista ou Personal.</p>
+                </button>
+            </div>
+        </div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gold-500/10 blur-[100px] rounded-full pointer-events-none"></div>
+    </div>
+
     <!-- Header Fixo -->
     <header class="fixed top-0 left-0 w-full bg-navy-950/90 backdrop-blur-2xl border-b border-gold/20 z-40">
         <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
@@ -862,6 +890,37 @@
         </div>
     </div>
 
-</body>
+    <!-- Script Splash Screen Entrada -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hasChosen = localStorage.getItem('rfhub_entry_choice');
+            const splash = document.getElementById('splash-entry');
+            
+            // Só exibe se for a primeira vez e se não for uma URL de checkout ou afim
+            const isHome = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '';
+            if (!hasChosen && isHome) {
+                splash.classList.remove('hidden');
+                setTimeout(() => {
+                    splash.classList.remove('opacity-0');
+                    splash.classList.add('opacity-100');
+                }, 100);
+            }
+        });
 
+        function escolherTipoUsuario(tipo) {
+            localStorage.setItem('rfhub_entry_choice', tipo);
+            const splash = document.getElementById('splash-entry');
+            
+            if (tipo === 'aluno') {
+                window.location.href = 'login.html';
+            } else if (tipo === 'profissional') {
+                splash.classList.remove('opacity-100');
+                splash.classList.add('opacity-0');
+                setTimeout(() => {
+                    splash.classList.add('hidden');
+                }, 500);
+            }
+        }
+    </script>
+</body>
 </html>
