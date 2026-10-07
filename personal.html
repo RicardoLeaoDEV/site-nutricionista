@@ -231,7 +231,7 @@
                                         class="w-7 h-7 rounded-lg bg-orange-500/10 flex items-center justify-center shrink-0 border border-orange-500/20">
                                         <i data-lucide="user-plus" class="w-4 h-4 text-orange-400"></i>
                                     </div>
-                                    <span class="truncate">Cadastrar novo aluno</span>
+                                    <span class="truncate">Convidar novo aluno</span>
                                 </div>
                                 <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600 shrink-0"></i>
                             </button>
@@ -377,7 +377,7 @@
         <!-- RESUMO DO PROFISSIONAL (Item 22) -->
         <div id="container-resumo-personal"></div>
 
-        <!-- SEÇÃO: Formulário para Cadastrar Aluno -->
+        <!-- SEÇÃO: Convidar Aluno -->
         <section id="secao-cadastrar-aluno"
             class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
@@ -389,10 +389,10 @@
                     </div>
                     <div class="min-w-0 flex-1">
                         <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
-                            Cadastrar Novo Aluno
+                            Convidar Novo Aluno
+                            <span class="text-[10px] bg-orange-500/10 text-orange-400 px-2.5 py-0.5 rounded-full border border-orange-500/30 font-semibold">Self-Service</span>
                         </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Cria o acesso para o aluno
-                            entrar no portal com senha temporária</p>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Envie um link exclusivo para o aluno criar o próprio acesso e preencher os dados iniciais</p>
                     </div>
                 </div>
                 <div
@@ -402,35 +402,36 @@
             </div>
 
             <div class="collapse-content expanded px-5 sm:px-6 pb-6 pt-0">
-                <form id="form-cadastrar-aluno" class="space-y-4 pt-4 border-t border-slate-800/80">
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Nome do
-                                Aluno</label>
-                            <input type="text" id="novo-aluno-nome" placeholder="Ex: Maria Silva" required
-                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
+                <div class="space-y-4 pt-4 border-t border-slate-800/80">
+                    <div class="flex flex-col sm:flex-row gap-4 items-end">
+                        <div class="w-full flex-1">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Link de Convite Único</label>
+                            <input type="text" id="input-link-convite" readonly value="Carregando link..."
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-400 focus:outline-none focus:border-orange-500 font-mono select-all">
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">E-mail
-                                de
-                                Acesso</label>
-                            <input type="email" id="novo-aluno-email" placeholder="aluno@email.com" required
-                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Senha
-                                Inicial</label>
-                            <input type="text" id="novo-aluno-senha" placeholder="Mínimo 6 caracteres" required
-                                value="123456"
-                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500">
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <button type="button" onclick="copiarLinkConvite()" id="btn-copiar-convite"
+                                class="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-700 text-orange-400 hover:text-orange-300 font-bold py-3 px-4 rounded-xl transition-all border border-slate-700 hover:border-orange-500/30 flex items-center justify-center gap-2 cursor-pointer shadow-sm">
+                                <i data-lucide="copy" class="w-4 h-4" id="icone-copiar-convite"></i>
+                                <span id="texto-copiar-convite">Copiar Link</span>
+                            </button>
+                            <button type="button" onclick="compartilharWhatsAppConvite()"
+                                class="flex-1 sm:flex-none bg-green-600/20 hover:bg-green-600/30 text-green-400 hover:text-green-300 font-bold py-3 px-4 rounded-xl transition-all border border-green-500/30 hover:border-green-500/50 flex items-center justify-center gap-2 cursor-pointer shadow-sm">
+                                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                <span>WhatsApp</span>
+                            </button>
                         </div>
                     </div>
-                    <button type="submit" id="btn-cadastrar-aluno"
-                        class="w-full bg-slate-800 hover:bg-slate-700 text-orange-400 hover:text-orange-300 font-bold py-3 rounded-xl transition-all border border-slate-700 hover:border-orange-500/30 flex items-center justify-center gap-2 cursor-pointer">
-                        <i data-lucide="user-check" class="w-4 h-4"></i>
-                        <span>Cadastrar Aluno no Sistema</span>
-                    </button>
-                </form>
+                    <div class="flex items-center justify-between text-xs mt-2 pt-2">
+                        <div class="text-slate-400 flex items-center gap-1.5">
+                            <i data-lucide="info" class="w-3.5 h-3.5 text-blue-400"></i>
+                            O aluno definirá a própria senha no primeiro acesso.
+                        </div>
+                        <div class="font-semibold text-slate-300 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-800" id="contador-alunos-limite">
+                            Alunos ativos: -- / Limite do plano: --
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -1438,6 +1439,7 @@
                 }
             }
 
+            await inicializarGeradorConvite();
             await carregarPerfisAlunosAdmin();
             await carregarAlunosSelect();
             await carregarListaAlunosChat();
@@ -2445,6 +2447,82 @@
         // Pré-inicializa todas as quatro seções imediatamente para que o conteúdo já esteja disponível ao abrir
         if (typeof inicializarTodasSecoesProfissionais === 'function') {
             inicializarTodasSecoesProfissionais();
+        }
+
+        // Funções para Convite de Aluno
+        async function inicializarGeradorConvite() {
+            try {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (!session) return;
+                
+                const userId = session.user.id;
+                const linkConvite = window.location.origin + '/convite.html?prof=' + userId;
+                
+                const inputConvite = document.getElementById('input-link-convite');
+                if (inputConvite) inputConvite.value = linkConvite;
+
+                // Contar alunos
+                const { count: alunosAtivos, error: erroAlunos } = await supabaseClient
+                    .from('perfis')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('profissional_id', userId);
+                    
+                // Buscar limite do plano do profissional
+                const { data: profData, error: erroProf } = await supabaseClient
+                    .from('profissionais')
+                    .select('limite_alunos')
+                    .eq('id', userId)
+                    .single();
+                
+                const contadorElement = document.getElementById('contador-alunos-limite');
+                if (contadorElement && !erroAlunos && !erroProf) {
+                    const limite = profData?.limite_alunos || '∞';
+                    contadorElement.innerText = `Alunos ativos: ${alunosAtivos} / Limite do plano: ${limite}`;
+                }
+            } catch (err) {
+                console.error("Erro ao inicializar convite:", err);
+            }
+        }
+
+        function copiarLinkConvite() {
+            const inputConvite = document.getElementById('input-link-convite');
+            if (!inputConvite || !inputConvite.value || inputConvite.value === 'Carregando link...') return;
+            
+            navigator.clipboard.writeText(inputConvite.value).then(() => {
+                const btnIcon = document.getElementById('icone-copiar-convite');
+                const btnText = document.getElementById('texto-copiar-convite');
+                const btn = document.getElementById('btn-copiar-convite');
+                
+                const originalIcon = btnIcon.getAttribute('data-lucide');
+                const originalText = btnText.innerText;
+                
+                btnIcon.setAttribute('data-lucide', 'check');
+                btnText.innerText = 'Link Copiado!';
+                btn.classList.add('bg-green-600/30', 'text-green-300', 'border-green-500/50');
+                if (window.lucide) lucide.createIcons();
+                
+                if (typeof showToast === 'function') {
+                    showToast('Copiado!', 'Link de convite copiado para a área de transferência.', 'success');
+                }
+                
+                setTimeout(() => {
+                    btnIcon.setAttribute('data-lucide', originalIcon);
+                    btnText.innerText = originalText;
+                    btn.classList.remove('bg-green-600/30', 'text-green-300', 'border-green-500/50');
+                    if (window.lucide) lucide.createIcons();
+                }, 2000);
+            });
+        }
+
+        function compartilharWhatsAppConvite() {
+            const inputConvite = document.getElementById('input-link-convite');
+            if (!inputConvite || !inputConvite.value || inputConvite.value === 'Carregando link...') return;
+            
+            const link = inputConvite.value;
+            const mensagem = `Olá! Aqui está o seu link de acesso exclusivo para a nossa consultoria no Real Fit Hub. Crie a sua conta e defina a sua senha para começarmos: ${link}`;
+            const urlFormatada = \`https://api.whatsapp.com/send?text=\${encodeURIComponent(mensagem)}\`;
+            
+            window.open(urlFormatada, '_blank');
         }
 
         verificarSessao();
