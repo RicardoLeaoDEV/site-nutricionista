@@ -331,43 +331,90 @@
 
     <!-- Entry Splash Screen Modal -->
     <div id="splash-entry"
-        class="fixed inset-0 z-[10000] bg-navy-950 flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-500">
-        <div class="relative w-full max-w-lg px-6 py-10 z-10 text-center">
-            <div class="mb-8 flex flex-col items-center gap-4">
-                <div class="flex justify-center h-28 sm:h-36">
+        class="fixed inset-0 z-[10000] w-full h-[100dvh] bg-gradient-to-b from-[#030712] via-[#050b18] to-[#0b1329] flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-500 overflow-hidden px-6 select-none">
+        
+        <!-- Aurora Glow Effects (brilhos difusos e de baixa opacidade) -->
+        <div class="absolute -top-24 -left-20 w-80 h-80 sm:w-96 sm:h-96 rounded-full bg-[#FACC15] opacity-[0.14] blur-[100px] pointer-events-none"></div>
+        <div class="absolute top-1/4 -right-24 w-80 h-80 sm:w-96 sm:h-96 rounded-full bg-[#10B981] opacity-[0.13] blur-[110px] pointer-events-none"></div>
+        <div class="absolute -bottom-24 left-1/4 w-80 h-80 sm:w-96 sm:h-96 rounded-full bg-[#10B981] opacity-[0.10] blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-10 -right-16 w-72 h-72 rounded-full bg-[#FACC15] opacity-[0.08] blur-[100px] pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] rounded-full bg-gradient-to-tr from-[#10B981]/10 via-transparent to-[#FACC15]/10 blur-[90px] pointer-events-none"></div>
+
+        <!-- Conteúdo Centralizado / Mobile Viewport sem rolagem -->
+        <div class="relative w-full max-w-[420px] mx-auto flex flex-col items-center justify-center z-10">
+            
+            <!-- Logo e Identidade -->
+            <div class="flex flex-col items-center mb-6 sm:mb-8">
+                <div class="relative w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center">
+                    <div class="absolute inset-0 bg-[#FACC15]/15 rounded-[24px] blur-xl"></div>
                     <img src="assets/icon-192.png" alt="Real Fit Hub"
-                        class="h-full w-auto object-contain drop-shadow-2xl rounded-[22%] shadow-lg border border-white/5">
+                        class="relative w-full h-full object-contain rounded-[22%] shadow-2xl border border-white/10">
                 </div>
-                <div class="text-3xl font-clash font-extrabold tracking-widest text-white uppercase text-center">REAL
-                    FIT <span class="text-amber-400">HUB</span></div>
+                <div class="text-xl sm:text-2xl font-black tracking-wider text-white uppercase text-center mt-3 font-sans">
+                    REAL FIT <span class="text-[#FACC15]">HUB</span>
+                </div>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-clash font-bold text-white mb-4">Como você deseja acessar?</h1>
-            <p class="text-sm text-slate-400 mb-10">Escolha o seu perfil para ser direcionado corretamente.</p>
 
-            <div class="grid gap-4 sm:grid-cols-2">
-                <button onclick="escolherTipoUsuario('aluno')"
-                    class="group relative bg-[#091122] border border-slate-800 hover:border-brand-500 rounded-2xl p-6 text-left transition-all hover:shadow-2xl hover:shadow-brand-500/20">
-                    <div
-                        class="w-12 h-12 bg-brand-500/10 rounded-full flex items-center justify-center text-brand-400 mb-4 group-hover:scale-110 transition-transform">
-                        <i data-lucide="user" class="w-6 h-6"></i>
+            <!-- Título e Subtítulo -->
+            <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight text-center mb-2.5 leading-tight">
+                Como você deseja acessar?
+            </h1>
+            <p class="text-xs sm:text-sm text-[#9CA3AF] text-center mb-7 sm:mb-8 max-w-xs leading-relaxed">
+                Escolha o seu perfil para ser direcionado corretamente.
+            </p>
+
+            <!-- Cartões de Seleção de Perfil (Cards Empilhados) -->
+            <div class="flex flex-col gap-4 w-full">
+                <!-- Card Sou Aluno -->
+                <button onclick="escolherTipoUsuario('aluno')" type="button"
+                    class="group relative w-full flex items-center justify-between p-4 sm:p-5 rounded-2xl bg-[rgba(17,24,39,0.7)] backdrop-blur-xl border border-white/[0.08] hover:border-[#10B981]/50 active:scale-[0.98] transition-all duration-300 shadow-[0_8px_30px_rgb(0,0,0,0.35)] hover:shadow-[0_0_25px_rgba(16,185,129,0.2)] text-left cursor-pointer overflow-hidden">
+                    <div class="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"></div>
+                    
+                    <div class="flex items-center gap-3.5 sm:gap-4 flex-1 min-w-0">
+                        <!-- Ícone à Esquerda -->
+                        <div class="w-12 h-12 rounded-xl bg-[#10B981]/10 border border-[#10B981]/20 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-[#10B981]/20 group-hover:shadow-[0_0_15px_rgba(16,185,129,0.35)] transition-all duration-300">
+                            <div class="w-8 h-8 rounded-full bg-[#10B981]/15 flex items-center justify-center">
+                                <i data-lucide="user" class="w-5 h-5 text-[#10B981]"></i>
+                            </div>
+                        </div>
+                        <!-- Textos no Centro -->
+                        <div class="flex flex-col min-w-0">
+                            <span class="text-base font-bold text-white group-hover:text-emerald-300 transition-colors tracking-tight">Sou Aluno</span>
+                            <span class="text-xs sm:text-[13px] text-[#9CA3AF] leading-snug line-clamp-1">Quero acessar meus treinos e dietas.</span>
+                        </div>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-100 mb-1">Sou Aluno</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">Quero acessar meus treinos e dietas.</p>
+                    
+                    <!-- Indicador à Direita -->
+                    <div class="shrink-0 ml-3 text-[#10B981]/70 group-hover:text-[#10B981] group-hover:translate-x-1 transition-all duration-300">
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </div>
                 </button>
 
-                <button onclick="escolherTipoUsuario('profissional')"
-                    class="group relative bg-[#091122] border border-slate-800 hover:border-gold-400 rounded-2xl p-6 text-left transition-all hover:shadow-2xl hover:shadow-gold-500/20">
-                    <div
-                        class="w-12 h-12 bg-gold-500/10 rounded-full flex items-center justify-center text-gold-400 mb-4 group-hover:scale-110 transition-transform">
-                        <i data-lucide="briefcase" class="w-6 h-6"></i>
+                <!-- Card Sou Profissional -->
+                <button onclick="escolherTipoUsuario('profissional')" type="button"
+                    class="group relative w-full flex items-center justify-between p-4 sm:p-5 rounded-2xl bg-[rgba(17,24,39,0.7)] backdrop-blur-xl border border-white/[0.08] hover:border-[#FACC15]/50 active:scale-[0.98] transition-all duration-300 shadow-[0_8px_30px_rgb(0,0,0,0.35)] hover:shadow-[0_0_25px_rgba(250,204,21,0.2)] text-left cursor-pointer overflow-hidden">
+                    <div class="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"></div>
+                    
+                    <div class="flex items-center gap-3.5 sm:gap-4 flex-1 min-w-0">
+                        <!-- Ícone à Esquerda -->
+                        <div class="w-12 h-12 rounded-xl bg-[#FACC15]/10 border border-[#FACC15]/20 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-[#FACC15]/20 group-hover:shadow-[0_0_15px_rgba(250,204,21,0.35)] transition-all duration-300">
+                            <div class="w-8 h-8 rounded-full bg-[#FACC15]/15 flex items-center justify-center">
+                                <i data-lucide="briefcase" class="w-5 h-5 text-[#FACC15]"></i>
+                            </div>
+                        </div>
+                        <!-- Textos no Centro -->
+                        <div class="flex flex-col min-w-0">
+                            <span class="text-base font-bold text-white group-hover:text-amber-300 transition-colors tracking-tight">Sou Profissional</span>
+                            <span class="text-xs sm:text-[13px] text-[#9CA3AF] leading-snug line-clamp-1">Sou Nutricionista ou Personal.</span>
+                        </div>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-100 mb-1">Sou Profissional</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">Sou Nutricionista ou Personal.</p>
+                    
+                    <!-- Indicador à Direita -->
+                    <div class="shrink-0 ml-3 text-[#FACC15]/70 group-hover:text-[#FACC15] group-hover:translate-x-1 transition-all duration-300">
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </div>
                 </button>
             </div>
-        </div>
-        <div
-            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gold-500/10 blur-[100px] rounded-full pointer-events-none">
         </div>
     </div>
 
@@ -922,6 +969,7 @@
                 setTimeout(() => {
                     splash.classList.remove('opacity-0');
                     splash.classList.add('opacity-100');
+                    if (window.lucide) lucide.createIcons();
                 }, 100);
             }
         });
