@@ -193,12 +193,18 @@
                 </span>
             </a>
                 <nav class="hidden lg:flex items-center gap-1 ml-2">
-                    <a href="dashboard.html" class="nav-link"><i data-lucide="layout-dashboard"
-                            class="w-3.5 h-3.5"></i>Painel</a>
-                    <a href="treinos.html" class="nav-link ativo"><i data-lucide="dumbbell" class="w-3.5 h-3.5"></i>Meus
-                        Treinos</a>
-                    <a href="nutricao.html" class="nav-link"><i data-lucide="utensils"
-                            class="w-3.5 h-3.5"></i>Nutrição</a>
+                    <a href="dashboard.html" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <span>Meu Painel</span>
+                    </a>
+                    <a href="treinos.html" class="nav-link ativo">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/></svg>
+                        <span>Treino</span>
+                    </a>
+                    <a href="nutricao.html" class="nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/><path d="M15 2v14a2 2 0 0 1-2 2h0a2 2 0 0 1-2-2V2"/><path d="M2 2v20"/><path d="M2 7h5a3 3 0 0 1 3 3v12"/></svg>
+                        <span>Dieta</span>
+                    </a>
                 </nav>
             </div>
             <div class="flex items-center gap-3">
@@ -226,22 +232,10 @@
                 </button>
             </div>
         </div>
-        <!-- Nav mobile e tablet -->
-        <div class="lg:hidden border-t border-slate-800/60 flex">
-            <a href="dashboard.html"
-                class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-slate-400"><i
-                    data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>Painel</a>
-            <a href="treinos.html"
-                class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-brand-400 border-b-2 border-brand-500 bg-brand-500/5"><i
-                    data-lucide="dumbbell" class="w-3.5 h-3.5"></i>Treinos</a>
-            <a href="nutricao.html"
-                class="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11px] font-semibold text-slate-400"><i
-                    data-lucide="utensils" class="w-3.5 h-3.5"></i>Nutrição</a>
-        </div>
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 flex-1 w-full relative z-10 pb-28 sm:pb-20">
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 flex-1 w-full relative z-10 pb-32 sm:pb-36 lg:pb-12">
 
         <!-- Cabeçalho da Página -->
         <div
@@ -302,13 +296,13 @@
 
     </main>
 
-    <footer class="border-t border-slate-900 bg-slate-950/80 py-5 px-6 text-center text-xs text-slate-500">
+    <footer class="border-t border-slate-900 bg-slate-950/80 py-5 px-6 pb-24 lg:py-5 text-center text-xs text-slate-500">
         Real Fit Hub Digital Platform • Transformando rotinas através da performance consciente.
     </footer>
 
     <!-- Toast -->
     <div id="toast"
-        class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 max-w-sm pointer-events-none">
+        class="fixed bottom-20 sm:bottom-22 right-4 sm:right-6 lg:bottom-6 lg:right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 max-w-sm pointer-events-none">
         <div class="glass-panel border rounded-2xl p-4 shadow-2xl flex items-center gap-3" id="toast-inner">
             <div id="toast-icon-wrapper" class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"><i
                     id="toast-icon" data-lucide="check" class="w-4 h-4"></i></div>
@@ -638,6 +632,34 @@
     </script>
     <script src="js/apexfit-core.js"></script>
     <script src="js/rest-timer.js"></script>
+
+    <!-- Barra de Navegação Inferior Fixa para Mobile e Tablet -->
+    <nav aria-label="Navegação Principal Mobile e Tablet"
+        class="lg:hidden fixed bottom-0 inset-x-0 z-[60] bg-slate-950/95 backdrop-blur-2xl border-t border-slate-800/80 shadow-[0_-8px_30px_rgba(0,0,0,0.8)] px-3 pt-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] pointer-events-auto select-none">
+        <div class="max-w-md md:max-w-lg mx-auto grid grid-cols-3 gap-2 sm:gap-4 items-center">
+            <a href="dashboard.html"
+                class="group flex flex-col items-center justify-center py-2 px-2 rounded-2xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-1 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
+                </svg>
+                <span class="text-[11px] sm:text-xs font-medium tracking-tight">Meu Painel</span>
+            </a>
+            <a href="treinos.html"
+                class="group flex flex-col items-center justify-center py-2 px-2 rounded-2xl text-orange-400 bg-orange-500/15 border border-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] font-bold transition-all active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-1 transition-transform group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/>
+                </svg>
+                <span class="text-[11px] sm:text-xs font-bold tracking-tight">Treino</span>
+            </a>
+            <a href="nutricao.html"
+                class="group flex flex-col items-center justify-center py-2 px-2 rounded-2xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-1 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/><path d="M15 2v14a2 2 0 0 1-2 2h0a2 2 0 0 1-2-2V2"/><path d="M2 2v20"/><path d="M2 7h5a3 3 0 0 1 3 3v12"/>
+                </svg>
+                <span class="text-[11px] sm:text-xs font-medium tracking-tight">Dieta</span>
+            </a>
+        </div>
+    </nav>
 </body>
 
 </html>

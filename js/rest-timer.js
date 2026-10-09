@@ -27,9 +27,9 @@
 
             widget = document.createElement('div');
             widget.id = 'apex-rest-timer-widget';
-            widget.className = 'fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 transform translate-y-32 opacity-0 pointer-events-none transition-all duration-300 w-[calc(100vw-2rem)] max-w-xs sm:w-80';
+            widget.className = 'hidden fixed bottom-24 right-4 sm:bottom-24 sm:right-6 lg:bottom-6 lg:right-6 z-40 transform translate-y-32 opacity-0 pointer-events-none transition-all duration-300 w-[calc(100vw-2rem)] max-w-xs sm:w-80';
             widget.innerHTML = `
-                <div class="glass-panel bg-slate-900/95 border border-orange-500/40 rounded-3xl p-4 shadow-2xl backdrop-blur-2xl text-slate-100 space-y-3 pointer-events-auto">
+                <div class="glass-panel bg-slate-900/95 border border-orange-500/40 rounded-3xl p-4 shadow-2xl backdrop-blur-2xl text-slate-100 space-y-3">
                     <!-- Topo do Cronômetro -->
                     <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                         <div class="flex items-center gap-2">
@@ -99,7 +99,7 @@
             this.atualizarDisplay();
             const widget = document.getElementById('apex-rest-timer-widget');
             if (widget) {
-                widget.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+                widget.classList.remove('hidden', 'translate-y-32', 'opacity-0', 'pointer-events-none');
                 widget.classList.add('translate-y-0', 'opacity-100');
             }
         },
@@ -108,7 +108,7 @@
             this.pausar();
             const widget = document.getElementById('apex-rest-timer-widget');
             if (widget) {
-                widget.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+                widget.classList.add('hidden', 'translate-y-32', 'opacity-0', 'pointer-events-none');
                 widget.classList.remove('translate-y-0', 'opacity-100');
             }
         },
