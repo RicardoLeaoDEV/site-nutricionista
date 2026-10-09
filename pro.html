@@ -276,7 +276,7 @@
     </style>
 </head>
 
-<body class="relative">
+<body class="relative w-full overflow-x-hidden">
 
     <!-- Preloader -->
     <div id="preloader"
@@ -289,119 +289,121 @@
         <div class="text-xs uppercase tracking-widest text-slate-400">Carregando painel profissional...</div>
     </div>
 
-    <!-- Header Fixo -->
-    <header class="fixed top-0 left-0 w-full bg-navy-950/90 backdrop-blur-2xl border-b border-gold/20 z-40">
+    <!-- Header Fixo Glassmorphism B2B -->
+    <header class="fixed top-0 left-0 w-full bg-black/75 backdrop-blur-md border-b border-white/5 z-40 transition-all duration-300">
         <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-            <a href="pro.html" class="inline-flex items-center gap-1.5 sm:gap-2 group h-10 sm:h-12"
+            <!-- Emblema Mobile: RFH com badge PRO; Tablet (iPad 768px) e Desktop: Logo Completo + PRO -->
+            <a href="pro.html" class="inline-flex items-center gap-2 group h-10 sm:h-12"
                 title="Real Fit Hub PRO">
                 <img src="assets/icon-192.png" alt="Real Fit Hub"
-                    class="h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform rounded-[22%] shadow-lg border border-white/5">
-                <span
-                    class="hidden sm:flex items-center gap-1.5 text-xl font-bold tracking-tight text-white font-clash">
+                    class="h-9 sm:h-11 w-auto object-contain group-hover:scale-105 transition-transform rounded-[22%] shadow-lg border border-white/10">
+                <span class="bg-[#FACC15] text-black text-[10px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest sm:hidden">PRO</span>
+                <span class="hidden sm:flex items-center gap-1.5 text-xl font-bold tracking-tight text-white font-clash">
                     <span class="whitespace-nowrap"><strong class="font-extrabold">REAL FIT</strong><span
-                            class="text-amber-400 font-extrabold"> HUB</span></span>
-                    <span
-                        class="bg-gold-500 text-navy-950 text-[10px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest">PRO</span>
+                            class="text-[#FACC15] font-extrabold"> HUB</span></span>
+                    <span class="bg-[#FACC15] text-black text-[10px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest ml-1">PRO</span>
                 </span>
             </a>
 
-            <nav class="hidden lg:flex items-center gap-7 text-xs uppercase tracking-wider font-bold text-slate-300">
-                <a href="#ecossistema" class="hover:text-gold-400 transition-colors">Ecossistema</a>
-                <a href="#planos" class="hover:text-gold-400 transition-colors">Planos</a>
-                <a href="#faq" class="hover:text-gold-400 transition-colors">Perguntas Frequentes</a>
+            <!-- Links Institucionais Desktop (Breakpoint a partir de lg: 1024px) -->
+            <nav class="hidden lg:flex items-center gap-6 lg:gap-8 text-xs uppercase tracking-wider font-bold text-slate-300">
+                <a href="#ecossistema" class="hover:text-[#FACC15] transition-colors">Ecossistema</a>
+                <a href="#planos" class="hover:text-[#FACC15] transition-colors">Planos</a>
+                <a href="#faq" class="hover:text-[#FACC15] transition-colors">Perguntas Frequentes</a>
             </nav>
 
-            <div class="hidden lg:flex items-center gap-3.5">
+            <!-- Ações Desktop: Redirecionamento Secundário para Alunos + CTA (Breakpoint a partir de lg: 1024px) -->
+            <div class="hidden lg:flex items-center gap-3">
                 <a href="index.html"
-                    class="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-gold-400 bg-gold-500/10 hover:bg-gold-500/20 border border-gold-500/30 px-4 py-2.5 rounded-full transition-all">
-                    <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
-                    <span>Para Alunos</span>
+                    class="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-slate-300 hover:text-white px-4 py-2.5 rounded-full hover:bg-white/5 border border-white/10 transition-all">
+                    <i data-lucide="user" class="w-3.5 h-3.5 text-[#FACC15]"></i>
+                    <span>Área do Aluno</span>
                 </a>
-                <a href="login.html" class="botaoDourado !h-[48px] !text-xs !py-1 !pl-5 !pr-[58px]">
-                    <span>Fazer Login</span>
-                    <div class="divSeta !w-[38px] !h-[38px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </div>
+                <a href="cadastro-profissional.html?plano=starter" class="botaoDourado !h-[46px] !text-xs !py-1 !pl-5 !pr-[54px] shadow-lg shadow-yellow-500/20">
+                    <span>Teste Grátis</span>
+                    <div class="divSeta !w-[36px] !h-[36px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
                 </a>
             </div>
 
-            <!-- Botões de Ação Mobile -->
-            <div class="flex items-center gap-2 lg:hidden">
-                <a href="index.html"
-                    class="flex items-center justify-center w-8 h-8 rounded-lg bg-gold-500/10 border border-gold-500/30 text-gold-400 hover:bg-gold-500/20 transition-all"
-                    title="Para Alunos">
-                    <i data-lucide="briefcase" class="w-4 h-4"></i>
-                </a>
-                <a href="login.html"
-                    class="flex items-center gap-1.5 text-xs font-bold text-slate-300 bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-2 rounded-xl transition-all">
-                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                    <span>Entrar</span>
-                </a>
+            <!-- Botões de Ação Mobile/Tablet (visível até lg: 1024px, garantindo limpeza visual no iPad) -->
+            <div class="flex items-center lg:hidden">
                 <button type="button" id="btn-mobile-menu" aria-label="Abrir Menu"
-                    class="w-10 h-10 rounded-xl bg-slate-900 border border-gold/20 flex items-center justify-center text-slate-200 hover:text-gold-400 transition-colors focus:outline-none">
+                    class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-200 hover:text-[#FACC15] hover:bg-white/10 transition-colors focus:outline-none">
                     <i data-lucide="menu" id="icon-menu-open" class="w-5 h-5"></i>
                     <i data-lucide="x" id="icon-menu-close" class="w-5 h-5 hidden"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Menu Suspenso Mobile -->
+        <!-- Menu Suspenso Mobile/Tablet (Gaveta Retrátil até lg: 1024px) -->
         <div id="menu-mobile"
-            class="hidden lg:hidden border-t border-gold/15 bg-navy-950/98 backdrop-blur-2xl px-5 py-6 space-y-4 shadow-2xl transition-all duration-300">
+            class="hidden lg:hidden border-t border-white/10 bg-black/95 backdrop-blur-2xl px-5 py-6 space-y-5 shadow-2xl transition-all duration-300">
             <nav class="flex flex-col space-y-3 text-sm font-semibold text-slate-200">
                 <a href="#ecossistema" onclick="fecharMenuMobile()"
-                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-[#FACC15] transition-colors">
                     <span>Ecossistema B2B</span>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
                 </a>
                 <a href="#planos" onclick="fecharMenuMobile()"
-                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-[#FACC15] transition-colors">
                     <span>Planos e Preços</span>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
                 </a>
                 <a href="#faq" onclick="fecharMenuMobile()"
-                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-[#FACC15] transition-colors">
                     <span>Perguntas Frequentes</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+                </a>
+                <a href="index.html"
+                    class="flex items-center justify-between py-2 border-b border-white/5 text-slate-300 hover:text-white transition-colors">
+                    <span class="flex items-center gap-2"><i data-lucide="user" class="w-4 h-4 text-[#FACC15]"></i> Área do Aluno</span>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
                 </a>
                 <a href="login.html"
                     class="flex items-center justify-between py-2 border-b border-white/5 text-slate-300 hover:text-white transition-colors">
-                    <span class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4 text-gold-400"></i> Área
-                        do Profissional</span>
+                    <span class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4 text-[#FACC15]"></i> Login do Profissional</span>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
                 </a>
             </nav>
             <div class="pt-2">
                 <a href="cadastro-profissional.html"
-                    class="botaoDourado w-full text-center justify-center !h-[50px] !text-xs !py-1 !pl-5 !pr-[58px]">
-                    <span>Começar Teste Grátis</span>
-                    <div class="divSeta !w-[40px] !h-[40px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </div>
+                    class="botaoDourado w-full text-center justify-center !h-[48px] !text-xs !py-1 !pl-5 !pr-[54px] shadow-lg shadow-yellow-500/20">
+                    <span>Começar Teste Grátis de 3 Dias</span>
+                    <div class="divSeta !w-[38px] !h-[38px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
                 </a>
             </div>
         </div>
     </header>
 
-    <main>
-        <!-- Hero Section B2B -->
-        <section class="pt-32 pb-20 md:pt-44 md:pb-32 px-4 sm:px-6 relative bg-cover bg-center"
-            style="background-image: linear-gradient(to right bottom, rgba(2, 4, 8, 0.95), rgba(3, 7, 18, 0.90)), url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=1920');">
-            <div class="max-w-7xl mx-auto text-center">
-                <div class="cardSubtitulo mx-auto mb-6 reveal" style="--reveal-delay: 0ms">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-gold-400"></i>
-                    <h3>ECOSSISTEMA PROFISSIONAL DE ALTO PADRÃO</h3>
+    <main class="w-full overflow-x-hidden">
+        <!-- Hero Section B2B (Foco em Conversão e Vendas com pb-24 garantido para respiro inferior) -->
+        <section class="pt-32 pb-24 md:pt-40 md:pb-28 lg:pt-44 lg:pb-36 px-4 sm:px-6 relative bg-cover bg-center overflow-hidden"
+            style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.90) 50%, rgba(0, 0, 0, 1) 100%), url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=1920');">
+            <!-- Iluminação Ambiente Dourada com Blur Extremo -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 sm:w-[500px] h-72 sm:h-[500px] bg-[#FACC15]/15 blur-3xl rounded-full pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto text-center relative z-10">
+                <!-- Badge Superior Pílula -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FACC15]/10 border border-[#FACC15]/30 mb-6 mx-auto reveal" style="--reveal-delay: 0ms">
+                    <span class="text-xs font-bold uppercase tracking-wider text-[#FACC15]">✨ ECOSSISTEMA PROFISSIONAL DE ALTO PADRÃO</span>
                 </div>
-                <h1 class="font-clash text-3xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-8 text-white reveal"
+
+                <!-- Proposta de Valor / Título Principal Responsivo (text-2xl sm:text-4xl lg:text-6xl com leading-tight e tracking normal) -->
+                <h1 class="font-clash text-2xl sm:text-4xl lg:text-6xl font-black tracking-normal sm:tracking-tight leading-tight mb-6 sm:mb-8 text-white break-words reveal"
                     style="--reveal-delay: 120ms">
-                    Eleve o nível da sua <span class="text-gold-400">CONSULTORIA</span>
+                    ELEVE O NÍVEL DA SUA <br class="hidden sm:inline" /><span class="text-[#FACC15] tracking-normal font-black">CONSULTORIA FITNESS</span>
                 </h1>
-                <p class="max-w-xl mx-auto text-sm sm:text-base text-slate-300 mb-10 leading-relaxed reveal"
+
+                <!-- Subtítulo -->
+                <p class="max-w-xl mx-auto text-sm sm:text-base text-zinc-300 mb-8 sm:mb-10 leading-relaxed reveal"
                     style="--reveal-delay: 240ms">
-                    Centralize a prescrição de dietas, treinos e acompanhamento de alunos em um painel único de alta
-                    performance.
+                    Centralize a prescrição de dietas, treinos e acompanhamento de alunos em um painel único de alta performance.
                 </p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-[500px] mx-auto reveal"
+
+                <!-- Botão de Ação Primário -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-sm mx-auto w-full reveal"
                     style="--reveal-delay: 360ms">
-                    <a href="cadastro-profissional.html" class="botaoDourado w-full sm:w-auto">
+                    <a href="cadastro-profissional.html" class="botaoDourado w-full sm:w-auto shadow-lg shadow-yellow-500/20 min-h-[52px]">
                         <span>COMEÇAR TESTE GRÁTIS DE 3 DIAS</span>
                         <div class="divSeta"><i data-lucide="arrow-right" class="w-5 h-5"></i></div>
                     </a>
@@ -409,18 +411,12 @@
             </div>
         </section>
 
-        <!-- Marquee Dinâmico B2B -->
-        <section class="py-3 border-y border-gold/20 bg-navy-950 relative overflow-hidden">
-            <div class="marquee-wrapper">
-                <div
-                    class="marquee-content font-clash text-lg sm:text-xl font-semibold tracking-wider text-slate-300 uppercase items-center">
-                    <span>✦ BANCO DE ALIMENTOS TACO/IBGE</span> <span class="text-gold-400 font-bold">✦ PRESCRIÇÃO DE
-                        TREINOS COM VÍDEOS</span>
-                    <span>✦ ACOMPANHAMENTO DE FOTOS</span> <span class="text-amber-300 font-bold">✦ CÁLCULO AUTOMÁTICO
-                        DE MACROS</span>
-                    <span>✦ CHAT DIRETO E SEGURO</span> <span class="text-gold-400 font-bold">✦ APLICATIVO INSTALÁVEL
-                        PWA</span>
-                    <span>✦ GESTÃO FINANCEIRA E RETENÇÃO</span>
+        <!-- Faixa de Benefícios / Marquee Dinâmico B2B -->
+        <section class="py-3.5 border-y border-white/5 bg-black/90 relative overflow-hidden w-full overflow-x-hidden">
+            <div class="marquee-wrapper w-full overflow-hidden">
+                <div class="marquee-content font-clash text-xs sm:text-sm font-bold tracking-widest text-slate-300 uppercase items-center whitespace-nowrap">
+                    <span>BANCO DE ALIMENTOS TACO/IBGE</span> <span class="text-[#FACC15]">✦</span> <span>PRESCRIÇÃO DE TREINOS COM VÍDEOS</span> <span class="text-[#FACC15]">✦</span> <span>ACOMPANHAMENTO DE FOTOS</span> <span class="text-[#FACC15]">✦</span> <span>CÁLCULO AUTOMÁTICO DE MACROS</span> <span class="text-[#FACC15]">✦</span> <span>APLICATIVO INSTALÁVEL PWA</span> <span class="text-[#FACC15]">✦</span>
+                    <span>BANCO DE ALIMENTOS TACO/IBGE</span> <span class="text-[#FACC15]">✦</span> <span>PRESCRIÇÃO DE TREINOS COM VÍDEOS</span> <span class="text-[#FACC15]">✦</span> <span>ACOMPANHAMENTO DE FOTOS</span> <span class="text-[#FACC15]">✦</span> <span>CÁLCULO AUTOMÁTICO DE MACROS</span> <span class="text-[#FACC15]">✦</span> <span>APLICATIVO INSTALÁVEL PWA</span> <span class="text-[#FACC15]">✦</span>
                 </div>
             </div>
         </section>

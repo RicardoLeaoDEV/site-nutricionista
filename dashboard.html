@@ -448,12 +448,12 @@
 
                 <button type="button"
                     onclick="if(document.getElementById('chat-window').classList.contains('hidden')) document.getElementById('chat-toggle-btn').click();"
-                    class="hidden sm:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-gold-400 hover:text-gold-300 text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all cursor-pointer">
+                    class="hidden xl:flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-gold-400 hover:text-gold-300 text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all cursor-pointer">
                     <i data-lucide="message-circle" class="w-4 h-4"></i>
                     Chat com o profissional
                 </button>
 
-                <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
+                <div class="h-6 w-px bg-slate-800 hidden xl:block"></div>
 
                 <div class="flex items-center gap-2">
                     <button type="button" onclick="abrirModalFotoPerfil()"
@@ -492,22 +492,16 @@
 
         <!-- Boas-vindas e Data -->
         <div
-            class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-[#030712]/90 to-[#0a0a02]/40 p-6 rounded-3xl border border-gold-500/15 shadow-xl">
+            class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-[#030712]/90 to-[#0a0a02]/40 px-4 py-2 sm:p-6 rounded-2xl sm:rounded-3xl border border-gold-500/15 shadow-xl">
             <div>
                 <div class="text-xs font-semibold uppercase tracking-wider text-gold-400 mb-1" id="data-hoje">--</div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
                     <span id="saudacao">Olá</span>, <span id="nome-aluno" class="text-gold-400">Aluno(a)</span>! 👋
                 </h1>
                 <p class="text-sm text-slate-400 mt-1">
                     Mantenha a consistência. Cada refeição saudável conta para a sua transformação.
                 </p>
             </div>
-            <button type="button"
-                onclick="if(document.getElementById('chat-window').classList.contains('hidden')) document.getElementById('chat-toggle-btn').click();"
-                class="sm:hidden flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 transition-all cursor-pointer">
-                <i data-lucide="message-circle" class="w-4 h-4"></i>
-                <span>Suporte</span>
-            </button>
         </div>
 
         <!-- AVISOS & COMPROMISSOS AGENDADOS (Sincronização em Tempo Real com o Profissional) -->
@@ -517,7 +511,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- 1. Peso Atual & Sparkline de Tendência -->
             <div
-                class="glass-panel stat-card-modern p-5 rounded-2xl border border-slate-800/80 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/5 flex flex-col justify-between relative overflow-hidden group">
+                class="glass-panel stat-card-modern p-3 sm:p-5 rounded-2xl border border-slate-800/80 hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-500/5 flex flex-col justify-between relative overflow-hidden group">
                 <!-- Brilho ambiente no hover -->
                 <div
                     class="absolute -top-12 -right-12 w-28 h-28 bg-emerald-500/5 group-hover:bg-emerald-500/15 rounded-full blur-2xl transition-all pointer-events-none">
@@ -583,7 +577,7 @@
 
             <!-- 2. Perfil Físico & Régua Interativa de IMC -->
             <div
-                class="glass-panel stat-card-modern p-5 rounded-2xl border border-slate-800/80 hover:border-blue-500/40 hover:shadow-xl hover:shadow-blue-500/5 flex flex-col justify-between relative overflow-hidden group">
+                class="glass-panel stat-card-modern p-3 sm:p-5 rounded-2xl border border-slate-800/80 hover:border-blue-500/40 hover:shadow-xl hover:shadow-blue-500/5 flex flex-col justify-between relative overflow-hidden group">
                 <!-- Brilho ambiente no hover -->
                 <div
                     class="absolute -top-12 -right-12 w-28 h-28 bg-blue-500/5 group-hover:bg-blue-500/15 rounded-full blur-2xl transition-all pointer-events-none">
@@ -661,7 +655,7 @@
 
             <!-- 3. Refeições Concluídas Hoje (Donut Chart + Macros/Calorias) -->
             <div
-                class="glass-panel stat-card-modern p-5 rounded-2xl border border-slate-800/80 hover:border-lime-500/40 hover:shadow-xl hover:shadow-lime-500/5 flex flex-col justify-between relative overflow-hidden group">
+                class="glass-panel stat-card-modern p-3 sm:p-5 rounded-2xl border border-slate-800/80 hover:border-lime-500/40 hover:shadow-xl hover:shadow-lime-500/5 flex flex-col justify-between relative overflow-hidden group">
                 <!-- Brilho ambiente no hover -->
                 <div
                     class="absolute -top-12 -right-12 w-28 h-28 bg-lime-500/5 group-hover:bg-lime-500/15 rounded-full blur-2xl transition-all pointer-events-none">
@@ -742,7 +736,7 @@
 
             <!-- 4. Rastreador Interativo de Água -->
             <div
-                class="glass-panel stat-card-modern p-5 rounded-2xl border border-slate-800/80 hover:border-cyan-500/40 hover:shadow-xl hover:shadow-cyan-500/5 flex flex-col justify-between relative overflow-hidden group">
+                class="glass-panel stat-card-modern p-3 sm:p-5 rounded-2xl border border-slate-800/80 hover:border-cyan-500/40 hover:shadow-xl hover:shadow-cyan-500/5 flex flex-col justify-between relative overflow-hidden group">
                 <!-- Brilho ambiente no hover -->
                 <div
                     class="absolute -top-12 -right-12 w-28 h-28 bg-cyan-500/5 group-hover:bg-cyan-500/15 rounded-full blur-2xl transition-all pointer-events-none">
@@ -773,9 +767,9 @@
 
                 <!-- Rodapé: Feedback Dinâmico Contextual & Reiniciar -->
                 <div class="pt-2.5 border-t border-slate-800/80 flex items-center justify-between gap-2">
-                    <span class="text-[11px] font-semibold text-slate-300 truncate flex items-center gap-1"
+                    <span class="text-xs text-zinc-400 leading-tight flex items-center gap-1"
                         id="agua-feedback-texto">
-                        💧 Comece a se hidratar
+                        💧 Comece o dia se hidratando
                     </span>
                     <button id="btn-reset-agua" type="button"
                         class="text-[11px] font-semibold text-slate-400 hover:text-cyan-300 bg-slate-800/60 hover:bg-slate-800 px-2 py-1 rounded-lg border border-slate-700/60 transition-colors flex items-center gap-1 cursor-pointer shrink-0">
@@ -3314,7 +3308,7 @@
 
     <!-- Botão Flutuante do Chat no Dashboard do Aluno -->
     <button id="chat-toggle-btn"
-        class="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 bg-brand-500 hover:bg-brand-400 text-slate-950 p-3.5 sm:p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-50 group hover:scale-105 active:scale-95 cursor-pointer">
+        class="lg:hidden fixed bottom-4 sm:bottom-6 right-4 sm:right-6 bg-brand-500 hover:bg-brand-400 text-slate-950 p-3.5 sm:p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-50 group hover:scale-105 active:scale-95 cursor-pointer">
         <i data-lucide="message-square" class="w-5 h-5 sm:w-6 sm:h-6"></i>
         <!-- Símbolo de notificação pulsante em vermelho e branco -->
         <span id="chat-badge"

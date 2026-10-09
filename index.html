@@ -312,7 +312,7 @@
     </style>
 </head>
 
-<body class="relative">
+<body class="relative w-full overflow-x-hidden">
 
     <!-- Preloader -->
     <div id="preloader"
@@ -418,122 +418,112 @@
         </div>
     </div>
 
-    <!-- Header Fixo -->
-    <header class="fixed top-0 left-0 w-full bg-navy-950/90 backdrop-blur-2xl border-b border-gold/20 z-40">
+    <!-- Header Fixo Glassmorphism -->
+    <header class="fixed top-0 left-0 w-full bg-black/70 backdrop-blur-md border-b border-white/5 z-40 transition-all duration-300">
         <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-            <a href="index.html" class="inline-flex items-center gap-1.5 sm:gap-2 group h-10 sm:h-12"
-                title="Real Fit Hub">
+            <!-- Logótipo: Mobile exibe apenas o ícone do escudo RFH; Tablet (iPad 768px) e Desktop exibem logo completo -->
+            <a href="index.html" class="inline-flex items-center gap-2 group h-10 sm:h-12" title="Real Fit Hub">
                 <img src="assets/icon-192.png" alt="Real Fit Hub"
-                    class="h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform rounded-[22%] shadow-lg border border-white/5">
-                <span class="text-xl font-bold tracking-tight text-white whitespace-nowrap font-clash hidden sm:block">
-                    <strong class="font-extrabold">REAL FIT</strong><span class="text-amber-400 font-extrabold">
-                        HUB</span>
+                    class="h-9 sm:h-11 w-auto object-contain group-hover:scale-105 transition-transform rounded-[22%] shadow-lg border border-white/10">
+                <span class="hidden sm:flex items-center text-xl font-bold tracking-tight text-white whitespace-nowrap font-clash">
+                    <strong class="font-extrabold">REAL FIT</strong><span class="text-[#FACC15] font-extrabold ml-1">HUB</span>
                 </span>
             </a>
 
-            <nav class="hidden lg:flex items-center gap-7 text-xs uppercase tracking-wider font-bold text-slate-300">
-                <a href="#plataforma" class="hover:text-gold-400 transition-colors">A Plataforma</a>
-                <a href="#sobre" class="hover:text-gold-400 transition-colors">Sobre os Profissionais</a>
-                <a href="#faq" class="hover:text-gold-400 transition-colors">Dúvidas</a>
+            <!-- Navegação Desktop (Breakpoint a partir de lg: 1024px para evitar colisão no iPad) -->
+            <nav class="hidden lg:flex items-center gap-6 lg:gap-8 text-xs uppercase tracking-wider font-bold text-slate-300">
+                <a href="#plataforma" class="hover:text-[#FACC15] transition-colors">A Plataforma</a>
+                <a href="#sobre" class="hover:text-[#FACC15] transition-colors">Sobre os Profissionais</a>
+                <a href="#faq" class="hover:text-[#FACC15] transition-colors">Dúvidas</a>
             </nav>
 
-            <div class="hidden lg:flex items-center gap-3.5">
+            <!-- Ações Desktop (Breakpoint a partir de lg: 1024px) -->
+            <div class="hidden lg:flex items-center gap-3">
                 <a href="pro.html"
-                    class="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-gold-400 bg-gold-500/10 hover:bg-gold-500/20 border border-gold-500/30 px-4 py-2.5 rounded-full transition-all">
+                    class="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-[#FACC15] bg-[#FACC15]/10 hover:bg-[#FACC15]/20 border border-[#FACC15]/30 px-4 py-2.5 rounded-full transition-all">
                     <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
                     <span>Para Profissionais</span>
                 </a>
-                <a href="login.html" class="botaoDourado !h-[48px] !text-xs !py-1 !pl-5 !pr-[58px]">
-                    <span>Fazer Login</span>
-                    <div class="divSeta !w-[38px] !h-[38px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </div>
+                <a href="login.html" class="botaoDourado !h-[46px] !text-xs !py-1 !pl-5 !pr-[54px] shadow-lg shadow-yellow-500/20">
+                    <span>Área do Aluno</span>
+                    <div class="divSeta !w-[36px] !h-[36px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
                 </a>
             </div>
 
-            <!-- Botões de Ação para Celular / Tablet (Mobile) -->
-            <div class="flex items-center gap-2 lg:hidden">
-                <!-- Botão de Instalação Mobile Infalível -->
-                <button type="button" id="install-btn-mobile"
-                    onclick="alert('Para instalar o Real Fit Hub na sua tela inicial, toque nos três pontinhos (...) no canto superior direito do seu Chrome e selecione \'Instalar aplicativo\' ou \'Adicionar à tela inicial\'.')"
-                    class="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 hover:bg-amber-500/20 transition-all cursor-pointer">
-                    <i data-lucide="download" class="w-4 h-4"></i>
-                </button>
-
-                <a href="pro.html"
-                    class="flex items-center justify-center w-8 h-8 rounded-lg bg-gold-500/10 border border-gold-500/30 text-gold-400 hover:bg-gold-500/20 transition-all"
-                    title="Para Profissionais">
-                    <i data-lucide="briefcase" class="w-4 h-4"></i>
-                </a>
-                <a href="login.html"
-                    class="flex items-center gap-1.5 text-xs font-bold text-slate-300 bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-2 rounded-xl transition-all">
-                    <i data-lucide="user" class="w-3.5 h-3.5"></i>
-                    <span>Entrar</span>
-                </a>
+            <!-- Botão Hambúrguer Mobile/Tablet (visível até lg: 1024px, garantindo limpeza visual no iPad) -->
+            <div class="flex items-center lg:hidden">
                 <button type="button" id="btn-mobile-menu" aria-label="Abrir Menu"
-                    class="w-10 h-10 rounded-xl bg-slate-900 border border-gold/20 flex items-center justify-center text-slate-200 hover:text-gold-400 transition-colors focus:outline-none">
+                    class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-200 hover:text-[#FACC15] hover:bg-white/10 transition-colors focus:outline-none">
                     <i data-lucide="menu" id="icon-menu-open" class="w-5 h-5"></i>
                     <i data-lucide="x" id="icon-menu-close" class="w-5 h-5 hidden"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Menu Suspenso Mobile (Gaveta Retrátil) -->
+        <!-- Menu Suspenso Mobile/Tablet (Gaveta Retrátil até lg: 1024px) -->
         <div id="menu-mobile"
-            class="hidden lg:hidden border-t border-gold/15 bg-navy-950/98 backdrop-blur-2xl px-5 py-6 space-y-4 shadow-2xl transition-all duration-300">
+            class="hidden lg:hidden border-t border-white/10 bg-black/95 backdrop-blur-2xl px-5 py-6 space-y-5 shadow-2xl transition-all duration-300">
             <nav class="flex flex-col space-y-3 text-sm font-semibold text-slate-200">
                 <a href="#plataforma" onclick="fecharMenuMobile()"
-                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-[#FACC15] transition-colors">
                     <span>A Plataforma</span>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
                 </a>
                 <a href="#sobre" onclick="fecharMenuMobile()"
-                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
+                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-[#FACC15] transition-colors">
                     <span>Sobre os Profissionais</span>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
                 </a>
                 <a href="#faq" onclick="fecharMenuMobile()"
-                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-gold-400 transition-colors">
-                    <span>Perguntas Frequentes</span>
+                    class="flex items-center justify-between py-2 border-b border-white/5 hover:text-[#FACC15] transition-colors">
+                    <span>Dúvidas Frequentes</span>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
                 </a>
                 <a href="pro.html"
-                    class="flex items-center justify-between py-2 border-b border-white/5 text-gold-400 hover:text-gold-300 transition-colors">
-                    <span class="flex items-center gap-2"><i data-lucide="briefcase" class="w-4 h-4"></i> Para
-                        Profissionais</span>
-                    <i data-lucide="chevron-right" class="w-4 h-4 text-gold-500/60"></i>
+                    class="flex items-center justify-between py-2 border-b border-white/5 text-[#FACC15] hover:text-amber-300 transition-colors">
+                    <span class="flex items-center gap-2"><i data-lucide="briefcase" class="w-4 h-4"></i> Para Profissionais</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-[#FACC15]/60"></i>
                 </a>
             </nav>
-            <div class="pt-2">
+            <div class="pt-2 space-y-3">
                 <a href="login.html"
-                    class="botaoDourado w-full text-center justify-center !h-[50px] !text-xs !py-1 !pl-5 !pr-[58px]">
-                    <span>Área do Aluno</span>
-                    <div class="divSeta !w-[40px] !h-[40px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </div>
+                    class="botaoDourado w-full text-center justify-center !h-[48px] !text-xs !py-1 !pl-5 !pr-[54px] shadow-lg shadow-yellow-500/20">
+                    <span>Entrar na Área do Aluno</span>
+                    <div class="divSeta !w-[38px] !h-[38px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
                 </a>
             </div>
         </div>
     </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="pt-32 pb-20 md:pt-44 md:pb-32 px-4 sm:px-6 relative bg-cover bg-center"
-            style="background-image: linear-gradient(to right bottom, rgba(2, 4, 8, 0.95), rgba(3, 7, 18, 0.90)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1920');">
-            <div class="max-w-7xl mx-auto text-center">
-                <div class="cardSubtitulo mx-auto mb-6 reveal" style="--reveal-delay: 0ms">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-gold-400"></i>
-                    <h3>NUTRIÇÃO & TRAINING EM ALTO PADRÃO</h3>
+    <main class="w-full overflow-x-hidden">
+        <!-- Hero Section (Destaque Principal com pb-24 garantido para respiro inferior) -->
+        <section class="pt-32 pb-24 md:pt-40 md:pb-28 lg:pt-44 lg:pb-36 px-4 sm:px-6 relative bg-cover bg-center overflow-hidden"
+            style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.90) 50%, rgba(0, 0, 0, 1) 100%), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1920');">
+            <!-- Iluminação Ambiente Radial Amber/Dourado com Blur Extremo -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 sm:w-[500px] h-72 sm:h-[500px] bg-[#FACC15]/15 blur-3xl rounded-full pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto text-center relative z-10">
+                <!-- Badge Pílula Dourada -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FACC15]/10 border border-[#FACC15]/30 mb-6 mx-auto reveal" style="--reveal-delay: 0ms">
+                    <span class="text-xs font-bold uppercase tracking-wider text-[#FACC15]">✨ NUTRIÇÃO &amp; TRAINING EM ALTO PADRÃO</span>
                 </div>
-                <h1 class="font-clash text-3xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-8 text-white reveal"
+
+                <!-- Título com Escala Fluida Responsiva (text-2xl sm:text-4xl lg:text-6xl com leading-tight e tracking normal) -->
+                <h1 class="font-clash text-2xl sm:text-4xl lg:text-6xl font-black tracking-normal sm:tracking-tight leading-tight mb-6 sm:mb-8 text-white reveal"
                     style="--reveal-delay: 120ms">
-                    A EVOLUÇÃO DO SEU CORPO <span class="text-gold-400">DIRECIONADA POR ESPECIALISTAS</span>
+                    A EVOLUÇÃO DO SEU CORPO <br class="hidden sm:inline" /><span class="text-[#FACC15] tracking-normal font-black">DIRECIONADA POR ESPECIALISTAS</span>
                 </h1>
-                <p class="max-w-xl mx-auto text-sm sm:text-base text-slate-300 mb-10 leading-relaxed reveal"
+
+                <!-- Subtítulo -->
+                <p class="max-w-xl mx-auto text-sm sm:text-base text-[#D1D5DB] mb-8 sm:mb-10 leading-relaxed reveal"
                     style="--reveal-delay: 240ms">
                     Acompanhamento nutricional e treinos avançados em um único painel de alta performance.
                 </p>
+
+                <!-- Botão CTA Cápsula -->
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto reveal"
                     style="--reveal-delay: 360ms">
-                    <a href="login.html" class="botaoDourado w-full sm:w-auto">
+                    <a href="login.html" class="botaoDourado w-full sm:w-auto shadow-lg shadow-yellow-500/20">
                         <span>ENTRAR NA ÁREA DO ALUNO</span>
                         <div class="divSeta"><i data-lucide="arrow-right" class="w-5 h-5"></i></div>
                     </a>
@@ -541,17 +531,14 @@
             </div>
         </section>
 
-        <!-- Marquee -->
-        <section class="py-3 border-y border-gold/20 bg-navy-950 relative overflow-hidden">
-            <div class="marquee-wrapper">
-                <div
-                    class="marquee-content font-clash text-lg sm:text-xl font-semibold tracking-wider text-slate-300 uppercase items-center">
-                    <span>✦ DIETA 100% PERSONALIZADA</span> <span class="text-gold-400 font-bold">✦ TREINOS DE ALTA
-                        PERFORMANCE</span>
-                    <span>✦ SUPORTE DIRETO COM PROFISSIONAIS</span> <span class="text-amber-300 font-bold">✦
-                        ACOMPANHAMENTO DE CARGAS E PESO</span>
-                    <span>✦ GALERIA DE EVOLUÇÃO SEGURA</span> <span class="text-gold-400 font-bold">✦ REAL FIT HUB
-                        ECOSYSTEM</span>
+        <!-- Faixa de Benefícios (Ticker/Marquee Contínuo Infinito) -->
+        <section class="py-3.5 border-y border-white/5 bg-black/90 relative overflow-hidden w-full overflow-x-hidden">
+            <div class="marquee-wrapper w-full overflow-hidden">
+                <div class="marquee-content font-clash text-xs sm:text-sm font-bold tracking-widest text-slate-300 uppercase items-center whitespace-nowrap">
+                    <span>100% PERSONALIZADA</span> <span class="text-[#FACC15]">✦</span> <span>TREINOS DE ALTA PERFORMANCE</span> <span class="text-[#FACC15]">✦</span> <span>SUPORTE DIRETO COM PROFISSIONAIS</span> <span class="text-[#FACC15]">✦</span>
+                    <span>100% PERSONALIZADA</span> <span class="text-[#FACC15]">✦</span> <span>TREINOS DE ALTA PERFORMANCE</span> <span class="text-[#FACC15]">✦</span> <span>SUPORTE DIRETO COM PROFISSIONAIS</span> <span class="text-[#FACC15]">✦</span>
+                    <span>100% PERSONALIZADA</span> <span class="text-[#FACC15]">✦</span> <span>TREINOS DE ALTA PERFORMANCE</span> <span class="text-[#FACC15]">✦</span> <span>SUPORTE DIRETO COM PROFISSIONAIS</span> <span class="text-[#FACC15]">✦</span>
+                    <span>100% PERSONALIZADA</span> <span class="text-[#FACC15]">✦</span> <span>TREINOS DE ALTA PERFORMANCE</span> <span class="text-[#FACC15]">✦</span> <span>SUPORTE DIRETO COM PROFISSIONAIS</span> <span class="text-[#FACC15]">✦</span>
                 </div>
             </div>
         </section>
