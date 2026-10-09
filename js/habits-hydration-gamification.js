@@ -210,48 +210,66 @@
                             </div>
                         </div>
 
-                        <!-- 2. Barra de Progresso XP -->
-                        <div class="mt-4 mb-3">
-                            <div class="flex items-center justify-between text-xs mb-1.5 font-semibold">
-                                <span class="text-slate-400 text-[11px] uppercase tracking-wider font-bold">Progresso para o Nível ${gam.nivel + 1}</span>
-                                <span class="text-gold-400 font-black">${xpNoNivel} / 100 XP <span class="text-slate-500 font-normal">(${pctNivel}%)</span></span>
+                        <!-- 2. Barra de Progresso XP com Destaque Aprimorado -->
+                        <div class="mt-4 mb-3.5 bg-slate-950/60 border border-slate-800/80 p-3 rounded-2xl">
+                            <div class="flex items-center justify-between text-xs mb-2">
+                                <span class="text-slate-300 text-[11px] uppercase tracking-wider font-bold flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                                    Progresso para o Nível ${gam.nivel + 1}
+                                </span>
+                                <span class="text-amber-300 font-extrabold text-xs">
+                                    ${xpNoNivel} <span class="text-slate-400 font-normal">/ 100 XP</span>
+                                    <span class="text-slate-400 font-semibold ml-1">(${pctNivel}%)</span>
+                                </span>
                             </div>
-                            <div class="h-2.5 w-full bg-slate-950 rounded-full border border-slate-800/80 overflow-hidden p-0.5 shadow-inner">
-                                <div class="h-full bg-gradient-to-r from-amber-500 via-gold-400 to-yellow-300 rounded-full transition-all duration-700 shadow-md shadow-gold-500/30" style="width: ${Math.max(5, pctNivel)}%"></div>
+                            <div class="h-3 w-full bg-slate-950 rounded-full border border-slate-800 overflow-hidden p-0.5 shadow-inner">
+                                <div class="h-full bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-300 rounded-full transition-all duration-700 shadow-sm shadow-amber-500/40" style="width: ${Math.max(5, pctNivel)}%"></div>
                             </div>
                         </div>
 
-                        <!-- 3. Grade de Conquistas & Badges (2x2) -->
+                        <!-- 3. Grade de Conquistas & Badges (Design Limpo e Ícones Sutis) -->
                         <div class="grid grid-cols-2 gap-2.5 my-3">
-                            <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/90 flex items-center gap-2.5 hover:border-slate-700 transition-all">
-                                <span class="text-2xl shrink-0">🏆</span>
+                            <div class="p-2.5 sm:p-3 rounded-2xl bg-slate-950/70 border border-slate-800/80 hover:border-slate-700 flex items-center gap-2.5 transition-all">
+                                <div class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 text-amber-400 flex items-center justify-center shrink-0">
+                                    <i data-lucide="trophy" class="w-4 h-4"></i>
+                                </div>
                                 <div class="min-w-0">
-                                    <span class="text-xs font-extrabold text-white block truncate">1º Treino</span>
-                                    <span class="text-[10px] text-emerald-400 font-bold block">Desbloqueado</span>
+                                    <span class="text-xs font-bold text-slate-100 block truncate">1º Treino</span>
+                                    <span class="text-[10px] text-emerald-400 font-semibold flex items-center gap-0.5">
+                                        <i data-lucide="check" class="w-2.5 h-2.5"></i>Desbloqueado
+                                    </span>
                                 </div>
                             </div>
 
-                            <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/90 flex items-center gap-2.5 hover:border-slate-700 transition-all">
-                                <span class="text-2xl shrink-0">🔥</span>
+                            <div class="p-2.5 sm:p-3 rounded-2xl bg-slate-950/70 border border-slate-800/80 hover:border-slate-700 flex items-center gap-2.5 transition-all">
+                                <div class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 text-amber-400 flex items-center justify-center shrink-0">
+                                    <i data-lucide="flame" class="w-4 h-4"></i>
+                                </div>
                                 <div class="min-w-0">
-                                    <span class="text-xs font-extrabold text-white block truncate">7 Dias Invictos</span>
-                                    <span class="text-[10px] text-emerald-400 font-bold block">${streakDias >= 7 ? 'Desbloqueado' : `${streakDias}/7 dias`}</span>
+                                    <span class="text-xs font-bold text-slate-100 block truncate">7 Dias Invictos</span>
+                                    <span class="text-[10px] ${streakDias >= 7 ? 'text-emerald-400' : 'text-slate-400'} font-semibold block truncate">
+                                        ${streakDias >= 7 ? 'Desbloqueado' : `${streakDias}/7 dias`}
+                                    </span>
                                 </div>
                             </div>
 
-                            <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/90 flex items-center gap-2.5 hover:border-slate-700 transition-all">
-                                <span class="text-2xl shrink-0">💧</span>
+                            <div class="p-2.5 sm:p-3 rounded-2xl bg-slate-950/70 border border-slate-800/80 hover:border-slate-700 flex items-center gap-2.5 transition-all">
+                                <div class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 text-amber-400 flex items-center justify-center shrink-0">
+                                    <i data-lucide="droplets" class="w-4 h-4"></i>
+                                </div>
                                 <div class="min-w-0">
-                                    <span class="text-xs font-extrabold text-white block truncate">Meta H2O</span>
-                                    <span class="text-[10px] text-cyan-400 font-bold block">Ativo Hoje</span>
+                                    <span class="text-xs font-bold text-slate-100 block truncate">Meta H2O</span>
+                                    <span class="text-[10px] text-amber-400/90 font-semibold block">Ativo Hoje</span>
                                 </div>
                             </div>
 
-                            <div class="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/90 flex items-center gap-2.5 hover:border-slate-700 transition-all">
-                                <span class="text-2xl shrink-0">🥗</span>
+                            <div class="p-2.5 sm:p-3 rounded-2xl bg-slate-950/70 border border-slate-800/80 hover:border-slate-700 flex items-center gap-2.5 transition-all">
+                                <div class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 text-amber-400 flex items-center justify-center shrink-0">
+                                    <i data-lucide="apple" class="w-4 h-4"></i>
+                                </div>
                                 <div class="min-w-0">
-                                    <span class="text-xs font-extrabold text-white block truncate">Dieta 100%</span>
-                                    <span class="text-[10px] text-gold-400 font-bold block">Nível 2</span>
+                                    <span class="text-xs font-bold text-slate-100 block truncate">Dieta 100%</span>
+                                    <span class="text-[10px] text-slate-400 font-semibold block">Nível 2</span>
                                 </div>
                             </div>
                         </div>
