@@ -283,8 +283,8 @@
         class="fixed inset-0 z-50 bg-navy-950 flex flex-col items-center justify-center transition-opacity duration-700">
         <div class="rf-logo text-3xl font-clash text-white mb-2 flex items-center gap-2">
             <span><span class="hidden sm:inline"><strong>R</strong>eal <strong>F</strong>it</span>
-            <span
-                class="bg-gold-500 text-navy-950 text-xs font-black px-1.5 py-0.5 rounded tracking-widest uppercase">PRO</span>
+                <span
+                    class="bg-gold-500 text-navy-950 text-xs font-black px-1.5 py-0.5 rounded tracking-widest uppercase">PRO</span>
         </div>
         <div class="text-xs uppercase tracking-widest text-slate-400">Carregando painel profissional...</div>
     </div>
@@ -292,11 +292,16 @@
     <!-- Header Fixo -->
     <header class="fixed top-0 left-0 w-full bg-navy-950/90 backdrop-blur-2xl border-b border-gold/20 z-40">
         <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-            <a href="pro.html" class="inline-flex items-center gap-1.5 sm:gap-2 group h-10 sm:h-12" title="Real Fit Hub PRO">
-                <img src="assets/icon-192.png" alt="Real Fit Hub" class="h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform rounded-[22%] shadow-lg border border-white/5">
-                <span class="hidden sm:flex items-center gap-1.5 text-xl font-bold tracking-tight text-white font-clash">
-                    <span class="whitespace-nowrap"><strong class="font-extrabold">REAL FIT</strong><span class="text-amber-400 font-extrabold"> HUB</span></span>
-                    <span class="bg-gold-500 text-navy-950 text-[10px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest">PRO</span>
+            <a href="pro.html" class="inline-flex items-center gap-1.5 sm:gap-2 group h-10 sm:h-12"
+                title="Real Fit Hub PRO">
+                <img src="assets/icon-192.png" alt="Real Fit Hub"
+                    class="h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform rounded-[22%] shadow-lg border border-white/5">
+                <span
+                    class="hidden sm:flex items-center gap-1.5 text-xl font-bold tracking-tight text-white font-clash">
+                    <span class="whitespace-nowrap"><strong class="font-extrabold">REAL FIT</strong><span
+                            class="text-amber-400 font-extrabold"> HUB</span></span>
+                    <span
+                        class="bg-gold-500 text-navy-950 text-[10px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest">PRO</span>
                 </span>
             </a>
 
@@ -307,27 +312,29 @@
             </nav>
 
             <div class="hidden lg:flex items-center gap-3.5">
-                <a href="login.html"
-                    class="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-slate-300 hover:text-white px-4 py-2.5 rounded-full hover:bg-white/5 border border-white/10 transition-all">
-                    <i data-lucide="lock" class="w-4 h-4 text-gold-400"></i> Entrar
+                <a href="index.html"
+                    class="flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-gold-400 bg-gold-500/10 hover:bg-gold-500/20 border border-gold-500/30 px-4 py-2.5 rounded-full transition-all">
+                    <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
+                    <span>Para Alunos</span>
                 </a>
-                <a href="cadastro-profissional.html?plano=starter" class="botaoDourado w-full sm:w-auto">
-                    <span>TESTE GRÁTIS</span>
-                    <div class="divSeta"><i data-lucide="arrow-right" class="w-5 h-5"></i></div>
+                <a href="login.html" class="botaoDourado !h-[48px] !text-xs !py-1 !pl-5 !pr-[58px]">
+                    <span>Fazer Login</span>
+                    <div class="divSeta !w-[38px] !h-[38px] !right-1"><i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </div>
                 </a>
             </div>
 
             <!-- Botões de Ação Mobile -->
             <div class="flex items-center gap-2 lg:hidden">
-                <a href="login.html"
-                    class="flex items-center justify-center w-8 h-8 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 transition-all"
-                    title="Área do Profissional">
-                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                <a href="index.html"
+                    class="flex items-center justify-center w-8 h-8 rounded-lg bg-gold-500/10 border border-gold-500/30 text-gold-400 hover:bg-gold-500/20 transition-all"
+                    title="Para Alunos">
+                    <i data-lucide="briefcase" class="w-4 h-4"></i>
                 </a>
-                <a href="cadastro-profissional.html"
-                    class="flex items-center gap-1.5 text-xs font-bold text-navy-950 bg-gold-400 hover:bg-gold-500 px-3 py-2 rounded-xl transition-all">
-                    <i data-lucide="zap" class="w-3.5 h-3.5"></i>
-                    <span>Começar</span>
+                <a href="login.html"
+                    class="flex items-center gap-1.5 text-xs font-bold text-slate-300 bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-2 rounded-xl transition-all">
+                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                    <span>Entrar</span>
                 </a>
                 <button type="button" id="btn-mobile-menu" aria-label="Abrir Menu"
                     class="w-10 h-10 rounded-xl bg-slate-900 border border-gold/20 flex items-center justify-center text-slate-200 hover:text-gold-400 transition-colors focus:outline-none">
@@ -385,21 +392,18 @@
                 </div>
                 <h1 class="font-clash text-3xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-8 text-white reveal"
                     style="--reveal-delay: 120ms">
-                    ESCALABILIDADE E REFINAMENTO PARA A SUA <span class="text-gold-400">CONSULTORIA FITNESS</span>
+                    Eleve o nível da sua <span class="text-gold-400">CONSULTORIA</span>
                 </h1>
                 <p class="max-w-xl mx-auto text-sm sm:text-base text-slate-300 mb-10 leading-relaxed reveal"
                     style="--reveal-delay: 240ms">
-                    Centralize a prescrição de dietas, treinos e acompanhamento de alunos em um painel único de alta performance.
+                    Centralize a prescrição de dietas, treinos e acompanhamento de alunos em um painel único de alta
+                    performance.
                 </p>
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-[500px] mx-auto reveal"
                     style="--reveal-delay: 360ms">
                     <a href="cadastro-profissional.html" class="botaoDourado w-full sm:w-auto">
                         <span>COMEÇAR TESTE GRÁTIS DE 3 DIAS</span>
                         <div class="divSeta"><i data-lucide="arrow-right" class="w-5 h-5"></i></div>
-                    </a>
-                    <a href="login.html"
-                        class="flex items-center justify-center gap-2 w-full sm:w-auto h-[60px] px-8 rounded-full bg-white/5 border border-gold/30 text-white font-bold text-sm hover:bg-white/10 transition-all">
-                        <i data-lucide="lock" class="w-4 h-4 text-gold-400"></i> Acessar Plataforma
                     </a>
                 </div>
             </div>
@@ -629,7 +633,7 @@
                         onclick="toggleFaq(this)">
                         <div class="flex items-center justify-between">
                             <h3 class="text-base font-bold text-white">Preciso cadastrar cartão de crédito para o teste
-                                de 7 dias?</h3>
+                                de 3 dias?</h3>
                             <i data-lucide="chevron-down" class="w-5 h-5 text-gold-400 faq-icon"></i>
                         </div>
                         <div class="faq-answer">
@@ -694,11 +698,16 @@
     <!-- Footer -->
     <footer class="border-t border-gold/20 bg-navy-950 py-16 px-6">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
-            <a href="pro.html" class="inline-flex items-center gap-1.5 sm:gap-2 group h-10 sm:h-12" title="Real Fit Hub PRO">
-                <img src="assets/icon-192.png" alt="Real Fit Hub" class="h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform rounded-[22%] shadow-lg border border-white/5">
-                <span class="hidden sm:flex items-center gap-1.5 text-xl font-bold tracking-tight text-white font-clash">
-                    <span class="whitespace-nowrap"><strong class="font-extrabold">REAL FIT</strong><span class="text-amber-400 font-extrabold"> HUB</span></span>
-                    <span class="bg-gold-500 text-navy-950 text-[10px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest">PRO</span>
+            <a href="pro.html" class="inline-flex items-center gap-1.5 sm:gap-2 group h-10 sm:h-12"
+                title="Real Fit Hub PRO">
+                <img src="assets/icon-192.png" alt="Real Fit Hub"
+                    class="h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform rounded-[22%] shadow-lg border border-white/5">
+                <span
+                    class="hidden sm:flex items-center gap-1.5 text-xl font-bold tracking-tight text-white font-clash">
+                    <span class="whitespace-nowrap"><strong class="font-extrabold">REAL FIT</strong><span
+                            class="text-amber-400 font-extrabold"> HUB</span></span>
+                    <span
+                        class="bg-gold-500 text-navy-950 text-[10px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest">PRO</span>
                 </span>
             </a>
 
