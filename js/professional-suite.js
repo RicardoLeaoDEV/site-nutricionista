@@ -21,42 +21,103 @@
             const container = document.getElementById(containerId);
             if (!container) return;
 
+            const isNutri = (containerId && containerId.includes('nutri')) || (window.location && window.location.pathname.includes('admin'));
             const alunos = stats.alunos || 1;
             const checkinsPendentes = stats.checkinsPendentes || 1;
             const pagamentosPendentes = stats.pagamentosPendentes || 0;
             const consultasHoje = stats.consultasHoje || 2;
             const mensagensNaoLidas = stats.mensagensNaoLidas || 0;
 
+            const fnAlternar = isNutri ? 'alternarAbaNutri' : 'alternarAbaPersonal';
+            const secaoAlunosId = isNutri ? 'secao-alunos-vinculados-nutri' : 'secao-alunos-vinculados-personal';
+
             container.innerHTML = `
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
-                    <div class="glass-panel p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-800 text-center flex flex-col justify-between">
-                        <span class="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 block mb-0.5 truncate">Alunos Ativos</span>
-                        <div class="text-lg sm:text-2xl font-bold sm:font-black text-white tracking-tight my-0.5">${alunos}</div>
-                        <span class="text-[9px] sm:text-[10px] text-emerald-400 font-semibold block truncate">100% monitorados</span>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3.5">
+                    <!-- 1. Alunos Ativos -->
+                    <div onclick="if(document.getElementById('${secaoAlunosId}')) document.getElementById('${secaoAlunosId}').scrollIntoView({ behavior: 'smooth' })"
+                        title="Ver lista de alunos vinculados"
+                        class="glass-panel p-3 sm:p-4 rounded-2xl border border-slate-800/90 hover:border-emerald-500/40 bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-[#0a0f1d] flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-500/5 group cursor-pointer">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-wider text-slate-400 group-hover:text-emerald-400 transition-colors truncate">Alunos Ativos</span>
+                            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500/20 transition-all shrink-0">
+                                <i data-lucide="users" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                            </div>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-black text-white tracking-tight my-1">${alunos}</div>
+                        <div class="flex items-center gap-1.5 text-[10px] text-emerald-400 font-bold">
+                            <i data-lucide="check-circle-2" class="w-3 h-3 shrink-0"></i>
+                            <span class="truncate">100% monitorados</span>
+                        </div>
                     </div>
 
-                    <div class="glass-panel p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl border border-amber-500/30 bg-amber-500/5 text-center flex flex-col justify-between">
-                        <span class="text-[9px] sm:text-[10px] uppercase font-bold text-amber-400 block mb-0.5 truncate">Check-ins Pendentes</span>
-                        <div class="text-lg sm:text-2xl font-bold sm:font-black text-amber-300 tracking-tight my-0.5">${checkinsPendentes}</div>
-                        <span class="text-[9px] sm:text-[10px] text-amber-400/80 font-semibold block truncate">Aguardando revisão</span>
+                    <!-- 2. Check-ins Pendentes -->
+                    <div onclick="if(typeof ${fnAlternar} === 'function') ${fnAlternar}('evolucao')"
+                        title="Revisar fotos e respostas de check-in"
+                        class="glass-panel p-3 sm:p-4 rounded-2xl border ${checkinsPendentes > 0 ? 'border-amber-500/40 bg-gradient-to-br from-amber-950/20 via-slate-900/80 to-[#0a0f1d] shadow-sm shadow-amber-500/10' : 'border-slate-800/90 bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-[#0a0f1d]'} hover:border-amber-400/60 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-amber-500/10 group cursor-pointer">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-wider ${checkinsPendentes > 0 ? 'text-amber-400' : 'text-slate-400'} group-hover:text-amber-300 transition-colors truncate">Check-ins Pendentes</span>
+                            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl ${checkinsPendentes > 0 ? 'bg-amber-500/20 border-amber-500/40 text-amber-300 shadow-sm shadow-amber-500/10' : 'bg-slate-800 border-slate-700 text-slate-400'} flex items-center justify-center group-hover:scale-110 transition-all shrink-0">
+                                <i data-lucide="camera" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                            </div>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-black ${checkinsPendentes > 0 ? 'text-amber-300' : 'text-white'} tracking-tight my-1">${checkinsPendentes}</div>
+                        <div class="flex items-center gap-1.5 text-[10px] ${checkinsPendentes > 0 ? 'text-amber-400 font-extrabold' : 'text-slate-400 font-medium'}">
+                            <i data-lucide="${checkinsPendentes > 0 ? 'clock' : 'check'}" class="w-3 h-3 shrink-0"></i>
+                            <span class="truncate">${checkinsPendentes > 0 ? 'Aguardando revisão' : 'Tudo em dia'}</span>
+                        </div>
                     </div>
 
-                    <div class="glass-panel p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-800 text-center flex flex-col justify-between">
-                        <span class="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 block mb-0.5 truncate">Consultas Hoje</span>
-                        <div class="text-lg sm:text-2xl font-bold sm:font-black text-cyan-400 tracking-tight my-0.5">${consultasHoje}</div>
-                        <span class="text-[9px] sm:text-[10px] text-slate-400 font-semibold block truncate">Na agenda</span>
+                    <!-- 3. Consultas Hoje -->
+                    <div onclick="if(typeof ${fnAlternar} === 'function') ${fnAlternar}('gestao')"
+                        title="Ver agenda de atendimentos e consultas"
+                        class="glass-panel p-3 sm:p-4 rounded-2xl border border-slate-800/90 hover:border-cyan-500/40 bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-[#0a0f1d] flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-cyan-500/5 group cursor-pointer">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-wider text-slate-400 group-hover:text-cyan-400 transition-colors truncate">Consultas Hoje</span>
+                            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/25 flex items-center justify-center text-cyan-400 group-hover:scale-110 group-hover:bg-cyan-500/20 transition-all shrink-0">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                            </div>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-black text-cyan-300 tracking-tight my-1">${consultasHoje}</div>
+                        <div class="flex items-center gap-1.5 text-[10px] text-cyan-400/90 font-bold">
+                            <i data-lucide="clock" class="w-3 h-3 shrink-0"></i>
+                            <span class="truncate">Na agenda</span>
+                        </div>
                     </div>
 
-                    <div class="glass-panel p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-800 text-center flex flex-col justify-between">
-                        <span class="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 block mb-0.5 truncate">Mensagens Novas</span>
-                        <div class="text-lg sm:text-2xl font-bold sm:font-black ${mensagensNaoLidas > 0 ? 'text-red-400' : 'text-slate-400'} tracking-tight my-0.5">${mensagensNaoLidas}</div>
-                        <span class="text-[9px] sm:text-[10px] text-slate-400 font-semibold block truncate">No chat</span>
+                    <!-- 4. Mensagens Novas -->
+                    <div onclick="if(typeof abrirChatFlutuante === 'function') abrirChatFlutuante()"
+                        title="Abrir chat com alunos"
+                        class="glass-panel p-3 sm:p-4 rounded-2xl border border-slate-800/90 hover:border-blue-500/40 bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-[#0a0f1d] flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-blue-500/5 group cursor-pointer">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-wider text-slate-400 group-hover:text-blue-400 transition-colors truncate">Mensagens Novas</span>
+                            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl ${mensagensNaoLidas > 0 ? 'bg-rose-500/15 border-rose-500/30 text-rose-400 animate-pulse' : 'bg-blue-500/10 border-blue-500/25 text-blue-400'} flex items-center justify-center group-hover:scale-110 transition-all shrink-0">
+                                <i data-lucide="message-square" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                            </div>
+                        </div>
+                        <div class="text-2xl sm:text-3xl font-black ${mensagensNaoLidas > 0 ? 'text-rose-400' : 'text-slate-300'} tracking-tight my-1">${mensagensNaoLidas}</div>
+                        <div class="flex items-center gap-1.5 text-[10px] ${mensagensNaoLidas > 0 ? 'text-rose-400 font-extrabold' : 'text-slate-400 font-medium'}">
+                            <i data-lucide="message-circle" class="w-3 h-3 shrink-0"></i>
+                            <span class="truncate">${mensagensNaoLidas > 0 ? 'Respostas pendentes' : 'No chat'}</span>
+                        </div>
                     </div>
 
-                    <div class="glass-panel p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-800 text-center col-span-2 sm:col-span-1 flex flex-col justify-between">
-                        <span class="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 block mb-0.5 truncate">Mensalidades</span>
-                        <div class="text-lg sm:text-2xl font-bold sm:font-black ${pagamentosPendentes > 0 ? 'text-amber-400' : 'text-emerald-400'} tracking-tight my-0.5">${pagamentosPendentes > 0 ? pagamentosPendentes + ' pendentes' : 'Em dia'}</div>
-                        <span class="text-[9px] sm:text-[10px] text-slate-400 font-semibold block truncate">Fluxo financeiro</span>
+                    <!-- 5. Mensalidades -->
+                    <div onclick="if(typeof ${fnAlternar} === 'function') ${fnAlternar}('gestao')"
+                        title="Acessar financeiro e planos"
+                        class="glass-panel p-3 sm:p-4 rounded-2xl border border-slate-800/90 hover:border-emerald-500/40 bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-[#0a0f1d] col-span-2 sm:col-span-1 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-500/5 group cursor-pointer">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-wider text-slate-400 group-hover:text-emerald-400 transition-colors truncate">Mensalidades</span>
+                            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl ${pagamentosPendentes > 0 ? 'bg-amber-500/15 border-amber-500/30 text-amber-400' : 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400'} flex items-center justify-center group-hover:scale-110 transition-all shrink-0">
+                                <i data-lucide="wallet" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+                            </div>
+                        </div>
+                        <div class="text-xl sm:text-2xl font-black ${pagamentosPendentes > 0 ? 'text-amber-400' : 'text-emerald-400'} tracking-tight my-1">
+                            ${pagamentosPendentes > 0 ? pagamentosPendentes + ' pendentes' : 'Em dia'}
+                        </div>
+                        <div class="flex items-center gap-1.5 text-[10px] text-emerald-400/90 font-bold">
+                            <i data-lucide="trending-up" class="w-3 h-3 shrink-0"></i>
+                            <span class="truncate">Fluxo financeiro</span>
+                        </div>
                     </div>
                 </div>
             `;

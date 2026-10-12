@@ -80,6 +80,29 @@
             }
         }
 
+        /* Folga visual segura para botão flutuante de chat e janela acima da barra mobile/tablet */
+        @media (max-width: 1023px) {
+            #chat-toggle-btn {
+                bottom: calc(max(6rem, var(--safe-bottom) + 5.25rem)) !important;
+            }
+            #chat-window {
+                bottom: calc(max(6rem, var(--safe-bottom) + 5.25rem)) !important;
+            }
+            #toast {
+                bottom: calc(max(6rem, var(--safe-bottom) + 5.25rem)) !important;
+            }
+        }
+
+        /* Compensação de espaçamento superior do conteúdo principal para cabeçalho fixo */
+        main {
+            padding-top: calc(var(--header-height) + 1.25rem);
+        }
+        @media (min-width: 1024px) {
+            main {
+                padding-top: calc(var(--header-h-desktop) + 1.25rem) !important;
+            }
+        }
+
         html {
             scroll-padding-top: calc(var(--header-height) + 1.25rem);
             scroll-behavior: smooth;
@@ -278,8 +301,9 @@
             box-shadow: 0 4px 18px -2px rgba(234, 179, 8, 0.22);
         }
 
-        /* Slider de Adesão à Dieta com Gradiente Suave */
-        input[type=range].slider-dieta {
+        /* Sliders de Adesão à Dieta e ao Treino com Gradiente Suave */
+        input[type=range].slider-dieta,
+        input[type=range].slider-treino {
             -webkit-appearance: none;
             appearance: none;
             width: 100%;
@@ -289,7 +313,8 @@
             outline: none;
         }
 
-        input[type=range].slider-dieta::-webkit-slider-thumb {
+        input[type=range].slider-dieta::-webkit-slider-thumb,
+        input[type=range].slider-treino::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
             width: 22px;
@@ -302,11 +327,13 @@
             transition: transform 0.15s ease;
         }
 
-        input[type=range].slider-dieta::-webkit-slider-thumb:hover {
+        input[type=range].slider-dieta::-webkit-slider-thumb:hover,
+        input[type=range].slider-treino::-webkit-slider-thumb:hover {
             transform: scale(1.15);
         }
 
-        input[type=range].slider-dieta::-moz-range-thumb {
+        input[type=range].slider-dieta::-moz-range-thumb,
+        input[type=range].slider-treino::-moz-range-thumb {
             width: 22px;
             height: 22px;
             border-radius: 50%;
@@ -558,34 +585,80 @@
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-6xl mx-auto p-3.5 sm:p-6 lg:p-8 pt-20 sm:pt-24 pb-32 sm:pb-36 lg:pb-8 space-y-4 sm:space-y-6 flex-1 w-full">
+    <main class="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-24 pb-32 sm:pb-36 lg:pb-12 space-y-4 sm:space-y-6 flex-1 w-full">
 
-        <!-- Boas-vindas e Data Conforme Imagem 1 -->
-        <div
-            class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-[#030712]/90 via-[#0a0f1d]/60 to-[#0a0a02]/40 p-5 sm:p-7 rounded-3xl border border-gold-500/15 shadow-xl relative overflow-hidden">
-            <div class="z-10">
-                <div class="text-xs font-black uppercase tracking-wider text-amber-400 mb-1" id="data-hoje">DOMINGO, 11 DE OUTUBRO DE 2026</div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                    Olá, <span id="nome-aluno" class="text-amber-400 font-extrabold">Lucas Martins</span>! 👋
-                </h1>
-                <p class="text-xs sm:text-sm text-slate-300 mt-1">
-                    Meta vigente: <strong id="meta-vigente-aluno" class="text-white font-bold">Hipertrofia com Definição</strong> · Mantenha a consistência diária.
-                </p>
-            </div>
-
-            <!-- Indicador de Protocolo Ativo à Direita (Sem exportação de PDF) -->
-            <div class="z-10 flex items-center gap-2">
-                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-bold text-xs shadow-sm">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    Protocolo Ativo
+        <!-- ------------------------------------------------------------------ -->
+        <!-- BARRA HORIZONTAL COM AS OPÇÕES (APENAS DESKTOP - NO MOBILE UTILIZA A BARRA FIXA INFERIOR) -->
+        <!-- ------------------------------------------------------------------ -->
+        <div class="glass-panel bg-[#0a0f1d]/80 border border-white/10 p-1.5 sm:p-2 rounded-2xl hidden lg:flex items-center gap-2 overflow-x-auto scrollbar-none shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] select-none" id="barra-horizontal-opcoes">
+            <button type="button" onclick="alternarAbaAluno('painel')" id="tab-btn-painel" class="tab-horizontal-btn ativa" title="Meu Painel">
+                <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"></i>
+                <span class="truncate">
+                    <span class="inline sm:hidden">Painel</span>
+                    <span class="hidden sm:inline">Meu Painel</span>
                 </span>
-            </div>
+            </button>
+            <button type="button" onclick="alternarAbaAluno('dieta')" id="tab-btn-dieta" class="tab-horizontal-btn" title="Plano Alimentar">
+                <i data-lucide="utensils" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"></i>
+                <span class="truncate">
+                    <span class="inline sm:hidden">Dieta</span>
+                    <span class="hidden sm:inline">Plano Alimentar</span>
+                </span>
+            </button>
+            <button type="button" onclick="alternarAbaAluno('treinos')" id="tab-btn-treinos" class="tab-horizontal-btn" title="Meus Treinos">
+                <i data-lucide="dumbbell" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"></i>
+                <span class="truncate">
+                    <span class="inline sm:hidden">Treinos</span>
+                    <span class="hidden sm:inline">Meus Treinos</span>
+                </span>
+            </button>
+            <button type="button" onclick="alternarAbaAluno('medidas')" id="tab-btn-medidas" class="tab-horizontal-btn" title="Medidas Corporais">
+                <i data-lucide="ruler" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"></i>
+                <span class="truncate">
+                    <span class="inline sm:hidden">Medidas</span>
+                    <span class="hidden sm:inline">Medidas Corporais</span>
+                </span>
+            </button>
+            <button type="button" onclick="alternarAbaAluno('pix')" id="tab-btn-pix" class="tab-horizontal-btn" title="Mensalidade & PIX">
+                <i data-lucide="qr-code" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"></i>
+                <span class="truncate">
+                    <span class="inline sm:hidden">PIX</span>
+                    <span class="hidden sm:inline">Mensalidade & PIX</span>
+                </span>
+            </button>
         </div>
 
-        <!-- AVISOS & COMPROMISSOS AGENDADOS (Sincronização em Tempo Real com o Profissional) -->
-        <div id="container-notificacao-agendamentos" class="hidden"></div>
+        <!-- ================================================================== -->
+        <!-- ABA 1: MEU PAINEL (CONTEÚDO DINÂMICO)                             -->
+        <!-- ================================================================== -->
+        <div id="conteudo-tab-painel" class="space-y-4 sm:space-y-6">
 
-        <!-- 1. OS 4 CARDS DE MÉTRICAS NO TOPO (2 COLUNAS NO MOBILE, COMPACTOS E HARMÔNICOS) -->
+            <!-- Boas-vindas e Data Conforme Imagem 1 -->
+            <div
+                class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-[#030712]/90 via-[#0a0f1d]/60 to-[#0a0a02]/40 p-5 sm:p-7 rounded-3xl border border-gold-500/15 shadow-xl relative overflow-hidden">
+                <div class="z-10">
+                    <div class="text-xs font-black uppercase tracking-wider text-amber-400 mb-1" id="data-hoje">DOMINGO, 11 DE OUTUBRO DE 2026</div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                        Olá, <span id="nome-aluno" class="text-amber-400 font-extrabold">Lucas Martins</span>! 👋
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-300 mt-1">
+                        Meta vigente: <strong id="meta-vigente-aluno" class="text-white font-bold">Hipertrofia com Definição</strong> · Mantenha a consistência diária.
+                    </p>
+                </div>
+
+                <!-- Indicador de Protocolo Ativo à Direita (Sem exportação de PDF) -->
+                <div class="z-10 flex items-center gap-2">
+                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-bold text-xs shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Protocolo Ativo
+                    </span>
+                </div>
+            </div>
+
+            <!-- AVISOS & COMPROMISSOS AGENDADOS (Sincronização em Tempo Real com o Profissional) -->
+            <div id="container-notificacao-agendamentos" class="hidden"></div>
+
+            <!-- 1. OS 4 CARDS DE MÉTRICAS NO TOPO (2 COLUNAS NO MOBILE, COMPACTOS E HARMÔNICOS) -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
             <!-- 1. Último Peso -->
             <div
@@ -820,52 +893,6 @@
             </div>
         </div>
 
-        <!-- ------------------------------------------------------------------ -->
-        <!-- 2. BARRA HORIZONTAL COM AS OPÇÕES (ORDEM: MEU PAINEL, PLANO ALIMENTAR, MEUS TREINOS, MENSALIDADE & PIX) -->
-        <!-- ------------------------------------------------------------------ -->
-        <div class="glass-panel bg-[#0a0f1d]/80 border border-white/10 p-1.5 sm:p-2 rounded-2xl hidden lg:flex items-center gap-2 overflow-x-auto scrollbar-none shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] select-none" id="barra-horizontal-opcoes">
-            <button type="button" onclick="alternarAbaAluno('painel')" id="tab-btn-painel" class="tab-horizontal-btn ativa" title="Meu Painel">
-                <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"></i>
-                <span class="truncate">
-                    <span class="inline sm:hidden">Painel</span>
-                    <span class="hidden sm:inline">Meu Painel</span>
-                </span>
-            </button>
-            <button type="button" onclick="alternarAbaAluno('dieta')" id="tab-btn-dieta" class="tab-horizontal-btn" title="Plano Alimentar">
-                <i data-lucide="utensils" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"></i>
-                <span class="truncate">
-                    <span class="inline sm:hidden">Dieta</span>
-                    <span class="hidden sm:inline">Plano Alimentar</span>
-                </span>
-            </button>
-            <button type="button" onclick="alternarAbaAluno('treinos')" id="tab-btn-treinos" class="tab-horizontal-btn" title="Meus Treinos">
-                <i data-lucide="dumbbell" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"></i>
-                <span class="truncate">
-                    <span class="inline sm:hidden">Treinos</span>
-                    <span class="hidden sm:inline">Meus Treinos</span>
-                </span>
-            </button>
-            <button type="button" onclick="alternarAbaAluno('medidas')" id="tab-btn-medidas" class="tab-horizontal-btn" title="Medidas Corporais">
-                <i data-lucide="ruler" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"></i>
-                <span class="truncate">
-                    <span class="inline sm:hidden">Medidas</span>
-                    <span class="hidden sm:inline">Medidas Corporais</span>
-                </span>
-            </button>
-            <button type="button" onclick="alternarAbaAluno('pix')" id="tab-btn-pix" class="tab-horizontal-btn" title="Mensalidade & PIX">
-                <i data-lucide="qr-code" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"></i>
-                <span class="truncate">
-                    <span class="inline sm:hidden">PIX</span>
-                    <span class="hidden sm:inline">Mensalidade & PIX</span>
-                </span>
-            </button>
-        </div>
-
-        <!-- ================================================================== -->
-        <!-- ABA 1: MEU PAINEL (CHECK-IN DIÁRIO/SEMANAL/MENSAL + COMPARADOR)    -->
-        <!-- ================================================================== -->
-        <div id="conteudo-tab-painel" class="space-y-6">
-
             <!-- ================================================================== -->
             <!-- SEÇÃO DE PLANOS & CONSULTORIAS DO ALUNO (PERSONAL & NUTRICIONISTA) -->
             <!-- ================================================================== -->
@@ -927,7 +954,7 @@
 
                 <!-- Formulário de Check-in -->
                 <form id="form-checkin-aluno-inline" onsubmit="event.preventDefault(); submeterCheckinFormulario();" class="space-y-6">
-                    <!-- Linha 1: Peso, Cintura, Nota de Adesão à Dieta -->
+                    <!-- Linha 1: Peso, Nota de Adesão à Treino, Nota de Adesão à Dieta -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">
@@ -937,11 +964,16 @@
                                 class="w-full bg-slate-950/80 border border-slate-800 focus:border-amber-400 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                                CINTURA (CM) - OPCIONAL
-                            </label>
-                            <input type="number" step="0.1" id="checkin-input-cintura" placeholder="Ex: 80.5"
-                                class="w-full bg-slate-950/80 border border-slate-800 focus:border-amber-400 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300">
+                                    NOTA DE ADESÃO À TREINO (1 A 10):
+                                </label>
+                                <span id="checkin-nota-treino-valor" class="text-sm font-black text-amber-400">10</span>
+                            </div>
+                            <div class="pt-2">
+                                <input type="range" min="1" max="10" value="10" id="checkin-slider-nota-treino" class="slider-treino cursor-pointer"
+                                    oninput="document.getElementById('checkin-nota-treino-valor').textContent = this.value">
+                            </div>
                         </div>
                         <div>
                             <div class="flex items-center justify-between mb-1.5">
@@ -1082,68 +1114,124 @@
         <!-- ================================================================== -->
         <!-- ABA 2: PLANO ALIMENTAR (CARDÁPIO, CALORIAS, MACROS E REFEIÇÕES)     -->
         <!-- ================================================================== -->
-        <div id="conteudo-tab-dieta" class="hidden space-y-6">
+        <div id="conteudo-tab-dieta" class="hidden space-y-3.5 sm:space-y-5">
             <!-- BANNER DE ASSINATURA DO NUTRICIONISTA RESPONSÁVEL -->
-            <div id="banner-prescritor-nutri-aluno" class="glass-panel rounded-2xl border border-slate-800 p-4 bg-slate-900/80 flex items-center justify-between gap-3 shadow-lg">
-                <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-11 h-11 rounded-full overflow-hidden bg-slate-800 border-2 border-lime-500/40 shrink-0 shadow-md flex items-center justify-center">
+            <div id="banner-prescritor-nutri-aluno" class="glass-panel rounded-2xl border border-slate-800/90 p-3 sm:p-4 bg-slate-900/80 flex items-center justify-between gap-3 shadow-lg">
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl overflow-hidden bg-slate-800 border-2 border-lime-500/40 shrink-0 shadow-md flex items-center justify-center">
                         <img id="prescritor-nutri-aluno-foto" src="" alt="Nutricionista" class="w-full h-full object-cover hidden">
-                        <span id="prescritor-nutri-aluno-initials" class="text-sm font-black text-lime-400">N</span>
+                        <span id="prescritor-nutri-aluno-initials" class="text-xs sm:text-sm font-black text-lime-400">N</span>
                     </div>
                     <div class="min-w-0">
-                        <div class="text-[10px] uppercase font-bold tracking-wider text-lime-400 flex items-center gap-1.5">
+                        <div class="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-lime-400 flex items-center gap-1.5">
                             <i data-lucide="utensils" class="w-3 h-3"></i>
                             <span>Nutricionista Responsável</span>
                         </div>
-                        <div class="text-sm font-bold text-white truncate" id="prescritor-nutri-aluno-nome">Nutricionista</div>
-                        <div class="text-[11px] text-slate-400">Prescrição nutricional individualizada com pesagem calculada</div>
+                        <div class="text-xs sm:text-sm font-bold text-white truncate" id="prescritor-nutri-aluno-nome">Nutricionista</div>
+                        <div class="text-[10px] sm:text-[11px] text-slate-400 truncate">Prescrição individualizada com pesagem calculada</div>
                     </div>
                 </div>
-                <div id="prescritor-nutri-aluno-doc-badge" class="hidden shrink-0 text-xs bg-lime-500/10 text-lime-400 border border-lime-500/30 px-2.5 py-1 rounded-full font-bold">
+                <div id="prescritor-nutri-aluno-doc-badge" class="hidden shrink-0 text-[10px] sm:text-xs bg-lime-500/10 text-lime-400 border border-lime-500/30 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full font-bold">
                     CRN
                 </div>
             </div>
-            <div class="glass-panel rounded-3xl border border-white/10 shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all p-5 sm:p-7 relative bg-[#0a0f1d]/80 backdrop-blur-md">
-                <!-- Título em cima de Prescrição Calórica Diária -->
-                <div class="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+
+            <div class="glass-panel rounded-2xl sm:rounded-3xl border border-white/10 shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all p-3 sm:p-5 lg:p-6 relative bg-[#0a0f1d]/80 backdrop-blur-md">
+                <!-- Cabeçalho do Plano Alimentar com CTA Dedicado -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 pb-3 sm:pb-4 border-b border-white/5">
                     <div>
-                        <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                            SEU PLANO ALIMENTAR DE HOJE
+                        <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-[10px] font-bold tracking-wider uppercase mb-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Prescrição Nutricional Ativa
+                        </div>
+                        <h2 class="text-base sm:text-xl lg:text-2xl font-black text-white tracking-tight flex items-center gap-2">
+                            <span>SEU PLANO ALIMENTAR DE HOJE</span>
                         </h2>
-                        <p class="text-xs text-slate-400 mt-1">Prescrição nutricional individualizada com cardápio, horários e pesagem calculada.</p>
+                        <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5 max-w-xl">
+                            Cardápio individualizado com horários sugeridos, pesagem calculada e opções de substituição.
+                        </p>
+                    </div>
+
+                    <!-- Botão Acessar portal completo de nutrição -->
+                    <a href="nutricao.html" id="btn-portal-nutricao-topo"
+                        class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 hover:border-amber-400 text-amber-300 hover:text-white font-bold text-[11px] sm:text-xs transition-all shadow-lg shadow-amber-500/10 active:scale-95 shrink-0 self-start sm:self-center group">
+                        <i data-lucide="utensils" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 group-hover:scale-110 transition-transform"></i>
+                        <span>Acessar Portal de Nutrição</span>
+                        <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
+                    </a>
+                </div>
+
+                <!-- Grid Compacto de Prescrição Calórica Diária e Macronutrientes -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 py-3 sm:py-3.5">
+                    <!-- Card 1: Meta Calórica -->
+                    <div class="rounded-xl sm:rounded-2xl p-2.5 sm:p-3 bg-gradient-to-br from-amber-500/10 via-slate-900/70 to-[#0a0f1d] border border-amber-500/30 relative overflow-hidden group hover:border-amber-500/50 transition-all">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[9px] sm:text-[10px] uppercase font-black text-amber-400/90 tracking-wider">Meta Diária</span>
+                            <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                <i data-lucide="flame" class="w-3 h-3"></i>
+                            </div>
+                        </div>
+                        <div class="text-sm sm:text-lg font-black text-white tracking-tight truncate" id="tab-dieta-calorias-total">2.350 kcal / dia</div>
+                        <span class="text-[9px] sm:text-[10px] text-slate-400 font-medium block truncate mt-0.5">Prescrição calórica</span>
+                    </div>
+
+                    <!-- Card 2: Proteína -->
+                    <div class="rounded-xl sm:rounded-2xl p-2.5 sm:p-3 bg-gradient-to-br from-cyan-500/10 via-slate-900/70 to-[#0a0f1d] border border-cyan-500/25 relative overflow-hidden group hover:border-cyan-500/40 transition-all">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[9px] sm:text-[10px] uppercase font-black text-cyan-400/90 tracking-wider">Proteína</span>
+                            <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                                <i data-lucide="shield" class="w-3 h-3"></i>
+                            </div>
+                        </div>
+                        <div class="text-sm sm:text-lg font-black text-cyan-300 tracking-tight truncate" id="tab-dieta-macro-prot">175g</div>
+                        <span class="text-[9px] sm:text-[10px] text-slate-400 font-medium block truncate mt-0.5">Construção muscular</span>
+                    </div>
+
+                    <!-- Card 3: Carboidrato -->
+                    <div class="rounded-xl sm:rounded-2xl p-2.5 sm:p-3 bg-gradient-to-br from-yellow-500/10 via-slate-900/70 to-[#0a0f1d] border border-yellow-500/25 relative overflow-hidden group hover:border-yellow-500/40 transition-all">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[9px] sm:text-[10px] uppercase font-black text-yellow-400/90 tracking-wider">Carboidrato</span>
+                            <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-yellow-500/15 border border-yellow-500/30 flex items-center justify-center text-yellow-400">
+                                <i data-lucide="zap" class="w-3 h-3"></i>
+                            </div>
+                        </div>
+                        <div class="text-sm sm:text-lg font-black text-yellow-300 tracking-tight truncate" id="tab-dieta-macro-carb">265g</div>
+                        <span class="text-[9px] sm:text-[10px] text-slate-400 font-medium block truncate mt-0.5">Energia & Rendimento</span>
+                    </div>
+
+                    <!-- Card 4: Gordura -->
+                    <div class="rounded-xl sm:rounded-2xl p-2.5 sm:p-3 bg-gradient-to-br from-emerald-500/10 via-slate-900/70 to-[#0a0f1d] border border-emerald-500/25 relative overflow-hidden group hover:border-emerald-500/40 transition-all">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[9px] sm:text-[10px] uppercase font-black text-emerald-400/90 tracking-wider">Gordura</span>
+                            <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                                <i data-lucide="droplet" class="w-3 h-3"></i>
+                            </div>
+                        </div>
+                        <div class="text-sm sm:text-lg font-black text-emerald-300 tracking-tight truncate" id="tab-dieta-macro-gord">65g</div>
+                        <span class="text-[9px] sm:text-[10px] text-slate-400 font-medium block truncate mt-0.5">Gorduras essenciais</span>
                     </div>
                 </div>
 
-                <!-- Topo da Prescrição Calórica Diária e Macros com Botão ao Lado -->
-                <div class="flex flex-col lg:flex-row lg:items-center justify-between pb-5 border-b border-slate-800/80 gap-4 mb-6">
-                    <div>
-                        <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block mb-0.5">PRESCRIÇÃO CALÓRICA DIÁRIA</span>
-                        <div class="text-2xl sm:text-3xl font-black text-white" id="tab-dieta-calorias-total">2.350 kcal / dia</div>
+                <!-- Mini Barra de Progresso de Adesão às Refeições (Compacta e motivadora) -->
+                <div class="mb-3 bg-slate-950/70 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl border border-slate-800/80">
+                    <div class="flex items-center justify-between text-xs mb-1.5">
+                        <span class="text-slate-400 text-[11px] font-medium flex items-center gap-1.5">
+                            <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+                            Progresso das Refeições:
+                        </span>
+                        <span id="tab-dieta-progresso-badge" class="text-[11px] font-bold text-emerald-300">
+                            0 / 0 concluídas
+                        </span>
                     </div>
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <span class="text-xs font-bold px-3 py-1.5 rounded-xl bg-cyan-950/60 text-cyan-400 border border-cyan-500/30 shadow-sm" id="tab-dieta-macro-prot">
-                            Proteína: 175g
-                        </span>
-                        <span class="text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-950/60 text-amber-400 border border-amber-500/30 shadow-sm" id="tab-dieta-macro-carb">
-                            Carboidrato: 265g
-                        </span>
-                        <span class="text-xs font-bold px-3 py-1.5 rounded-xl bg-emerald-950/60 text-emerald-400 border border-emerald-500/30 shadow-sm" id="tab-dieta-macro-gord">
-                            Gordura: 65g
-                        </span>
-                        <!-- Botão Acessar portal completo de nutrição ao lado dos macros -->
-                        <a href="nutricao.html" id="btn-portal-nutricao-topo"
-                            class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 hover:border-amber-400 text-amber-300 hover:text-white font-bold text-xs transition-all shadow-md active:scale-95 shrink-0">
-                            <span>Acessar portal completo de nutrição</span>
-                            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                        </a>
+                    <div class="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                        <div id="tab-dieta-progresso-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-300" style="width: 0%;"></div>
                     </div>
                 </div>
 
                 <!-- Lista de Refeições Prescritas (Carregamento Dinâmico do Banco) -->
-                <div class="space-y-4" id="tab-dieta-refeicoes-lista">
+                <div class="space-y-2.5 sm:space-y-3" id="tab-dieta-refeicoes-lista">
                     <!-- Preenchido dinamicamente via JS com as dietas prescritas pelo profissional -->
-                    <div class="text-center py-8 text-slate-500 text-xs">Carregando plano alimentar...</div>
+                    <div class="text-center py-6 text-slate-500 text-xs">Carregando plano alimentar...</div>
                 </div>
             </div>
         </div>
@@ -1151,11 +1239,11 @@
         <!-- ================================================================== -->
         <!-- ABA 3: MEUS TREINOS (FICHA DE EXERCÍCIOS, SÉRIES E REPETIÇÕES)      -->
         <!-- ================================================================== -->
-        <div id="conteudo-tab-treinos" class="hidden space-y-6">
+        <div id="conteudo-tab-treinos" class="hidden space-y-3.5 sm:space-y-5">
             <!-- BANNER DE ASSINATURA DO PERSONAL RESPONSÁVEL -->
-            <div id="banner-prescritor-personal-aluno" class="glass-panel rounded-2xl border border-slate-800 p-4 bg-slate-900/80 flex items-center justify-between gap-3 shadow-lg">
+            <div id="banner-prescritor-personal-aluno" class="glass-panel rounded-2xl border border-slate-800/90 p-3.5 sm:p-4 bg-slate-900/80 flex items-center justify-between gap-3 shadow-lg">
                 <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-11 h-11 rounded-full overflow-hidden bg-slate-800 border-2 border-amber-500/40 shrink-0 shadow-md flex items-center justify-center">
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl overflow-hidden bg-slate-800 border-2 border-amber-500/40 shrink-0 shadow-md flex items-center justify-center">
                         <img id="prescritor-personal-aluno-foto" src="" alt="Personal Trainer" class="w-full h-full object-cover hidden">
                         <span id="prescritor-personal-aluno-initials" class="text-sm font-black text-amber-400">P</span>
                     </div>
@@ -1165,47 +1253,75 @@
                             <span>Personal Trainer Responsável</span>
                         </div>
                         <div class="text-sm font-bold text-white truncate" id="prescritor-personal-aluno-nome">Personal Trainer</div>
-                        <div class="text-[11px] text-slate-400">Ficha de exercícios, periodização e metodologia prescrita</div>
+                        <div class="text-[11px] text-slate-400 truncate">Ficha de exercícios, periodização e metodologia prescrita</div>
                     </div>
                 </div>
                 <div id="prescritor-personal-aluno-doc-badge" class="hidden shrink-0 text-xs bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-full font-bold">
                     CREF
                 </div>
             </div>
-            <div class="glass-panel rounded-3xl border border-white/10 shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all p-5 sm:p-7 relative bg-[#0a0f1d]/80 backdrop-blur-md">
-                <!-- Topo com Título e Botão Acessar portal completo de treino -->
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800/80 gap-3 mb-5">
+
+            <div class="glass-panel rounded-3xl border border-white/10 shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all p-4 sm:p-6 lg:p-7 relative bg-[#0a0f1d]/80 backdrop-blur-md">
+                <!-- Cabeçalho de Treinos com CTA Dedicado -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 pb-4 sm:pb-5 border-b border-white/5">
                     <div>
+                        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 text-[11px] font-bold tracking-wider uppercase mb-1.5">
+                            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                            Ficha de Treino Ativa
+                        </div>
                         <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                            <i data-lucide="dumbbell" class="w-6 h-6 text-amber-400"></i>
                             <span>MEUS TREINOS</span>
                         </h2>
-                        <p class="text-xs text-slate-400 mt-1">Resumo da ficha de treino e execuções prescritas pelo seu personal trainer.</p>
+                        <p class="text-xs text-slate-400 mt-0.5 max-w-xl">
+                            Resumo da ficha de treino, divisões musculares e execuções prescritas.
+                        </p>
                     </div>
-                    <!-- Substituído 'Abrir tela cheia' por 'Acessar portal completo de treino' -->
+
+                    <!-- Botão Acessar portal completo de treino -->
                     <a href="treinos.html" id="btn-portal-treino-topo"
-                        class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 hover:border-amber-400 text-amber-300 hover:text-white font-bold text-xs transition-all shadow-md active:scale-95 shrink-0 self-start sm:self-auto">
-                        <span>Acessar portal completo de treino</span>
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 hover:border-amber-400 text-amber-300 hover:text-white font-bold text-xs transition-all shadow-lg shadow-amber-500/10 active:scale-95 shrink-0 self-start sm:self-center group">
+                        <i data-lucide="dumbbell" class="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform"></i>
+                        <span>Acessar Portal Completo de Treino</span>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
                     </a>
                 </div>
 
-                <!-- Seletor de Treino Separado pelo Título Prescrito (Pills / Abas de Treino) -->
-                <div class="mb-5 bg-slate-950/80 p-3 sm:p-4 rounded-2xl border border-slate-800/80">
-                    <div class="flex items-center justify-between mb-2.5">
-                        <label class="text-[11px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                <!-- Seletor de Divisões de Treino e Status (Compacto & Otimizado para Mobile) -->
+                <div class="mt-4 mb-4 bg-slate-950/70 p-3 sm:p-4 rounded-2xl border border-slate-800/80">
+                    <div class="flex items-center justify-between gap-2 mb-2.5">
+                        <label class="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
                             <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-                            SELECIONE O TREINO PRESCRITO:
+                            <span>Divisão Prescrita:</span>
                         </label>
-                        <span class="text-[11px] text-slate-400" id="tab-treinos-label-rotina-atual">Carregando divisões...</span>
+                        <div id="tab-treinos-label-rotina-atual" class="text-xs text-slate-400 truncate">
+                            Carregando divisões...
+                        </div>
                     </div>
+
+                    <!-- Abas Horizontais com rolagem suave sem scrollbar feia -->
                     <div id="seletor-treinos-tabs" class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                        <!-- Preenchido dinamicamente com botões por título de treino (Treino A, Treino B...) -->
+                        <!-- Preenchido dinamicamente com botões por divisão de treino -->
+                    </div>
+
+                    <!-- Mini Barra de Progresso da Divisão Ativa (Compacta e motivadora) -->
+                    <div class="mt-3 pt-3 border-t border-slate-800/80 flex flex-col gap-1.5">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-slate-400 text-[11px] font-medium flex items-center gap-1.5">
+                                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-amber-400"></i>
+                                Progresso desta sessão:
+                            </span>
+                            <span id="tab-treinos-progresso-badge" class="text-[11px] font-bold text-amber-300">
+                                0 / 0 concluídos
+                            </span>
+                        </div>
+                        <div class="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                            <div id="tab-treinos-progresso-fill" class="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full transition-all duration-300" style="width: 0%;"></div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Lista de Exercícios do Treino Ativo Selecionado -->
-                <div class="space-y-3" id="tab-treinos-exercicios-lista">
+                <div class="space-y-2.5 sm:space-y-3" id="tab-treinos-exercicios-lista">
                     <div class="text-center py-8 text-slate-500 text-xs">Carregando exercícios prescritos...</div>
                 </div>
             </div>
@@ -1793,7 +1909,7 @@
 
     <!-- Toast Notification Flutuante -->
     <div id="toast"
-        class="fixed bottom-20 sm:bottom-22 right-4 sm:right-6 lg:bottom-6 lg:right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 max-w-[calc(100vw-32px)] sm:max-w-sm pointer-events-none">
+        class="fixed bottom-24 sm:bottom-28 right-4 sm:right-6 lg:bottom-6 lg:right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 max-w-[calc(100vw-32px)] sm:max-w-sm pointer-events-none">
         <div class="glass-panel border rounded-2xl p-4 shadow-2xl flex items-center gap-3" id="toast-inner">
             <div id="toast-icon-wrapper" class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0">
                 <i id="toast-icon" data-lucide="check" class="w-4 h-4"></i>
@@ -2076,15 +2192,15 @@
         // ==============================================================
         window.submeterCheckinFormulario = async function () {
             const inputPeso = document.getElementById('checkin-input-peso');
-            const inputCintura = document.getElementById('checkin-input-cintura');
-            const sliderNota = document.getElementById('checkin-slider-nota');
+            const sliderNotaTreino = document.getElementById('checkin-slider-nota-treino');
+            const sliderNotaDieta = document.getElementById('checkin-slider-nota');
             const inputRelato = document.getElementById('checkin-input-relato');
             const btn = document.getElementById('btn-submeter-checkin');
 
             const peso = parseFloat(inputPeso.value);
-            const cintura = inputCintura.value ? parseFloat(inputCintura.value) : null;
-            const nota = parseInt(sliderNota.value, 10);
-            const relato = inputRelato.value.trim();
+            const notaTreino = sliderNotaTreino ? parseInt(sliderNotaTreino.value, 10) : 10;
+            const notaDieta = sliderNotaDieta ? parseInt(sliderNotaDieta.value, 10) : 10;
+            const relato = inputRelato ? inputRelato.value.trim() : '';
 
             if (!peso || peso <= 0) {
                 showToast('Atenção', 'Por favor, informe seu peso atual para o check-in.', 'error');
@@ -2129,8 +2245,17 @@
 
                 // Limpa formulário
                 inputPeso.value = '';
-                inputCintura.value = '';
-                inputRelato.value = '';
+                if (sliderNotaTreino) {
+                    sliderNotaTreino.value = '10';
+                    const elTreinoVal = document.getElementById('checkin-nota-treino-valor');
+                    if (elTreinoVal) elTreinoVal.textContent = '10';
+                }
+                if (sliderNotaDieta) {
+                    sliderNotaDieta.value = '10';
+                    const elDietaVal = document.getElementById('checkin-nota-valor');
+                    if (elDietaVal) elDietaVal.textContent = '10';
+                }
+                if (inputRelato) inputRelato.value = '';
 
             } catch (e) {
                 showToast('Erro ao submeter', e.message, 'error');
@@ -2695,17 +2820,25 @@
                     if (proxEl) proxEl.innerHTML = '<p class="text-xs text-slate-500 italic">Plano ainda não cadastrado. <a href="nutricao.html" class="text-amber-400 underline">Acessar nutrição</a></p>';
                     if (badgeEl) badgeEl.textContent = '0 / 0';
                     if (fillEl) fillEl.style.width = '0%';
+                    const tabBadge = document.getElementById('tab-dieta-progresso-badge');
+                    const tabBar = document.getElementById('tab-dieta-progresso-bar');
+                    const tabStatus = document.getElementById('tab-dieta-progresso-status');
+                    const tabPct = document.getElementById('tab-dieta-progresso-pct');
+                    if (tabBadge) tabBadge.textContent = '0 / 0 concluídas';
+                    if (tabBar) tabBar.style.width = '0%';
+                    if (tabPct) tabPct.textContent = '0%';
+                    if (tabStatus) tabStatus.textContent = 'Aguardando prescrição do nutricionista';
                     if (listaTabDieta) {
                         listaTabDieta.innerHTML = `
-                            <div class="p-8 rounded-2xl bg-slate-950/60 border border-slate-800 text-center space-y-3">
-                                <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center mx-auto">
-                                    <i data-lucide="salad" class="w-6 h-6"></i>
+                            <div class="p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-slate-950/60 border border-slate-800 text-center space-y-3">
+                                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center mx-auto shadow-lg shadow-amber-500/10">
+                                    <i data-lucide="salad" class="w-5 h-5 sm:w-6 sm:h-6"></i>
                                 </div>
-                                <h3 class="text-base font-bold text-white">Plano Alimentar em Montagem</h3>
-                                <p class="text-xs text-slate-400 max-w-sm mx-auto">Seu nutricionista está elaborando seu cardápio individualizado. Assim que for salvo, ele aparecerá aqui automaticamente em tempo real.</p>
-                                <a href="nutricao.html" class="inline-flex items-center gap-1.5 text-xs text-amber-400 font-bold hover:underline">
+                                <h3 class="text-base sm:text-lg font-bold text-white">Plano Alimentar em Montagem</h3>
+                                <p class="text-[11px] sm:text-xs text-slate-400 max-w-md mx-auto leading-relaxed">Seu nutricionista está calculando seus macronutrientes e elaborando seu cardápio individualizado. Assim que for salvo, ele aparecerá aqui automaticamente em tempo real.</p>
+                                <a href="nutricao.html" class="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 transition-all">
                                     <span>Ir para o Portal de Nutrição</span>
-                                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                                    <i data-lucide="arrow-right" class="w-3 h-3"></i>
                                 </a>
                             </div>`;
                         if (window.lucide) lucide.createIcons();
@@ -2721,6 +2854,30 @@
 
                 if (badgeEl) badgeEl.textContent = `${done} / ${total}`;
                 if (fillEl) fillEl.style.width = pct + '%';
+
+                // Atualizar progresso diário na aba Dieta
+                const tabBadge = document.getElementById('tab-dieta-progresso-badge');
+                const tabBar = document.getElementById('tab-dieta-progresso-bar');
+                const tabStatus = document.getElementById('tab-dieta-progresso-status');
+                const tabPct = document.getElementById('tab-dieta-progresso-pct');
+                if (tabBadge) {
+                    if (total > 0 && done >= total) {
+                        tabBadge.textContent = `Todas concluídas! 🎉 (${total}/${total})`;
+                    } else {
+                        tabBadge.textContent = `${done} / ${total} concluídas (${pct}%)`;
+                    }
+                }
+                if (tabBar) tabBar.style.width = pct + '%';
+                if (tabPct) tabPct.textContent = pct + '%';
+                if (tabStatus) {
+                    if (total > 0 && done >= total) {
+                        tabStatus.innerHTML = '<span class="text-emerald-400 font-bold flex items-center gap-1.5"><i data-lucide="check-check" class="w-3.5 h-3.5"></i> Meta batida! Todas as refeições concluídas hoje 🎉</span>';
+                    } else if (total > 0) {
+                        tabStatus.textContent = `${total - done} refeição(ões) pendente(s) hoje`;
+                    } else {
+                        tabStatus.textContent = 'Marque suas refeições à medida que forem consumidas';
+                    }
+                }
 
                 // Próximas refeições pendentes no card resumo do painel
                 const pendentes = dietas.filter(d => !concluidas.includes(d.id)).slice(0, 3);
@@ -2740,52 +2897,134 @@
                 totalRefeicoesCount = total;
                 atualizarContadorRefeicoes(done, total);
 
-                // Renderização da lista de refeições na aba "Plano Alimentar"
+                // Helper de escape HTML
+                const escLocal = (s) => (s ? String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m])) : '');
+
+                // Helper de ícone inteligente por nome de refeição
+                const obterIconeRef = (nome, idx, totalCount) => {
+                    if (!nome) return idx === 0 ? 'coffee' : (idx === 1 ? 'utensils' : (idx === totalCount - 1 ? 'moon' : 'utensils'));
+                    const n = nome.toLowerCase();
+                    if (n.includes('café') || n.includes('cafe') || n.includes('desjejum') || n.includes('manhã') || n.includes('manha')) return 'coffee';
+                    if (n.includes('almoço') || n.includes('almoco')) return 'utensils';
+                    if (n.includes('lanche')) return 'apple';
+                    if (n.includes('jantar') || n.includes('janta')) return 'soup';
+                    if (n.includes('ceia') || n.includes('noite')) return 'moon';
+                    if (n.includes('pré') || n.includes('pre') || n.includes('pós') || n.includes('pos')) return 'flame';
+                    return 'utensils';
+                };
+
+                // Renderização aprimorada e compacta da lista de refeições na aba "Plano Alimentar"
                 if (listaTabDieta) {
                     listaTabDieta.innerHTML = dietas.map((d, idx) => {
                         const isFeita = concluidas.includes(d.id);
-                        const alimentosList = (d.alimentos || '')
+                        const iconeRef = obterIconeRef(d.refeicao, idx, dietas.length);
+
+                        // Alimentos estruturados em pills compactas e legíveis
+                        const linhasAlimentos = (d.alimentos || '')
                             .split('\n')
                             .map(l => l.trim())
-                            .filter(Boolean)
-                            .map(l => `<li class="flex items-start gap-2 text-xs text-slate-300">
-                                <span class="text-amber-400 font-black">•</span>
-                                <span>${l}</span>
-                            </li>`).join('');
+                            .map(l => l.replace(/^[•\-\*\s]+/, ''))
+                            .filter(Boolean);
 
-                        const substituicoesHtml = d.substituicoes ? `
-                            <div class="mt-3 p-3 rounded-xl bg-slate-950/70 border border-emerald-500/20 text-xs">
-                                <span class="text-[10px] uppercase font-bold text-emerald-400 tracking-wider block mb-1">Opções de Substituição:</span>
-                                <div class="text-slate-300 text-xs whitespace-pre-line leading-relaxed">${d.substituicoes}</div>
-                            </div>` : '';
+                        const alimentosHtml = linhasAlimentos.length > 0 ? `
+                            <div class="mt-2.5 sm:mt-3">
+                                <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-wider text-slate-400 mb-1.5 flex items-center gap-1.5">
+                                    <i data-lucide="salad" class="w-3 h-3 text-amber-400"></i>
+                                    Itens e Porções Prescritas:
+                                </span>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
+                                    ${linhasAlimentos.map(item => `
+                                        <div class="flex items-start gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-slate-700 transition-all text-[11px] sm:text-xs text-slate-200">
+                                            <span class="w-1.5 h-1.5 rounded-full ${isFeita ? 'bg-emerald-400' : 'bg-amber-400'} mt-1.5 shrink-0"></span>
+                                            <span class="font-medium leading-snug">${escLocal(item)}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : '';
+
+                        // Substituições prescritas em formato organizado e compacto
+                        let substituicoesHtml = '';
+                        if (d.substituicoes && d.substituicoes.trim()) {
+                            const partes = d.substituicoes
+                                .split(/(?:->|=>|\n|;)+/)
+                                .map(p => p.trim())
+                                .map(p => p.replace(/^[•\-\*\s]+/, ''))
+                                .filter(Boolean);
+
+                            substituicoesHtml = `
+                                <div class="mt-2.5 sm:mt-3 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-slate-950/80 border border-emerald-500/25">
+                                    <div class="flex items-center gap-1.5 text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-emerald-400 mb-1.5">
+                                        <i data-lucide="refresh-cw" class="w-3 h-3 text-emerald-400 shrink-0"></i>
+                                        <span>Opções de Substituição Prescritas:</span>
+                                    </div>
+                                    ${partes.length > 1 ? `
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                                            ${partes.map((opt, i) => `
+                                                <div class="flex items-start gap-1.5 p-2 rounded-lg sm:rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] sm:text-xs text-slate-200">
+                                                    <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded bg-emerald-500/15 text-emerald-400 font-black text-[9px] shrink-0 border border-emerald-500/30">
+                                                        ${i + 1}
+                                                    </span>
+                                                    <span class="leading-snug font-medium">${escLocal(opt)}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    ` : `
+                                        <div class="text-slate-300 text-[11px] sm:text-xs whitespace-pre-line leading-relaxed font-medium">
+                                            ${escLocal(d.substituicoes)}
+                                        </div>
+                                    `}
+                                </div>
+                            `;
+                        }
 
                         return `
-                            <div class="glass-panel rounded-2xl border ${isFeita ? 'border-emerald-500/40 bg-emerald-950/10' : 'border-slate-800 bg-slate-900/70'} p-5 relative flex flex-col sm:flex-row sm:items-start justify-between gap-4 transition-all">
-                                <div class="flex items-start gap-4 flex-1">
-                                    <div class="w-11 h-11 rounded-2xl ${isFeita ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'} flex items-center justify-center shrink-0">
-                                        <i data-lucide="${idx === 0 ? 'coffee' : (idx === 1 ? 'sun' : (idx === dietas.length - 1 ? 'moon' : 'utensils'))}" class="w-5 h-5"></i>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <div class="flex items-center gap-2 flex-wrap">
-                                            <h3 class="text-base font-bold text-white">${d.refeicao}</h3>
-                                            ${isFeita ? `
-                                                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
-                                                    CONCLUÍDA ✓
+                            <div class="glass-panel rounded-2xl sm:rounded-3xl border ${isFeita ? 'border-emerald-500/40 bg-gradient-to-br from-emerald-950/20 via-slate-900/85 to-[#0a0f1d] shadow-sm shadow-emerald-950/20' : 'border-slate-800/80 hover:border-slate-700/80 bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-[#0a0f1d]'} p-3 sm:p-4.5 transition-all duration-200">
+                                <!-- Topo do Card: Ícone, Info e Botão Tátil Lado a Lado -->
+                                <div class="flex items-center justify-between gap-2.5 pb-2.5 sm:pb-3 border-b border-white/5">
+                                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                                        <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl ${isFeita ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-sm shadow-emerald-500/20' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-sm shadow-amber-500/10'} flex items-center justify-center shrink-0">
+                                            <i data-lucide="${iconeRef}" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                                        </div>
+                                        <div class="min-w-0">
+                                            <div class="flex items-center gap-1.5 flex-wrap">
+                                                <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                                    Refeição ${idx + 1}
                                                 </span>
-                                            ` : ''}
+                                                <h3 class="text-sm sm:text-base font-bold text-white tracking-tight truncate">${escLocal(d.refeicao)}</h3>
+                                                ${isFeita ? `
+                                                    <span class="inline-flex items-center gap-0.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                                        <i data-lucide="check" class="w-2.5 h-2.5"></i> Feito
+                                                    </span>
+                                                ` : ''}
+                                            </div>
+                                            <div class="flex items-center gap-1.5 mt-0.5 flex-wrap text-xs">
+                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-950/80 border border-slate-800 text-[10px] sm:text-[11px] text-slate-300 font-medium">
+                                                    <i data-lucide="clock" class="w-3 h-3 text-amber-400"></i>
+                                                    ${escLocal(d.horario || 'Horário livre')}
+                                                </span>
+                                                ${d.calorias ? `
+                                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-[10px] sm:text-[11px] text-amber-300 font-semibold">
+                                                        <i data-lucide="flame" class="w-3 h-3 text-amber-400"></i>
+                                                        ${escLocal(d.calorias)} kcal
+                                                    </span>
+                                                ` : ''}
+                                            </div>
                                         </div>
-                                        <div class="text-xs text-slate-400 mt-0.5 flex items-center gap-2">
-                                            <span>⏰ ${d.horario || 'Horário Livre'}</span>
-                                            ${d.calorias ? `<span>• ${d.calorias} kcal</span>` : ''}
-                                        </div>
-                                        ${alimentosList ? `<ul class="mt-3 space-y-1">${alimentosList}</ul>` : ''}
-                                        ${substituicoesHtml}
                                     </div>
+
+                                    <!-- Botão de Ação / Conclusão -->
+                                    <button type="button" onclick="alternarConclusaoRefeicaoTab('${d.id}')"
+                                        title="${isFeita ? 'Desmarcar refeição' : 'Marcar refeição como concluída'}"
+                                        class="shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${isFeita ? 'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 shadow-sm' : 'bg-slate-800/80 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-300 border border-slate-700/80'} active:scale-95 group">
+                                        <i data-lucide="${isFeita ? 'check-circle-2' : 'circle'}" class="w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFeita ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400'} transition-colors"></i>
+                                        <span>${isFeita ? 'Feito ✓' : 'Marcar'}</span>
+                                    </button>
                                 </div>
-                                <button type="button" onclick="alternarConclusaoRefeicaoTab('${d.id}')"
-                                    class="px-4 py-2 rounded-xl text-xs font-bold transition-all self-end sm:self-start shrink-0 cursor-pointer ${isFeita ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-slate-800 hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border border-slate-700 hover:border-amber-500/30'}">
-                                    ${isFeita ? 'Concluída ✓' : 'Marcar Feito'}
-                                </button>
+
+                                <!-- Conteúdo: Alimentos e Substituições -->
+                                ${alimentosHtml}
+                                ${substituicoesHtml}
                             </div>
                         `;
                     }).join('');
@@ -2812,9 +3051,9 @@
                         const cEl = document.getElementById('tab-dieta-macro-carb');
                         const gEl = document.getElementById('tab-dieta-macro-gord');
                         if (calEl) calEl.textContent = `${Number(macros.calorias).toLocaleString('pt-BR')} kcal / dia`;
-                        if (pEl) pEl.textContent = `Proteína: ${macros.proteinas}g`;
-                        if (cEl) cEl.textContent = `Carboidrato: ${macros.carboidratos}g`;
-                        if (gEl) gEl.textContent = `Gordura: ${macros.gorduras}g`;
+                        if (pEl) pEl.textContent = `${macros.proteinas}g`;
+                        if (cEl) cEl.textContent = `${macros.carboidratos}g`;
+                        if (gEl) gEl.textContent = `${macros.gorduras}g`;
 
                         const strip = document.getElementById('dashboard-macros-strip');
                         const val = document.getElementById('dashboard-macros-valores');
@@ -2855,6 +3094,8 @@
         window.treinosAlunoAgrupados = {};
         window.treinoTabAtivo = null;
 
+        const escTreinoLocal = (s) => (s ? String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m])) : '');
+
         async function carregarResumoTreinos(userId) {
             await carregarTreinosTab(userId);
         }
@@ -2875,6 +3116,8 @@
             const seletorTabs = document.getElementById('seletor-treinos-tabs');
             const exerciciosLista = document.getElementById('tab-treinos-exercicios-lista');
             const labelRotina = document.getElementById('tab-treinos-label-rotina-atual');
+            const progressoBadge = document.getElementById('tab-treinos-progresso-badge');
+            const progressoFill = document.getElementById('tab-treinos-progresso-fill');
 
             try {
                 const { data: treinos, error } = await supabaseClient
@@ -2894,15 +3137,17 @@
                     if (pctEl) pctEl.textContent = '0%';
                     if (seletorTabs) seletorTabs.innerHTML = '';
                     if (labelRotina) labelRotina.textContent = 'Nenhuma divisão cadastrada';
+                    if (progressoBadge) progressoBadge.textContent = '0 / 0 concluídos';
+                    if (progressoFill) progressoFill.style.width = '0%';
                     if (exerciciosLista) {
                         exerciciosLista.innerHTML = `
-                            <div class="p-8 rounded-2xl bg-slate-950/60 border border-slate-800 text-center space-y-3">
-                                <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center mx-auto">
-                                    <i data-lucide="dumbbell" class="w-6 h-6"></i>
+                            <div class="p-8 sm:p-10 rounded-3xl bg-slate-950/60 border border-slate-800 text-center space-y-4">
+                                <div class="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center mx-auto shadow-lg shadow-amber-500/10">
+                                    <i data-lucide="dumbbell" class="w-7 h-7"></i>
                                 </div>
-                                <h3 class="text-base font-bold text-white">Ficha de Treinos em Elaboração</h3>
-                                <p class="text-xs text-slate-400 max-w-sm mx-auto">Seu personal trainer está montando suas divisões e séries. Elas serão sincronizadas aqui em tempo real.</p>
-                                <a href="treinos.html" class="inline-flex items-center gap-1.5 text-xs text-amber-400 font-bold hover:underline">
+                                <h3 class="text-lg font-bold text-white">Ficha de Treinos em Elaboração</h3>
+                                <p class="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">Seu personal trainer está estruturando suas séries, cargas e repetições. Assim que for salva, ela aparecerá aqui automaticamente em tempo real.</p>
+                                <a href="treinos.html" class="inline-flex items-center gap-2 text-xs font-bold px-4 py-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 transition-all">
                                     <span>Ir para o Portal de Treinos</span>
                                     <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                                 </a>
@@ -2947,7 +3192,7 @@
                     }).join('');
                 }
 
-                // Seletor de Treino com abas / pills por título prescrito (sem exibição de dia)
+                // Seletor de Treino com abas / pills por título prescrito
                 if (seletorTabs) {
                     if (!window.treinoTabAtivo || !grupos[window.treinoTabAtivo]) {
                         window.treinoTabAtivo = nomesTreinos[0];
@@ -2955,10 +3200,13 @@
 
                     seletorTabs.innerHTML = nomesTreinos.map(nome => {
                         const isAtivo = nome === window.treinoTabAtivo;
+                        const exList = grupos[nome] || [];
+                        const grupoMusc = exList[0]?.grupo_muscular || '';
                         return `
                             <button type="button" onclick="selecionarTreinoTab('${nome.replace(/'/g, "\\'")}')"
-                                class="px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 shrink-0 ${isAtivo ? 'bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black shadow-md shadow-amber-500/20 border border-amber-400' : 'bg-slate-900 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-800'}">
-                                <span>${nome}</span>
+                                class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 shrink-0 active:scale-95 ${isAtivo ? 'bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black shadow-md shadow-amber-500/20 border border-amber-400' : 'bg-slate-900/90 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-800/80'}">
+                                <span>${escTreinoLocal(nome)}</span>
+                                ${grupoMusc ? `<span class="${isAtivo ? 'text-slate-950/80 bg-black/10' : 'text-slate-400 bg-white/5'} text-[10px] font-semibold px-1.5 py-0.5 rounded-md">${escTreinoLocal(grupoMusc)}</span>` : ''}
                             </button>
                         `;
                     }).join('');
@@ -2981,10 +3229,13 @@
                 const nomes = Object.keys(window.treinosAlunoAgrupados);
                 seletorTabs.innerHTML = nomes.map(nome => {
                     const isAtivo = nome === window.treinoTabAtivo;
+                    const exList = window.treinosAlunoAgrupados[nome] || [];
+                    const grupoMusc = exList[0]?.grupo_muscular || '';
                     return `
                         <button type="button" onclick="selecionarTreinoTab('${nome.replace(/'/g, "\\'")}')"
-                            class="px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 shrink-0 ${isAtivo ? 'bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black shadow-md shadow-amber-500/20 border border-amber-400' : 'bg-slate-900 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-800'}">
-                            <span>${nome}</span>
+                            class="px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 shrink-0 active:scale-95 ${isAtivo ? 'bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black shadow-md shadow-amber-500/20 border border-amber-400' : 'bg-slate-900/90 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-800/80'}">
+                            <span>${escTreinoLocal(nome)}</span>
+                            ${grupoMusc ? `<span class="${isAtivo ? 'text-slate-950/80 bg-black/10' : 'text-slate-400 bg-white/5'} text-[10px] font-semibold px-1.5 py-0.5 rounded-md">${escTreinoLocal(grupoMusc)}</span>` : ''}
                         </button>
                     `;
                 }).join('');
@@ -2996,6 +3247,8 @@
         function renderizarExerciciosDoTreinoAtivo(userId) {
             const exerciciosLista = document.getElementById('tab-treinos-exercicios-lista');
             const labelRotina = document.getElementById('tab-treinos-label-rotina-atual');
+            const progressoBadge = document.getElementById('tab-treinos-progresso-badge');
+            const progressoFill = document.getElementById('tab-treinos-progresso-fill');
             if (!exerciciosLista) return;
 
             const nomeAtivo = window.treinoTabAtivo;
@@ -3003,54 +3256,111 @@
 
             if (!exercicios.length) {
                 exerciciosLista.innerHTML = '<p class="text-xs text-slate-500 text-center py-6">Nenhum exercício encontrado nesta divisão.</p>';
+                if (progressoBadge) progressoBadge.textContent = '0 / 0 concluídos';
+                if (progressoFill) progressoFill.style.width = '0%';
                 return;
             }
 
             const grupo = exercicios[0].grupo_muscular || '';
             if (labelRotina) {
-                labelRotina.textContent = `${grupo || 'Geral'} (${exercicios.length} exercícios)`;
+                labelRotina.innerHTML = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 font-bold text-xs"><i data-lucide="dumbbell" class="w-3 h-3 text-amber-400"></i>${escTreinoLocal(grupo || 'Geral')} • ${exercicios.length} exercícios</span>`;
             }
 
             const key = 'apexfit_treino_check_' + userId;
             let feitos = {};
             try { feitos = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) { }
 
-            exerciciosLista.innerHTML = exercicios.map(e => {
+            const concluidos = exercicios.filter(e => feitos[e.id]).length;
+            const total = exercicios.length;
+            const pct = total > 0 ? Math.round((concluidos / total) * 100) : 0;
+
+            if (progressoBadge) {
+                if (total > 0 && concluidos >= total) {
+                    progressoBadge.innerHTML = '<span class="text-emerald-400 font-bold flex items-center gap-1"><i data-lucide="check-check" class="w-3.5 h-3.5"></i> Todos concluídos! 🎉</span>';
+                } else {
+                    progressoBadge.textContent = `${concluidos} / ${total} concluídos (${pct}%)`;
+                }
+            }
+            if (progressoFill) {
+                progressoFill.style.width = pct + '%';
+                if (pct === 100) {
+                    progressoFill.className = 'h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-300 shadow-sm shadow-emerald-500/30';
+                } else {
+                    progressoFill.className = 'h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full transition-all duration-300';
+                }
+            }
+
+            exerciciosLista.innerHTML = exercicios.map((e, idx) => {
                 const isCheck = Boolean(feitos[e.id]);
                 return `
-                    <div class="bg-slate-950/70 border ${isCheck ? 'border-emerald-500/40 bg-emerald-950/10' : 'border-slate-800/80'} rounded-2xl p-4 transition-all">
-                        <div class="flex items-start justify-between gap-3">
-                            <label class="flex items-start gap-3 flex-1 cursor-pointer">
-                                <input type="checkbox" data-id="${e.id}" ${isCheck ? 'checked' : ''}
-                                    onchange="alternarConclusaoExercicioTab('${e.id}', this.checked)"
-                                    class="mt-1 w-4 h-4 rounded accent-amber-500 cursor-pointer shrink-0">
-                                <div class="min-w-0 flex-1">
-                                    <div class="flex items-center gap-2 flex-wrap">
-                                        <h4 class="text-sm font-bold ${isCheck ? 'line-through text-slate-400' : 'text-white'}">${e.exercicio}</h4>
-                                        ${e.carga ? `<span class="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">${e.carga}</span>` : ''}
+                    <div class="glass-panel rounded-2xl border ${isCheck ? 'border-emerald-500/40 bg-gradient-to-br from-emerald-950/20 via-slate-900/85 to-[#0a0f1d] shadow-sm shadow-emerald-950/20' : 'border-slate-800/80 hover:border-slate-700/80 bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-[#0a0f1d]'} p-3.5 sm:p-4 transition-all duration-200">
+                        <div class="flex items-start gap-3 min-w-0">
+                            <!-- Botão de Checkbox Personalizado (Tátil e Moderno) -->
+                            <button type="button" onclick="alternarConclusaoExercicioTab('${e.id}', ${!isCheck})"
+                                title="${isCheck ? 'Desmarcar exercício' : 'Concluir exercício'}"
+                                class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all cursor-pointer active:scale-90 mt-0.5 ${isCheck ? 'bg-emerald-500 text-slate-950 border border-emerald-400 shadow-md shadow-emerald-500/30' : 'bg-slate-900/90 border border-slate-700/90 text-slate-500 hover:border-amber-400 hover:text-amber-400'}">
+                                <i data-lucide="${isCheck ? 'check' : 'circle'}" class="w-4 h-4 ${isCheck ? 'stroke-[3]' : ''}"></i>
+                            </button>
+
+                            <!-- Conteúdo Principal do Exercício -->
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between gap-2">
+                                    <div class="flex items-center gap-2 min-w-0 flex-wrap">
+                                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">#${idx + 1}</span>
+                                        <h4 class="text-sm sm:text-base font-bold ${isCheck ? 'line-through text-slate-400' : 'text-white'} truncate" title="${escTreinoLocal(e.exercicio)}">
+                                            ${escTreinoLocal(e.exercicio)}
+                                        </h4>
+                                        ${e.carga ? `
+                                            <span class="inline-flex items-center gap-1 text-[10px] font-black text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/25 shrink-0">
+                                                <i data-lucide="weight" class="w-3 h-3 text-amber-400"></i>
+                                                ${escTreinoLocal(e.carga)}
+                                            </span>
+                                        ` : ''}
+                                        ${isCheck ? `
+                                            <span class="inline-flex items-center gap-1 text-[9px] font-black uppercase px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
+                                                Feito ✓
+                                            </span>
+                                        ` : ''}
                                     </div>
-                                    <div class="text-xs text-slate-400 mt-1 flex items-center gap-3 flex-wrap">
-                                        <span><strong>${e.series}</strong> séries × <strong>${e.repeticoes}</strong> reps</span>
-                                        ${e.descanso ? `<span class="text-amber-400 font-semibold">⏱️ Descanso: ${e.descanso}</span>` : ''}
-                                    </div>
-                                    ${e.observacoes ? `<p class="text-xs text-slate-400 mt-1.5 italic">${e.observacoes}</p>` : ''}
+
+                                    <!-- Botão de Vídeo (Compacto no topo direito) -->
                                     ${e.video_url && e.video_url.startsWith('http') ? `
-                                        <a href="${e.video_url}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[11px] text-amber-400 hover:text-amber-300 font-bold mt-2 underline">
-                                            <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>
-                                            <span>Ver demonstração em vídeo</span>
+                                        <a href="${escTreinoLocal(e.video_url)}" target="_blank" rel="noopener" title="Assistir execução"
+                                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 hover:text-white border border-amber-500/25 hover:border-amber-400 text-[11px] font-bold transition-all shrink-0 active:scale-95 group">
+                                            <i data-lucide="play" class="w-3 h-3 text-amber-400 fill-amber-400/40 group-hover:scale-110 transition-transform"></i>
+                                            <span class="hidden sm:inline">Vídeo</span>
                                         </a>
                                     ` : ''}
                                 </div>
-                            </label>
-                            ${isCheck ? `
-                                <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
-                                    <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+
+                                <!-- Badges de Séries, Repetições e Descanso -->
+                                <div class="flex items-center gap-1.5 flex-wrap mt-1.5 text-xs">
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-300 text-[11px] font-semibold">
+                                        <i data-lucide="layers" class="w-3 h-3 text-amber-400"></i>
+                                        ${e.series ? `${escTreinoLocal(e.series)} séries` : 'Séries'} × ${e.repeticoes ? `${escTreinoLocal(e.repeticoes)} reps` : ''}
+                                    </span>
+                                    ${e.descanso ? `
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-slate-950/80 border border-slate-800 text-amber-300/90 text-[11px] font-medium">
+                                            <i data-lucide="timer" class="w-3 h-3 text-amber-400"></i>
+                                            ${escTreinoLocal(e.descanso)} descanso
+                                        </span>
+                                    ` : ''}
                                 </div>
-                            ` : ''}
+
+                                <!-- Observações do Treinador (se houver) -->
+                                ${e.observacoes ? `
+                                    <div class="mt-2 text-[11px] text-slate-400 italic bg-white/[0.02] px-2.5 py-1.5 rounded-xl border border-white/5 flex items-start gap-1.5 leading-relaxed">
+                                        <i data-lucide="info" class="w-3 h-3 text-amber-400 shrink-0 mt-0.5"></i>
+                                        <span>${escTreinoLocal(e.observacoes)}</span>
+                                    </div>
+                                ` : ''}
+                            </div>
                         </div>
                     </div>
                 `;
             }).join('');
+
+            if (window.lucide) lucide.createIcons();
         }
 
         window.alternarConclusaoExercicioTab = function(exId, isChecked) {
@@ -4620,7 +4930,7 @@
 
     <!-- Botão Flutuante do Chat no Dashboard do Aluno (Posicionado acima da barra inferior no mobile/tablet) -->
     <button id="chat-toggle-btn"
-        class="lg:hidden fixed bottom-20 sm:bottom-22 right-4 sm:right-6 bg-brand-500 hover:bg-brand-400 text-slate-950 w-12 h-12 rounded-full shadow-2xl shadow-brand-500/30 transition-all flex items-center justify-center z-50 group hover:scale-105 active:scale-95 cursor-pointer"
+        class="lg:hidden fixed bottom-24 sm:bottom-28 right-4 sm:right-6 bg-brand-500 hover:bg-brand-400 text-slate-950 w-12 h-12 rounded-full shadow-2xl shadow-brand-500/30 transition-all flex items-center justify-center z-50 group hover:scale-105 active:scale-95 cursor-pointer"
         aria-label="Abrir chat com o profissional">
         <i data-lucide="message-square" class="w-5 h-5"></i>
         <!-- Símbolo de notificação pulsante em vermelho e branco -->
@@ -4630,7 +4940,7 @@
 
     <!-- Janela Deslizante do Chat (Elevação ajustada para não cobrir a barra de navegação) -->
     <div id="chat-window"
-        class="hidden fixed bottom-20 sm:bottom-24 right-3 sm:right-6 left-3 sm:left-auto max-w-[calc(100vw-24px)] sm:w-96 max-h-[72vh] h-[480px] glass-panel border border-slate-800/80 rounded-3xl shadow-2xl flex flex-col z-[80] overflow-hidden">
+        class="hidden fixed bottom-24 sm:bottom-28 right-3 sm:right-6 left-3 sm:left-auto max-w-[calc(100vw-24px)] sm:w-96 max-h-[72vh] h-[480px] glass-panel border border-slate-800/80 rounded-3xl shadow-2xl flex flex-col z-[80] overflow-hidden">
         <div class="bg-slate-900/90 p-4 flex justify-between items-center border-b border-slate-800">
             <div class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center font-bold">

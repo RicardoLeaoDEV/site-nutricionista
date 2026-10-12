@@ -68,6 +68,16 @@
             border-color: rgba(245, 158, 11, 0.30);
         }
 
+        /* Folga visual segura para botão flutuante de chat e janela acima da barra mobile/tablet */
+        @media (max-width: 1023px) {
+            #chat-toggle-btn {
+                bottom: calc(max(6rem, env(safe-area-inset-bottom, 0px) + 5.25rem)) !important;
+            }
+            #chat-window {
+                bottom: calc(max(6rem, env(safe-area-inset-bottom, 0px) + 5.25rem)) !important;
+            }
+        }
+
         /* Grelha Técnica Discreta de 40px com Máscara Radial */
         .bg-tech-grid {
             position: absolute;
@@ -83,14 +93,22 @@
         /* ------------------------------------------------------------------ */
         /* BARRA HORIZONTAL COM OPÇÕES (ABAS MODERNAS IGUAL DASHBOARD)        */
         /* ------------------------------------------------------------------ */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
         .tab-horizontal-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            padding: 7px 5px;
-            border-radius: 11px;
-            font-size: 10.5px;
+            gap: 6px;
+            padding: 8px 10px;
+            border-radius: 12px;
+            font-size: 12px;
             font-weight: 700;
             color: #94a3b8;
             background: transparent;
@@ -99,19 +117,17 @@
             white-space: nowrap;
             cursor: pointer;
             user-select: none;
-            flex: 1 1 0%;
+            width: 100%;
             min-width: 0;
             text-align: center;
         }
 
-        @media (min-width: 640px) {
+        @media (min-width: 1280px) {
             .tab-horizontal-btn {
                 gap: 8px;
-                padding: 9px 16px;
+                padding: 10px 14px;
                 border-radius: 14px;
                 font-size: 13px;
-                flex: initial;
-                min-width: auto;
             }
         }
 
@@ -293,39 +309,67 @@
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 flex-1 w-full pb-32 sm:pb-36 lg:pb-12">
-        <div class="bg-gradient-to-r from-[#0a0f1d]/90 via-[#0a0f1d]/75 to-amber-950/30 p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border border-white/10 backdrop-blur-md shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all">
-            <h1 class="text-lg sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                Painel do Personal 🏋️
-            </h1>
-            <p class="text-[11px] sm:text-sm text-slate-400 mt-0.5 sm:mt-1">
-                Gerencie seus alunos, monte treinos e acompanhe resultados em um só lugar.
-            </p>
+    <main class="max-w-6xl xl:max-w-7xl mx-auto p-3.5 sm:p-5 lg:p-6 space-y-6 flex-1 w-full pb-32 sm:pb-36 lg:pb-12">
+        <!-- Banner Executivo do Personal -->
+        <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-gradient-to-br from-[#0d1527] via-[#0a0f1d] to-[#1a1205] p-4 sm:p-6 shadow-2xl backdrop-blur-md group hover:border-amber-500/30 transition-all">
+            <!-- Glows decorativos de fundo -->
+            <div class="absolute -top-12 -right-12 w-52 h-52 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-12 -left-12 w-52 h-52 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 text-[10px] sm:text-[11px] font-bold tracking-wider uppercase mb-2">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                        Central de Prescrição & Alta Performance
+                    </div>
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight flex items-center gap-2.5">
+                        <span>Painel do Personal</span>
+                        <span class="text-2xl sm:text-3xl">🏋️</span>
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
+                        Gerencie seus alunos, periodize treinos de musculação e acompanhe a evolução e check-ins em tempo real.
+                    </p>
+                </div>
+
+                <!-- Ações rápidas do Header -->
+                <div class="flex items-center gap-2.5 shrink-0 self-start md:self-center">
+                    <button type="button" onclick="alternarAbaPersonal('montar')"
+                        class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white border border-amber-500/30 hover:border-amber-400 text-xs font-bold transition-all active:scale-95 shadow-md shadow-amber-500/10 cursor-pointer">
+                        <i data-lucide="dumbbell" class="w-4 h-4 text-amber-400"></i>
+                        <span>Montar Treino</span>
+                    </button>
+                    <button type="button" onclick="navegarParaSecao('secao-cadastrar-aluno')"
+                        class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs transition-all active:scale-95 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 cursor-pointer">
+                        <i data-lucide="user-plus" class="w-4 h-4"></i>
+                        <span>Convidar Aluno</span>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- ------------------------------------------------------------------ -->
-        <!-- BARRA HORIZONTAL COM AS OPÇÕES DO PERSONAL                         -->
+        <!-- BARRA HORIZONTAL COM AS OPÇÕES DO PERSONAL (GRID 5 ABAS PERFEITO)  -->
         <!-- ------------------------------------------------------------------ -->
-        <div class="glass-panel bg-[#0a0f1d]/80 border border-white/10 p-1.5 sm:p-2 rounded-2xl hidden lg:flex items-center gap-2 overflow-x-auto shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] select-none" id="barra-horizontal-opcoes-personal">
+        <div class="glass-panel bg-[#0a0f1d]/80 border border-white/10 p-1.5 sm:p-2 rounded-2xl hidden lg:grid lg:grid-cols-5 gap-1.5 sm:gap-2 shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] select-none no-scrollbar overflow-x-auto" id="barra-horizontal-opcoes-personal">
             <button type="button" onclick="alternarAbaPersonal('painel')" id="tab-btn-personal-painel" class="tab-horizontal-btn ativa">
-                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                <span>Painel do Personal</span>
+                <i data-lucide="layout-dashboard" class="w-4 h-4 shrink-0"></i>
+                <span class="truncate">Painel do Personal</span>
             </button>
             <button type="button" onclick="alternarAbaPersonal('montar')" id="tab-btn-personal-montar" class="tab-horizontal-btn">
-                <i data-lucide="dumbbell" class="w-4 h-4"></i>
-                <span>Montar & Gerenciar Treino</span>
+                <i data-lucide="dumbbell" class="w-4 h-4 shrink-0"></i>
+                <span class="truncate">Montar Treino</span>
             </button>
             <button type="button" onclick="alternarAbaPersonal('evolucao')" id="tab-btn-personal-evolucao" class="tab-horizontal-btn">
-                <i data-lucide="camera" class="w-4 h-4"></i>
-                <span>Evolução & Check-ins</span>
+                <i data-lucide="camera" class="w-4 h-4 shrink-0"></i>
+                <span class="truncate">Evolução & Check-ins</span>
             </button>
             <button type="button" onclick="alternarAbaPersonal('medidas')" id="tab-btn-personal-medidas" class="tab-horizontal-btn">
-                <i data-lucide="ruler" class="w-4 h-4"></i>
-                <span>Medidas & Antropometria</span>
+                <i data-lucide="ruler" class="w-4 h-4 shrink-0"></i>
+                <span class="truncate">Medidas & Avaliação</span>
             </button>
             <button type="button" onclick="alternarAbaPersonal('gestao')" id="tab-btn-personal-gestao" class="tab-horizontal-btn">
-                <i data-lucide="badge-dollar-sign" class="w-4 h-4"></i>
-                <span>Financeiro & Agenda</span>
+                <i data-lucide="badge-dollar-sign" class="w-4 h-4 shrink-0"></i>
+                <span class="truncate">Financeiro & Agenda</span>
             </button>
         </div>
 
@@ -338,11 +382,11 @@
 
             <!-- SEÇÃO: Lista de Alunos Vinculados (100% Funcional) -->
             <section id="secao-alunos-vinculados-personal" class="glass-panel rounded-3xl border border-white/10 shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all p-5 sm:p-6 space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-800/80">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/5">
                     <div>
                         <h2 class="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
                             <span>Lista de Alunos Vinculados</span>
-                            <span id="badge-total-alunos-tabela" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/25">
+                            <span id="badge-total-alunos-tabela" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/25">
                                 0 alunos
                             </span>
                         </h2>
@@ -350,15 +394,15 @@
                             Clique em qualquer aluno para carregar o prontuário ou ajustar prescrições.
                         </p>
                     </div>
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <div class="relative w-48 sm:w-64">
-                            <input type="text" id="busca-aluno-tabela-personal" placeholder="Buscar aluno por nome ou e-mail..."
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <div class="relative w-full sm:w-64">
+                            <input type="text" id="busca-aluno-tabela-personal" placeholder="Buscar por nome ou e-mail..."
                                 oninput="if(typeof filtrarTabelaAlunosPersonal === 'function') filtrarTabelaAlunosPersonal(this.value)"
-                                class="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition-colors">
+                                class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/30 transition-all">
                             <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2.5 pointer-events-none"></i>
                         </div>
                         <button type="button" onclick="navegarParaSecao('secao-cadastrar-aluno')"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition-all cursor-pointer">
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 transition-all shadow-md shadow-amber-500/20 active:scale-95 cursor-pointer">
                             <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
                             <span>Convidar Aluno</span>
                         </button>
@@ -366,19 +410,19 @@
                 </div>
 
                 <!-- Lista em Cards para Mobile (< md) -->
-                <div id="cards-alunos-vinculados-mobile" class="md:hidden space-y-2"></div>
+                <div id="cards-alunos-vinculados-mobile" class="md:hidden space-y-2.5"></div>
 
                 <!-- Tabela Completa para Desktop (>= md) -->
-                <div class="hidden md:block overflow-x-auto -mx-2 sm:mx-0">
-                    <table class="w-full text-left border-collapse min-w-[760px]">
+                <div class="hidden md:block overflow-x-auto no-scrollbar -mx-2 sm:mx-0 rounded-2xl border border-slate-800/80 bg-slate-950/40">
+                    <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="text-[11px] font-bold uppercase tracking-wider text-slate-400 bg-slate-900/60 border-b border-slate-800">
-                                <th class="py-3 px-4 rounded-l-xl">ALUNO</th>
-                                <th class="py-3 px-4">OBJETIVO</th>
-                                <th class="py-3 px-4">PESO ATUAL</th>
-                                <th class="py-3 px-4">PLANO / STATUS</th>
-                                <th class="py-3 px-4">CHECK-IN</th>
-                                <th class="py-3 px-4 text-right rounded-r-xl">AÇÃO</th>
+                            <tr class="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-400 bg-slate-900/80 border-b border-slate-800">
+                                <th class="py-3 px-3 sm:px-4">ALUNO</th>
+                                <th class="py-3 px-2 sm:px-3">OBJETIVO</th>
+                                <th class="py-3 px-2 text-center whitespace-nowrap">PESO ATUAL</th>
+                                <th class="py-3 px-2 sm:px-3 whitespace-nowrap">PLANO / STATUS</th>
+                                <th class="py-3 px-2 text-center whitespace-nowrap">CHECK-IN</th>
+                                <th class="py-3 px-3 sm:px-4 text-right whitespace-nowrap">AÇÃO</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-alunos-vinculados" class="divide-y divide-slate-800/60 text-xs">
@@ -1134,7 +1178,7 @@
 
     <!-- Botão Flutuante do Chat no Painel do Personal -->
     <button id="chat-toggle-btn" onclick="toggleChatFlutuante()"
-        class="fixed bottom-[72px] sm:bottom-22 lg:bottom-6 right-4 sm:right-6 bg-brand-500 hover:bg-brand-400 text-slate-950 p-3 sm:p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-[55] group hover:scale-105 active:scale-95 cursor-pointer"
+        class="fixed bottom-24 sm:bottom-28 lg:bottom-6 right-4 sm:right-6 bg-brand-500 hover:bg-brand-400 text-slate-950 p-3 sm:p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-[55] group hover:scale-105 active:scale-95 cursor-pointer"
         title="Abrir Chat com Alunos">
         <i data-lucide="message-square" class="w-5 h-5 sm:w-6 sm:h-6"></i>
         <!-- Símbolo de notificação pulsante em vermelho e branco -->
@@ -1144,7 +1188,7 @@
 
     <!-- Janela Deslizante do Chat Flutuante -->
     <div id="chat-window"
-        class="hidden fixed bottom-[76px] sm:bottom-24 right-3 sm:right-6 w-[calc(100vw-24px)] sm:w-[540px] max-h-[80vh] h-[520px] glass-panel border border-slate-800 rounded-3xl shadow-2xl flex flex-col z-[75] overflow-hidden">
+        class="hidden fixed bottom-24 sm:bottom-28 lg:bottom-24 right-3 sm:right-6 w-[calc(100vw-24px)] sm:w-[540px] max-h-[80vh] h-[520px] glass-panel border border-slate-800 rounded-3xl shadow-2xl flex flex-col z-[75] overflow-hidden">
         <!-- Topo da Janela -->
         <div class="bg-slate-900/95 p-3.5 flex justify-between items-center border-b border-slate-800">
             <div class="flex items-center gap-2.5">
@@ -1705,95 +1749,164 @@
                 badgeTotal.textContent = `${listaParaExibir.length} aluno${listaParaExibir.length === 1 ? '' : 's'}`;
             }
 
-            tbody.innerHTML = listaParaExibir.map(aluno => `
-                <tr class="hover:bg-slate-900/60 transition-colors group cursor-pointer border-b border-slate-800/60" onclick="if(!event.target.closest('button')) irParaMontarTreinoAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')">
-                    <td class="py-3 px-4">
-                        <div class="flex items-center gap-3">
-                            <img src="${esc(aluno.foto)}" alt="${esc(aluno.nome)}"
-                                class="w-9 h-9 rounded-full object-cover border border-slate-700/80 shadow-md shrink-0 bg-slate-800"
-                                onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(aluno.nome)}'">
-                            <div class="min-w-0">
-                                <div class="font-bold text-slate-100 text-sm group-hover:text-amber-400 transition-colors truncate">
-                                    ${esc(aluno.nome)}
-                                </div>
-                                <div class="text-[11px] text-slate-400 truncate">
-                                    ${esc(aluno.email)}
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-3 px-4 text-slate-300 font-medium">
-                        ${esc(aluno.objetivo)}
-                    </td>
-                    <td class="py-3 px-4 font-bold text-slate-100">
-                        ${esc(aluno.peso)}
-                    </td>
-                    <td class="py-3 px-4">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase border ${aluno.planoClasse}">
-                            ${esc(aluno.plano)}
-                        </span>
-                    </td>
-                    <td class="py-3 px-4">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase border ${aluno.checkinClasse}">
-                            ${esc(aluno.checkin)}
-                        </span>
-                    </td>
-                    <td class="py-3 px-4 text-right">
-                        <div class="flex items-center justify-end gap-1.5">
-                            <button type="button"
-                                onclick="event.stopPropagation(); irParaMontarTreinoAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')"
-                                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 transition-all cursor-pointer shadow-sm active:scale-95">
-                                <i data-lucide="dumbbell" class="w-3.5 h-3.5"></i>
-                                <span>TREINO</span>
-                            </button>
-                            <button type="button"
-                                onclick="event.stopPropagation(); irParaMontarDietaAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')"
-                                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 transition-all cursor-pointer shadow-sm active:scale-95">
-                                <i data-lucide="utensils" class="w-3.5 h-3.5"></i>
-                                <span>DIETA</span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+            const extrairIniciais = (nome) => {
+                if (!nome) return 'AL';
+                const partes = String(nome).trim().split(/\s+/).filter(Boolean);
+                if (partes.length === 1) return partes[0].slice(0, 2).toUpperCase();
+                return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
+            };
 
-            const cardsContainer = document.getElementById('cards-alunos-vinculados-mobile');
-            if (cardsContainer) {
-                cardsContainer.innerHTML = listaParaExibir.map(aluno => `
-                    <div class="glass-panel p-3 rounded-2xl border border-slate-800/90 bg-slate-900/60 hover:border-amber-500/30 transition-all flex flex-col gap-2.5 shadow-sm active:scale-[0.99] cursor-pointer" onclick="if(!event.target.closest('button')) irParaMontarTreinoAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')">
-                        <div class="flex items-center justify-between gap-2">
+            const temFotoValida = (foto) => foto && !foto.includes('dicebear') && !foto.includes('seed=') && !foto.includes('undefined');
+
+            tbody.innerHTML = listaParaExibir.map(aluno => {
+                const avatarHtml = temFotoValida(aluno.foto) ? `
+                    <img src="${esc(aluno.foto)}" alt="${esc(aluno.nome)}"
+                        class="w-10 h-10 rounded-xl object-cover border border-amber-500/30 shadow-md shrink-0 bg-slate-800"
+                        onerror="this.outerHTML='<div class=\\'w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 via-slate-800 to-slate-900 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 text-xs shadow-md shrink-0\\'>${extrairIniciais(aluno.nome)}</div>'">
+                ` : `
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 via-slate-800 to-slate-900 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 text-xs shadow-md shrink-0">
+                        ${extrairIniciais(aluno.nome)}
+                    </div>
+                `;
+
+                const isCheckinEmDia = String(aluno.checkin || '').toUpperCase().includes('DIA');
+                const checkinHtml = isCheckinEmDia ? `
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider uppercase bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-xs">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        <span>EM DIA</span>
+                    </span>
+                ` : `
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider uppercase bg-amber-500/15 text-amber-300 border border-amber-500/30 shadow-xs">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                        <span>PENDENTE</span>
+                    </span>
+                `;
+
+                // Formatar nome do plano sem repetição redundante da palavra 'PLANO' para caber perfeito sem reticências
+                const planoLimpo = String(aluno.plano || '').replace(/^PLANO\s+/i, '').trim();
+
+                return `
+                    <tr class="hover:bg-slate-900/80 transition-all duration-150 group cursor-pointer border-b border-slate-800/60" onclick="if(!event.target.closest('button')) irParaMontarTreinoAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')">
+                        <td class="py-3 px-3 sm:px-4">
                             <div class="flex items-center gap-2.5 min-w-0">
-                                <img src="${esc(aluno.foto)}" alt="${esc(aluno.nome)}"
-                                    class="w-9 h-9 rounded-full object-cover border border-slate-700/80 shadow-md shrink-0 bg-slate-800"
-                                    onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(aluno.nome)}'">
+                                ${avatarHtml}
                                 <div class="min-w-0">
-                                    <div class="font-bold text-slate-100 text-xs truncate">${esc(aluno.nome)}</div>
-                                    <div class="text-[10px] text-slate-400 truncate">${esc(aluno.objetivo)} • <strong class="text-slate-300">${esc(aluno.peso)}</strong></div>
+                                    <div class="font-bold text-slate-100 text-xs sm:text-sm group-hover:text-amber-400 transition-colors truncate flex items-center gap-1.5">
+                                        <span class="truncate">${esc(aluno.nome)}</span>
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" title="Aluno ativo"></span>
+                                    </div>
+                                    <div class="text-[10px] sm:text-[11px] text-slate-400 truncate max-w-[140px] lg:max-w-[170px]">
+                                        ${esc(aluno.email)}
+                                    </div>
                                 </div>
                             </div>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider uppercase border shrink-0 ${aluno.checkinClasse}">
-                                ${esc(aluno.checkin)}
+                        </td>
+                        <td class="py-3 px-2 sm:px-3">
+                            <div class="flex items-center gap-1.5 min-w-0">
+                                <div class="w-5 h-5 rounded-md bg-slate-800/90 border border-slate-700/60 flex items-center justify-center text-amber-400 shrink-0">
+                                    <i data-lucide="target" class="w-2.5 h-2.5"></i>
+                                </div>
+                                <span class="font-semibold text-xs text-slate-200 truncate max-w-[130px] lg:max-w-[160px] xl:max-w-[190px]" title="${esc(aluno.objetivo)}">${esc(aluno.objetivo)}</span>
+                            </div>
+                        </td>
+                        <td class="py-3 px-2 text-center whitespace-nowrap">
+                            <div class="font-extrabold text-white text-xs sm:text-sm tracking-tight">${esc(aluno.peso)}</div>
+                            <span class="text-[9px] text-slate-500 block font-medium leading-none mt-0.5">Recente</span>
+                        </td>
+                        <td class="py-3 px-2 sm:px-3 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase border ${aluno.planoClasse} shadow-xs">
+                                <i data-lucide="award" class="w-3 h-3 shrink-0"></i>
+                                <span>${esc(planoLimpo)}</span>
                             </span>
-                        </div>
-                        <div class="flex items-center justify-between pt-2 border-t border-slate-800/60 gap-2">
-                            <span class="text-[9px] font-bold uppercase tracking-wider truncate text-slate-400 max-w-[130px]">
-                                ${esc(aluno.plano)}
-                            </span>
-                            <div class="flex items-center gap-1.5 shrink-0">
+                        </td>
+                        <td class="py-3 px-2 text-center whitespace-nowrap">
+                            ${checkinHtml}
+                        </td>
+                        <td class="py-3 px-3 sm:px-4 text-right whitespace-nowrap">
+                            <div class="flex items-center justify-end gap-1.5">
                                 <button type="button"
                                     onclick="event.stopPropagation(); irParaMontarTreinoAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')"
-                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 cursor-pointer active:scale-95">
-                                    <i data-lucide="dumbbell" class="w-3 h-3"></i> Treino
+                                    title="Montar ou ajustar treino do aluno"
+                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white border border-amber-500/35 hover:border-amber-400 transition-all cursor-pointer shadow-sm active:scale-95 group">
+                                    <i data-lucide="dumbbell" class="w-3 h-3 text-amber-400 group-hover:scale-110 transition-transform"></i>
+                                    <span>Treino</span>
                                 </button>
                                 <button type="button"
                                     onclick="event.stopPropagation(); irParaMontarDietaAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')"
-                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 cursor-pointer active:scale-95">
-                                    <i data-lucide="utensils" class="w-3 h-3"></i> Dieta
+                                    title="Ajustar plano nutricional do aluno"
+                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 hover:text-white border border-emerald-500/35 hover:border-emerald-400 transition-all cursor-pointer shadow-sm active:scale-95 group">
+                                    <i data-lucide="utensils" class="w-3 h-3 text-emerald-400 group-hover:scale-110 transition-transform"></i>
+                                    <span>Dieta</span>
                                 </button>
                             </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            const cardsContainer = document.getElementById('cards-alunos-vinculados-mobile');
+            if (cardsContainer) {
+                cardsContainer.innerHTML = listaParaExibir.map(aluno => {
+                    const avatarMob = temFotoValida(aluno.foto) ? `
+                        <img src="${esc(aluno.foto)}" alt="${esc(aluno.nome)}"
+                            class="w-10 h-10 rounded-xl object-cover border border-amber-500/30 shadow-md shrink-0 bg-slate-800"
+                            onerror="this.outerHTML='<div class=\\'w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 via-slate-800 to-slate-900 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 text-xs shadow-md shrink-0\\'>${extrairIniciais(aluno.nome)}</div>'">
+                    ` : `
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 via-slate-800 to-slate-900 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 text-xs shadow-md shrink-0">
+                            ${extrairIniciais(aluno.nome)}
                         </div>
-                    </div>
-                `).join('');
+                    `;
+
+                    const isCheckinEmDiaMob = String(aluno.checkin || '').toUpperCase().includes('DIA');
+                    const checkinMob = isCheckinEmDiaMob ? `
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shrink-0">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> EM DIA
+                        </span>
+                    ` : `
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/30 shrink-0">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span> PENDENTE
+                        </span>
+                    `;
+
+                    return `
+                        <div class="glass-panel p-3.5 rounded-2xl border border-slate-800/90 bg-gradient-to-br from-slate-900/90 to-[#0a0f1d] hover:border-amber-500/30 transition-all flex flex-col gap-3 shadow-md active:scale-[0.99] cursor-pointer" onclick="if(!event.target.closest('button')) irParaMontarTreinoAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')">
+                            <div class="flex items-center justify-between gap-2.5">
+                                <div class="flex items-center gap-2.5 min-w-0">
+                                    ${avatarMob}
+                                    <div class="min-w-0">
+                                        <div class="font-bold text-slate-100 text-sm truncate">${esc(aluno.nome)}</div>
+                                        <div class="text-[11px] text-slate-400 truncate">${esc(aluno.email)}</div>
+                                    </div>
+                                </div>
+                                ${checkinMob}
+                            </div>
+                            <div class="flex items-center justify-between gap-2 py-2 border-y border-white/5 text-xs">
+                                <div class="flex items-center gap-1.5 text-slate-300 truncate">
+                                    <i data-lucide="target" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
+                                    <span class="truncate font-medium">${esc(aluno.objetivo)}</span>
+                                </div>
+                                <div class="font-black text-white shrink-0">${esc(aluno.peso)}</div>
+                            </div>
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border ${aluno.planoClasse} truncate max-w-[140px]">
+                                    ${esc(aluno.plano)}
+                                </span>
+                                <div class="flex items-center gap-2 shrink-0">
+                                    <button type="button"
+                                        onclick="event.stopPropagation(); irParaMontarTreinoAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')"
+                                        class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/35 cursor-pointer active:scale-95">
+                                        <i data-lucide="dumbbell" class="w-3.5 h-3.5 text-amber-400"></i> Treino
+                                    </button>
+                                    <button type="button"
+                                        onclick="event.stopPropagation(); irParaMontarDietaAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')"
+                                        class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/35 cursor-pointer active:scale-95">
+                                        <i data-lucide="utensils" class="w-3.5 h-3.5 text-emerald-400"></i> Dieta
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
             }
 
             if (window.lucide) {
