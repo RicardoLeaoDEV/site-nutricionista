@@ -267,80 +267,81 @@
     <header class="bg-[#0a0f1d]/95 border-b border-white/10 sticky top-0 z-40 backdrop-blur-md shadow-lg shadow-black/40">
         <div class="max-w-6xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
             <!-- 1. Logo Real Fit Hub (Completa e visível no mobile e desktop) -->
-            <a href="index.html" class="inline-flex items-center gap-2 group shrink-0 min-w-0" title="Real Fit Hub">
-                <img src="assets/icon-192.png" alt="Real Fit Hub" class="h-8 sm:h-10 w-auto object-contain rounded-xl shadow-md border border-white/5 group-hover:scale-105 transition-transform shrink-0">
-                <span class="text-sm sm:text-lg font-bold tracking-tight text-white whitespace-nowrap font-clash shrink-0">
-                    <strong class="font-extrabold text-white">REAL FIT</strong><span class="text-amber-400 font-extrabold"> HUB</span>
+            <!-- 1. Logo Real Fit Hub (Completa e visível no mobile e desktop) -->
+            <a href="index.html" class="inline-flex items-center gap-1.5 sm:gap-2 group shrink-0 min-w-0" title="Real Fit Hub">
+                <img src="assets/icon-192.png" alt="Real Fit Hub" class="h-7 sm:h-10 w-auto object-contain rounded-xl shadow-md border border-white/5 group-hover:scale-105 transition-transform shrink-0">
+                <span class="text-xs sm:text-lg font-bold tracking-tight text-white whitespace-nowrap font-clash shrink-0">
+                    <strong class="font-extrabold text-white"><span class="hidden xs:inline">REAL FIT </span><span class="xs:hidden">RF</span></strong><span class="text-amber-400 font-extrabold"><span class="hidden xs:inline"> HUB</span><span class="xs:hidden">H</span></span>
                 </span>
             </a>
 
             <!-- 2. Ações do Topo: Linha Única Perfeita (flex-nowrap, alinhamento absoluto, zero quebras) -->
-            <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0 flex-nowrap">
+            <div class="flex items-center gap-1 sm:gap-2.5 shrink-0 flex-nowrap">
                 <!-- Alternador de Área (Nutricionista) -->
                 <a href="admin.html" id="btn-atalho-nutri" title="Ir para o Painel do Nutricionista"
-                    class="hidden items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-lime-500/30 hover:border-lime-500/60 text-lime-400 text-xs font-bold transition-all active:scale-95 shadow-sm shrink-0">
+                    class="hidden items-center gap-1 px-2 sm:px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-lime-500/30 hover:border-lime-500/60 text-lime-400 text-xs font-bold transition-all active:scale-95 shadow-sm shrink-0">
                     <i data-lucide="apple" class="w-3.5 h-3.5 text-lime-400 shrink-0"></i>
-                    <span class="text-[11px] sm:text-xs">Nutri</span>
+                    <span class="text-[10px] sm:text-xs">Nutri</span>
                 </a>
 
                 <!-- Perfil Profissional (Personal) -->
                 <button type="button" onclick="abrirModalPerfilProfissional()" id="btn-perfil-personal-header" title="Meu Perfil Profissional & CREF"
-                    class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-amber-500/30 hover:border-amber-400/60 text-slate-200 transition-all cursor-pointer group active:scale-95 shadow-sm shrink-0">
-                    <div class="w-6 h-6 rounded-full overflow-hidden bg-slate-800 border border-amber-500/50 shrink-0 flex items-center justify-center">
+                    class="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-amber-500/30 hover:border-amber-400/60 text-slate-200 transition-all cursor-pointer group active:scale-95 shadow-sm shrink-0">
+                    <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden bg-slate-800 border border-amber-500/50 shrink-0 flex items-center justify-center">
                         <img id="header-personal-avatar-img" src="" alt="Foto" class="w-full h-full object-cover hidden">
-                        <span id="header-personal-avatar-initials" class="text-[11px] font-black text-amber-400">P</span>
+                        <span id="header-personal-avatar-initials" class="text-[10px] sm:text-[11px] font-black text-amber-400">P</span>
                     </div>
-                    <span id="header-personal-nome" class="text-[11px] sm:text-xs font-bold text-amber-300 group-hover:text-amber-200 transition-colors whitespace-nowrap">
+                    <span id="header-personal-nome" class="text-[10px] sm:text-xs font-bold text-amber-300 group-hover:text-amber-200 transition-colors whitespace-nowrap">
                         Personal
                     </span>
                 </button>
 
                 <!-- Divisória sutil vertical -->
-                <div class="h-5 w-px bg-slate-800 hidden xs:block"></div>
+                <div class="h-4 w-px bg-slate-800 hidden sm:block"></div>
 
                 <!-- Botão Sair da Sessão -->
                 <button id="btn-logout" title="Sair da sessão"
-                    class="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl text-slate-400 hover:text-rose-400 bg-slate-900/90 hover:bg-rose-500/10 border border-slate-800 hover:border-rose-500/30 transition-all cursor-pointer text-xs font-semibold shrink-0 active:scale-95 shadow-sm">
+                    class="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-xl text-slate-400 hover:text-rose-400 bg-slate-900/90 hover:bg-rose-500/10 border border-slate-800 hover:border-rose-500/30 transition-all cursor-pointer text-xs font-semibold shrink-0 active:scale-95 shadow-sm">
                     <i data-lucide="log-out" class="w-3.5 h-3.5 text-rose-400/90"></i>
-                    <span class="text-[11px] sm:text-xs font-bold">Sair</span>
+                    <span class="text-[11px] sm:text-xs font-bold hidden sm:inline">Sair</span>
                 </button>
             </div>
         </div>
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-6xl xl:max-w-7xl mx-auto p-3.5 sm:p-5 lg:p-6 space-y-6 flex-1 w-full pb-32 sm:pb-36 lg:pb-12">
+    <main class="max-w-6xl xl:max-w-7xl mx-auto p-3 sm:p-5 lg:p-6 space-y-4 sm:space-y-6 flex-1 w-full pb-32 sm:pb-36 lg:pb-12">
         <!-- Banner Executivo do Personal -->
-        <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-gradient-to-br from-[#0d1527] via-[#0a0f1d] to-[#1a1205] p-4 sm:p-6 shadow-2xl backdrop-blur-md group hover:border-amber-500/30 transition-all">
+        <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-gradient-to-br from-[#0d1527] via-[#0a0f1d] to-[#1a1205] p-3.5 sm:p-6 shadow-2xl backdrop-blur-md group hover:border-amber-500/30 transition-all">
             <!-- Glows decorativos de fundo -->
             <div class="absolute -top-12 -right-12 w-52 h-52 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-12 -left-12 w-52 h-52 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
                 <div>
-                    <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 text-[10px] sm:text-[11px] font-bold tracking-wider uppercase mb-2">
-                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                    <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 text-[9.5px] sm:text-[11px] font-bold tracking-wider uppercase mb-1.5 sm:mb-2">
+                        <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-400 animate-pulse"></span>
                         Central de Prescrição & Alta Performance
                     </div>
-                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight flex items-center gap-2.5">
+                    <h1 class="text-lg sm:text-2xl lg:text-3xl font-black text-white tracking-tight flex items-center gap-2">
                         <span>Painel do Personal</span>
-                        <span class="text-2xl sm:text-3xl">🏋️</span>
+                        <span class="text-xl sm:text-3xl">🏋️</span>
                     </h1>
-                    <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
+                    <p class="text-[11px] sm:text-sm text-slate-400 mt-0.5 sm:mt-1 max-w-xl leading-snug sm:leading-relaxed">
                         Gerencie seus alunos, periodize treinos de musculação e acompanhe a evolução e check-ins em tempo real.
                     </p>
                 </div>
 
                 <!-- Ações rápidas do Header -->
-                <div class="flex items-center gap-2.5 shrink-0 self-start md:self-center">
+                <div class="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-2.5 shrink-0 w-full sm:w-auto">
                     <button type="button" onclick="alternarAbaPersonal('montar')"
-                        class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white border border-amber-500/30 hover:border-amber-400 text-xs font-bold transition-all active:scale-95 shadow-md shadow-amber-500/10 cursor-pointer">
-                        <i data-lucide="dumbbell" class="w-4 h-4 text-amber-400"></i>
+                        class="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white border border-amber-500/30 hover:border-amber-400 text-xs font-bold transition-all active:scale-95 shadow-md shadow-amber-500/10 cursor-pointer">
+                        <i data-lucide="dumbbell" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400"></i>
                         <span>Montar Treino</span>
                     </button>
                     <button type="button" onclick="navegarParaSecao('secao-cadastrar-aluno')"
-                        class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs transition-all active:scale-95 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 cursor-pointer">
-                        <i data-lucide="user-plus" class="w-4 h-4"></i>
+                        class="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs transition-all active:scale-95 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 cursor-pointer">
+                        <i data-lucide="user-plus" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                         <span>Convidar Aluno</span>
                     </button>
                 </div>
@@ -1178,7 +1179,7 @@
 
     <!-- Botão Flutuante do Chat no Painel do Personal -->
     <button id="chat-toggle-btn" onclick="toggleChatFlutuante()"
-        class="fixed bottom-24 sm:bottom-28 lg:bottom-6 right-4 sm:right-6 bg-brand-500 hover:bg-brand-400 text-slate-950 p-3 sm:p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-[55] group hover:scale-105 active:scale-95 cursor-pointer"
+        class="fixed bottom-[4.75rem] sm:bottom-28 lg:bottom-6 right-3 sm:right-6 bg-brand-500 hover:bg-brand-400 text-slate-950 p-2.5 sm:p-3.5 rounded-full shadow-2xl transition-all flex items-center justify-center z-[55] group hover:scale-105 active:scale-95 cursor-pointer"
         title="Abrir Chat com Alunos">
         <i data-lucide="message-square" class="w-5 h-5 sm:w-6 sm:h-6"></i>
         <!-- Símbolo de notificação pulsante em vermelho e branco -->
@@ -4378,42 +4379,42 @@
 
     <!-- Barra de Navegação Inferior Fixa para Mobile e Tablet (Estilo Real Fit Hub) -->
     <nav aria-label="Navegação Principal Mobile e Tablet"
-        class="lg:hidden fixed bottom-0 inset-x-0 z-[60] bg-slate-950/95 backdrop-blur-2xl border-t border-slate-800/80 shadow-[0_-8px_30px_rgba(0,0,0,0.8)] px-2 pt-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] pointer-events-auto select-none">
+        class="lg:hidden fixed bottom-0 inset-x-0 z-[60] bg-slate-950/95 backdrop-blur-2xl border-t border-slate-800/80 shadow-[0_-8px_30px_rgba(0,0,0,0.8)] px-2 pt-1.5 pb-[max(0.9rem,calc(env(safe-area-inset-bottom)+0.45rem))] pointer-events-auto select-none">
         <div class="max-w-md md:max-w-lg mx-auto grid grid-cols-5 gap-1 items-center" id="mobile-nav-personal">
             <button type="button" onclick="alternarAbaPersonal('painel')" id="mob-tab-btn-personal-painel"
-                class="group flex flex-col items-center justify-center py-2 px-1 rounded-2xl text-amber-400 bg-amber-500/15 border border-amber-500/30 shadow-[0_0_15px_rgba(251,191,36,0.15)] font-bold transition-all active:scale-95 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-1 transition-transform group-hover:scale-110 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                class="group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl text-amber-400 bg-amber-500/15 border border-amber-500/30 shadow-[0_0_15px_rgba(251,191,36,0.15)] font-bold transition-all active:scale-95 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-0.5 transition-transform group-hover:scale-110 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
                 </svg>
-                <span class="text-[9px] sm:text-[10px] font-bold tracking-tight truncate">Painel</span>
+                <span class="text-[9px] sm:text-[10px] font-bold tracking-tight truncate leading-none mt-0.5">Painel</span>
             </button>
             <button type="button" onclick="alternarAbaPersonal('montar')" id="mob-tab-btn-personal-montar"
-                class="group flex flex-col items-center justify-center py-2 px-1 rounded-2xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-1 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                class="group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-0.5 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/>
                 </svg>
-                <span class="text-[9px] sm:text-[10px] font-medium tracking-tight truncate">Treinos</span>
+                <span class="text-[9px] sm:text-[10px] font-medium tracking-tight truncate leading-none mt-0.5">Treinos</span>
             </button>
             <button type="button" onclick="alternarAbaPersonal('evolucao')" id="mob-tab-btn-personal-evolucao"
-                class="group flex flex-col items-center justify-center py-2 px-1 rounded-2xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-1 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                class="group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-0.5 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>
                 </svg>
-                <span class="text-[9px] sm:text-[10px] font-medium tracking-tight truncate">Evolução</span>
+                <span class="text-[9px] sm:text-[10px] font-medium tracking-tight truncate leading-none mt-0.5">Evolução</span>
             </button>
             <button type="button" onclick="alternarAbaPersonal('medidas')" id="mob-tab-btn-personal-medidas"
-                class="group flex flex-col items-center justify-center py-2 px-1 rounded-2xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-1 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                class="group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-0.5 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0l12.6 12.6z"/><line x1="14.5" x2="18" y1="5.5" y2="9"/><line x1="11.5" x2="13" y1="8.5" y2="10"/><line x1="8.5" x2="12" y1="11.5" y2="15"/><line x1="5.5" x2="7" y1="14.5" y2="16"/>
                 </svg>
-                <span class="text-[9px] sm:text-[10px] font-medium tracking-tight truncate">Medidas</span>
+                <span class="text-[9px] sm:text-[10px] font-medium tracking-tight truncate leading-none mt-0.5">Medidas</span>
             </button>
             <button type="button" onclick="alternarAbaPersonal('gestao')" id="mob-tab-btn-personal-gestao"
-                class="group flex flex-col items-center justify-center py-2 px-1 rounded-2xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-1 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                class="group flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-0.5 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                 </svg>
-                <span class="text-[9px] sm:text-[10px] font-medium tracking-tight truncate">Gestão</span>
+                <span class="text-[9px] sm:text-[10px] font-medium tracking-tight truncate leading-none mt-0.5">Gestão</span>
             </button>
         </div>
     </nav>
