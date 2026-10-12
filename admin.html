@@ -57,11 +57,76 @@
         }
     </script>
     <style>
+        /* Efeito de Vidro Fosco de Alta Fidelidade (Profundidade Tridimensional) */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            background-color: rgba(10, 15, 29, 0.80);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+            transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(245, 158, 11, 0.30);
+        }
+
+        /* Grelha Técnica Discreta de 40px com Máscara Radial */
+        .bg-tech-grid {
+            position: absolute;
+            inset: 0;
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            mask-image: radial-gradient(ellipse 75% 65% at 50% 30%, #000 20%, transparent 85%);
+            -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 30%, #000 20%, transparent 85%);
+        }
+
+        /* Abas Horizontais do Painel */
+        .tab-horizontal-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 7px 5px;
+            border-radius: 11px;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #94a3b8;
+            background: transparent;
+            border: 1px solid transparent;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+            flex: 1 1 0%;
+            min-width: 0;
+            text-align: center;
+        }
+
+        @media (min-width: 640px) {
+            .tab-horizontal-btn {
+                gap: 8px;
+                padding: 9px 16px;
+                border-radius: 14px;
+                font-size: 13px;
+                flex: initial;
+                min-width: auto;
+            }
+        }
+
+        .tab-horizontal-btn:hover {
+            color: #f8fafc;
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .tab-horizontal-btn.ativa {
+            color: #a3e635;
+            background: rgba(132, 204, 22, 0.14);
+            border-color: rgba(132, 204, 22, 0.45);
+            box-shadow: 0 4px 18px -2px rgba(132, 204, 22, 0.22);
         }
 
         /* Estilos para Blocos Colapsáveis (Accordions) */
@@ -164,7 +229,19 @@
 </head>
 
 <body
-    class="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-brand-500 selection:text-white flex flex-col justify-between">
+    class="bg-[#030712] text-slate-100 min-h-screen font-sans selection:bg-brand-500 selection:text-white flex flex-col justify-between relative overflow-x-hidden">
+
+    <!-- Plano de Fundo Dinâmico de Alta Profundidade (Glow Orbs & Grelha Técnica 40px) -->
+    <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden" aria-hidden="true">
+        <!-- Luz 1: Dourada/Âmbar no Topo Esquerdo (Identidade Real Fit Gold) -->
+        <div class="absolute -top-36 -left-36 w-[560px] h-[560px] rounded-full bg-amber-500/10 blur-[130px]"></div>
+        <!-- Luz 2: Esmeralda à Direita (Identidade Nutrição & Saúde) -->
+        <div class="absolute top-1/4 -right-36 w-[600px] h-[600px] rounded-full bg-emerald-500/[0.08] blur-[130px]"></div>
+        <!-- Luz 3: Azul Profunda na Base (Identidade Tech & Performance Navy) -->
+        <div class="absolute -bottom-36 left-1/4 w-[650px] h-[650px] rounded-full bg-blue-600/[0.08] blur-[130px]"></div>
+        <!-- Grelha Técnica Discreta de 40px com Máscara Radial Suave -->
+        <div class="bg-tech-grid absolute inset-0"></div>
+    </div>
 
     <!-- Overlay Escuro para Fechar o Menu ao Clicar Fora (Mobile e Desktop) -->
     <div id="overlay-acoes-rapidas" onclick="fecharMenuAcoesRapidas()"
@@ -172,226 +249,149 @@
         aria-hidden="true"></div>
 
     <!-- Topo do Painel Admin -->
-    <header class="bg-slate-900/90 border-b border-slate-800/80 sticky top-0 z-40 backdrop-blur-md">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 min-h-[4.25rem] py-3 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
-                <a href="index.html" class="inline-flex items-center gap-1.5 sm:gap-2 group h-10 sm:h-12" title="Real Fit Hub">
-                    <img src="assets/icon-192.png" alt="Real Fit Hub" class="h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform rounded-[22%] shadow-lg border border-white/5">
-                <span class="text-xl font-bold tracking-tight text-white whitespace-nowrap font-clash hidden sm:block">
-                    <strong class="font-extrabold">REAL FIT</strong><span class="text-amber-400 font-extrabold"> HUB</span>
+    <header class="bg-[#0a0f1d]/95 border-b border-white/10 sticky top-0 z-40 backdrop-blur-md shadow-lg shadow-black/40">
+        <div class="max-w-6xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
+            <!-- 1. Logo Real Fit Hub (Completa e visível no mobile e desktop) -->
+            <a href="index.html" class="inline-flex items-center gap-2 group shrink-0 min-w-0" title="Real Fit Hub">
+                <img src="assets/icon-192.png" alt="Real Fit Hub" class="h-8 sm:h-10 w-auto object-contain rounded-xl shadow-md border border-white/5 group-hover:scale-105 transition-transform shrink-0">
+                <span class="text-sm sm:text-lg font-bold tracking-tight text-white whitespace-nowrap font-clash shrink-0">
+                    <strong class="font-extrabold text-white">REAL FIT</strong><span class="text-amber-400 font-extrabold"> HUB</span>
                 </span>
             </a>
-                <span
-                    class="hidden sm:flex text-xs bg-lime-500/10 text-lime-400 px-3 py-1 rounded-full border border-lime-500/20 font-semibold items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse shrink-0"></span>
-                    <span class="truncate">Painel do Nutricionista</span>
-                </span>
-            </div>
 
-            <div class="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
+            <!-- 2. Ações do Topo: Linha Única Perfeita (flex-nowrap, alinhamento absoluto, zero quebras) -->
+            <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0 flex-nowrap">
+                <!-- Alternador de Área (Personal) -->
+                <a href="personal.html" id="btn-atalho-personal" title="Ir para o Painel do Personal"
+                    class="hidden items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-amber-500/30 hover:border-amber-500/60 text-amber-400 text-xs font-bold transition-all active:scale-95 shadow-sm shrink-0">
+                    <i data-lucide="dumbbell" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
+                    <span class="text-[11px] sm:text-xs">Personal</span>
+                </a>
 
-                <!-- Menu Suspenso de Ações Rápidas (Toggle JS + Overlay Escuro no Mobile/Desktop) -->
-                <div class="relative" id="dropdown-acoes-rapidas">
-                    <button type="button" id="btn-acoes-rapidas" onclick="toggleMenuAcoesRapidas(event)"
-                        aria-expanded="false" aria-haspopup="true" aria-label="Abrir menu de ações rápidas"
-                        class="flex items-center gap-1.5 sm:gap-2 bg-slate-800/80 hover:bg-slate-700/80 active:scale-95 text-slate-300 hover:text-white text-xs font-semibold px-3 sm:px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all relative cursor-pointer shadow-sm select-none">
-                        <i data-lucide="layers" class="w-4 h-4 text-brand-400"></i>
-                        <span class="hidden sm:inline">Ações Rápidas</span>
-                        <i id="chevron-acoes-rapidas" data-lucide="chevron-down"
-                            class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200"></i>
-
-                        <!-- Badge Geral de Notificação do Cabeçalho -->
-                        <span id="badge-header-counter"
-                            class="hidden absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-black rounded-full border-2 border-slate-900 flex items-center justify-center shadow-lg shadow-red-600/50 animate-pulse">
-                            0
-                        </span>
-                    </button>
-
-                    <!-- Lista Suspensa do Menu de Atalhos -->
-                    <div id="menu-acoes-rapidas-lista"
-                        class="hidden absolute right-0 mt-2 w-72 sm:w-64 max-w-[calc(100vw-1.5rem)] bg-slate-900/98 sm:bg-slate-900 border border-slate-700/90 rounded-2xl shadow-2xl transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
-
-                        <!-- Cabeçalho do Menu Mobile -->
-                        <div
-                            class="flex sm:hidden items-center justify-between px-3.5 py-2.5 border-b border-slate-800/90 bg-slate-950/60">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="layers" class="w-3.5 h-3.5 text-lime-400"></i>
-                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Atalhos do
-                                    Nutricionista</span>
-                            </div>
-                            <button type="button" onclick="fecharMenuAcoesRapidas()"
-                                class="p-1 text-slate-400 hover:text-white rounded-lg active:scale-90 transition-transform"
-                                title="Fechar menu">
-                                <i data-lucide="x" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-
-                        <div class="p-1.5 space-y-1 max-h-[calc(100vh-6rem)] overflow-y-auto overscroll-contain">
-                            <button onclick="navegarParaSecao('secao-cadastrar-aluno')"
-                                class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-lime-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
-                                <div class="flex items-center gap-2.5 truncate">
-                                    <div
-                                        class="w-7 h-7 rounded-lg bg-lime-500/10 flex items-center justify-center shrink-0 border border-lime-500/20">
-                                        <i data-lucide="user-plus" class="w-4 h-4 text-lime-400"></i>
-                                    </div>
-                                    <span class="truncate">Convidar novo aluno</span>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600 shrink-0"></i>
-                            </button>
-
-                            <button onclick="navegarParaSecao('secao-calculadora-macros')"
-                                class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-brand-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
-                                <div class="flex items-center gap-2.5 truncate">
-                                    <div
-                                        class="w-7 h-7 rounded-lg bg-brand-500/10 flex items-center justify-center shrink-0 border border-brand-500/20">
-                                        <i data-lucide="calculator" class="w-4 h-4 text-brand-400"></i>
-                                    </div>
-                                    <span class="truncate">Calculadora de Macros</span>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600 shrink-0"></i>
-                            </button>
-
-                            <button onclick="navegarParaSecao('secao-cadastrar-refeicao')"
-                                class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-lime-300 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
-                                <div class="flex items-center gap-2.5 truncate">
-                                    <div
-                                        class="w-7 h-7 rounded-lg bg-lime-500/10 flex items-center justify-center shrink-0 border border-lime-500/20">
-                                        <i data-lucide="utensils" class="w-4 h-4 text-lime-400"></i>
-                                    </div>
-                                    <span class="truncate">Cadastrar refeição</span>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600 shrink-0"></i>
-                            </button>
-
-                            <button onclick="navegarParaSecao('secao-refeicoes-atuais')"
-                                class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-lime-300 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
-                                <div class="flex items-center gap-2.5 truncate">
-                                    <div
-                                        class="w-7 h-7 rounded-lg bg-lime-500/10 flex items-center justify-center shrink-0 border border-lime-500/20">
-                                        <i data-lucide="list-ordered" class="w-4 h-4 text-lime-400"></i>
-                                    </div>
-                                    <span class="truncate">Refeições atuais</span>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600 shrink-0"></i>
-                            </button>
-
-                            <button onclick="navegarParaSecao('secao-checkins-nutri')"
-                                class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-amber-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
-                                <div class="flex items-center gap-2.5 truncate">
-                                    <div
-                                        class="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20">
-                                        <i data-lucide="clipboard-check" class="w-4 h-4 text-amber-400"></i>
-                                    </div>
-                                    <span class="truncate">Check-ins dos Alunos</span>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600 shrink-0"></i>
-                            </button>
-
-                            <button onclick="navegarParaSecao('secao-agenda-nutri')"
-                                class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-cyan-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
-                                <div class="flex items-center gap-2.5 truncate">
-                                    <div
-                                        class="w-7 h-7 rounded-lg bg-cyan-500/10 flex items-center justify-center shrink-0 border border-cyan-500/20">
-                                        <i data-lucide="calendar" class="w-4 h-4 text-cyan-400"></i>
-                                    </div>
-                                    <span class="truncate">Agenda de Consultas</span>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600 shrink-0"></i>
-                            </button>
-
-                            <button onclick="navegarParaSecao('secao-financeiro-nutri')"
-                                class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-emerald-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
-                                <div class="flex items-center gap-2.5 truncate">
-                                    <div
-                                        class="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20">
-                                        <i data-lucide="badge-dollar-sign" class="w-4 h-4 text-emerald-400"></i>
-                                    </div>
-                                    <span class="truncate">Painel Financeiro</span>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600 shrink-0"></i>
-                            </button>
-
-                            <button onclick="navegarParaSecao('secao-ia-nutri')"
-                                class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
-                                <div class="flex items-center gap-2.5 truncate">
-                                    <div
-                                        class="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20">
-                                        <i data-lucide="bot" class="w-4 h-4 text-purple-400"></i>
-                                    </div>
-                                    <span class="truncate">Assistente Clínico IA</span>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600 shrink-0"></i>
-                            </button>
-
-                            <!-- 1. Chat com Alunos primeiro -->
-                            <button id="btn-header-duvidas" onclick="navegarParaSecao('canal-duvidas')"
-                                class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-lime-400 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
-                                <div class="flex items-center gap-2.5 truncate">
-                                    <div
-                                        class="w-7 h-7 rounded-lg bg-lime-500/10 flex items-center justify-center shrink-0 border border-lime-500/20">
-                                        <i data-lucide="message-square" class="w-4 h-4 text-lime-400"></i>
-                                    </div>
-                                    <span class="truncate">Chat com alunos</span>
-                                </div>
-                                <div class="flex items-center gap-1.5 shrink-0">
-                                    <span id="badge-header-pill"
-                                        class="hidden bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full border border-white shadow-sm shadow-red-600/40 animate-pulse">
-                                        0 nova(s)
-                                    </span>
-                                    <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
-                                </div>
-                            </button>
-
-                            <!-- 2. Fotos dos Alunos depois -->
-                            <button onclick="navegarParaSecao('secao-fotos-alunos')"
-                                class="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-purple-300 hover:bg-slate-800/90 active:bg-slate-800 active:scale-[0.98] transition-all min-h-[44px]">
-                                <div class="flex items-center gap-2.5 truncate">
-                                    <div
-                                        class="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20">
-                                        <i data-lucide="camera" class="w-4 h-4 text-purple-400"></i>
-                                    </div>
-                                    <span class="truncate">Fotos dos Alunos</span>
-                                </div>
-                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600 shrink-0"></i>
-                            </button>
-                        </div>
+                <!-- Perfil Profissional (Nutricionista) -->
+                <button type="button" onclick="abrirModalPerfilProfissionalNutri()" id="btn-perfil-nutri-header" title="Meu Perfil Profissional & CRN"
+                    class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-lime-500/30 hover:border-lime-400/60 text-slate-200 transition-all cursor-pointer group active:scale-95 shadow-sm shrink-0">
+                    <div class="w-6 h-6 rounded-full overflow-hidden bg-slate-800 border border-lime-500/50 shrink-0 flex items-center justify-center">
+                        <img id="header-nutri-avatar-img" src="" alt="Foto" class="w-full h-full object-cover hidden">
+                        <span id="header-nutri-avatar-initials" class="text-[11px] font-black text-lime-400">N</span>
                     </div>
-                </div>
+                    <span id="header-nutri-nome" class="text-[11px] sm:text-xs font-bold text-lime-300 group-hover:text-lime-200 transition-colors whitespace-nowrap">
+                        Nutri
+                    </span>
+                </button>
 
-                <a href="personal.html" id="btn-atalho-personal"
-                    class="hidden items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700/80 transition-all"><i
-                        data-lucide="dumbbell" class="w-4 h-4 text-orange-400"></i><span class="hidden lg:inline">Espaço
-                        do Personal</span></a>
+                <!-- Divisória sutil vertical -->
+                <div class="h-5 w-px bg-slate-800 hidden xs:block"></div>
 
-                <div class="h-6 w-px bg-slate-800"></div>
-
-                <button id="btn-logout" title="Terminar sessão"
-                    class="flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-rose-400 bg-slate-800/50 hover:bg-rose-500/10 px-3 py-2 rounded-xl border border-slate-800 transition-colors">
-                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
-                    <span class="hidden sm:inline">Sair</span>
+                <!-- Botão Sair da Sessão -->
+                <button id="btn-logout" title="Sair da sessão"
+                    class="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl text-slate-400 hover:text-rose-400 bg-slate-900/90 hover:bg-rose-500/10 border border-slate-800 hover:border-rose-500/30 transition-all cursor-pointer text-xs font-semibold shrink-0 active:scale-95 shadow-sm">
+                    <i data-lucide="log-out" class="w-3.5 h-3.5 text-rose-400/90"></i>
+                    <span class="text-[11px] sm:text-xs font-bold">Sair</span>
                 </button>
             </div>
         </div>
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1 w-full">
-        <div
-            class="bg-gradient-to-r from-slate-900/90 to-lime-950/30 p-5 rounded-3xl border border-lime-500/20 shadow-xl">
-            <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
+    <main class="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 flex-1 w-full pb-32 sm:pb-36 lg:pb-12">
+        <div class="bg-gradient-to-r from-[#0a0f1d]/90 via-[#0a0f1d]/75 to-lime-950/30 p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border border-white/10 backdrop-blur-md shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all">
+            <h1 class="text-lg sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
                 Painel do Nutricionista 📋
             </h1>
-            <p class="text-xs sm:text-sm text-slate-400 mt-1">
-                Gerencie alunos, prescreva dietas e acompanhe evolução clínica em um só lugar.
+            <p class="text-[11px] sm:text-sm text-slate-400 mt-0.5 sm:mt-1">
+                Gerencie seus alunos, prescreva dietas e acompanhe a evolução clínica em um só lugar.
             </p>
         </div>
 
-        <!-- RESUMO EXECUTIVO DO PROFISSIONAL (Item 22) -->
-        <div id="container-resumo-nutri"></div>
+        <!-- ------------------------------------------------------------------ -->
+        <!-- BARRA HORIZONTAL COM AS OPÇÕES DO NUTRICIONISTA                    -->
+        <!-- ------------------------------------------------------------------ -->
+        <div class="glass-panel bg-[#0a0f1d]/80 border border-white/10 p-1.5 sm:p-2 rounded-2xl hidden lg:flex items-center gap-2 overflow-x-auto shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] select-none" id="barra-horizontal-opcoes-nutri">
+            <button type="button" onclick="alternarAbaNutri('painel')" id="tab-btn-nutri-painel" class="tab-horizontal-btn ativa">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                <span>Painel do Nutricionista</span>
+            </button>
+            <button type="button" onclick="alternarAbaNutri('montar')" id="tab-btn-nutri-montar" class="tab-horizontal-btn">
+                <i data-lucide="utensils" class="w-4 h-4"></i>
+                <span>Montar & Gerenciar Dieta</span>
+            </button>
+            <button type="button" onclick="alternarAbaNutri('evolucao')" id="tab-btn-nutri-evolucao" class="tab-horizontal-btn">
+                <i data-lucide="camera" class="w-4 h-4"></i>
+                <span>Evolução & Check-ins</span>
+            </button>
+            <button type="button" onclick="alternarAbaNutri('medidas')" id="tab-btn-nutri-medidas" class="tab-horizontal-btn">
+                <i data-lucide="ruler" class="w-4 h-4"></i>
+                <span>Medidas & Antropometria</span>
+            </button>
+            <button type="button" onclick="alternarAbaNutri('gestao')" id="tab-btn-nutri-gestao" class="tab-horizontal-btn">
+                <i data-lucide="badge-dollar-sign" class="w-4 h-4"></i>
+                <span>Financeiro & Agenda</span>
+            </button>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- ABA 1: PAINEL GERAL (RESUMO + TABELA DE ALUNOS + CONVITE)     -->
+        <!-- ============================================================== -->
+        <div id="conteudo-tab-nutri-painel" class="space-y-6">
+            <!-- RESUMO EXECUTIVO DO PROFISSIONAL (Item 22) -->
+            <div id="container-resumo-nutri"></div>
+
+            <!-- SEÇÃO: Lista de Alunos Vinculados (100% Funcional) -->
+            <section id="secao-alunos-vinculados-nutri" class="glass-panel rounded-3xl border border-white/10 shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all p-5 sm:p-6 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-800/80">
+                    <div>
+                        <h2 class="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
+                            <span>Lista de Alunos Vinculados</span>
+                            <span id="badge-total-alunos-tabela" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-lime-500/10 text-lime-400 border border-lime-500/25">
+                                0 alunos
+                            </span>
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Clique em qualquer aluno para carregar o prontuário ou ajustar prescrições nutricionais.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <div class="relative w-48 sm:w-64">
+                            <input type="text" id="busca-aluno-tabela-nutri" placeholder="Buscar aluno por nome ou e-mail..."
+                                oninput="if(typeof filtrarTabelaAlunosNutri === 'function') filtrarTabelaAlunosNutri(this.value)"
+                                class="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-lime-400 transition-colors">
+                            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2.5 pointer-events-none"></i>
+                        </div>
+                        <button type="button" onclick="navegarParaSecao('secao-cadastrar-aluno')"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-lime-500/10 hover:bg-lime-500/20 text-lime-400 border border-lime-500/30 transition-all cursor-pointer">
+                            <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                            <span>Convidar Aluno</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lista em Cards para Mobile (< md) -->
+                <div id="cards-alunos-vinculados-nutri-mobile" class="md:hidden space-y-2"></div>
+
+                <!-- Tabela Completa para Desktop (>= md) -->
+                <div class="hidden md:block overflow-x-auto -mx-2 sm:mx-0">
+                    <table class="w-full text-left border-collapse min-w-[760px]">
+                        <thead>
+                            <tr class="text-[11px] font-bold uppercase tracking-wider text-slate-400 bg-slate-900/60 border-b border-slate-800">
+                                <th class="py-3 px-4 rounded-l-xl">ALUNO</th>
+                                <th class="py-3 px-4">OBJETIVO</th>
+                                <th class="py-3 px-4">PESO ATUAL</th>
+                                <th class="py-3 px-4">PLANO / STATUS</th>
+                                <th class="py-3 px-4">CHECK-IN</th>
+                                <th class="py-3 px-4 text-right rounded-r-xl">AÇÃO</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-alunos-vinculados-nutri" class="divide-y divide-slate-800/60 text-xs">
+                            <!-- Inserido dinamicamente via renderizarTabelaAlunosVinculadosNutri() -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
         <!-- SEÇÃO: Convidar Aluno -->
         <section id="secao-cadastrar-aluno"
-            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+            class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header active p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -450,10 +450,16 @@
                 </div>
             </div>
         </section>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- ABA 2: MONTAR & GERENCIAR DIETA (MACROS + PRESCRIÇÃO + REFEIÇÕES) -->
+        <!-- ============================================================== -->
+        <div id="conteudo-tab-nutri-montar" class="hidden space-y-6">
 
         <!-- SEÇÃO: CALCULADORA AUTOMÁTICA DE MACROS (Accordion) -->
         <section id="secao-calculadora-macros"
-            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+            class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
             <!-- Cabeçalho do Accordion -->
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
@@ -838,7 +844,7 @@
 
         <!-- SEÇÃO: Cadastrar Refeição no Plano do Aluno (Accordion) -->
         <section id="secao-cadastrar-refeicao"
-            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+            class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -871,8 +877,50 @@
                         </div>
                     </button>
                 </div>
+                <!-- Banner de Identificação do Nutricionista Prescritor [Foto, Nome e CRN (se houver)] -->
+                <div id="banner-prescritor-nutri" class="mb-4 p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-3 shadow-lg">
+                    <div class="flex items-center gap-3">
+                        <div class="relative w-10 h-10 rounded-full overflow-hidden bg-slate-800 border border-lime-500/30 shrink-0 flex items-center justify-center">
+                            <img id="prescritor-nutri-foto" src="" alt="Foto" class="w-full h-full object-cover hidden">
+                            <span id="prescritor-nutri-initials" class="text-sm font-black text-lime-400">N</span>
+                        </div>
+                        <div>
+                            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold flex items-center gap-1.5">
+                                <i data-lucide="award" class="w-3 h-3 text-lime-400"></i>Dieta Prescrita por:
+                            </div>
+                            <div class="text-xs sm:text-sm font-bold text-white flex items-center gap-2 flex-wrap">
+                                <span id="prescritor-nutri-nome">Nutricionista</span>
+                                <span id="prescritor-nutri-doc-badge" class="hidden text-[10px] bg-lime-500/10 text-lime-400 border border-lime-500/30 px-2 py-0.5 rounded-full font-bold"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" onclick="abrirModalPerfilProfissionalNutri()" class="text-xs text-lime-400 hover:text-lime-300 font-semibold px-2.5 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors cursor-pointer shrink-0">
+                        Meu Perfil
+                    </button>
+                </div>
 
                 <form id="form-dieta" class="space-y-5">
+                    <!-- Banner Dinâmico de Edição de Refeição -->
+                    <div id="aviso-edicao-refeicao"
+                        class="hidden p-3.5 rounded-2xl bg-lime-500/10 border border-lime-500/30 text-lime-300 flex items-center justify-between gap-3 shadow-lg animate-in fade-in">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div class="w-8 h-8 rounded-xl bg-lime-500/20 text-lime-400 flex items-center justify-center shrink-0">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-xs font-bold text-white flex items-center gap-2">
+                                    <span>Editando Refeição:</span>
+                                    <span id="nome-refeicao-em-edicao" class="text-lime-400 font-extrabold truncate">Café da Manhã</span>
+                                </div>
+                                <p class="text-[11px] text-slate-300">Altere os campos abaixo e clique em Salvar Alterações para atualizar.</p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="cancelarEdicaoRefeicao()"
+                            class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold border border-slate-700 transition-all shrink-0 cursor-pointer">
+                            Cancelar
+                        </button>
+                    </div>
+
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
                             Selecionar Aluno
@@ -959,17 +1007,106 @@
                             </div>
 
                             <!-- Barra de Ações Clínicas: Medidas & Antropometria -->
-                            <div
-                                class="mt-3 pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
-                                <div class="text-[11px] text-slate-400 flex items-center gap-1.5">
-                                    <i data-lucide="ruler" class="w-3.5 h-3.5 text-lime-400"></i>
-                                    <span>Avaliação Antropométrica & Circunferências Corporais</span>
+                            <div class="mt-3 pt-3 border-t border-slate-800/80 space-y-2.5">
+                                <div class="flex flex-wrap items-center justify-between gap-3">
+                                    <div class="text-[11px] text-slate-300 font-bold flex items-center gap-1.5">
+                                        <i data-lucide="ruler" class="w-3.5 h-3.5 text-lime-400"></i>
+                                        <span>Avaliação Antropométrica & Circunferências Corporais</span>
+                                    </div>
+                                    <button type="button" onclick="irParaAbaMedidasNutri()"
+                                        class="px-3.5 py-1.5 rounded-xl bg-lime-500 hover:bg-lime-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md shadow-lime-500/20 transition-all cursor-pointer active:scale-95">
+                                        <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5"></i>
+                                        <span>Registrar / Atualizar Medidas</span>
+                                    </button>
                                 </div>
-                                <button type="button" onclick="abrirModalMedidasProfissional()"
-                                    class="px-3.5 py-1.5 rounded-xl bg-lime-500 hover:bg-lime-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md shadow-lime-500/20 transition-all cursor-pointer active:scale-95">
-                                    <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
-                                    <span>Registrar / Atualizar Medidas</span>
-                                </button>
+
+                                <!-- Chips / Pills de Resumo Antropométrico Imediato -->
+                                <div id="nutri-chips-antropometria" class="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                    <!-- Renderizado dinamicamente via ApexEvolucao.renderChipsAntropometria -->
+                                </div>
+                            </div>
+
+                            <!-- ============================================================== -->
+                            <!-- COMPONENTE DE CONTROLE DE ESCOPO & ASSISTENTE DE IA DE DIETA   -->
+                            <!-- ============================================================== -->
+                            <div id="barra-ia-prescricao-dieta"
+                                class="mt-4 pt-4 border-t border-slate-800/90 bg-[#0d121f] rounded-2xl p-4 sm:p-5 border border-slate-800/90 shadow-2xl space-y-4">
+                                <!-- Cabeçalho do Assistente de IA -->
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-800/80">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-8 h-8 rounded-xl bg-lime-500/15 text-lime-400 border border-lime-500/30 flex items-center justify-center shrink-0 shadow-sm shadow-lime-500/10">
+                                            <i data-lucide="sparkles" class="w-4 h-4 text-lime-400 animate-pulse"></i>
+                                        </div>
+                                        <div>
+                                            <div class="flex items-center gap-2 flex-wrap">
+                                                <h3 class="text-xs sm:text-sm font-bold text-white tracking-tight">
+                                                    Assistente de Prescrição Nutricional por Inteligência Artificial
+                                                </h3>
+                                                <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-lime-500/15 text-lime-400 border border-lime-500/30">
+                                                    IA Dietoterápica
+                                                </span>
+                                            </div>
+                                            <p class="text-[11px] text-slate-400 mt-0.5">
+                                                Prescrição calibrada para peso, altura, IMC e objetivo metabólico do aluno
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 text-[11px] text-slate-400 self-start sm:self-auto">
+                                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                        <span class="font-medium text-emerald-400">Motor Nutricional Ativo</span>
+                                    </div>
+                                </div>
+
+                                <!-- Barra de Controle de Escopo + Foco Metabólico + Botão Gerar -->
+                                <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 items-end">
+                                    <!-- 1. Seletor de Escopo: 'Apenas Esta Refeição' vs 'Plano Completo' -->
+                                    <div class="lg:col-span-5 space-y-1.5">
+                                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                                            <i data-lucide="layers" class="w-3.5 h-3.5 text-lime-400"></i>
+                                            Seletor de Escopo
+                                        </label>
+                                        <div class="grid grid-cols-2 p-1 bg-slate-950/90 border border-slate-800 rounded-xl gap-1">
+                                            <button type="button" onclick="setEscopoIADieta('refeicao')" id="btn-escopo-ia-refeicao"
+                                                class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-lime-500/20 text-lime-300 border border-lime-500/40 shadow-sm">
+                                                <span class="w-2 h-2 rounded-full bg-lime-400 shrink-0" id="dot-escopo-refeicao"></span>
+                                                <span class="truncate">Apenas Esta Refeição</span>
+                                            </button>
+                                            <button type="button" onclick="setEscopoIADieta('plano')" id="btn-escopo-ia-plano"
+                                                class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition-all cursor-pointer border border-transparent">
+                                                <span class="w-2 h-2 rounded-full bg-slate-600 shrink-0" id="dot-escopo-plano"></span>
+                                                <span class="truncate">Plano Completo (Dia Todo)</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- 2. Seletor de Foco Nutricional / Intensidade -->
+                                    <div class="lg:col-span-4 space-y-1.5">
+                                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                                            <i data-lucide="target" class="w-3.5 h-3.5 text-lime-400"></i>
+                                            Foco Nutricional / Objetivo
+                                        </label>
+                                        <div class="relative">
+                                            <select id="select-foco-nutricional-ia"
+                                                class="w-full bg-slate-950/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold text-slate-100 focus:outline-none focus:border-lime-500 transition-all cursor-pointer">
+                                                <option value="Hipertrofia & Ganho Limpo" selected>⚡ Hipertrofia & Ganho Limpo (Superávit)</option>
+                                                <option value="Emagrecimento & Definição">🔥 Emagrecimento & Definição (Déficit Proteico)</option>
+                                                <option value="Manutenção & Recomposição">⚖️ Manutenção & Recomposição (Normocalórica)</option>
+                                                <option value="Alta Performance Esportiva">🚀 Alta Performance & Carga de Glicogênio</option>
+                                                <option value="Low Carb & Densidade">🥑 Low Carb & Controle Glicêmico</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- 3. Botão de Ação: [ ✨ Gerar Sugestão por IA ] -->
+                                    <div class="lg:col-span-3">
+                                        <button type="button" id="btn-gerar-sugestao-ia-dieta" onclick="gerarSugestaoIADieta()"
+                                            class="w-full h-[38px] inline-flex items-center justify-center gap-2 px-4 rounded-xl font-black text-xs bg-gradient-to-r from-lime-400 via-lime-500 to-emerald-500 hover:from-lime-300 hover:to-lime-400 text-slate-950 shadow-lg shadow-lime-500/20 hover:shadow-lime-500/35 border border-lime-300/40 transition-all duration-200 cursor-pointer active:scale-95">
+                                            <i data-lucide="sparkles" class="w-4 h-4 text-slate-950 shrink-0" id="icone-gerar-ia-dieta"></i>
+                                            <span id="texto-gerar-ia-dieta" class="truncate">✨ Gerar Sugestão por IA</span>
+                                            <div id="spinner-gerar-ia-dieta" class="hidden w-4 h-4 border-2 border-slate-950/40 border-t-slate-950 rounded-full animate-spin"></div>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1205,21 +1342,27 @@
                             class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all leading-relaxed"></textarea>
                     </div>
 
-                    <button type="submit" id="btn-submit"
-                        class="w-full bg-brand-600 hover:bg-brand-500 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl transition-all duration-200 shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2 cursor-pointer">
-                        <i data-lucide="check" class="w-4 h-4" id="btn-icon"></i>
-                        <span id="btn-text">Guardar Refeição na Dieta do Aluno</span>
-                        <div id="btn-spinner"
-                            class="hidden w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin">
-                        </div>
-                    </button>
+                    <div class="flex flex-col sm:flex-row items-center gap-3">
+                        <button type="submit" id="btn-submit"
+                            class="flex-1 w-full bg-brand-600 hover:bg-brand-500 active:scale-[0.99] text-white font-bold py-3.5 rounded-xl transition-all duration-200 shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2 cursor-pointer">
+                            <i data-lucide="check" class="w-4 h-4" id="btn-icon"></i>
+                            <span id="btn-text">Guardar Refeição na Dieta do Aluno</span>
+                            <div id="btn-spinner"
+                                class="hidden w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin">
+                            </div>
+                        </button>
+                        <button type="button" id="btn-cancelar-edicao-refeicao" onclick="cancelarEdicaoRefeicao()"
+                            class="hidden w-full sm:w-auto px-5 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs border border-slate-700 transition-all cursor-pointer">
+                            Cancelar Edição
+                        </button>
+                    </div>
                 </form>
             </div>
         </section>
 
         <!-- SEÇÃO: Refeições Atuais do Aluno (Accordion) -->
         <section id="secao-refeicoes-atuais"
-            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+            class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -1242,6 +1385,32 @@
             </div>
 
             <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
+                <!-- Barra de Seleção do Aluno & Ações Rápidas -->
+                <div class="bg-slate-900/70 border border-slate-800 p-4 rounded-2xl mb-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div class="flex-1 max-w-md">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center gap-1.5">
+                            <i data-lucide="user-check" class="w-3.5 h-3.5 text-lime-400"></i>
+                            Visualizar Refeições do Aluno
+                        </label>
+                        <select id="gerenciar-dieta-aluno-select" onchange="sincronizarSelecaoAluno(this.value, 'gerenciar')"
+                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-lime-500">
+                            <option value="" disabled selected>A carregar lista de alunos...</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button type="button" onclick="irParaPrescreverNovaRefeicao()"
+                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-lime-500/10 hover:bg-lime-500/20 text-lime-400 border border-lime-500/30 text-xs font-bold transition-all cursor-pointer">
+                            <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+                            <span>Prescrever Nova Refeição</span>
+                        </button>
+                        <button type="button" onclick="gerarPdfAlunoAdmin()"
+                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition-all cursor-pointer">
+                            <i data-lucide="file-down" class="w-3.5 h-3.5 text-lime-400"></i>
+                            <span>Baixar PDF</span>
+                        </button>
+                    </div>
+                </div>
+
                 <div id="resumo-diario-macros-aluno"
                     class="hidden mb-4 p-3 rounded-2xl bg-slate-900/80 border border-slate-800"></div>
                 <div id="lista-refeicoes-aluno" class="space-y-4">
@@ -1258,10 +1427,16 @@
                 </div>
             </div>
         </section>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- ABA 3: EVOLUÇÃO & CHECK-INS (FOTOS + CHECK-INS SEMANAIS)       -->
+        <!-- ============================================================== -->
+        <div id="conteudo-tab-nutri-evolucao" class="hidden space-y-6">
 
         <!-- SEÇÃO: Fotos de Evolução Corporal dos Alunos (Accordion) -->
         <section id="secao-fotos-alunos"
-            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+            class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -1381,7 +1556,7 @@
 
         <!-- SEÇÃO: Check-ins dos Alunos (Accordion) -->
         <section id="secao-checkins-nutri"
-            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+            class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -1406,11 +1581,21 @@
                 <div id="conteudo-checkins-nutri"></div>
             </div>
         </section>
+        </div>
 
+        <!-- ============================================================== -->
+        <!-- ABA 4: AVALIAÇÃO ANTROPOMÉTRICA & CIRCUNFERÊNCIAS CORPORAIS    -->
+        <!-- ============================================================== -->
+        <div id="conteudo-tab-nutri-medidas" class="hidden space-y-6"></div>
+
+        <!-- ============================================================== -->
+        <!-- ABA 5: GESTÃO & AGENDA & FINANCEIRO & IA                       -->
+        <!-- ============================================================== -->
+        <div id="conteudo-tab-nutri-gestao" class="hidden space-y-6">
 
         <!-- SEÇÃO: Agenda de Consultas & Retornos (Accordion) -->
         <section id="secao-agenda-nutri"
-            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+            class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -1438,7 +1623,7 @@
 
         <!-- SEÇÃO: Painel Financeiro & Planos (Accordion) -->
         <section id="secao-financeiro-nutri"
-            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+            class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -1466,7 +1651,7 @@
 
         <!-- SEÇÃO: Assistente Clínico IA (Accordion) -->
         <section id="secao-ia-nutri"
-            class="glass-panel rounded-3xl border border-slate-800 shadow-xl overflow-hidden scroll-mt-24">
+            class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
             <div onclick="toggleSecaoDashboard(this)"
                 class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
                 <div class="flex items-center gap-3.5 min-w-0 pr-2">
@@ -1491,6 +1676,7 @@
                 <div id="conteudo-ia-nutri"></div>
             </div>
         </section>
+        </div>
 
         <!-- Template Oculto para Geração de PDF no Admin -->
         <div id="area-impressao-pdf-admin" class="hidden"></div>
@@ -1503,7 +1689,7 @@
 
     <!-- Botão Flutuante do Chat no Painel do Nutricionista -->
     <button id="chat-toggle-btn" onclick="toggleChatFlutuante()"
-        class="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 bg-lime-500 hover:bg-lime-400 text-slate-950 p-3.5 sm:p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-50 group hover:scale-105 active:scale-95 cursor-pointer"
+        class="fixed bottom-[72px] sm:bottom-22 lg:bottom-6 right-4 sm:right-6 bg-lime-500 hover:bg-lime-400 text-slate-950 p-3 sm:p-4 rounded-full shadow-2xl transition-all flex items-center justify-center z-[55] group hover:scale-105 active:scale-95 cursor-pointer"
         title="Abrir Chat com Alunos">
         <i data-lucide="message-square" class="w-5 h-5 sm:w-6 sm:h-6"></i>
         <!-- Símbolo de notificação pulsante em vermelho e branco -->
@@ -1513,7 +1699,7 @@
 
     <!-- Janela Deslizante do Chat Flutuante -->
     <div id="chat-window"
-        class="hidden fixed bottom-20 sm:bottom-24 right-3 sm:right-6 w-[calc(100vw-24px)] sm:w-[540px] max-h-[80vh] h-[520px] glass-panel border border-slate-800 rounded-3xl shadow-2xl flex flex-col z-50 overflow-hidden">
+        class="hidden fixed bottom-[76px] sm:bottom-24 right-3 sm:right-6 w-[calc(100vw-24px)] sm:w-[540px] max-h-[80vh] h-[520px] glass-panel border border-slate-800 rounded-3xl shadow-2xl flex flex-col z-[75] overflow-hidden">
         <!-- Topo da Janela -->
         <div class="bg-slate-900/95 p-3.5 flex justify-between items-center border-b border-slate-800">
             <div class="flex items-center gap-2.5">
@@ -1817,6 +2003,980 @@
             win.classList.add('hidden');
         };
 
+        // ==============================================================
+        // CONTROLE DE ESTADO & DIETAS (NUTRIÇÃO)
+        // ==============================================================
+        let escopoIADietaAtiva = 'refeicao'; // 'refeicao' ou 'plano'
+        let refeicaoEmEdicaoId = null;
+
+        // ==============================================================
+        // ALTERNÂNCIA DE ABAS HORIZONTAIS DO NUTRICIONISTA
+        // (5 abas: Painel, Montar Dieta, Evolução, Medidas & Antropometria, Gestão)
+        // ==============================================================
+        window.alternarAbaNutri = function (aba) {
+            if (aba === 'gerenciar') aba = 'montar';
+            const abas = ['painel', 'montar', 'evolucao', 'medidas', 'gestao'];
+            if (!abas.includes(aba)) aba = 'painel';
+
+            abas.forEach(nome => {
+                const btn = document.getElementById('tab-btn-nutri-' + nome);
+                const conteudo = document.getElementById('conteudo-tab-nutri-' + nome);
+                const mobBtn = document.getElementById('mob-tab-btn-nutri-' + nome);
+
+                if (nome === aba) {
+                    if (btn) btn.className = 'tab-horizontal-btn ativa';
+                    if (conteudo) conteudo.classList.remove('hidden');
+                    if (mobBtn) {
+                        mobBtn.className = 'group flex flex-col items-center justify-center py-2 px-1 rounded-2xl text-lime-400 bg-lime-500/15 border border-lime-500/30 shadow-[0_0_15px_rgba(132,204,22,0.15)] font-bold transition-all active:scale-95 cursor-pointer';
+                        const svg = mobBtn.querySelector('svg');
+                        if (svg) {
+                            svg.classList.remove('text-slate-400');
+                            svg.classList.add('text-lime-400');
+                        }
+                    }
+                } else {
+                    if (btn) btn.className = 'tab-horizontal-btn';
+                    if (conteudo) conteudo.classList.add('hidden');
+                    if (mobBtn) {
+                        mobBtn.className = 'group flex flex-col items-center justify-center py-2 px-1 rounded-2xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95 cursor-pointer';
+                        const svg = mobBtn.querySelector('svg');
+                        if (svg) {
+                            svg.classList.remove('text-lime-400');
+                            svg.classList.add('text-slate-400');
+                        }
+                    }
+                }
+            });
+
+            if (window.lucide) {
+                setTimeout(() => lucide.createIcons(), 50);
+            }
+
+            // Sincronizações específicas por aba
+            if (aba === 'painel') {
+                const totalAlunos = (typeof listaAlunosCache !== 'undefined' && listaAlunosCache.length)
+                    ? listaAlunosCache.length
+                    : (typeof perfisAlunosCache !== 'undefined' ? Object.keys(perfisAlunosCache).length : 3);
+                if (window.ApexProfissional && document.getElementById('container-resumo-nutri')) {
+                    ApexProfissional.renderDashboardResumo('container-resumo-nutri', {
+                        alunos: totalAlunos || 3,
+                        checkinsPendentes: 1,
+                        consultasHoje: 2,
+                        pagamentosPendentes: 0
+                    });
+                }
+                if (typeof renderizarTabelaAlunosVinculadosNutri === 'function') {
+                    renderizarTabelaAlunosVinculadosNutri();
+                }
+            } else if (aba === 'montar') {
+                // Abre seções de prescrição e gerenciamento de refeições
+                ['secao-cadastrar-refeicao', 'secao-refeicoes-atuais', 'secao-calculadora-macros'].forEach(id => {
+                    const sec = document.getElementById(id);
+                    if (sec) {
+                        const h = sec.querySelector('.collapse-header');
+                        const c = sec.querySelector('.collapse-content');
+                        if (h && (id === 'secao-cadastrar-refeicao' || id === 'secao-refeicoes-atuais')) h.classList.add('active');
+                        if (c && (id === 'secao-cadastrar-refeicao' || id === 'secao-refeicoes-atuais')) c.classList.add('expanded');
+                    }
+                });
+                const selDieta = document.getElementById('aluno-select');
+                const selGerenciar = document.getElementById('gerenciar-dieta-aluno-select');
+                if (selDieta && (!selDieta.value || selDieta.value === '') && selDieta.options.length > 1) {
+                    for (let i = 0; i < selDieta.options.length; i++) {
+                        if (selDieta.options[i].value && !selDieta.options[i].disabled) {
+                            selDieta.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+                if (selGerenciar && selDieta && selDieta.value && selGerenciar.value !== selDieta.value) {
+                    selGerenciar.value = selDieta.value;
+                }
+                const idAtivo = selDieta?.value || selGerenciar?.value;
+                if (idAtivo) {
+                    if (typeof atualizarCardAlunoClinico === 'function') atualizarCardAlunoClinico(idAtivo);
+                    if (typeof carregarRefeicoesAlunoAdmin === 'function') carregarRefeicoesAlunoAdmin(idAtivo);
+                }
+            } else if (aba === 'evolucao') {
+                ['secao-fotos-alunos', 'secao-checkins-nutri'].forEach(id => {
+                    const sec = document.getElementById(id);
+                    if (sec) {
+                        const h = sec.querySelector('.collapse-header');
+                        const c = sec.querySelector('.collapse-content');
+                        if (h) h.classList.add('active');
+                        if (c) c.classList.add('expanded');
+                    }
+                });
+                const selFotos = document.getElementById('fotos-aluno-select');
+                const selDieta = document.getElementById('aluno-select');
+                if (selFotos && selDieta && selDieta.value && !selFotos.value) {
+                    selFotos.value = selDieta.value;
+                }
+                const alunoId = (selFotos && selFotos.value) ? selFotos.value : (selDieta ? selDieta.value : null);
+                if (typeof renderizarSecaoCheckinsNutri === 'function') {
+                    renderizarSecaoCheckinsNutri(alunoId);
+                }
+                if (typeof carregarFotosAlunoSelecionado === 'function') {
+                    carregarFotosAlunoSelecionado();
+                }
+            } else if (aba === 'medidas') {
+                const selAluno = document.getElementById('aluno-select') || document.getElementById('gerenciar-dieta-aluno-select') || document.getElementById('fotos-aluno-select') || document.getElementById('calc-aluno-select');
+                let idAtivo = selAluno?.value;
+                if (!idAtivo && window.listaAlunosCache && window.listaAlunosCache.length > 0) {
+                    idAtivo = window.listaAlunosCache[0].id;
+                    if (selAluno) selAluno.value = idAtivo;
+                }
+                if (window.ApexEvolucao) {
+                    ApexEvolucao.renderAbaMedidasProfissional('conteudo-tab-nutri-medidas', idAtivo, {
+                        tipo: 'nutricionista',
+                        profissionalNome: window.nomeProfissionalLogado || 'Nutricionista'
+                    });
+                }
+            } else if (aba === 'gestao') {
+                ['secao-agenda-nutri', 'secao-financeiro-nutri', 'secao-ia-nutri'].forEach(id => {
+                    const sec = document.getElementById(id);
+                    if (sec) {
+                        const h = sec.querySelector('.collapse-header');
+                        const c = sec.querySelector('.collapse-content');
+                        if (h) h.classList.add('active');
+                        if (c) c.classList.add('expanded');
+                    }
+                });
+                if (typeof renderizarSecaoAgendaNutri === 'function') renderizarSecaoAgendaNutri();
+                if (typeof renderizarSecaoFinanceiroNutri === 'function') renderizarSecaoFinanceiroNutri();
+                if (typeof renderizarSecaoIANutri === 'function') renderizarSecaoIANutri();
+            }
+        };
+
+        window.irParaAbaMedidasNutri = function () {
+            const selAluno = document.getElementById('aluno-select') || document.getElementById('gerenciar-dieta-aluno-select') || document.getElementById('fotos-aluno-select') || document.getElementById('calc-aluno-select');
+            let alunoId = selAluno?.value;
+            if (!alunoId && window.listaAlunosCache && window.listaAlunosCache.length > 0) {
+                alunoId = window.listaAlunosCache[0].id;
+                if (selAluno) selAluno.value = alunoId;
+            }
+            if (!alunoId) {
+                if (window.showToast) {
+                    showToast('Selecione um Aluno', 'Escolha um aluno no menu superior antes de registrar ou visualizar medidas.', 'warning');
+                }
+                return;
+            }
+            alternarAbaNutri('medidas');
+        };
+
+        // ==============================================================
+        // TABELA DE ALUNOS VINCULADOS (100% FUNCIONAL + AÇÃO DIETA / TREINO)
+        // ==============================================================
+        window.filtroTabelaNutriAtual = '';
+
+        window.filtrarTabelaAlunosNutri = function (termo) {
+            window.filtroTabelaNutriAtual = (termo || '').toLowerCase().trim();
+            window.renderizarTabelaAlunosVinculadosNutri();
+        };
+
+        window.renderizarTabelaAlunosVinculadosNutri = function () {
+            const tbody = document.getElementById('tbody-alunos-vinculados-nutri');
+            if (!tbody) return;
+
+            const badgeTotal = document.getElementById('badge-total-alunos-tabela');
+            const termo = (window.filtroTabelaNutriAtual || '').toLowerCase().trim();
+
+            const todosAlunos = (typeof listaAlunosCache !== 'undefined' && Array.isArray(listaAlunosCache))
+                ? listaAlunosCache
+                : [];
+
+            if (badgeTotal) {
+                badgeTotal.textContent = `${todosAlunos.length} aluno${todosAlunos.length === 1 ? '' : 's'}`;
+            }
+
+            if (todosAlunos.length === 0) {
+                tbody.innerHTML = `
+                    <tr class="border-b border-slate-800">
+                        <td colspan="6" class="py-12 px-4 text-center">
+                            <div class="flex flex-col items-center justify-center gap-3">
+                                <div class="w-12 h-12 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center shadow-inner">
+                                    <i data-lucide="users" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-bold text-slate-200">Nenhum aluno vinculado no momento</div>
+                                    <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+                                        Seus alunos cadastrados aparecerão aqui com prontuário clínico e atalho direto para prescrição de dieta.
+                                    </p>
+                                </div>
+                                <button type="button" onclick="navegarParaSecao('secao-cadastrar-aluno')"
+                                    class="mt-1 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-lime-500 hover:bg-lime-400 text-slate-950 transition-all cursor-pointer shadow-md active:scale-95">
+                                    <i data-lucide="user-plus" class="w-4 h-4"></i>
+                                    <span>Convidar Primeiro Aluno</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                if (window.lucide) lucide.createIcons();
+                return;
+            }
+
+            // Obter pedidos de planos ativos para vincular aos alunos
+            let pedidosNutri = [];
+            try {
+                const todosPedidos = JSON.parse(localStorage.getItem('rfh_pedidos_planos') || '[]');
+                pedidosNutri = todosPedidos.filter(p => p.tipo === 'nutri');
+            } catch (e) { }
+
+            // Filtragem por busca
+            let listaFiltrada = todosAlunos;
+            if (termo) {
+                listaFiltrada = todosAlunos.filter(aluno => {
+                    const nome = (aluno.nome || '').toLowerCase();
+                    const email = (aluno.email || '').toLowerCase();
+                    const objetivo = (aluno.objetivo || '').toLowerCase();
+                    return nome.includes(termo) || email.includes(termo) || objetivo.includes(termo);
+                });
+            }
+
+            if (listaFiltrada.length === 0) {
+                tbody.innerHTML = `
+                    <tr class="border-b border-slate-800">
+                        <td colspan="6" class="py-8 px-4 text-center text-slate-400 text-xs">
+                            <i data-lucide="search-x" class="w-6 h-6 text-slate-500 mx-auto mb-2"></i>
+                            Nenhum aluno encontrado para "<strong>${esc(termo)}</strong>".
+                        </td>
+                    </tr>
+                `;
+                const mobContainer = document.getElementById('cards-alunos-vinculados-nutri-mobile');
+                if (mobContainer) {
+                    mobContainer.innerHTML = `
+                        <div class="glass-panel p-6 rounded-2xl border border-slate-800 text-center text-slate-400 text-xs">
+                            <i data-lucide="search-x" class="w-6 h-6 text-slate-500 mx-auto mb-1.5"></i>
+                            Nenhum aluno encontrado para "<strong>${esc(termo)}</strong>".
+                        </div>
+                    `;
+                }
+                if (window.lucide) lucide.createIcons();
+                return;
+            }
+
+            tbody.innerHTML = listaFiltrada.map(aluno => {
+                const perfil = (typeof perfisAlunosCache !== 'undefined' && perfisAlunosCache[aluno.id]) ? perfisAlunosCache[aluno.id] : {};
+                const fotoFinal = aluno.foto_perfil || perfil.foto_perfil || ('https://api.dicebear.com/7.x/initials/svg?seed=' + encodeURIComponent(aluno.nome || 'Aluno'));
+                const pesoFinal = aluno.peso ? `${aluno.peso} kg` : (perfil.peso ? `${perfil.peso} kg` : '--');
+                const objetivoFinal = aluno.objetivo || perfil.objetivo || 'Em acompanhamento nutricional';
+
+                // Localiza plano contratado pelo aluno se houver
+                const pedidoAtivo = pedidosNutri.find(p => p.alunoId === aluno.id || p.alunoEmail === aluno.email);
+                let planoTexto = 'SEM PLANO ATIVO';
+                let planoClasse = 'text-slate-400 bg-slate-800/80 border-slate-700';
+
+                if (pedidoAtivo) {
+                    if (pedidoAtivo.status === 'aceito') {
+                        planoTexto = (pedidoAtivo.planoNome || 'PLANO NUTRI').toUpperCase();
+                        planoClasse = 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30';
+                    } else if (pedidoAtivo.status === 'pendente') {
+                        planoTexto = `${(pedidoAtivo.planoNome || 'PLANO').toUpperCase()} (SOLICITADO)`;
+                        planoClasse = 'text-amber-400 bg-amber-500/10 border-amber-500/30';
+                    }
+                }
+
+                const checkinBadge = {
+                    texto: 'EM DIA',
+                    classe: 'text-slate-200 bg-slate-800/90 border-slate-700'
+                };
+
+                return `
+                <tr class="hover:bg-slate-900/60 transition-colors group cursor-pointer border-b border-slate-800/60" onclick="if(!event.target.closest('button')) irParaMontarDietaAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')">
+                    <!-- ALUNO -->
+                    <td class="py-3.5 px-4">
+                        <div class="flex items-center gap-3">
+                            <img src="${esc(fotoFinal)}" alt="${esc(aluno.nome)}"
+                                class="w-10 h-10 rounded-full object-cover border border-slate-700/80 shadow-md shrink-0 bg-slate-800"
+                                onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(aluno.nome)}'">
+                            <div class="min-w-0">
+                                <div class="font-bold text-slate-100 text-sm group-hover:text-lime-400 transition-colors truncate">
+                                    ${esc(aluno.nome || 'Aluno')}
+                                </div>
+                                <div class="text-[11px] text-slate-400 truncate">
+                                    ${esc(aluno.email || '')}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- OBJETIVO -->
+                    <td class="py-3.5 px-4 text-slate-300 font-medium max-w-[200px] truncate" title="${esc(objetivoFinal)}">
+                        ${esc(objetivoFinal)}
+                    </td>
+
+                    <!-- PESO ATUAL -->
+                    <td class="py-3.5 px-4 font-bold text-slate-100 whitespace-nowrap">
+                        ${esc(pesoFinal)}
+                    </td>
+
+                    <!-- PLANO / STATUS -->
+                    <td class="py-3.5 px-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase border ${planoClasse}">
+                            ${esc(planoTexto)}
+                        </span>
+                    </td>
+
+                    <!-- CHECK-IN -->
+                    <td class="py-3.5 px-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase border ${checkinBadge.classe}">
+                            ${esc(checkinBadge.texto)}
+                        </span>
+                    </td>
+
+                    <!-- AÇÃO (DIETA e TREINO) -->
+                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                        <div class="flex items-center justify-end gap-2">
+                            <button type="button"
+                                onclick="event.stopPropagation(); irParaMontarDietaAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')"
+                                title="Montar e prescrever dieta para ${esc(aluno.nome)}"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-lime-500/15 hover:bg-lime-500/25 text-lime-400 hover:text-lime-300 border border-lime-500/30 hover:border-lime-500/50 transition-all cursor-pointer shadow-sm active:scale-95">
+                                <i data-lucide="utensils" class="w-3.5 h-3.5"></i>
+                                <span>DIETA</span>
+                            </button>
+                            <button type="button"
+                                onclick="event.stopPropagation(); irParaMontarTreinoAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')"
+                                title="Ir para montagem de treino de ${esc(aluno.nome)}"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/15 hover:bg-amber-500/25 text-amber-400 hover:text-amber-300 border border-amber-500/30 hover:border-amber-500/50 transition-all cursor-pointer shadow-sm active:scale-95">
+                                <i data-lucide="dumbbell" class="w-3.5 h-3.5"></i>
+                                <span>TREINO</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+
+            const cardsContainerNutri = document.getElementById('cards-alunos-vinculados-nutri-mobile');
+            if (cardsContainerNutri) {
+                cardsContainerNutri.innerHTML = listaFiltrada.map(aluno => {
+                    const perfil = (typeof perfisAlunosCache !== 'undefined' && perfisAlunosCache[aluno.id]) ? perfisAlunosCache[aluno.id] : {};
+                    const fotoFinal = aluno.foto_perfil || perfil.foto_perfil || ('https://api.dicebear.com/7.x/initials/svg?seed=' + encodeURIComponent(aluno.nome || 'Aluno'));
+                    const pesoFinal = aluno.peso ? `${aluno.peso} kg` : (perfil.peso ? `${perfil.peso} kg` : '--');
+                    const objetivoFinal = aluno.objetivo || perfil.objetivo || 'Em acompanhamento nutricional';
+
+                    const pedidoAtivo = pedidosNutri.find(p => p.alunoId === aluno.id || p.alunoEmail === aluno.email);
+                    let planoTexto = 'SEM PLANO ATIVO';
+                    if (pedidoAtivo) {
+                        if (pedidoAtivo.status === 'aceito') {
+                            planoTexto = (pedidoAtivo.planoNome || 'PLANO NUTRI').toUpperCase();
+                        } else if (pedidoAtivo.status === 'pendente') {
+                            planoTexto = `${(pedidoAtivo.planoNome || 'PLANO').toUpperCase()} (SOLICITADO)`;
+                        }
+                    }
+
+                    return `
+                    <div class="glass-panel p-3 rounded-2xl border border-slate-800/90 bg-slate-900/60 hover:border-lime-500/30 transition-all flex flex-col gap-2.5 shadow-sm active:scale-[0.99] cursor-pointer" onclick="if(!event.target.closest('button')) irParaMontarDietaAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <img src="${esc(fotoFinal)}" alt="${esc(aluno.nome)}"
+                                    class="w-9 h-9 rounded-full object-cover border border-slate-700/80 shadow-md shrink-0 bg-slate-800"
+                                    onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(aluno.nome)}'">
+                                <div class="min-w-0">
+                                    <div class="font-bold text-slate-100 text-xs truncate">${esc(aluno.nome || 'Aluno')}</div>
+                                    <div class="text-[10px] text-slate-400 truncate">${esc(objetivoFinal)} • <strong class="text-slate-300">${esc(pesoFinal)}</strong></div>
+                                </div>
+                            </div>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider uppercase border shrink-0 text-slate-200 bg-slate-800/90 border-slate-700">
+                                EM DIA
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-800/60 gap-2">
+                            <span class="text-[9px] font-bold uppercase tracking-wider truncate text-slate-400 max-w-[130px]">
+                                ${esc(planoTexto)}
+                            </span>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <button type="button"
+                                    onclick="event.stopPropagation(); irParaMontarDietaAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')"
+                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-lime-500/15 text-lime-400 border border-lime-500/30 cursor-pointer active:scale-95">
+                                    <i data-lucide="utensils" class="w-3 h-3"></i> Dieta
+                                </button>
+                                <button type="button"
+                                    onclick="event.stopPropagation(); irParaMontarTreinoAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')"
+                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 cursor-pointer active:scale-95">
+                                    <i data-lucide="dumbbell" class="w-3 h-3"></i> Treino
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+            }
+
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        };
+
+        // Redirecionamento 100% funcional para MONTAR & GERENCIAR DIETA do aluno
+        window.irParaMontarDietaAluno = function (alunoId, alunoNome) {
+            if (window.alternarAbaNutri) {
+                window.alternarAbaNutri('montar');
+            }
+
+            const selDieta = document.getElementById('aluno-select');
+            const selGerenciar = document.getElementById('gerenciar-dieta-aluno-select');
+            const selCalc = document.getElementById('calc-aluno-select');
+            const selFotos = document.getElementById('fotos-aluno-select');
+
+            if (alunoId && !alunoId.startsWith('mock-')) {
+                [selDieta, selGerenciar, selCalc, selFotos].forEach(sel => {
+                    if (sel) {
+                        let opt = sel.querySelector(`option[value="${alunoId}"]`);
+                        if (!opt && alunoNome) {
+                            opt = document.createElement('option');
+                            opt.value = alunoId;
+                            opt.textContent = alunoNome;
+                            sel.appendChild(opt);
+                        }
+                        sel.value = alunoId;
+                    }
+                });
+
+                if (typeof sincronizarSelecaoAluno === 'function') {
+                    sincronizarSelecaoAluno(alunoId, 'dieta');
+                }
+            }
+
+            const secPrescricao = document.getElementById('secao-cadastrar-refeicao');
+            if (secPrescricao) {
+                const header = secPrescricao.querySelector('.collapse-header');
+                const content = secPrescricao.querySelector('.collapse-content');
+                if (header) header.classList.add('active');
+                if (content) content.classList.add('expanded');
+                setTimeout(() => {
+                    secPrescricao.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    secPrescricao.classList.add('secao-destaque');
+                    setTimeout(() => secPrescricao.classList.remove('secao-destaque'), 1800);
+                    const elNome = document.getElementById('refeicao-nome');
+                    if (elNome) elNome.focus();
+                }, 150);
+            }
+
+            const nomeExibicao = alunoNome || (alunoId ? 'Aluno' : 'Aluno selecionado');
+            if (typeof showToast === 'function') {
+                showToast('Aluno Selecionado! 🥗', `Prontuário de ${nomeExibicao} carregado. Pronto para prescrever dieta.`, 'success');
+            }
+        };
+
+        // Redirecionamento para o espaço do personal para montar treino
+        window.irParaMontarTreinoAluno = function (alunoId, alunoNome) {
+            if (alunoId && !alunoId.startsWith('mock-')) {
+                window.location.href = `personal.html?aluno_id=${encodeURIComponent(alunoId)}&acao=treino`;
+            } else {
+                window.location.href = 'personal.html#secao-cadastrar-treino';
+            }
+        };
+
+        // Atalho para prescrever nova refeição a partir da lista
+        window.irParaPrescreverNovaRefeicao = function () {
+            if (typeof cancelarEdicaoRefeicao === 'function') {
+                cancelarEdicaoRefeicao();
+            }
+            const sec = document.getElementById('secao-cadastrar-refeicao');
+            if (sec) {
+                const h = sec.querySelector('.collapse-header');
+                const c = sec.querySelector('.collapse-content');
+                if (h) h.classList.add('active');
+                if (c) c.classList.add('expanded');
+                sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const elNome = document.getElementById('refeicao-nome');
+                if (elNome) elNome.focus();
+            }
+        };
+
+        // Controle do Toggle de Escopo da IA de Dieta
+        window.setEscopoIADieta = function (escopo) {
+            escopoIADietaAtiva = escopo === 'plano' ? 'plano' : 'refeicao';
+
+            const btnRefeicao = document.getElementById('btn-escopo-ia-refeicao');
+            const btnPlano = document.getElementById('btn-escopo-ia-plano');
+            const dotRefeicao = document.getElementById('dot-escopo-refeicao');
+            const dotPlano = document.getElementById('dot-escopo-plano');
+
+            if (escopoIADietaAtiva === 'refeicao') {
+                if (btnRefeicao) {
+                    btnRefeicao.className = 'flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-lime-500/20 text-lime-300 border border-lime-500/40 shadow-sm';
+                }
+                if (btnPlano) {
+                    btnPlano.className = 'flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition-all cursor-pointer border border-transparent';
+                }
+                if (dotRefeicao) dotRefeicao.className = 'w-2 h-2 rounded-full bg-lime-400 shrink-0';
+                if (dotPlano) dotPlano.className = 'w-2 h-2 rounded-full bg-slate-600 shrink-0';
+            } else {
+                if (btnPlano) {
+                    btnPlano.className = 'flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-lime-500/20 text-lime-300 border border-lime-500/40 shadow-sm';
+                }
+                if (btnRefeicao) {
+                    btnRefeicao.className = 'flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition-all cursor-pointer border border-transparent';
+                }
+                if (dotPlano) dotPlano.className = 'w-2 h-2 rounded-full bg-lime-400 shrink-0';
+                if (dotRefeicao) dotRefeicao.className = 'w-2 h-2 rounded-full bg-slate-600 shrink-0';
+            }
+        };
+
+        // ==============================================================
+        // BANCO DE DADOS CLÍNICO PARA SUGESTÃO DE DIETAS POR IA
+        // ==============================================================
+        const BANCO_DIETAS_IA = {
+            'Hipertrofia & Ganho Limpo': {
+                refeicoes: [
+                    {
+                        nome: 'Café da Manhã Anabólico',
+                        horario: '07:30',
+                        alimentosBase: (peso) => [
+                            `• Ovos inteiros mexidos (${Math.min(5, Math.max(3, Math.round(peso / 22)))} unidades) ➔ P: 24g | G: 18g | 260 kcal`,
+                            `• Aveia em flocos finos (${Math.round(peso * 0.8)}g) com canela em pó ➔ C: 42g | P: 9g | 230 kcal`,
+                            `• Banana prata média (1 unidade / ~90g) fatiada ➔ C: 23g | 90 kcal`,
+                            `• Pasta de amendoim integral (${Math.round(peso * 0.25)}g) ➔ G: 10g | P: 5g | 120 kcal`,
+                            `• Café preto sem açúcar (200ml) ➔ 0 kcal`
+                        ],
+                        substituicoes: '• Ovos ➔ Whey Protein isolado (30g) batido com água ou leite vegetal.\n• Aveia ➔ Farinha de arroz integral ou tapioca (60g).\n• Banana ➔ Morangos frescos (150g) ou maçã média.'
+                    },
+                    {
+                        nome: 'Almoço Construtor',
+                        horario: '12:30',
+                        alimentosBase: (peso) => [
+                            `• Arroz branco ou integral cozido (${Math.round(peso * 2.2)}g) ➔ C: 48g | 215 kcal`,
+                            `• Feijão carioca cozido (concha média / ~120g) ➔ C: 16g | P: 6g | 92 kcal`,
+                            `• Peito de frango grelhado ou filé de tilápia (${Math.round(peso * 2.0)}g) ➔ P: 46g | G: 4g | 235 kcal`,
+                            `• Salada verde à vontade (rúcula, alface e espinafre) ➔ Fibras & micronutrientes`,
+                            `• Azeite de oliva extravirgem (1 colher de sobremesa / 8ml) ➔ G: 7g | 65 kcal`
+                        ],
+                        substituicoes: '• Peito de frango ➔ Patinho moído magro ou filé mignon (160g).\n• Arroz + Feijão ➔ Mandioca cozida (180g) ou batata-doce assada (220g).\n• Azeite ➔ Abacate picado (40g).'
+                    },
+                    {
+                        nome: 'Lanche Pré/Pós-Treino Energético',
+                        horario: '16:00',
+                        alimentosBase: (peso) => [
+                            `• Pão 100% integral (2 fatias / ~50g) ➔ C: 22g | P: 4g | 110 kcal`,
+                            `• Queijo cottage ou ricota fresca (60g) ➔ P: 8g | G: 2g | 60 kcal`,
+                            `• Peito de frango desfiado (${Math.round(peso * 1.0)}g) ➔ P: 23g | 115 kcal`,
+                            `• Suco de uva integral sem açúcar (150ml) ➔ C: 22g | 90 kcal`
+                        ],
+                        substituicoes: '• Sanduíche ➔ Crepioca (1 ovo + 30g goma tapioca + 80g frango desfiado).\n• Suco de uva ➔ Fruta in natura (laranja com bagaço ou mamão papaia).'
+                    },
+                    {
+                        nome: 'Jantar Recuperador',
+                        horario: '20:00',
+                        alimentosBase: (peso) => [
+                            `• Batata inglesa ou doce assada (${Math.round(peso * 2.0)}g) ➔ C: 36g | 150 kcal`,
+                            `• Carne vermelha magra (patinho/alcatra) ou salmão (${Math.round(peso * 1.8)}g) ➔ P: 42g | G: 8g | 240 kcal`,
+                            `• Mix de legumes no vapor (brócolis, cenoura e abobrinha / 150g) ➔ C: 8g | 40 kcal`,
+                            `• Azeite extravirgem (5ml) ➔ G: 4.5g | 42 kcal`
+                        ],
+                        substituicoes: '• Batata ➔ Abóbora cabotiá assada (250g) ou arroz parboilizado (140g).\n• Carne vermelha ➔ Omelete de 3 ovos com legumes ou filé de atum.'
+                    }
+                ]
+            },
+            'Emagrecimento & Definição': {
+                refeicoes: [
+                    {
+                        nome: 'Café da Manhã Sacietogênico',
+                        horario: '08:00',
+                        alimentosBase: (peso) => [
+                            `• Ovos inteiros mexidos (2 unidades) + 1 clara ➔ P: 18g | G: 10g | 170 kcal`,
+                            `• Farelo de aveia (${Math.round(peso * 0.35)}g) ➔ C: 12g | P: 4g | 75 kcal`,
+                            `• Morangos frescos picados (120g) ➔ C: 9g | 40 kcal`,
+                            `• Chá verde com gengibre ou café sem açúcar (200ml) ➔ 0 kcal`
+                        ],
+                        substituicoes: '• Ovos ➔ Iogurte grego zero gordura (140g) + 1 dose de Whey Protein (25g).\n• Morango ➔ Mirtilos (80g) ou melão picado (150g).\n• Farelo de aveia ➔ Sementes de chia (15g).'
+                    },
+                    {
+                        nome: 'Almoço Termogênico & Fibras',
+                        horario: '12:30',
+                        alimentosBase: (peso) => [
+                            `• Peito de frango grelhado ou filé de pescada (${Math.round(peso * 2.2)}g) ➔ P: 48g | G: 3g | 230 kcal`,
+                            `• Arroz integral cozido (${Math.round(peso * 1.2)}g) ➔ C: 26g | 120 kcal`,
+                            `• Prato farto de salada crua variada com folhas escuras e pepino ➔ Fibras sacietógenas`,
+                            `• Legumes cozidos (brócolis e couve-flor / 150g) ➔ C: 7g | P: 3g | 45 kcal`,
+                            `• Azeite extravirgem (1 colher de chá / 5ml) ➔ G: 4.5g | 42 kcal`
+                        ],
+                        substituicoes: '• Peito de frango ➔ Lombo suíno magro grelhado (160g) ou patinho moído.\n• Arroz integral ➔ Batata-doce cozida (130g) ou abóbora assada (200g).'
+                    },
+                    {
+                        nome: 'Lanche da Tarde Proteico & Leve',
+                        horario: '16:30',
+                        alimentosBase: (peso) => [
+                            `• Whey Protein concentrado/isolado (1 scoop / 30g) diluído em água ➔ P: 24g | 120 kcal`,
+                            `• Castanhas-do-pará (2 unidades / 8g) ➔ G: 5g | 50 kcal`,
+                            `• Maçã pequena com casca (1 unidade) ➔ C: 15g | 60 kcal`
+                        ],
+                        substituicoes: '• Whey Protein ➔ Iogurte desnatado natural (170g) + 1 colher de pasta de amendoim em pó.\n• Castanhas ➔ Nozes (3 metades) ou amêndoas torradas (10 unidades).'
+                    },
+                    {
+                        nome: 'Jantar Cetogênico / Low Carb Noturno',
+                        horario: '19:45',
+                        alimentosBase: (peso) => [
+                            `• Sobrecoxa de frango sem pele ou filé mignon suíno (${Math.round(peso * 2.0)}g) ➔ P: 42g | G: 6g | 225 kcal`,
+                            `• Abobrinha e berinjela grelhadas no azeite com alho (150g) ➔ C: 6g | 45 kcal`,
+                            `• Salada de folhas verdes à vontade com raspas de limão e azeite (5ml) ➔ G: 4.5g | 42 kcal`
+                        ],
+                        substituicoes: '• Proteína ➔ Omelete de 3 ovos com cogumelos shimeji ou filé de atum selado.\n• Legumes ➔ Purê de couve-flor com açafrão ou espinafre refogado.'
+                    }
+                ]
+            },
+            'Manutenção & Recomposição': {
+                refeicoes: [
+                    {
+                        nome: 'Café da Manhã Balanceado',
+                        horario: '08:00',
+                        alimentosBase: (peso) => [
+                            `• Ovos mexidos (${Math.min(4, Math.max(2, Math.round(peso / 25)))} unidades) ➔ P: 18g | G: 12g | 190 kcal`,
+                            `• Pão integral ou tapioca (2 fatias / 50g) ➔ C: 24g | P: 4g | 120 kcal`,
+                            `• Mamão papaia (1/2 unidade / 140g) com sementes de chia (10g) ➔ C: 15g | 80 kcal`,
+                            `• Café ou chá sem açúcar ➔ 0 kcal`
+                        ],
+                        substituicoes: '• Ovos ➔ Queijo minas frescal (70g) grelhado.\n• Pão ➔ Aveia em flocos (40g) cozida com água e canela.\n• Mamão ➔ Kiwi (2 unidades) ou maçã.'
+                    },
+                    {
+                        nome: 'Almoço Mediterrâneo Equilibrado',
+                        horario: '12:30',
+                        alimentosBase: (peso) => [
+                            `• Arroz branco ou integral (${Math.round(peso * 1.6)}g) ➔ C: 38g | 170 kcal`,
+                            `• Feijão preto ou carioca (1 concha média / 100g) ➔ C: 14g | P: 5g | 75 kcal`,
+                            `• Peito de frango, carne magra ou peixe (${Math.round(peso * 1.8)}g) ➔ P: 40g | G: 4g | 200 kcal`,
+                            `• Salada colorida crua (cenoura, beterraba, tomate e folhas) ➔ Fibras`,
+                            `• Azeite extravirgem (1 colher de sobremesa / 8ml) ➔ G: 7g | 65 kcal`
+                        ],
+                        substituicoes: '• Arroz + Feijão ➔ Batata inglesa cozida (200g) ou massa integral com molho de tomate caseiro.\n• Frango ➔ Filé de salmão (140g) ou lombo suíno.'
+                    },
+                    {
+                        nome: 'Lanche Intermediário Funcional',
+                        horario: '16:30',
+                        alimentosBase: (peso) => [
+                            `• Iogurte natural desnatado (150g) com Whey Protein (20g) ➔ P: 22g | C: 8g | 150 kcal`,
+                            `• Aveia em flocos (${Math.round(peso * 0.4)}g) ➔ C: 18g | 85 kcal`,
+                            `• Mix de oleaginosas (amêndoas e nozes / 15g) ➔ G: 9g | 95 kcal`
+                        ],
+                        substituicoes: '• Iogurte + Whey ➔ Shake de leite desnatado (200ml) + banana + 25g de proteína.\n• Oleaginosas ➔ Pasta de amendoim integral (15g).'
+                    },
+                    {
+                        nome: 'Jantar Nutritivo & Digestivo',
+                        horario: '20:00',
+                        alimentosBase: (peso) => [
+                            `• Proteína magra grelhada (frango, peixe ou ovos) (${Math.round(peso * 1.7)}g) ➔ P: 36g | 180 kcal`,
+                            `• Mandioca ou batata assada (${Math.round(peso * 1.4)}g) ➔ C: 30g | 130 kcal`,
+                            `• Legumes refogados no vapor (abobrinha, cenoura e vagem / 140g) ➔ C: 7g | 40 kcal`,
+                            `• Azeite extravirgem (5ml) ➔ G: 4.5g | 42 kcal`
+                        ],
+                        substituicoes: '• Mandioca ➔ Arroz com brócolis (130g) ou quinoa cozida (120g).\n• Peixe ➔ Frango desfiado com molho de tomate natural.'
+                    }
+                ]
+            },
+            'Alta Performance Esportiva': {
+                refeicoes: [
+                    {
+                        nome: 'Café da Manhã de Carga de Glicogênio',
+                        horario: '07:00',
+                        alimentosBase: (peso) => [
+                            `• Mingau de aveia (${Math.round(peso * 1.0)}g) com leite desnatado (200ml) e mel (1 colher) ➔ C: 65g | P: 14g | 360 kcal`,
+                            `• Ovos mexidos (3 unidades) ➔ P: 18g | G: 15g | 210 kcal`,
+                            `• Banana nanica fatiada (1 grande / 100g) ➔ C: 26g | 105 kcal`,
+                            `• Café preto com canela (200ml) ➔ 0 kcal`
+                        ],
+                        substituicoes: '• Mingau ➔ Panqueca de aveia com 2 ovos e 50g de farinha de aveia com pasta de amendoim.\n• Mel ➔ Geleia de frutas 100% fruta sem açúcar.'
+                    },
+                    {
+                        nome: 'Almoço de Alta Demanda Energética',
+                        horario: '12:00',
+                        alimentosBase: (peso) => [
+                            `• Arroz branco cozido (${Math.round(peso * 2.5)}g) ➔ C: 60g | 260 kcal`,
+                            `• Feijão carioca (concha cheia / 140g) ➔ C: 20g | P: 7g | 110 kcal`,
+                            `• Peito de frango ou carne bovina magra (${Math.round(peso * 2.2)}g) ➔ P: 48g | G: 6g | 250 kcal`,
+                            `• Beterraba cozida e salada verde com azeite (10ml) ➔ Nitratos naturais e micronutrientes`
+                        ],
+                        substituicoes: '• Arroz + Feijão ➔ Macarrão grano duro com molho de tomate e carne moída magra.\n• Frango ➔ Filé de salmão com batata rústica.'
+                    },
+                    {
+                        nome: 'Refeição Pré-Treino de Absorção Rápida',
+                        horario: '15:30',
+                        alimentosBase: (peso) => [
+                            `• Pão de forma integral (2 fatias) com geleia de morango (20g) ➔ C: 36g | 150 kcal`,
+                            `• Whey Protein isolado (1 scoop / 30g) batido com água gelada ➔ P: 26g | 120 kcal`,
+                            `• Uvas passas ou tâmaras desidratadas (30g) ➔ C: 22g | 90 kcal`
+                        ],
+                        substituicoes: '• Pão com geleia ➔ Batata-doce assada (150g) com canela.\n• Tâmaras ➔ Banana com mel.'
+                    },
+                    {
+                        nome: 'Jantar Restaurador Neuromuscular',
+                        horario: '19:30',
+                        alimentosBase: (peso) => [
+                            `• Arroz ou batata inglesa cozida (${Math.round(peso * 2.0)}g) ➔ C: 45g | 190 kcal`,
+                            `• Salmão grelhado ou filé de tilápia com camarão (${Math.round(peso * 2.2)}g) ➔ P: 46g | G: 10g | 280 kcal`,
+                            `• Brócolis e espinafre ao alho e azeite extravirgem (8ml) ➔ Magnésio e recuperação muscular`
+                        ],
+                        substituicoes: '• Peixe ➔ Patinho grelhado com purê de mandioca.\n• Batata ➔ Quinoa com lentilhas cozidas.'
+                    }
+                ]
+            },
+            'Low Carb & Densidade': {
+                refeicoes: [
+                    {
+                        nome: 'Desjejum Cetogênico & Energético',
+                        horario: '08:30',
+                        alimentosBase: (peso) => [
+                            `• Ovos caipiras mexidos com manteiga ghee (3 unidades) ➔ P: 20g | G: 19g | 250 kcal`,
+                            `• Abacate fatiado temperado com azeite e flor de sal (${Math.round(peso * 1.0)}g) ➔ G: 14g | C: 4g | 160 kcal`,
+                            `• Café passado com óleo de coco ou canela ➔ 45 kcal`
+                        ],
+                        substituicoes: '• Ovos ➔ Omelete com queijo gouda ou parmesão ralado e cogumelos.\n• Abacate ➔ Mix de castanhas e nozes (30g).'
+                    },
+                    {
+                        nome: 'Almoço Low Carb Denso em Nutrientes',
+                        horario: '13:00',
+                        alimentosBase: (peso) => [
+                            `• Picanha ou fraldinha magra grelhada (${Math.round(peso * 2.2)}g) ➔ P: 48g | G: 14g | 320 kcal`,
+                            `• Arroz de couve-flor refogado no azeite com alho (160g) ➔ C: 5g | 60 kcal`,
+                            `• Salada verde escura (rúcula, agrião e espinafre) com sementes de abóbora (15g) ➔ G: 7g | P: 4g | 85 kcal`,
+                            `• Azeite extravirgem (10ml) ➔ G: 9g | 80 kcal`
+                        ],
+                        substituicoes: '• Carne bovina ➔ Coxa/sobrecoxa de frango assada com pele crocante ou salmão com crosta de gergelim.\n• Couve-flor ➔ Espaguete de abobrinha com molho pesto caseiro.'
+                    },
+                    {
+                        nome: 'Lanche Sacietógeno da Tarde',
+                        horario: '16:30',
+                        alimentosBase: (peso) => [
+                            `• Queijo curado (canastra ou minas padrão / 50g) ➔ P: 13g | G: 15g | 190 kcal`,
+                            `• Castanhas-de-caju ou amêndoas torradas (${Math.round(peso * 0.35)}g) ➔ G: 13g | P: 5g | 150 kcal`,
+                            `• Chá de camomila ou hortelã ➔ 0 kcal`
+                        ],
+                        substituicoes: '• Queijo ➔ 2 ovos cozidos com azeite e orégano.\n• Castanhas ➔ Azeitonas verdes recheadas (8 unidades).'
+                    },
+                    {
+                        nome: 'Jantar Leve & Rico em Ômega-3',
+                        horario: '20:00',
+                        alimentosBase: (peso) => [
+                            `• Filé de tilápia, saint peter ou atum selado (${Math.round(peso * 2.2)}g) ➔ P: 46g | G: 4g | 220 kcal`,
+                            `• Brócolis gratinado no forno com azeite e ervas finas (180g) ➔ C: 7g | P: 5g | 75 kcal`,
+                            `• Salada de folhas verdes com palmito pupunha assado ➔ 40 kcal`
+                        ],
+                        substituicoes: '• Peixe ➔ Frango em cubos salteado com legumes baixos em carbo.\n• Brócolis ➔ Aspargos grelhados ou cogumelos paris salteados.'
+                    }
+                ]
+            }
+        };
+
+        // ==============================================================
+        // MOTOR DE GERAÇÃO DE SUGESTÕES DE DIETA POR INTELIGÊNCIA ARTIFICIAL
+        // ==============================================================
+        window.gerarSugestaoIADieta = async function () {
+            const btnGerar = document.getElementById('btn-gerar-sugestao-ia-dieta');
+            const icone = document.getElementById('icone-gerar-ia-dieta');
+            const texto = document.getElementById('texto-gerar-ia-dieta');
+            const spinner = document.getElementById('spinner-gerar-ia-dieta');
+
+            // 1. Validação de seleção do aluno
+            const selAluno = document.getElementById('aluno-select');
+            let alunoId = selAluno ? selAluno.value : '';
+
+            if (!alunoId && selAluno && selAluno.options.length > 1) {
+                for (let i = 0; i < selAluno.options.length; i++) {
+                    if (selAluno.options[i].value && !selAluno.options[i].disabled) {
+                        selAluno.selectedIndex = i;
+                        alunoId = selAluno.value;
+                        if (typeof sincronizarSelecaoAluno === 'function') sincronizarSelecaoAluno(alunoId, 'dieta');
+                        break;
+                    }
+                }
+            }
+
+            if (!alunoId) {
+                showToast('Selecione um Aluno', 'Escolha um aluno no menu acima antes de solicitar a sugestão por IA.', 'warning');
+                if (selAluno) selAluno.focus();
+                return;
+            }
+
+            if (btnGerar) btnGerar.disabled = true;
+            if (spinner) spinner.classList.remove('hidden');
+            if (icone) icone.classList.add('hidden');
+            if (texto) texto.textContent = 'Processando IA...';
+
+            await new Promise(r => setTimeout(r, 350));
+
+            try {
+                // 2. Coleta de biometria
+                let pesoAluno = parseFloat(document.getElementById('clinico-peso')?.textContent) || 75;
+                let nomeAluno = document.getElementById('clinico-nome')?.textContent || 'Aluno';
+                const foco = document.getElementById('select-foco-nutricional-ia')?.value || 'Hipertrofia & Ganho Limpo';
+                const configPlano = BANCO_DIETAS_IA[foco] || BANCO_DIETAS_IA['Hipertrofia & Ganho Limpo'];
+
+                // CASO A: "APENAS ESTA REFEIÇÃO"
+                if (escopoIADietaAtiva === 'refeicao') {
+                    const nomeAtual = document.getElementById('refeicao-nome')?.value.trim();
+                    const refeicoesPrescritas = (dietasAlunoAtual || []).map(d => (d.refeicao || '').toLowerCase());
+
+                    let refeicaoEscolhida = null;
+                    if (nomeAtual) {
+                        refeicaoEscolhida = configPlano.refeicoes.find(r => r.nome.toLowerCase().includes(nomeAtual.toLowerCase()))
+                            || configPlano.refeicoes[0];
+                    } else {
+                        refeicaoEscolhida = configPlano.refeicoes.find(r => !refeicoesPrescritas.some(presc => presc.includes(r.nome.toLowerCase().slice(0, 4))))
+                            || configPlano.refeicoes[0];
+                    }
+
+                    const alimentosLista = refeicaoEscolhida.alimentosBase(pesoAluno);
+                    const textoAlimentos = alimentosLista.join('\n');
+
+                    const elNome = document.getElementById('refeicao-nome');
+                    const elHorario = document.getElementById('refeicao-horario');
+                    const elAlimentos = document.getElementById('refeicao-alimentos');
+                    const elSubs = document.getElementById('refeicao-substituicoes');
+
+                    if (elNome) elNome.value = refeicaoEscolhida.nome;
+                    if (elHorario) elHorario.value = refeicaoEscolhida.horario;
+                    if (elAlimentos) elAlimentos.value = textoAlimentos;
+                    if (elSubs) elSubs.value = refeicaoEscolhida.substituicoes;
+
+                    // Destaque visual
+                    [elNome, elHorario, elAlimentos, elSubs].forEach(input => {
+                        if (input) {
+                            input.classList.add('ring-2', 'ring-lime-400', 'bg-lime-500/10');
+                            setTimeout(() => {
+                                input.classList.remove('ring-2', 'ring-lime-400', 'bg-lime-500/10');
+                            }, 2500);
+                        }
+                    });
+
+                    showToast('Sugestão por IA Gerada! ✨', `Refeição "${refeicaoEscolhida.nome}" calculada para ${nomeAluno} (${pesoAluno}kg).`, 'success');
+
+                    if (elAlimentos) {
+                        setTimeout(() => {
+                            elAlimentos.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            elAlimentos.focus();
+                        }, 120);
+                    }
+                }
+                // CASO B: "PLANO COMPLETO (DIA TODO)"
+                else {
+                    const gradeRefeicoes = configPlano.refeicoes;
+                    const novasRefeicoes = gradeRefeicoes.map(r => ({
+                        aluno_id: alunoId,
+                        refeicao: r.nome,
+                        horario: r.horario,
+                        alimentos: r.alimentosBase(pesoAluno).join('\n'),
+                        substituicoes: r.substituicoes
+                    }));
+
+                    let inseridoComSucesso = false;
+                    try {
+                        const { error } = await supabaseClient.from('dietas').insert(novasRefeicoes);
+                        if (!error) inseridoComSucesso = true;
+                    } catch (e) {
+                        console.warn('Erro ao inserir dieta completa no Supabase:', e);
+                    }
+
+                    if (inseridoComSucesso) {
+                        await carregarRefeicoesAlunoAdmin(alunoId);
+                    } else {
+                        // Fallback local
+                        novasRefeicoes.forEach((item, idx) => {
+                            item.id = 'local-dieta-ia-' + Date.now() + '-' + idx;
+                            dietasAlunoAtual.push(item);
+                        });
+                        await carregarRefeicoesAlunoAdmin(alunoId);
+                    }
+
+                    showToast('Plano Completo Gerado! ✨', `Cardápio completo de 4 refeições gerado para ${nomeAluno}. Revise abaixo!`, 'success');
+
+                    const secRef = document.getElementById('secao-refeicoes-atuais');
+                    if (secRef) {
+                        const header = secRef.querySelector('.collapse-header');
+                        const content = secRef.querySelector('.collapse-content');
+                        if (header) header.classList.add('active');
+                        if (content) content.classList.add('expanded');
+                        setTimeout(() => secRef.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+                    }
+                }
+            } catch (err) {
+                console.error('Erro na IA de Dieta:', err);
+                showToast('Erro na Sugestão', 'Não foi possível gerar a sugestão nutricional: ' + (err.message || err), 'error');
+            } finally {
+                if (btnGerar) btnGerar.disabled = false;
+                if (spinner) spinner.classList.add('hidden');
+                if (icone) icone.classList.remove('hidden');
+                if (texto) texto.textContent = '✨ Gerar Sugestão por IA';
+                if (window.lucide) lucide.createIcons();
+            }
+        };
+
+        // Editar refeição cadastrada no formulário de prescrição
+        window.editarRefeicaoDieta = function (id) {
+            const refeicao = (dietasAlunoAtual || []).find(d => String(d.id) === String(id));
+            if (!refeicao) {
+                showToast('Refeição não encontrada', 'Não foi possível carregar os dados para edição.', 'error');
+                return;
+            }
+
+            refeicaoEmEdicaoId = refeicao.id;
+
+            // Preenche o formulário
+            const elNome = document.getElementById('refeicao-nome');
+            const elHorario = document.getElementById('refeicao-horario');
+            const elAlimentos = document.getElementById('refeicao-alimentos');
+            const elSubs = document.getElementById('refeicao-substituicoes');
+
+            if (elNome) elNome.value = refeicao.refeicao || '';
+            if (elHorario) elHorario.value = refeicao.horario || '';
+            if (elAlimentos) elAlimentos.value = refeicao.alimentos || '';
+            if (elSubs) elSubs.value = refeicao.substituicoes || '';
+
+            // Atualiza banner de edição
+            const aviso = document.getElementById('aviso-edicao-refeicao');
+            const nomeAviso = document.getElementById('nome-refeicao-em-edicao');
+            if (aviso) aviso.classList.remove('hidden');
+            if (nomeAviso) nomeAviso.textContent = refeicao.refeicao || 'Refeição';
+
+            // Atualiza botão de submit e exibe botão de cancelar
+            const btnText = document.getElementById('btn-text');
+            const btnCancelar = document.getElementById('btn-cancelar-edicao-refeicao');
+            if (btnText) btnText.textContent = 'Salvar Alterações da Refeição';
+            if (btnCancelar) btnCancelar.classList.remove('hidden');
+
+            // Garante que o accordion de prescrição esteja aberto
+            const secForm = document.getElementById('secao-cadastrar-refeicao');
+            if (secForm) {
+                const h = secForm.querySelector('.collapse-header');
+                const c = secForm.querySelector('.collapse-content');
+                if (h) h.classList.add('active');
+                if (c) c.classList.add('expanded');
+                secForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            if (elNome) elNome.focus();
+            if (window.lucide) lucide.createIcons();
+
+            showToast('Modo de Edição ✏️', `Editando "${refeicao.refeicao}". Faça os ajustes e salve.`, 'info');
+        };
+
+        // Cancelar edição da refeição
+        window.cancelarEdicaoRefeicao = function () {
+            refeicaoEmEdicaoId = null;
+
+            const aviso = document.getElementById('aviso-edicao-refeicao');
+            if (aviso) aviso.classList.add('hidden');
+
+            const btnText = document.getElementById('btn-text');
+            const btnCancelar = document.getElementById('btn-cancelar-edicao-refeicao');
+            if (btnText) btnText.textContent = 'Guardar Refeição na Dieta do Aluno';
+            if (btnCancelar) btnCancelar.classList.add('hidden');
+
+            const elNome = document.getElementById('refeicao-nome');
+            const elHorario = document.getElementById('refeicao-horario');
+            const elAlimentos = document.getElementById('refeicao-alimentos');
+            const elSubs = document.getElementById('refeicao-substituicoes');
+
+            if (elNome) elNome.value = '';
+            if (elHorario) elHorario.value = '';
+            if (elAlimentos) elAlimentos.value = '';
+            if (elSubs) elSubs.value = '';
+
+            if (typeof limparAlimentosDaRefeicao === 'function') {
+                limparAlimentosDaRefeicao();
+            }
+        };
+
         // Navegação Instantânea para Atalhos com Destaque Visual e Abertura Automática de Accordions
         function navegarParaSecao(id) {
             fecharMenuAcoesRapidas();
@@ -1824,6 +2984,18 @@
                 abrirChatFlutuante();
                 return;
             }
+
+            // Sincroniza e abre a aba correta antes de fazer o scroll
+            if (id === 'secao-cadastrar-refeicao' || id === 'secao-refeicoes-atuais' || id === 'secao-calculadora-macros') {
+                alternarAbaNutri('montar');
+            } else if (id === 'secao-fotos-alunos' || id === 'secao-checkins-nutri') {
+                alternarAbaNutri('evolucao');
+            } else if (id === 'secao-agenda-nutri' || id === 'secao-financeiro-nutri' || id === 'secao-ia-nutri') {
+                alternarAbaNutri('gestao');
+            } else if (id === 'secao-cadastrar-aluno' || id === 'secao-alunos-vinculados-nutri') {
+                alternarAbaNutri('painel');
+            }
+
             const el = document.getElementById(id);
             if (!el) return;
 
@@ -1836,11 +3008,13 @@
                 renderizarSecaoProfissionalAoAbrir(header, content);
             }
 
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            el.classList.add('secao-destaque');
             setTimeout(() => {
-                el.classList.remove('secao-destaque');
-            }, 1800);
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                el.classList.add('secao-destaque');
+                setTimeout(() => {
+                    el.classList.remove('secao-destaque');
+                }, 1800);
+            }, 60);
         }
 
         // ===== CONFIGURAÇÃO DO INDEXEDDB (FOTOS DE EVOLUÇÃO) =====
@@ -2066,6 +3240,20 @@
             await atualizarNotificacoesChat(false);
             iniciarRealtimeEPolling();
 
+            // Suporte para redirecionamento direto a partir do painel do personal com aluno pré-selecionado
+            const urlParams = new URLSearchParams(window.location.search);
+            const alunoParam = urlParams.get('aluno_id');
+            if (alunoParam) {
+                const sel = document.getElementById('aluno-select');
+                if (sel) {
+                    sel.value = alunoParam;
+                    if (sel.onchange) sel.onchange({ target: sel });
+                }
+                if (typeof navegarParaSecao === 'function') {
+                    setTimeout(() => navegarParaSecao('secao-cadastrar-refeicao'), 300);
+                }
+            }
+
             // Inicializar Suíte de Gestão, Check-ins, Banco de Alimentos e IA no Admin
             inicializarTodasSecoesProfissionaisAdmin();
             inicializarBancoAlimentosBuilder();
@@ -2159,8 +3347,25 @@
                 return;
             }
 
-            const aluno = listaAlunosCache.find(a => a.id === alunoId);
-            if (!aluno) return;
+            let aluno = (typeof listaAlunosCache !== 'undefined' && Array.isArray(listaAlunosCache))
+                ? listaAlunosCache.find(a => a.id === alunoId)
+                : null;
+            if (!aluno && typeof supabaseClient !== 'undefined') {
+                try {
+                    const { data: aDb } = await supabaseClient
+                        .from('alunos')
+                        .select('id, nome, email, foto_perfil, peso, objetivo, telefone, altura, idade')
+                        .eq('id', alunoId)
+                        .single();
+                    if (aDb) {
+                        aluno = aDb;
+                        if (typeof listaAlunosCache !== 'undefined' && Array.isArray(listaAlunosCache) && !listaAlunosCache.some(x => x.id === aDb.id)) {
+                            listaAlunosCache.push(aDb);
+                        }
+                    }
+                } catch (e) { }
+            }
+            if (!aluno) aluno = { id: alunoId, nome: 'Aluno', email: '' };
 
             let perfil = {};
 
@@ -2250,6 +3455,12 @@
                 statusBadge.textContent = 'Aguardando Aluno no Portal';
                 statusBadge.className = 'text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30';
             }
+
+            // Atualiza os chips de resumo antropométrico no card clínico
+            if (window.ApexEvolucao && typeof ApexEvolucao.renderChipsAntropometria === 'function') {
+                ApexEvolucao.renderChipsAntropometria('nutri-chips-antropometria', alunoId);
+            }
+
             lucide.createIcons();
             carregarResumoMacrosCardClinico(alunoId);
         }
@@ -2566,16 +3777,56 @@
             }
 
             estadoCalculadora.alunoId = alunoId;
-            const alunoObj = listaAlunosCache.find(a => a.id === alunoId);
+            let alunoObj = (typeof listaAlunosCache !== 'undefined' && Array.isArray(listaAlunosCache))
+                ? listaAlunosCache.find(a => a.id === alunoId)
+                : null;
+
+            if (!alunoObj && typeof supabaseClient !== 'undefined') {
+                try {
+                    const { data: aDb } = await supabaseClient
+                        .from('alunos')
+                        .select('id, nome, email, foto_perfil, peso, objetivo, telefone, altura, idade')
+                        .eq('id', alunoId)
+                        .single();
+                    if (aDb) {
+                        alunoObj = aDb;
+                        if (typeof listaAlunosCache === 'undefined' || !Array.isArray(listaAlunosCache)) {
+                            listaAlunosCache = [];
+                        }
+                        if (!listaAlunosCache.some(x => x.id === aDb.id)) {
+                            listaAlunosCache.push(aDb);
+                        }
+                    }
+                } catch (e) { }
+            }
+
             estadoCalculadora.alunoNome = alunoObj ? (alunoObj.nome || 'Aluno') : 'Aluno';
 
             // Sincroniza todos os selects de aluno na página
             const selDieta = document.getElementById('aluno-select');
             const selCalc = document.getElementById('calc-aluno-select');
             const selFotos = document.getElementById('fotos-aluno-select');
-            if (selDieta && selDieta.value !== alunoId) selDieta.value = alunoId;
-            if (selCalc && selCalc.value !== alunoId) selCalc.value = alunoId;
-            if (selFotos && selFotos.value !== alunoId) selFotos.value = alunoId;
+            const selGerenciar = document.getElementById('gerenciar-dieta-aluno-select');
+
+            [selDieta, selCalc, selFotos, selGerenciar].forEach(sel => {
+                if (sel) {
+                    let opt = sel.querySelector(`option[value="${alunoId}"]`);
+                    if (!opt && alunoObj) {
+                        opt = document.createElement('option');
+                        opt.value = alunoObj.id;
+                        opt.textContent = `${alunoObj.nome || 'Sem Nome'} (${alunoObj.email || 'Sem e-mail'})`;
+                        sel.appendChild(opt);
+                    }
+                    if (sel.value !== alunoId) {
+                        sel.value = alunoId;
+                    }
+                }
+            });
+
+            // Se for chamada pela aba de fotos de evolução, carrega também as fotos
+            if (origem === 'fotos' || (selFotos && selFotos.value === alunoId && typeof carregarFotosAlunoSelecionado === 'function')) {
+                carregarFotosAlunoSelecionado();
+            }
 
             // Execução paralela e desacoplada: falha em biometria ou cálculo NÃO impede as refeições de carregarem
             await Promise.allSettled([
@@ -2583,6 +3834,15 @@
                 carregarOuInicializarMacrosAluno(alunoId).catch(err => console.error("Erro ao carregar macros do aluno:", err)),
                 carregarRefeicoesAlunoAdmin(alunoId).catch(err => console.error("Erro ao carregar refeições do aluno:", err))
             ]);
+
+            if (document.getElementById('conteudo-tab-nutri-medidas')?.classList.contains('hidden') === false) {
+                if (window.ApexEvolucao) {
+                    ApexEvolucao.renderAbaMedidasProfissional('conteudo-tab-nutri-medidas', alunoId, {
+                        tipo: 'nutricionista',
+                        profissionalNome: window.nomeProfissionalLogado || 'Nutricionista'
+                    });
+                }
+            }
         }
 
         async function carregarOuInicializarMacrosAluno(alunoId) {
@@ -2908,16 +4168,18 @@ _Prescrição elaborada pelo seu nutricionista._`;
             const selectEl = document.getElementById('aluno-select');
             const selectFotosEl = document.getElementById('fotos-aluno-select');
             const selectCalcEl = document.getElementById('calc-aluno-select');
+            const selectGerenciarEl = document.getElementById('gerenciar-dieta-aluno-select');
 
             const { data: alunos, error } = await supabaseClient
                 .from('alunos')
-                .select('id, nome, email')
+                .select('id, nome, email, foto_perfil, peso, objetivo, telefone, altura, idade')
                 .order('nome', { ascending: true });
 
             if (error) {
                 if (selectEl) selectEl.innerHTML = `<option value="" disabled>Erro ao carregar alunos: ${error.message}</option>`;
                 if (selectFotosEl) selectFotosEl.innerHTML = `<option value="" disabled>Erro ao carregar alunos: ${error.message}</option>`;
                 if (selectCalcEl) selectCalcEl.innerHTML = `<option value="" disabled>Erro ao carregar alunos: ${error.message}</option>`;
+                if (selectGerenciarEl) selectGerenciarEl.innerHTML = `<option value="" disabled>Erro ao carregar alunos: ${error.message}</option>`;
                 return;
             }
 
@@ -2927,6 +4189,8 @@ _Prescrição elaborada pelo seu nutricionista._`;
                 if (selectEl) selectEl.innerHTML = `<option value="" disabled>Nenhum aluno encontrado. Cadastre um acima!</option>`;
                 if (selectFotosEl) selectFotosEl.innerHTML = `<option value="" disabled>Nenhum aluno cadastrado ainda.</option>`;
                 if (selectCalcEl) selectCalcEl.innerHTML = `<option value="" disabled>Nenhum aluno cadastrado ainda.</option>`;
+                if (selectGerenciarEl) selectGerenciarEl.innerHTML = `<option value="" disabled>Nenhum aluno cadastrado ainda.</option>`;
+                if (typeof renderizarTabelaAlunosVinculadosNutri === 'function') renderizarTabelaAlunosVinculadosNutri();
                 return;
             }
 
@@ -2941,6 +4205,17 @@ _Prescrição elaborada pelo seu nutricionista._`;
 
                 // Listener sincronizado para atualizar tanto a calculadora quanto o card clínico
                 selectEl.onchange = (e) => sincronizarSelecaoAluno(e.target.value, 'dieta');
+            }
+
+            if (selectGerenciarEl) {
+                selectGerenciarEl.innerHTML = `<option value="" disabled selected>Selecione um aluno para visualizar plano...</option>`;
+                alunos.forEach(aluno => {
+                    const option = document.createElement('option');
+                    option.value = aluno.id;
+                    option.textContent = `${aluno.nome || 'Sem Nome'} (${aluno.email || 'Sem e-mail'})`;
+                    selectGerenciarEl.appendChild(option);
+                });
+                selectGerenciarEl.onchange = (e) => sincronizarSelecaoAluno(e.target.value, 'gerenciar');
             }
 
             if (selectCalcEl) {
@@ -2963,6 +4238,11 @@ _Prescrição elaborada pelo seu nutricionista._`;
                     if (valorAtual && valorAtual === aluno.id) option.selected = true;
                     selectFotosEl.appendChild(option);
                 });
+            }
+
+            // Atualiza tabela de alunos do painel com a lista carregada
+            if (typeof renderizarTabelaAlunosVinculadosNutri === 'function') {
+                renderizarTabelaAlunosVinculadosNutri();
             }
 
             // Inicializa ouvintes e cálculo padrão da calculadora
@@ -2993,9 +4273,38 @@ _Prescrição elaborada pelo seu nutricionista._`;
             const btnSpinner = document.getElementById('btn-spinner');
 
             btn.disabled = true;
-            btnText.textContent = 'Salvando no banco de dados...';
             btnIcon.classList.add('hidden');
             btnSpinner.classList.remove('hidden');
+
+            if (refeicaoEmEdicaoId) {
+                btnText.textContent = 'Salvando alterações...';
+                const { error } = await supabaseClient
+                    .from('dietas')
+                    .update({
+                        refeicao: refeicao,
+                        horario: horario,
+                        alimentos: alimentos,
+                        substituicoes: substituicoes
+                    })
+                    .eq('id', refeicaoEmEdicaoId);
+
+                btn.disabled = false;
+                btnText.textContent = 'Guardar Refeição na Dieta do Aluno';
+                btnIcon.classList.remove('hidden');
+                btnSpinner.classList.add('hidden');
+                if (window.lucide) lucide.createIcons();
+
+                if (error) {
+                    showToast('Erro ao atualizar', error.message, 'error');
+                } else {
+                    showToast('Refeição Atualizada! 🥗', `Refeição "${refeicao}" atualizada com sucesso.`, 'success');
+                    cancelarEdicaoRefeicao();
+                    carregarRefeicoesAlunoAdmin(alunoId);
+                }
+                return;
+            }
+
+            btnText.textContent = 'Salvando no banco de dados...';
 
             const { error } = await supabaseClient
                 .from('dietas')
@@ -3289,17 +4598,30 @@ _Prescrição elaborada pelo seu nutricionista._`;
             const listEl = document.getElementById('admin-chat-alunos-list');
             const { data: alunos, error } = await supabaseClient
                 .from('alunos')
-                .select('id, nome, email')
+                .select('id, nome, email, foto_perfil, peso, objetivo, telefone, altura, idade')
                 .order('nome', { ascending: true });
 
             if (error || !alunos || alunos.length === 0) {
-                listEl.innerHTML = '<span class="text-xs text-slate-500 p-2 block">Nenhum aluno cadastrado.</span>';
-                listaAlunosCache = [];
+                if (listEl) listEl.innerHTML = '<span class="text-xs text-slate-500 p-2 block">Nenhum aluno cadastrado.</span>';
+                if (!listaAlunosCache || listaAlunosCache.length === 0) {
+                    listaAlunosCache = [];
+                    if (typeof renderizarTabelaAlunosVinculadosNutri === 'function') renderizarTabelaAlunosVinculadosNutri();
+                }
                 return;
             }
 
-            listaAlunosCache = alunos;
+            // Preserva e mescla dados já carregados para não perder peso, objetivo e fotos
+            if (listaAlunosCache && listaAlunosCache.length > 0) {
+                const mapa = new Map(listaAlunosCache.map(a => [a.id, a]));
+                listaAlunosCache = alunos.map(a => Object.assign({}, mapa.get(a.id) || {}, a));
+            } else {
+                listaAlunosCache = alunos;
+            }
+
             renderizarListaAlunosChat();
+            if (typeof renderizarTabelaAlunosVinculadosNutri === 'function') {
+                renderizarTabelaAlunosVinculadosNutri();
+            }
         }
 
         function renderizarListaAlunosChat() {
@@ -4352,6 +5674,10 @@ _Prescrição elaborada pelo seu nutricionista._`;
                                     <span class="text-[11px] font-bold text-lime-400 bg-lime-500/10 border border-lime-500/20 px-2.5 py-0.5 rounded-full">
                                         ⏰ ${horarioStr}
                                     </span>
+                                    <button type="button" onclick="editarRefeicaoDieta('${d.id}')" title="Editar refeição no formulário"
+                                        class="text-slate-400 hover:text-lime-400 p-1.5 rounded-lg hover:bg-slate-800 transition-all cursor-pointer">
+                                        <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                    </button>
                                     <button type="button" onclick="removerRefeicao('${d.id}')" title="Excluir refeição"
                                         class="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-800 transition-all cursor-pointer">
                                         <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -4408,6 +5734,9 @@ _Prescrição elaborada pelo seu nutricionista._`;
 
         async function removerRefeicao(id) {
             if (!confirm('Deseja realmente remover esta refeição do plano alimentar do aluno?')) return;
+            if (refeicaoEmEdicaoId && String(refeicaoEmEdicaoId) === String(id)) {
+                cancelarEdicaoRefeicao();
+            }
 
             const { error } = await supabaseClient
                 .from('dietas')
@@ -4560,11 +5889,335 @@ _Prescrição elaborada pelo seu nutricionista._`;
             window.open(urlFormatada, '_blank');
         }
 
-        // Executa a verificação e dispara a inicialização do convite na sequência
+
+        // ==============================================================
+        // GESTÃO DE PERFIL PROFISSIONAL DO NUTRICIONISTA (FOTO, NOME, CRN)
+        // ==============================================================
+        let fotoPerfilProfissionalNutriTemp = null;
+
+        function obterDadosPerfilNutri() {
+            try {
+                const salvo = localStorage.getItem('rfh_perfil_nutri');
+                if (salvo) return JSON.parse(salvo);
+            } catch (e) { }
+            return {
+                nome: window.nomeProfissionalLogado || 'Nutricionista',
+                documento: window.registroProfissionalLogado || '',
+                foto: ''
+            };
+        }
+
+        window.abrirModalPerfilProfissionalNutri = function () {
+            const perfil = obterDadosPerfilNutri();
+            fotoPerfilProfissionalNutriTemp = perfil.foto || null;
+
+            const inputNome = document.getElementById('modal-nutri-nome');
+            const inputDoc = document.getElementById('modal-nutri-documento');
+
+            if (inputNome) inputNome.value = perfil.nome || '';
+            if (inputDoc) inputDoc.value = perfil.documento || '';
+
+            atualizarPreviewFotoModalNutri(fotoPerfilProfissionalNutriTemp, perfil.nome);
+
+            const modal = document.getElementById('modal-perfil-profissional-nutri');
+            if (modal) {
+                modal.classList.remove('hidden');
+                if (window.lucide) lucide.createIcons();
+            }
+        };
+
+        window.fecharModalPerfilProfissionalNutri = function () {
+            const modal = document.getElementById('modal-perfil-profissional-nutri');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        function atualizarPreviewFotoModalNutri(fotoUrl, nome) {
+            const previewImg = document.getElementById('modal-nutri-foto-preview');
+            const previewInitials = document.getElementById('modal-nutri-foto-initials');
+            if (!previewImg || !previewInitials) return;
+
+            if (fotoUrl) {
+                previewImg.src = fotoUrl;
+                previewImg.classList.remove('hidden');
+                previewInitials.classList.add('hidden');
+            } else {
+                previewImg.src = '';
+                previewImg.classList.add('hidden');
+                previewInitials.classList.remove('hidden');
+                previewInitials.textContent = ((nome || 'N').charAt(0)).toUpperCase();
+            }
+        }
+
+        window.aoSelecionarFotoPerfilNutri = function (event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    const maxDim = 320;
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > h) {
+                        if (w > maxDim) {
+                            h = Math.round((h * maxDim) / w);
+                            w = maxDim;
+                        }
+                    } else {
+                        if (h > maxDim) {
+                            w = Math.round((w * maxDim) / h);
+                            h = maxDim;
+                        }
+                    }
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    fotoPerfilProfissionalNutriTemp = canvas.toDataURL('image/jpeg', 0.85);
+
+                    const nomeAtual = document.getElementById('modal-nutri-nome')?.value;
+                    atualizarPreviewFotoModalNutri(fotoPerfilProfissionalNutriTemp, nomeAtual);
+                    if (window.showToast) window.showToast('Foto Carregada! 📸', 'Clique em Salvar Perfil para confirmar as alterações.', 'info');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.removerFotoPerfilNutri = function () {
+            fotoPerfilProfissionalNutriTemp = '';
+            const nomeAtual = document.getElementById('modal-nutri-nome')?.value;
+            atualizarPreviewFotoModalNutri('', nomeAtual);
+            if (window.showToast) window.showToast('Foto Removida', 'Clique em Salvar Perfil para confirmar a exclusão.', 'info');
+        };
+
+        window.salvarPerfilProfissionalNutri = async function (event) {
+            if (event) event.preventDefault();
+
+            const nome = document.getElementById('modal-nutri-nome')?.value.trim() || 'Nutricionista';
+            const documento = document.getElementById('modal-nutri-documento')?.value.trim() || '';
+            const foto = fotoPerfilProfissionalNutriTemp || '';
+
+            const perfilSalvo = obterDadosPerfilNutri();
+            const perfilAtualizado = {
+                ...perfilSalvo,
+                nome,
+                documento,
+                foto,
+                atualizadoEm: new Date().toISOString()
+            };
+
+            try {
+                localStorage.setItem('rfh_perfil_nutri', JSON.stringify(perfilAtualizado));
+            } catch (e) { }
+
+            // Atualiza variáveis globais do profissional
+            window.nomeProfissionalLogado = nome;
+            window.registroProfissionalLogado = documento;
+
+            // Sincroniza em segundo plano no Supabase mensagens
+            if (typeof supabaseClient !== 'undefined' && supabaseClient.from) {
+                try {
+                    await supabaseClient.from('mensagens').insert({
+                        aluno_id: null,
+                        remetente: 'sistema_perfil_nutri',
+                        mensagem: JSON.stringify(perfilAtualizado)
+                    });
+                } catch (e) { }
+            }
+
+            atualizarExibicaoPerfilNutriInterface(perfilAtualizado);
+            fecharModalPerfilProfissionalNutri();
+
+            if (window.showToast) {
+                window.showToast('Perfil Atualizado! 🥗', 'Suas informações e foto foram salvas com sucesso.', 'success');
+            }
+        };
+
+        window.atualizarExibicaoPerfilNutriInterface = function (perfil = null) {
+            const p = perfil || obterDadosPerfilNutri();
+
+            // 1. Cabeçalho
+            const headerNome = document.getElementById('header-nutri-nome');
+            const headerDoc = document.getElementById('header-nutri-doc');
+            const headerImg = document.getElementById('header-nutri-avatar-img');
+            const headerInitials = document.getElementById('header-nutri-avatar-initials');
+
+            if (headerNome) {
+                const nomeCurto = (p.nome || 'Nutri').split(' ')[0];
+                headerNome.innerHTML = `<span class="sm:hidden">${esc(nomeCurto)}</span><span class="hidden sm:inline">${esc(p.nome || 'Nutricionista')}</span>`;
+            }
+            if (headerDoc) headerDoc.textContent = p.documento ? p.documento : 'CRN & Perfil';
+            if (headerImg && headerInitials) {
+                if (p.foto) {
+                    headerImg.src = p.foto;
+                    headerImg.classList.remove('hidden');
+                    headerInitials.classList.add('hidden');
+                } else {
+                    headerImg.src = '';
+                    headerImg.classList.add('hidden');
+                    headerInitials.classList.remove('hidden');
+                    headerInitials.textContent = ((p.nome || 'N').charAt(0)).toUpperCase();
+                }
+            }
+
+            // 2. Banner de Prescrição de Dieta
+            const bNome = document.getElementById('prescritor-nutri-nome');
+            const bDoc = document.getElementById('prescritor-nutri-doc-badge');
+            const bFoto = document.getElementById('prescritor-nutri-foto');
+            const bInitials = document.getElementById('prescritor-nutri-initials');
+
+            if (bNome) bNome.textContent = p.nome || 'Nutricionista';
+            if (bDoc) {
+                if (p.documento && p.documento.trim()) {
+                    bDoc.textContent = p.documento.toUpperCase().startsWith('CRN') ? p.documento : `CRN: ${p.documento}`;
+                    bDoc.classList.remove('hidden');
+                } else {
+                    bDoc.classList.add('hidden');
+                }
+            }
+            if (bFoto && bInitials) {
+                if (p.foto) {
+                    bFoto.src = p.foto;
+                    bFoto.classList.remove('hidden');
+                    bInitials.classList.add('hidden');
+                } else {
+                    bFoto.src = '';
+                    bFoto.classList.add('hidden');
+                    bInitials.classList.remove('hidden');
+                    bInitials.textContent = ((p.nome || 'N').charAt(0)).toUpperCase();
+                }
+            }
+        };
+
+        async function carregarPerfilNutriNuvem() {
+            atualizarExibicaoPerfilNutriInterface();
+            if (typeof supabaseClient !== 'undefined' && supabaseClient.from) {
+                try {
+                    const { data } = await supabaseClient
+                        .from('mensagens')
+                        .select('mensagem')
+                        .eq('remetente', 'sistema_perfil_nutri')
+                        .order('created_at', { ascending: false })
+                        .limit(1);
+                    if (data && data.length > 0 && data[0].mensagem) {
+                        const perfilDb = JSON.parse(data[0].mensagem);
+                        const local = obterDadosPerfilNutri();
+                        const mesclado = { ...perfilDb, ...local };
+                        localStorage.setItem('rfh_perfil_nutri', JSON.stringify(mesclado));
+                        atualizarExibicaoPerfilNutriInterface(mesclado);
+                    }
+                } catch (e) { }
+            }
+        }
+
+        // Executa a verificação e dispara a inicialização do convite e das abas na sequência
         verificarSessao().then(() => {
+            carregarPerfilNutriNuvem();
             inicializarGeradorConvite();
+            if (typeof inicializarTodasSecoesProfissionaisAdmin === 'function') {
+                inicializarTodasSecoesProfissionaisAdmin();
+            }
+
+            // Tratamento de parâmetros de URL para navegação direta vinda de outras páginas (ex: personal.html)
+            const urlParams = new URLSearchParams(window.location.search);
+            const paramAlunoId = urlParams.get('aluno_id');
+            const paramAcao = urlParams.get('acao');
+            const hash = window.location.hash;
+
+            if (paramAlunoId) {
+                setTimeout(() => {
+                    if (typeof irParaMontarDietaAluno === 'function') {
+                        irParaMontarDietaAluno(paramAlunoId);
+                    }
+                }, 400);
+            } else if (paramAcao === 'dieta' || hash === '#secao-cadastrar-refeicao' || hash === '#secao-refeicoes-atuais') {
+                alternarAbaNutri('montar');
+            } else if (hash === '#secao-fotos-alunos' || hash === '#secao-checkins-nutri') {
+                alternarAbaNutri('evolucao');
+            } else if (hash === '#secao-agenda-nutri' || hash === '#secao-financeiro-nutri' || hash === '#secao-ia-nutri') {
+                alternarAbaNutri('gestao');
+            } else {
+                alternarAbaNutri('painel');
+            }
         });
     </script>
+
+    <!-- ============================================================== -->
+    <!-- MODAL DE PERFIL PROFISSIONAL DO NUTRICIONISTA (FOTO + CRN)   -->
+    <!-- ============================================================== -->
+    <div id="modal-perfil-profissional-nutri" class="hidden fixed inset-0 z-[75] bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-lg rounded-3xl border border-lime-500/30 p-6 space-y-5 shadow-2xl relative bg-slate-950/95 max-h-[92vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center">
+                        <i data-lucide="user-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm sm:text-base font-bold text-white">Meu Perfil Profissional</h3>
+                        <p class="text-xs text-slate-400">Personalize sua foto, nome de exibição e registro CRN.</p>
+                    </div>
+                </div>
+                <button type="button" onclick="fecharModalPerfilProfissionalNutri()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="form-perfil-profissional-nutri" onsubmit="salvarPerfilProfissionalNutri(event)" class="space-y-4">
+                <!-- SEÇÃO FOTO DO PERFIL -->
+                <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col sm:flex-row items-center gap-4">
+                    <div class="relative w-20 h-20 rounded-full overflow-hidden bg-slate-800 border-2 border-lime-500/40 shrink-0 shadow-lg flex items-center justify-center group">
+                        <img id="modal-nutri-foto-preview" src="" alt="Pré-visualização" class="w-full h-full object-cover hidden">
+                        <span id="modal-nutri-foto-initials" class="text-2xl font-black text-lime-400">N</span>
+                    </div>
+                    <div class="space-y-2 text-center sm:text-left flex-1">
+                        <div class="text-xs font-bold text-white">Foto do Perfil Profissional</div>
+                        <p class="text-[11px] text-slate-400">Aparecerá no cabeçalho do portal e ao prescrever planos alimentares para seus alunos.</p>
+                        <div class="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
+                            <input type="file" id="modal-nutri-file-input" accept="image/*" class="hidden" onchange="aoSelecionarFotoPerfilNutri(event)">
+                            <button type="button" onclick="document.getElementById('modal-nutri-file-input').click()"
+                                class="px-3 py-1.5 rounded-xl bg-lime-500/15 hover:bg-lime-500/25 text-lime-300 border border-lime-500/30 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-sm">
+                                <i data-lucide="camera" class="w-3.5 h-3.5"></i>Adicionar / Alterar Foto
+                            </button>
+                            <button type="button" onclick="removerFotoPerfilNutri()"
+                                class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-slate-700 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>Remover Foto
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CAMPO NOME -->
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">Nome de Exibição do Nutricionista *</label>
+                    <input type="text" id="modal-nutri-nome" placeholder="Ex: Dr. Marcelo Rocha" required
+                        class="w-full bg-slate-900 border border-slate-700 focus:border-lime-400 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition-colors">
+                </div>
+
+                <!-- CAMPO DOCUMENTO CRN (OPCIONAL) -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300">Documento Profissional (CRN)</label>
+                        <span class="text-[10px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full font-medium">Opcional</span>
+                    </div>
+                    <input type="text" id="modal-nutri-documento" placeholder="Ex: CRN-3 12345/P (ou deixe em branco se preferir)"
+                        class="w-full bg-slate-900 border border-slate-700 focus:border-lime-400 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition-colors">
+                    <p class="text-[11px] text-slate-400 mt-1">
+                        Se preenchido, seu registro CRN será exibido como selo de credibilidade profissional nos planos alimentares dos alunos. Caso prefira, pode deixar este campo em branco.
+                    </p>
+                </div>
+
+                <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-800">
+                    <button type="button" onclick="fecharModalPerfilProfissionalNutri()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all cursor-pointer">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-lime-500 hover:bg-lime-400 text-slate-950 font-black text-xs transition-all shadow-md active:scale-95 flex items-center gap-1.5 cursor-pointer">
+                        <i data-lucide="check" class="w-4 h-4"></i>Salvar Perfil
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Lightbox de Fotos do Admin (Alta Resolução com Download Clínico) -->
     <div id="admin-lightbox"
@@ -4701,6 +6354,48 @@ _Prescrição elaborada pelo seu nutricionista._`;
             </form>
         </div>
     </div>
+
+    <!-- Barra de Navegação Inferior Fixa para Mobile e Tablet (Estilo Real Fit Hub) -->
+    <nav aria-label="Navegação Principal Mobile e Tablet"
+        class="lg:hidden fixed bottom-0 inset-x-0 z-[60] bg-slate-950/95 backdrop-blur-2xl border-t border-slate-800/80 shadow-[0_-8px_30px_rgba(0,0,0,0.8)] px-2 pt-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] pointer-events-auto select-none">
+        <div class="max-w-md md:max-w-lg mx-auto grid grid-cols-5 gap-1 items-center" id="mobile-nav-nutri">
+            <button type="button" onclick="alternarAbaNutri('painel')" id="mob-tab-btn-nutri-painel"
+                class="group flex flex-col items-center justify-center py-2 px-1 rounded-2xl text-lime-400 bg-lime-500/15 border border-lime-500/30 shadow-[0_0_15px_rgba(132,204,22,0.15)] font-bold transition-all active:scale-95 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-1 transition-transform group-hover:scale-110 text-lime-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
+                </svg>
+                <span class="text-[9px] sm:text-[10px] font-bold tracking-tight truncate">Painel</span>
+            </button>
+            <button type="button" onclick="alternarAbaNutri('montar')" id="mob-tab-btn-nutri-montar"
+                class="group flex flex-col items-center justify-center py-2 px-1 rounded-2xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-1 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/><path d="M15 2v14a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V2"/><path d="M6 2v4a3 3 0 0 0 3 3 3 3 0 0 0 3-3V2"/><line x1="12" x2="12" y1="19" y2="22"/>
+                </svg>
+                <span class="text-[9px] sm:text-[10px] font-medium tracking-tight truncate">Dietas</span>
+            </button>
+            <button type="button" onclick="alternarAbaNutri('evolucao')" id="mob-tab-btn-nutri-evolucao"
+                class="group flex flex-col items-center justify-center py-2 px-1 rounded-2xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-1 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>
+                </svg>
+                <span class="text-[9px] sm:text-[10px] font-medium tracking-tight truncate">Evolução</span>
+            </button>
+            <button type="button" onclick="alternarAbaNutri('medidas')" id="mob-tab-btn-nutri-medidas"
+                class="group flex flex-col items-center justify-center py-2 px-1 rounded-2xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-1 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0l12.6 12.6z"/><line x1="14.5" x2="18" y1="5.5" y2="9"/><line x1="11.5" x2="13" y1="8.5" y2="10"/><line x1="8.5" x2="12" y1="11.5" y2="15"/><line x1="5.5" x2="7" y1="14.5" y2="16"/>
+                </svg>
+                <span class="text-[9px] sm:text-[10px] font-medium tracking-tight truncate">Medidas</span>
+            </button>
+            <button type="button" onclick="alternarAbaNutri('gestao')" id="mob-tab-btn-nutri-gestao"
+                class="group flex flex-col items-center justify-center py-2 px-1 rounded-2xl text-slate-400 hover:text-slate-100 hover:bg-slate-900/80 border border-transparent font-medium transition-all active:scale-95 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0 mb-1 text-slate-400 group-hover:text-slate-200 transition-all group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+                <span class="text-[9px] sm:text-[10px] font-medium tracking-tight truncate">Gestão</span>
+            </button>
+        </div>
+    </nav>
 </body>
 
 </html>

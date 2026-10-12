@@ -12,11 +12,7 @@
     'use strict';
 
     const ProfessionalSuite = {
-        planosPadrao: [
-            { id: 'mensal', nome: 'Plano Mensal VIP', valor: 199.00, duracao: '1 mês', desc: 'Acompanhamento nutricional + treinos com ajustes semanais' },
-            { id: 'trimestral', nome: 'Plano Trimestral Alta Performance', valor: 499.00, duracao: '3 meses', desc: 'Protocolo completo com foco em perda de gordura ou hipertrofia' },
-            { id: 'semestral', nome: 'Plano Semestral Transformação Total', valor: 899.00, duracao: '6 meses', desc: 'Acompanhamento contínuo e suporte prioritário via WhatsApp' }
-        ],
+        planosPadrao: [],
 
         // ----------------------------------------------------------------------
         // 1. DASHBOARD EXECUTIVO DO PROFISSIONAL (Item 22)
@@ -32,35 +28,35 @@
             const mensagensNaoLidas = stats.mensagensNaoLidas || 0;
 
             container.innerHTML = `
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-                    <div class="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
-                        <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Alunos Ativos</span>
-                        <div class="text-2xl font-black text-white">${alunos}</div>
-                        <span class="text-[10px] text-emerald-400 font-semibold mt-0.5 block">100% monitorados</span>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
+                    <div class="glass-panel p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-800 text-center flex flex-col justify-between">
+                        <span class="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 block mb-0.5 truncate">Alunos Ativos</span>
+                        <div class="text-lg sm:text-2xl font-bold sm:font-black text-white tracking-tight my-0.5">${alunos}</div>
+                        <span class="text-[9px] sm:text-[10px] text-emerald-400 font-semibold block truncate">100% monitorados</span>
                     </div>
 
-                    <div class="glass-panel p-4 rounded-2xl border border-amber-500/30 bg-amber-500/5 text-center">
-                        <span class="text-[10px] uppercase font-bold text-amber-400 block mb-1">Check-ins Pendentes</span>
-                        <div class="text-2xl font-black text-amber-300">${checkinsPendentes}</div>
-                        <span class="text-[10px] text-amber-400/80 font-semibold mt-0.5 block">Aguardando revisão</span>
+                    <div class="glass-panel p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl border border-amber-500/30 bg-amber-500/5 text-center flex flex-col justify-between">
+                        <span class="text-[9px] sm:text-[10px] uppercase font-bold text-amber-400 block mb-0.5 truncate">Check-ins Pendentes</span>
+                        <div class="text-lg sm:text-2xl font-bold sm:font-black text-amber-300 tracking-tight my-0.5">${checkinsPendentes}</div>
+                        <span class="text-[9px] sm:text-[10px] text-amber-400/80 font-semibold block truncate">Aguardando revisão</span>
                     </div>
 
-                    <div class="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
-                        <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Consultas Hoje</span>
-                        <div class="text-2xl font-black text-cyan-400">${consultasHoje}</div>
-                        <span class="text-[10px] text-slate-400 font-semibold mt-0.5 block">Na agenda</span>
+                    <div class="glass-panel p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-800 text-center flex flex-col justify-between">
+                        <span class="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 block mb-0.5 truncate">Consultas Hoje</span>
+                        <div class="text-lg sm:text-2xl font-bold sm:font-black text-cyan-400 tracking-tight my-0.5">${consultasHoje}</div>
+                        <span class="text-[9px] sm:text-[10px] text-slate-400 font-semibold block truncate">Na agenda</span>
                     </div>
 
-                    <div class="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
-                        <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Mensagens Novas</span>
-                        <div class="text-2xl font-black ${mensagensNaoLidas > 0 ? 'text-red-400' : 'text-slate-400'}">${mensagensNaoLidas}</div>
-                        <span class="text-[10px] text-slate-400 font-semibold mt-0.5 block">No chat com alunos</span>
+                    <div class="glass-panel p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-800 text-center flex flex-col justify-between">
+                        <span class="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 block mb-0.5 truncate">Mensagens Novas</span>
+                        <div class="text-lg sm:text-2xl font-bold sm:font-black ${mensagensNaoLidas > 0 ? 'text-red-400' : 'text-slate-400'} tracking-tight my-0.5">${mensagensNaoLidas}</div>
+                        <span class="text-[9px] sm:text-[10px] text-slate-400 font-semibold block truncate">No chat</span>
                     </div>
 
-                    <div class="glass-panel p-4 rounded-2xl border border-slate-800 text-center col-span-2 sm:col-span-1">
-                        <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Mensalidades</span>
-                        <div class="text-2xl font-black ${pagamentosPendentes > 0 ? 'text-amber-400' : 'text-emerald-400'}">${pagamentosPendentes > 0 ? pagamentosPendentes + ' pendentes' : 'Em dia'}</div>
-                        <span class="text-[10px] text-slate-400 font-semibold mt-0.5 block">Fluxo financeiro</span>
+                    <div class="glass-panel p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-800 text-center col-span-2 sm:col-span-1 flex flex-col justify-between">
+                        <span class="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 block mb-0.5 truncate">Mensalidades</span>
+                        <div class="text-lg sm:text-2xl font-bold sm:font-black ${pagamentosPendentes > 0 ? 'text-amber-400' : 'text-emerald-400'} tracking-tight my-0.5">${pagamentosPendentes > 0 ? pagamentosPendentes + ' pendentes' : 'Em dia'}</div>
+                        <span class="text-[9px] sm:text-[10px] text-slate-400 font-semibold block truncate">Fluxo financeiro</span>
                     </div>
                 </div>
             `;
@@ -70,17 +66,109 @@
         lastFinanceiroContainerId: null,
         lastAgendaContainerId: null,
 
-        obterPlanos() {
-            try {
-                const salvos = localStorage.getItem('apex_planos_consultoria');
-                if (salvos) return JSON.parse(salvos);
-            } catch (e) { }
-            return this.planosPadrao;
+        lastFinanceiroContainerId: null,
+        lastAgendaContainerId: null,
+
+        detectarTipoProfissional(tipo = null, containerId = null) {
+            if (tipo === 'nutri' || tipo === 'personal') return tipo;
+            const cid = containerId || this.lastFinanceiroContainerId || '';
+            if (cid.includes('nutri')) return 'nutri';
+            if (window.location && window.location.pathname.includes('admin')) return 'nutri';
+            return 'personal';
         },
 
-        salvarPlanos(planos) {
+        obterPlanos(tipo = null) {
+            const t = this.detectarTipoProfissional(tipo);
+            const chave = 'rfh_planos_' + t;
             try {
-                localStorage.setItem('apex_planos_consultoria', JSON.stringify(planos));
+                const salvos = localStorage.getItem(chave);
+                if (salvos) return JSON.parse(salvos);
+            } catch (e) { }
+            return [];
+        },
+
+        salvarPlanos(planos, tipo = null) {
+            const t = this.detectarTipoProfissional(tipo);
+            const chave = 'rfh_planos_' + t;
+            try {
+                localStorage.setItem(chave, JSON.stringify(planos));
+            } catch (e) { }
+            // Sincroniza em segundo plano com Supabase se disponível
+            if (typeof supabaseClient !== 'undefined' && supabaseClient.from) {
+                try {
+                    supabaseClient.from('mensagens').insert({
+                        aluno_id: null,
+                        remetente: 'sistema_planos_' + t,
+                        mensagem: JSON.stringify(planos)
+                    }).then(() => {}).catch(() => {});
+                } catch (e) { }
+            }
+        },
+
+        obterTodosPedidosPlanos() {
+            try {
+                const salvos = localStorage.getItem('rfh_pedidos_planos');
+                if (salvos) return JSON.parse(salvos);
+            } catch (e) { }
+            return [];
+        },
+
+        obterPedidosPlanosPorTipo(tipo = null) {
+            const t = this.detectarTipoProfissional(tipo);
+            const categoriaEsperada = (t === 'nutri') ? 'dieta' : 'treino';
+            const todos = this.obterTodosPedidosPlanos();
+            return todos.filter(p => p.tipo === categoriaEsperada);
+        },
+
+        salvarTodosPedidosPlanos(pedidos) {
+            try {
+                localStorage.setItem('rfh_pedidos_planos', JSON.stringify(pedidos));
+            } catch (e) { }
+            if (typeof supabaseClient !== 'undefined' && supabaseClient.from) {
+                try {
+                    supabaseClient.from('mensagens').insert({
+                        aluno_id: null,
+                        remetente: 'sistema_pedidos_planos_sync',
+                        mensagem: JSON.stringify(pedidos)
+                    }).then(() => {}).catch(() => {});
+                } catch (e) { }
+            }
+        },
+
+        obterConfigPagamentoProfissional(tipo = null) {
+            const t = this.detectarTipoProfissional(tipo);
+            const chavePerfil = 'rfh_perfil_' + t;
+            try {
+                const perfil = JSON.parse(localStorage.getItem(chavePerfil) || '{}');
+                return perfil.dadosPagamento || {
+                    tipoChavePix: 'chave_aleatoria',
+                    chavePix: '',
+                    qrCodePix: '',
+                    linkCartao: '',
+                    avisoResponsabilidade: 'Atenção: A geração e cobrança por link de cartão é de inteira responsabilidade do profissional.'
+                };
+            } catch (e) {
+                return {
+                    tipoChavePix: 'chave_aleatoria',
+                    chavePix: '',
+                    qrCodePix: '',
+                    linkCartao: '',
+                    avisoResponsabilidade: 'Atenção: A geração e cobrança por link de cartão é de inteira responsabilidade do profissional.'
+                };
+            }
+        },
+
+        salvarConfigPagamentoProfissional(dadosPagamento, tipo = null) {
+            const t = this.detectarTipoProfissional(tipo);
+            const chavePerfil = 'rfh_perfil_' + t;
+            try {
+                const perfil = JSON.parse(localStorage.getItem(chavePerfil) || '{}');
+                perfil.dadosPagamento = {
+                    ...perfil.dadosPagamento,
+                    ...dadosPagamento,
+                    avisoResponsabilidade: 'Atenção: A geração e cobrança por link de cartão é de inteira responsabilidade do profissional.'
+                };
+                localStorage.setItem(chavePerfil, JSON.stringify(perfil));
             } catch (e) { }
         },
 
@@ -103,87 +191,226 @@
         },
 
         // ----------------------------------------------------------------------
-        // 2. PAINEL FINANCEIRO & PAGAMENTOS (Itens 16 & 17)
+        // 2. PAINEL FINANCEIRO & PLANOS DINÂMICOS (SEPARADOS: PERSONAL VS NUTRI)
         // ----------------------------------------------------------------------
-        renderFinanceiro(containerId) {
+        renderFinanceiro(containerId, tipoParam = null) {
             const targetId = containerId || this.lastFinanceiroContainerId || 'conteudo-financeiro-personal';
             const container = document.getElementById(targetId);
             if (!container) return;
             this.lastFinanceiroContainerId = targetId;
 
-            const planos = this.obterPlanos();
-            const faturamentoCalculado = planos.reduce((acc, p) => acc + (parseFloat(p.valor) || 0), 0);
+            const tipo = this.detectarTipoProfissional(tipoParam, targetId);
+            const isNutri = (tipo === 'nutri');
+            const corTema = isNutri ? 'lime' : 'amber';
+            const iconeTema = isNutri ? 'apple' : 'dumbbell';
+            const tituloArea = isNutri ? 'Nutrição & Acompanhamento Alimentar' : 'Treino & Consultoria Esportiva';
+
+            const planos = this.obterPlanos(tipo);
+            const pedidos = this.obterPedidosPlanosPorTipo(tipo);
+            const pedidosPendentes = pedidos.filter(p => p.status === 'pendente');
+            const pedidosAceitos = pedidos.filter(p => p.status === 'aceito' || p.status === 'ativo');
+
+            const faturamentoPlanos = planos.reduce((acc, p) => acc + (parseFloat(p.valor) || 0), 0);
+            const faturamentoAceito = pedidosAceitos.reduce((acc, p) => acc + (parseFloat(p.valor) || 0), 0);
+            const configPag = this.obterConfigPagamentoProfissional(tipo);
+
+            const badgePeriodicidade = (per) => {
+                const p = (per || 'mensal').toLowerCase();
+                if (p.includes('trimestral') || p === 'trimestral') {
+                    return `<span class="text-[10px] bg-amber-500/15 text-amber-400 border border-amber-500/30 px-2.5 py-0.5 rounded-full font-bold uppercase">Trimestral (3 meses)</span>`;
+                }
+                if (p.includes('anual') || p === 'anual') {
+                    return `<span class="text-[10px] bg-purple-500/15 text-purple-400 border border-purple-500/30 px-2.5 py-0.5 rounded-full font-bold uppercase">Anual (12 meses)</span>`;
+                }
+                return `<span class="text-[10px] bg-sky-500/15 text-sky-400 border border-sky-500/30 px-2.5 py-0.5 rounded-full font-bold uppercase">Mensal (30 dias)</span>`;
+            };
 
             container.innerHTML = `
                 <div class="space-y-6">
+                    <!-- CABEÇALHO DA SEÇÃO FINANCEIRA -->
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
                         <div>
-                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5 mb-1">
-                                <i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5"></i>Gestão de Assinaturas & Cobrança
+                            <span class="text-xs font-bold uppercase tracking-wider text-${corTema}-400 flex items-center gap-1.5 mb-1">
+                                <i data-lucide="${iconeTema}" class="w-3.5 h-3.5"></i>Planos de ${tituloArea}
                             </span>
-                            <h2 class="text-lg font-bold text-white">Painel Financeiro & Planos</h2>
-                            <p class="text-xs text-slate-400">Controle mensalidades, faturamento estimado e planos de consultoria.</p>
+                            <h2 class="text-lg font-bold text-white">Gestão Financeira & Planos de Consultoria</h2>
+                            <p class="text-xs text-slate-400">Crie planos mensais, trimestrais e anuais, receba pedidos de contratação e gerencie formas de recebimento.</p>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button type="button" onclick="ApexProfissional.abrirModalNovoPlano()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-md shadow-emerald-500/20 transition-all cursor-pointer active:scale-95">
-                                <i data-lucide="plus" class="w-3.5 h-3.5"></i>Criar Novo Plano
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <button type="button" onclick="ApexProfissional.abrirModalConfigRecebimento('${tipo}')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm">
+                                <i data-lucide="qr-code" class="w-3.5 h-3.5 text-${corTema}-400"></i>Configurar Recebimento (PIX / Cartão)
+                            </button>
+                            <button type="button" onclick="ApexProfissional.abrirModalNovoPlano('${tipo}')" class="bg-${corTema}-600 hover:bg-${corTema}-500 text-slate-950 font-black text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-md shadow-${corTema}-500/20 transition-all cursor-pointer active:scale-95">
+                                <i data-lucide="plus" class="w-4 h-4"></i>Adicionar Novo Plano
                             </button>
                         </div>
                     </div>
 
-                    <!-- Cards de Métricas Financeiras -->
+                    <!-- CARDS DE MÉTRICAS -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 space-y-1">
-                            <span class="text-xs font-semibold text-slate-400 uppercase">Faturamento Projetado (Mês)</span>
-                            <div class="text-2xl font-black text-white font-mono">R$ ${(faturamentoCalculado * 2.5).toFixed(2).replace('.', ',')}</div>
-                            <span class="text-[11px] text-emerald-400 font-semibold">+18% em relação ao mês anterior</span>
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Planos Ativos Cadastrados</span>
+                            <div class="text-2xl font-black text-white font-mono">${planos.length} plano${planos.length === 1 ? '' : 's'}</div>
+                            <span class="text-[11px] text-${corTema}-400 font-semibold">Mensal, Trimestral ou Anual</span>
                         </div>
                         <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 space-y-1">
-                            <span class="text-xs font-semibold text-slate-400 uppercase">Recebimentos Confirmados</span>
-                            <div class="text-2xl font-black text-emerald-400 font-mono">R$ ${(faturamentoCalculado * 2.0).toFixed(2).replace('.', ',')}</div>
-                            <span class="text-[11px] text-slate-400 font-semibold">Via PIX e Cartão de Crédito</span>
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Pedidos Recebidos de Alunos</span>
+                            <div class="text-2xl font-black text-emerald-400 font-mono">${pedidos.length} pedido${pedidos.length === 1 ? '' : 's'}</div>
+                            <span class="text-[11px] text-emerald-400 font-semibold">${pedidosAceitos.length} aceitos / ativos</span>
                         </div>
                         <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 space-y-1">
-                            <span class="text-xs font-semibold text-slate-400 uppercase">Valores Pendentes / Vencer</span>
-                            <div class="text-2xl font-black text-amber-400 font-mono">R$ ${(faturamentoCalculado * 0.5).toFixed(2).replace('.', ',')}</div>
-                            <span class="text-[11px] text-amber-400 font-semibold">Faturas com vencimento nos próximos dias</span>
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Pedidos Aguardando Aceite</span>
+                            <div class="text-2xl font-black text-amber-400 font-mono">${pedidosPendentes.length} pendente${pedidosPendentes.length === 1 ? '' : 's'}</div>
+                            <span class="text-[11px] text-amber-400 font-semibold">Necessita confirmação de recebimento</span>
                         </div>
                     </div>
 
-                    <!-- Planos de Consultoria Cadastrados -->
+                    <!-- SEÇÃO: SOLICITAÇÕES / PEDIDOS DE ALUNOS (FLUXO 100% FUNCIONAL) -->
+                    <div class="glass-panel p-5 rounded-3xl border border-slate-800 space-y-4">
+                        <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+                            <div>
+                                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                    <i data-lucide="inbox" class="w-4 h-4 text-amber-400"></i>
+                                    <span>Solicitações de Planos (Pedidos de Alunos)</span>
+                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                        ${pedidosPendentes.length} pendente${pedidosPendentes.length === 1 ? '' : 's'}
+                                    </span>
+                                </h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Quando um aluno solicita um plano, você aceita o pedido e disponibiliza seus dados de pagamento (PIX ou Cartão).</p>
+                            </div>
+                        </div>
+
+                        ${pedidos.length === 0 ? `
+                            <div class="text-center py-8 px-4 rounded-2xl bg-slate-900/40 border border-slate-800/80 space-y-2">
+                                <div class="w-10 h-10 mx-auto rounded-2xl bg-slate-800 flex items-center justify-center text-slate-500">
+                                    <i data-lucide="receipt" class="w-5 h-5"></i>
+                                </div>
+                                <p class="text-xs text-slate-300 font-bold">Nenhum pedido de contratação recebido ainda.</p>
+                                <p class="text-[11px] text-slate-500 max-w-md mx-auto">Assim que os alunos escolherem um plano no painel deles, a solicitação aparecerá aqui para você aceitar e enviar os dados de pagamento.</p>
+                            </div>
+                        ` : `
+                            <div class="space-y-3">
+                                ${pedidos.map(ped => `
+                                    <div class="bg-slate-900/80 p-4 rounded-2xl border ${ped.status === 'pendente' ? 'border-amber-500/40 bg-amber-500/5' : 'border-slate-800'} flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all">
+                                        <div class="flex items-start sm:items-center gap-3">
+                                            <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-xs text-white shrink-0">
+                                                ${(ped.alunoNome || 'A').charAt(0).toUpperCase()}
+                                            </div>
+                                            <div>
+                                                <div class="flex items-center gap-2 flex-wrap">
+                                                    <span class="text-sm font-bold text-white">${ped.alunoNome || 'Aluno'}</span>
+                                                    ${badgePeriodicidade(ped.periodicidade)}
+                                                    <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${ped.status === 'pendente' ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30' : ped.status === 'aceito' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'}">
+                                                        ${ped.status === 'pendente' ? 'Aguardando Seu Aceite' : ped.status === 'aceito' ? 'Pedido Aceito' : 'Recusado'}
+                                                    </span>
+                                                </div>
+                                                <div class="text-xs text-slate-400 mt-1 flex items-center gap-3 flex-wrap">
+                                                    <span>Plano: <strong class="text-slate-200">${ped.planoNome}</strong></span>
+                                                    <span>Valor: <strong class="text-emerald-400 font-mono">R$ ${parseFloat(ped.valor || 0).toFixed(2).replace('.', ',')}</strong></span>
+                                                    <span>Data: ${ped.dataPedido ? new Date(ped.dataPedido).toLocaleDateString('pt-BR') : 'Hoje'}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+                                            ${ped.status === 'pendente' ? `
+                                                <button type="button" onclick="ApexProfissional.abrirModalAceitarPedido('${ped.id}', '${tipo}')" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md shadow-emerald-500/20 active:scale-95 flex items-center gap-1.5 cursor-pointer">
+                                                    <i data-lucide="check" class="w-3.5 h-3.5"></i>Aceitar Pedido
+                                                </button>
+                                                <button type="button" onclick="ApexProfissional.recusarPedido('${ped.id}', '${tipo}')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-slate-700 text-xs font-semibold transition-all cursor-pointer">
+                                                    Recusar
+                                                </button>
+                                            ` : `
+                                                <button type="button" onclick="ApexProfissional.abrirModalAceitarPedido('${ped.id}', '${tipo}')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition-all flex items-center gap-1.5 cursor-pointer">
+                                                    <i data-lucide="edit-3" class="w-3 h-3 text-${corTema}-400"></i>Atualizar Dados de Pagamento
+                                                </button>
+                                            `}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `}
+                    </div>
+
+                    <!-- SEÇÃO: PLANOS DE CONSULTORIA CADASTRADOS (ZERADOS INICIALMENTE, CUSTOMIZÁVEIS) -->
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">Planos de Consultoria Cadastrados (${planos.length})</h3>
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">
+                                Planos de ${tituloArea} Cadastrados (${planos.length})
+                            </h3>
+                            <button type="button" onclick="ApexProfissional.abrirModalNovoPlano('${tipo}')" class="text-xs text-${corTema}-400 hover:underline font-bold flex items-center gap-1">
+                                <i data-lucide="plus" class="w-3.5 h-3.5"></i>Adicionar Plano
+                            </button>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            ${planos.map(p => `
-                                <div class="bg-slate-950/70 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-3 hover:border-slate-700 transition-all group">
-                                    <div>
-                                        <div class="flex items-center justify-between mb-1">
-                                            <span class="text-xs font-extrabold text-white">${p.nome}</span>
-                                            <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full">${p.duracao}</span>
-                                        </div>
-                                        <p class="text-[11px] text-slate-400 leading-relaxed">${p.desc}</p>
-                                    </div>
-                                    <div class="flex items-center justify-between pt-2 border-t border-slate-800">
-                                        <span class="text-lg font-black text-emerald-400 font-mono">R$ ${parseFloat(p.valor || 0).toFixed(2).replace('.', ',')}</span>
-                                        <span class="text-[10px] text-emerald-400 font-bold uppercase bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Ativo</span>
-                                    </div>
+
+                        ${planos.length === 0 ? `
+                            <div class="p-6 rounded-2xl bg-slate-950/60 border border-dashed border-slate-800 text-center space-y-3">
+                                <div class="w-12 h-12 mx-auto rounded-2xl bg-${corTema}-500/10 text-${corTema}-400 border border-${corTema}-500/20 flex items-center justify-center">
+                                    <i data-lucide="credit-card" class="w-6 h-6"></i>
                                 </div>
-                            `).join('')}
-                        </div>
+                                <h4 class="text-sm font-bold text-white">Nenhum plano cadastrado no momento</h4>
+                                <p class="text-xs text-slate-400 max-w-md mx-auto">
+                                    Você pode adicionar planos <strong>Mensais</strong>, <strong>Trimestrais</strong> ou <strong>Anuais</strong> para que seus alunos visualizem e contratem diretamente no painel deles.
+                                </p>
+                                <button type="button" onclick="ApexProfissional.abrirModalNovoPlano('${tipo}')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-${corTema}-500 hover:bg-${corTema}-400 text-slate-950 font-black text-xs transition-all shadow-md active:scale-95 cursor-pointer">
+                                    <i data-lucide="plus-circle" class="w-4 h-4"></i>Cadastrar Primeiro Plano
+                                </button>
+                            </div>
+                        ` : `
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                ${planos.map(p => `
+                                    <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800 hover:border-slate-700 flex flex-col justify-between space-y-4 transition-all group relative overflow-hidden">
+                                        <div class="space-y-2">
+                                            <div class="flex items-start justify-between gap-2">
+                                                <h4 class="text-sm font-extrabold text-white group-hover:text-${corTema}-400 transition-colors">${p.nome}</h4>
+                                                ${badgePeriodicidade(p.duracao || p.periodicidade)}
+                                            </div>
+                                            <p class="text-xs text-slate-400 leading-relaxed whitespace-pre-line">${p.desc || 'Benefícios personalizados de acompanhamento.'}</p>
+                                        </div>
+
+                                        <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
+                                            <div>
+                                                <span class="text-[10px] text-slate-500 uppercase block font-bold">Investimento</span>
+                                                <span class="text-xl font-black text-emerald-400 font-mono">R$ ${parseFloat(p.valor || 0).toFixed(2).replace('.', ',')}</span>
+                                            </div>
+                                            <div class="flex items-center gap-1.5">
+                                                <button type="button" onclick="ApexProfissional.abrirModalEditarPlano('${p.id}', '${tipo}')" title="Editar plano" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-all">
+                                                    <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                                                </button>
+                                                <button type="button" onclick="ApexProfissional.excluirPlano('${p.id}', '${tipo}')" title="Excluir plano" class="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 transition-all">
+                                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `}
                     </div>
 
-                    <!-- Configuração de Gateway & PIX (Item 17) -->
-                    <div class="bg-slate-950/40 p-4 rounded-2xl border border-slate-800/80 space-y-2 text-xs">
-                        <div class="flex items-center gap-2 font-bold text-white">
-                            <i data-lucide="key" class="w-4 h-4 text-emerald-400"></i>
-                            <span>Integração de Pagamentos (PIX / Cartão / Gateway)</span>
+                    <!-- CONFIGURAÇÃO DE RECEBIMENTO & TERMO DE RESPONSABILIDADE -->
+                    <div class="bg-slate-950/60 p-5 rounded-3xl border border-slate-800/80 space-y-3 text-xs">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <div class="flex items-center gap-2 font-bold text-white">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-${corTema}-400"></i>
+                                <span>Meios de Recebimento de Pagamento Configurados</span>
+                            </div>
+                            <button type="button" onclick="ApexProfissional.abrirModalConfigRecebimento('${tipo}')" class="text-xs text-${corTema}-400 font-bold hover:underline">
+                                Editar Dados de Cobrança
+                            </button>
                         </div>
-                        <p class="text-slate-400">
-                            A arquitetura do Real Fit Hub está preparada para receber cobranças via <strong>PIX Copia e Cola</strong>, <strong>Mercado Pago</strong>, <strong>Asaas</strong> ou <strong>Stripe</strong>.
-                            Para ativar cobranças automáticas em produção, basta inserir sua chave de API ou Chave PIX nos parâmetros da plataforma.
-                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                            <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 space-y-1">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Chave PIX Cadastrada:</span>
+                                <div class="text-xs font-mono font-bold text-white">${configPag.chavePix ? configPag.chavePix : '<span class="text-slate-500 italic">Nenhuma chave informada ainda</span>'}</div>
+                                ${configPag.qrCodePix ? '<span class="text-[10px] text-emerald-400 font-semibold block">✓ QR Code PIX anexado</span>' : ''}
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 space-y-1">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase block">Link de Pagamento com Cartão:</span>
+                                <div class="text-xs text-white truncate">${configPag.linkCartao ? `<a href="${configPag.linkCartao}" target="_blank" class="text-sky-400 underline">${configPag.linkCartao}</a>` : '<span class="text-slate-500 italic">Nenhum link configurado</span>'}</div>
+                                <span class="text-[10px] text-amber-400/90 font-medium block">Cobrança de cartão por responsabilidade do profissional.</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -442,68 +669,102 @@ ${resumoTexto}
         // ----------------------------------------------------------------------
         // MODAIS INTERATIVOS: PLANOS & AGENDAMENTOS
         // ----------------------------------------------------------------------
-        abrirModalNovoPlano() {
+        // MODAIS INTERATIVOS: PLANOS, RECEBIMENTO & PEDIDOS DE ALUNOS
+        // ----------------------------------------------------------------------
+        abrirModalNovoPlano(tipoParam = null) {
+            this.abrirModalEditarPlano(null, tipoParam);
+        },
+
+        abrirModalEditarPlano(planoId = null, tipoParam = null) {
+            const tipo = this.detectarTipoProfissional(tipoParam);
+            const isNutri = (tipo === 'nutri');
+            const corTema = isNutri ? 'lime' : 'amber';
+            const tituloArea = isNutri ? 'Nutricional' : 'de Treino';
+
+            let planoExistente = null;
+            if (planoId) {
+                const planos = this.obterPlanos(tipo);
+                planoExistente = planos.find(p => p.id === planoId);
+            }
+
             let modal = document.getElementById('modal-pro-novo-plano');
-            if (!modal) {
-                modal = document.createElement('div');
-                modal.id = 'modal-pro-novo-plano';
-                modal.className = 'fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4';
-                modal.innerHTML = `
-                    <div class="glass-panel w-full max-w-md rounded-3xl border border-emerald-500/30 p-6 space-y-4 shadow-2xl relative">
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                            <div class="flex items-center gap-2">
-                                <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
-                                    <i data-lucide="badge-dollar-sign" class="w-4 h-4"></i>
-                                </div>
-                                <h3 class="text-sm font-bold text-white">Criar Novo Plano de Consultoria</h3>
+            if (modal) modal.remove();
+
+            modal = document.createElement('div');
+            modal.id = 'modal-pro-novo-plano';
+            modal.className = 'fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="glass-panel w-full max-w-lg rounded-3xl border border-${corTema}-500/30 p-6 space-y-4 shadow-2xl relative bg-slate-950/95 max-h-[90vh] overflow-y-auto">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-xl bg-${corTema}-500/10 text-${corTema}-400 border border-${corTema}-500/25 flex items-center justify-center">
+                                <i data-lucide="${isNutri ? 'apple' : 'dumbbell'}" class="w-5 h-5"></i>
                             </div>
-                            <button type="button" onclick="ApexProfissional.fecharModalNovoPlano()" class="text-slate-400 hover:text-white p-1 rounded-lg">
-                                <i data-lucide="x" class="w-5 h-5"></i>
+                            <div>
+                                <h3 class="text-sm font-bold text-white">${planoExistente ? 'Editar Plano ' + tituloArea : 'Novo Plano ' + tituloArea}</h3>
+                                <p class="text-[11px] text-slate-400">Configure os detalhes do plano que ficará disponível para os alunos.</p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="ApexProfissional.fecharModalNovoPlano()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <form id="form-pro-plano-dinamico" onsubmit="ApexProfissional.salvarPlanoFormulario(event, '${tipo}', '${planoExistente ? planoExistente.id : ''}')" class="space-y-4">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">Nome do Plano *</label>
+                            <input type="text" id="novo-plano-nome" placeholder="${isNutri ? 'Ex: Acompanhamento Nutricional Individualizado' : 'Ex: Consultoria de Treino & Periodização'}" value="${planoExistente ? (planoExistente.nome || '') : ''}" required
+                                class="w-full bg-slate-900 border border-slate-700 focus:border-${corTema}-400 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition-colors">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">Periodicidade / Duração *</label>
+                                <select id="novo-plano-duracao" required
+                                    class="w-full bg-slate-900 border border-slate-700 focus:border-${corTema}-400 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none transition-colors">
+                                    <option value="mensal" ${(planoExistente && (planoExistente.duracao === 'mensal' || planoExistente.duracao === '1 mês')) ? 'selected' : ''}>Mensal (30 dias)</option>
+                                    <option value="trimestral" ${(planoExistente && (planoExistente.duracao === 'trimestral' || planoExistente.duracao === '3 meses')) ? 'selected' : ''}>Trimestral (3 meses)</option>
+                                    <option value="anual" ${(planoExistente && (planoExistente.duracao === 'anual' || planoExistente.duracao === '12 meses')) ? 'selected' : ''}>Anual (12 meses)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">Valor (R$) *</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-2.5 text-xs text-slate-500 font-bold">R$</span>
+                                    <input type="number" id="novo-plano-valor" placeholder="150.00" step="0.01" min="1" value="${planoExistente ? (planoExistente.valor || '') : ''}" required
+                                        class="w-full bg-slate-900 border border-slate-700 focus:border-${corTema}-400 rounded-xl pl-9 pr-3 py-2 text-xs text-white font-mono focus:outline-none transition-colors">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">Benefícios Inclusos / Descrição *</label>
+                            <textarea id="novo-plano-desc" rows="3" placeholder="${isNutri ? 'Ex: - Plano alimentar individualizado\n- Cálculo de macronutrientes\n- Substituições inteligentes\n- Suporte via chat para dúvidas' : 'Ex: - Divisão semanal de treinos\n- Periodização e ajuste de cargas\n- Análise de vídeos de execução\n- Suporte prioritário via chat'}" required
+                                class="w-full bg-slate-900 border border-slate-700 focus:border-${corTema}-400 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none transition-colors">${planoExistente ? (planoExistente.desc || '') : ''}</textarea>
+                            <span class="text-[10px] text-slate-500 mt-1 block">Estes benefícios serão visualizados detalhadamente pelos alunos ao escolherem o plano.</span>
+                        </div>
+
+                        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-800">
+                            <button type="button" onclick="ApexProfissional.fecharModalNovoPlano()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all cursor-pointer">Cancelar</button>
+                            <button type="submit" class="px-5 py-2 rounded-xl bg-${corTema}-600 hover:bg-${corTema}-500 text-slate-950 font-black text-xs transition-all shadow-md shadow-${corTema}-500/20 active:scale-95 cursor-pointer">
+                                ${planoExistente ? 'Salvar Alterações' : 'Cadastrar Plano'}
                             </button>
                         </div>
-                        <form id="form-pro-novo-plano" onsubmit="ApexProfissional.salvarNovoPlano(event)" class="space-y-3.5">
-                            <div>
-                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Nome do Plano *</label>
-                                <input type="text" id="novo-plano-nome" placeholder="Ex: Plano Anual Elite VIP" required
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
-                            </div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Valor (R$) *</label>
-                                    <input type="number" id="novo-plano-valor" placeholder="299.00" step="0.01" min="1" required
-                                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-emerald-500">
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Duração *</label>
-                                    <input type="text" id="novo-plano-duracao" placeholder="Ex: 3 meses" required
-                                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Descrição dos Benefícios *</label>
-                                <textarea id="novo-plano-desc" rows="2" placeholder="O que inclui o plano..." required
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"></textarea>
-                            </div>
-                            <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
-                                <button type="button" onclick="ApexProfissional.fecharModalNovoPlano()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all">Cancelar</button>
-                                <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition-all shadow-md shadow-emerald-500/20 active:scale-95">Salvar Plano</button>
-                            </div>
-                        </form>
-                    </div>
-                `;
-                document.body.appendChild(modal);
-            }
-            modal.classList.remove('hidden');
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
             if (window.lucide) lucide.createIcons();
         },
 
         fecharModalNovoPlano() {
             const modal = document.getElementById('modal-pro-novo-plano');
-            if (modal) modal.classList.add('hidden');
+            if (modal) modal.remove();
         },
 
-        salvarNovoPlano(e) {
+        salvarPlanoFormulario(e, tipoParam, planoId) {
             e.preventDefault();
+            const tipo = this.detectarTipoProfissional(tipoParam);
             const nome = document.getElementById('novo-plano-nome')?.value.trim();
             const valor = parseFloat(document.getElementById('novo-plano-valor')?.value) || 0;
             const duracao = document.getElementById('novo-plano-duracao')?.value.trim();
@@ -511,20 +772,395 @@ ${resumoTexto}
 
             if (!nome || !valor) return;
 
-            const planos = this.obterPlanos();
-            planos.push({
-                id: 'plano_' + Date.now(),
-                nome,
-                valor,
-                duracao,
-                desc
-            });
-            this.salvarPlanos(planos);
+            const planos = this.obterPlanos(tipo);
+            if (planoId) {
+                const idx = planos.findIndex(p => p.id === planoId);
+                if (idx !== -1) {
+                    planos[idx] = { ...planos[idx], nome, valor, duracao, desc };
+                }
+            } else {
+                planos.push({
+                    id: 'plano_' + Date.now(),
+                    tipo: (tipo === 'nutri' ? 'dieta' : 'treino'),
+                    nome,
+                    valor,
+                    duracao,
+                    desc,
+                    criadoEm: new Date().toISOString()
+                });
+            }
+
+            this.salvarPlanos(planos, tipo);
             this.fecharModalNovoPlano();
-            this.renderFinanceiro(this.lastFinanceiroContainerId);
+            this.renderFinanceiro(this.lastFinanceiroContainerId, tipo);
 
             if (window.showToast) {
-                window.showToast('Plano Criado! 💳', `${nome} adicionado com sucesso.`, 'success');
+                window.showToast('Plano Salvo com Sucesso! 💳', `${nome} agora está disponível para contratação.`, 'success');
+            }
+        },
+
+        excluirPlano(planoId, tipoParam = null) {
+            if (!confirm('Deseja realmente excluir este plano de consultoria? Os alunos não poderão mais contratá-lo.')) return;
+            const tipo = this.detectarTipoProfissional(tipoParam);
+            let planos = this.obterPlanos(tipo);
+            planos = planos.filter(p => p.id !== planoId);
+            this.salvarPlanos(planos, tipo);
+            this.renderFinanceiro(this.lastFinanceiroContainerId, tipo);
+
+            if (window.showToast) {
+                window.showToast('Plano Excluído', 'O plano foi removido da sua lista.', 'info');
+            }
+        },
+
+        // ==============================================================
+        // MODAL: ACEITAR PEDIDO DE ALUNO E FORNECER DADOS DE PAGAMENTO
+        // ==============================================================
+        abrirModalAceitarPedido(pedidoId, tipoParam = null) {
+            const tipo = this.detectarTipoProfissional(tipoParam);
+            const isNutri = (tipo === 'nutri');
+            const corTema = isNutri ? 'lime' : 'amber';
+            const todosPedidos = this.obterTodosPedidosPlanos();
+            const pedido = todosPedidos.find(p => p.id === pedidoId);
+            if (!pedido) return;
+
+            const configPag = this.obterConfigPagamentoProfissional(tipo);
+
+            let modal = document.getElementById('modal-aceitar-pedido-plano');
+            if (modal) modal.remove();
+
+            modal = document.createElement('div');
+            modal.id = 'modal-aceitar-pedido-plano';
+            modal.className = 'fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="glass-panel w-full max-w-lg rounded-3xl border border-${corTema}-500/30 p-6 space-y-4 shadow-2xl relative bg-slate-950/95 max-h-[92vh] overflow-y-auto">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center justify-center">
+                                <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-white">Aceitar Pedido de Contratação</h3>
+                                <p class="text-[11px] text-slate-400">Aluno: <strong class="text-white">${pedido.alunoNome}</strong> • Plano: <strong class="text-${corTema}-400">${pedido.planoNome}</strong></p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="ApexProfissional.fecharModalAceitarPedido()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <!-- Resumo da Solicitação -->
+                    <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-400">Valor do Plano:</span>
+                            <span class="text-base font-black text-emerald-400 font-mono">R$ ${parseFloat(pedido.valor || 0).toFixed(2).replace('.', ',')}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-400">Periodicidade:</span>
+                            <span class="font-bold text-white uppercase">${pedido.periodicidade || 'Mensal'}</span>
+                        </div>
+                    </div>
+
+                    <form id="form-aceitar-pedido" onsubmit="ApexProfissional.salvarAceitePedidoFormulario(event, '${pedido.id}', '${tipo}')" class="space-y-4">
+                        <h4 class="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                            <i data-lucide="wallet" class="w-4 h-4 text-${corTema}-400"></i>
+                            Dados para o Aluno Efetuar o Pagamento:
+                        </h4>
+
+                        <!-- Opção PIX -->
+                        <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
+                            <span class="text-xs font-bold text-emerald-400 block flex items-center gap-1.5">
+                                <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>Opção 1: Recebimento via PIX
+                            </span>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Tipo da Chave</label>
+                                    <select id="aceite-tipo-chave-pix" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-${corTema}-400">
+                                        <option value="chave_aleatoria" ${configPag.tipoChavePix === 'chave_aleatoria' ? 'selected' : ''}>Chave Aleatória</option>
+                                        <option value="cpf" ${configPag.tipoChavePix === 'cpf' ? 'selected' : ''}>CPF / CNPJ</option>
+                                        <option value="email" ${configPag.tipoChavePix === 'email' ? 'selected' : ''}>E-mail</option>
+                                        <option value="telefone" ${configPag.tipoChavePix === 'telefone' ? 'selected' : ''}>Celular</option>
+                                    </select>
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Chave PIX *</label>
+                                    <input type="text" id="aceite-chave-pix" placeholder="Cole aqui sua chave PIX..." value="${configPag.chavePix || ''}" required
+                                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-${corTema}-400">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Imagem do QR Code PIX (Opcional)</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="file" id="aceite-file-qrcode" accept="image/*" class="hidden" onchange="ApexProfissional.aoSelecionarQrCode(event)">
+                                    <button type="button" onclick="document.getElementById('aceite-file-qrcode').click()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-all flex items-center gap-1.5 cursor-pointer">
+                                        <i data-lucide="image" class="w-3.5 h-3.5"></i>Upload Imagem QR Code
+                                    </button>
+                                    <span id="aceite-qrcode-status" class="text-[11px] text-slate-400 truncate max-w-[200px]">${configPag.qrCodePix ? 'QR Code carregado' : 'Nenhuma imagem selecionada'}</span>
+                                </div>
+                                <input type="hidden" id="aceite-qrcode-base64" value="${configPag.qrCodePix || ''}">
+                            </div>
+                        </div>
+
+                        <!-- Opção Cartão de Crédito -->
+                        <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
+                            <span class="text-xs font-bold text-sky-400 block flex items-center gap-1.5">
+                                <i data-lucide="credit-card" class="w-3.5 h-3.5"></i>Opção 2: Pagamento por Link de Cartão (Opcional)
+                            </span>
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Link de Pagamento / Checkout (Mercado Pago, InfinitePay, Stripe, Asaas, etc.)</label>
+                                <input type="url" id="aceite-link-cartao" placeholder="https://..." value="${configPag.linkCartao || ''}"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-${corTema}-400">
+                            </div>
+
+                            <!-- TERMO DE RESPONSABILIDADE VISÍVEL -->
+                            <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-300 leading-relaxed space-y-1">
+                                <div class="font-bold flex items-center gap-1.5">
+                                    <i data-lucide="alert-triangle" class="w-3.5 h-3.5 shrink-0 text-amber-400"></i>
+                                    <span>Termo de Responsabilidade:</span>
+                                </div>
+                                <p class="text-amber-200/90">
+                                    A criação, gestão e cobrança do link de cartão é de <strong>inteira responsabilidade do profissional</strong>. A plataforma Real Fit Hub apenas disponibiliza o link seguro de pagamento para facilitar a transação com seu aluno.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-800">
+                            <button type="button" onclick="ApexProfissional.fecharModalAceitarPedido()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all cursor-pointer">Cancelar</button>
+                            <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs transition-all shadow-md shadow-emerald-500/20 active:scale-95 flex items-center gap-1.5 cursor-pointer">
+                                <i data-lucide="check" class="w-4 h-4"></i>Confirmar e Disponibilizar ao Aluno
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            if (window.lucide) lucide.createIcons();
+        },
+
+        aoSelecionarQrCode(e) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const base64 = event.target.result;
+                const hiddenInput = document.getElementById('aceite-qrcode-base64');
+                const statusSpan = document.getElementById('aceite-qrcode-status');
+                if (hiddenInput) hiddenInput.value = base64;
+                if (statusSpan) statusSpan.textContent = file.name;
+                if (window.showToast) window.showToast('QR Code Carregado! 📸', 'Imagem pronta para envio ao aluno.', 'success');
+            };
+            reader.readAsDataURL(file);
+        },
+
+        fecharModalAceitarPedido() {
+            const modal = document.getElementById('modal-aceitar-pedido-plano');
+            if (modal) modal.remove();
+        },
+
+        salvarAceitePedidoFormulario(e, pedidoId, tipoParam) {
+            e.preventDefault();
+            const tipo = this.detectarTipoProfissional(tipoParam);
+            const chavePix = document.getElementById('aceite-chave-pix')?.value.trim();
+            const tipoChavePix = document.getElementById('aceite-tipo-chave-pix')?.value;
+            const qrCodePix = document.getElementById('aceite-qrcode-base64')?.value || '';
+            const linkCartao = document.getElementById('aceite-link-cartao')?.value.trim() || '';
+
+            if (!chavePix) {
+                alert('Por favor, informe a Chave PIX para recebimento.');
+                return;
+            }
+
+            const dadosPagamento = {
+                tipoChavePix,
+                chavePix,
+                qrCodePix,
+                linkCartao,
+                avisoResponsabilidade: 'Atenção: A cobrança via cartão de crédito é de inteira responsabilidade do profissional contratado.'
+            };
+
+            // Salva dados no perfil padrão do profissional
+            this.salvarConfigPagamentoProfissional(dadosPagamento, tipo);
+
+            // Atualiza o pedido
+            const todosPedidos = this.obterTodosPedidosPlanos();
+            const idx = todosPedidos.findIndex(p => p.id === pedidoId);
+            if (idx !== -1) {
+                // Recupera perfil profissional (nome, documento, foto) para anexar ao pedido
+                const perfilProf = JSON.parse(localStorage.getItem('rfh_perfil_' + tipo) || '{}');
+                todosPedidos[idx].status = 'aceito';
+                todosPedidos[idx].dadosPagamento = dadosPagamento;
+                todosPedidos[idx].profNome = perfilProf.nome || (tipo === 'nutri' ? 'Nutricionista Responsável' : 'Personal Trainer Responsável');
+                todosPedidos[idx].profDocumento = perfilProf.documento || perfilProf.registro || '';
+                todosPedidos[idx].profFoto = perfilProf.foto || '';
+                todosPedidos[idx].dataAceite = new Date().toISOString();
+            }
+
+            this.salvarTodosPedidosPlanos(todosPedidos);
+            this.fecharModalAceitarPedido();
+            this.renderFinanceiro(this.lastFinanceiroContainerId, tipo);
+
+            if (window.showToast) {
+                window.showToast('Pedido Aceito! 🎉', 'Os dados de pagamento foram disponibilizados diretamente no painel do aluno.', 'success');
+            }
+        },
+
+        recusarPedido(pedidoId, tipoParam = null) {
+            if (!confirm('Deseja realmente recusar esta solicitação de plano?')) return;
+            const tipo = this.detectarTipoProfissional(tipoParam);
+            const todosPedidos = this.obterTodosPedidosPlanos();
+            const idx = todosPedidos.findIndex(p => p.id === pedidoId);
+            if (idx !== -1) {
+                todosPedidos[idx].status = 'recusado';
+                todosPedidos[idx].dataRecusa = new Date().toISOString();
+            }
+            this.salvarTodosPedidosPlanos(todosPedidos);
+            this.renderFinanceiro(this.lastFinanceiroContainerId, tipo);
+
+            if (window.showToast) {
+                window.showToast('Pedido Recusado', 'O status da solicitação foi atualizado.', 'info');
+            }
+        },
+
+        // ==============================================================
+        // MODAL: CONFIGURAÇÃO PADRÃO DE MEIOS DE RECEBIMENTO
+        // ==============================================================
+        abrirModalConfigRecebimento(tipoParam = null) {
+            const tipo = this.detectarTipoProfissional(tipoParam);
+            const isNutri = (tipo === 'nutri');
+            const corTema = isNutri ? 'lime' : 'amber';
+            const configPag = this.obterConfigPagamentoProfissional(tipo);
+
+            let modal = document.getElementById('modal-config-recebimento-pro');
+            if (modal) modal.remove();
+
+            modal = document.createElement('div');
+            modal.id = 'modal-config-recebimento-pro';
+            modal.className = 'fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="glass-panel w-full max-w-md rounded-3xl border border-${corTema}-500/30 p-6 space-y-4 shadow-2xl relative bg-slate-950/95 max-h-[92vh] overflow-y-auto">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-xl bg-${corTema}-500/10 text-${corTema}-400 border border-${corTema}-500/25 flex items-center justify-center">
+                                <i data-lucide="wallet" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-white">Dados Padrão de Recebimento</h3>
+                                <p class="text-[11px] text-slate-400">Configure seus dados para receber pagamentos dos alunos via PIX ou Cartão.</p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="ApexProfissional.fecharModalConfigRecebimento()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <form id="form-config-recebimento" onsubmit="ApexProfissional.salvarConfigRecebimentoFormulario(event, '${tipo}')" class="space-y-4">
+                        <div class="space-y-3">
+                            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider block">Recebimento via PIX</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Tipo da Chave</label>
+                                    <select id="cfg-tipo-chave-pix" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-${corTema}-400">
+                                        <option value="chave_aleatoria" ${configPag.tipoChavePix === 'chave_aleatoria' ? 'selected' : ''}>Chave Aleatória</option>
+                                        <option value="cpf" ${configPag.tipoChavePix === 'cpf' ? 'selected' : ''}>CPF / CNPJ</option>
+                                        <option value="email" ${configPag.tipoChavePix === 'email' ? 'selected' : ''}>E-mail</option>
+                                        <option value="telefone" ${configPag.tipoChavePix === 'telefone' ? 'selected' : ''}>Celular</option>
+                                    </select>
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Chave PIX</label>
+                                    <input type="text" id="cfg-chave-pix" placeholder="Sua chave PIX..." value="${configPag.chavePix || ''}"
+                                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-${corTema}-400">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">QR Code PIX (Imagem Opcional)</label>
+                                <input type="file" id="cfg-file-qrcode" accept="image/*" class="hidden" onchange="ApexProfissional.aoSelecionarQrCodeCfg(event)">
+                                <div class="flex items-center gap-2">
+                                    <button type="button" onclick="document.getElementById('cfg-file-qrcode').click()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-all flex items-center gap-1.5 cursor-pointer">
+                                        <i data-lucide="upload" class="w-3.5 h-3.5"></i>Upload QR Code
+                                    </button>
+                                    <span id="cfg-qrcode-status" class="text-[11px] text-slate-400 truncate max-w-[200px]">${configPag.qrCodePix ? 'Imagem salva' : 'Nenhuma imagem'}</span>
+                                </div>
+                                <input type="hidden" id="cfg-qrcode-base64" value="${configPag.qrCodePix || ''}">
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 pt-3 border-t border-slate-800">
+                            <span class="text-xs font-bold text-sky-400 uppercase tracking-wider block">Link de Pagamento com Cartão</span>
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Link de Pagamento (Mercado Pago, Stripe, Asaas, etc.)</label>
+                                <input type="url" id="cfg-link-cartao" placeholder="https://..." value="${configPag.linkCartao || ''}"
+                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-${corTema}-400">
+                            </div>
+
+                            <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-300 leading-relaxed space-y-1">
+                                <div class="font-bold flex items-center gap-1.5">
+                                    <i data-lucide="alert-triangle" class="w-3.5 h-3.5 shrink-0 text-amber-400"></i>
+                                    <span>Termo de Responsabilidade:</span>
+                                </div>
+                                <p class="text-amber-200/90">
+                                    A criação do link de cartão é de inteira responsabilidade do profissional. A plataforma não cobra taxas de intermediação neste meio.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-800">
+                            <button type="button" onclick="ApexProfissional.fecharModalConfigRecebimento()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all cursor-pointer">Cancelar</button>
+                            <button type="submit" class="px-5 py-2 rounded-xl bg-${corTema}-600 hover:bg-${corTema}-500 text-slate-950 font-black text-xs transition-all shadow-md active:scale-95 cursor-pointer">
+                                Salvar Dados
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            if (window.lucide) lucide.createIcons();
+        },
+
+        aoSelecionarQrCodeCfg(e) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const base64 = event.target.result;
+                const hiddenInput = document.getElementById('cfg-qrcode-base64');
+                const statusSpan = document.getElementById('cfg-qrcode-status');
+                if (hiddenInput) hiddenInput.value = base64;
+                if (statusSpan) statusSpan.textContent = file.name;
+                if (window.showToast) window.showToast('QR Code Carregado! 📸', 'Imagem salva com sucesso.', 'success');
+            };
+            reader.readAsDataURL(file);
+        },
+
+        fecharModalConfigRecebimento() {
+            const modal = document.getElementById('modal-config-recebimento-pro');
+            if (modal) modal.remove();
+        },
+
+        salvarConfigRecebimentoFormulario(e, tipoParam) {
+            e.preventDefault();
+            const tipo = this.detectarTipoProfissional(tipoParam);
+            const chavePix = document.getElementById('cfg-chave-pix')?.value.trim();
+            const tipoChavePix = document.getElementById('cfg-tipo-chave-pix')?.value;
+            const qrCodePix = document.getElementById('cfg-qrcode-base64')?.value || '';
+            const linkCartao = document.getElementById('cfg-link-cartao')?.value.trim() || '';
+
+            const dadosPagamento = {
+                tipoChavePix,
+                chavePix,
+                qrCodePix,
+                linkCartao,
+                avisoResponsabilidade: 'Atenção: A cobrança via cartão de crédito é de inteira responsabilidade do profissional contratado.'
+            };
+
+            this.salvarConfigPagamentoProfissional(dadosPagamento, tipo);
+            this.fecharModalConfigRecebimento();
+            this.renderFinanceiro(this.lastFinanceiroContainerId, tipo);
+
+            if (window.showToast) {
+                window.showToast('Dados Salvos! 💳', 'Seus dados de recebimento foram atualizados com sucesso.', 'success');
             }
         },
 
