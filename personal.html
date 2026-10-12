@@ -268,32 +268,30 @@
         <div class="max-w-6xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2">
             <!-- 1. Logo Real Fit Hub (Completa e visível no mobile e desktop) -->
             <!-- 1. Logo Real Fit Hub (Completa e visível no mobile e desktop) -->
-            <a href="index.html" class="inline-flex items-center gap-1.5 sm:gap-2 group shrink-0 min-w-0" title="Real Fit Hub">
-                <img src="assets/icon-192.png" alt="Real Fit Hub" class="h-7 sm:h-10 w-auto object-contain rounded-xl shadow-md border border-white/5 group-hover:scale-105 transition-transform shrink-0">
-                <span class="text-xs sm:text-lg font-bold tracking-tight text-white whitespace-nowrap font-clash shrink-0">
-                    <strong class="font-extrabold text-white"><span class="hidden xs:inline">REAL FIT </span><span class="xs:hidden">RF</span></strong><span class="text-amber-400 font-extrabold"><span class="hidden xs:inline"> HUB</span><span class="xs:hidden">H</span></span>
+            <a href="index.html" class="inline-flex items-center gap-2 group shrink-0 min-w-0" title="Real Fit Hub">
+                <img src="assets/icon-192.png" alt="Real Fit Hub" class="h-8 sm:h-10 w-auto object-contain rounded-xl shadow-md border border-white/5 group-hover:scale-105 transition-transform shrink-0">
+                <span class="text-sm sm:text-lg font-bold tracking-tight text-white whitespace-nowrap font-clash shrink-0">
+                    <strong class="font-extrabold text-white">REAL FIT</strong><span class="text-amber-400 font-extrabold"> HUB</span>
                 </span>
             </a>
 
             <!-- 2. Ações do Topo: Linha Única Perfeita (flex-nowrap, alinhamento absoluto, zero quebras) -->
-            <div class="flex items-center gap-1 sm:gap-2.5 shrink-0 flex-nowrap">
+            <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0 flex-nowrap">
                 <!-- Alternador de Área (Nutricionista) -->
                 <a href="admin.html" id="btn-atalho-nutri" title="Ir para o Painel do Nutricionista"
-                    class="hidden items-center gap-1 px-2 sm:px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-lime-500/30 hover:border-lime-500/60 text-lime-400 text-xs font-bold transition-all active:scale-95 shadow-sm shrink-0">
+                    class="hidden items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-lime-500/30 hover:border-lime-500/60 text-lime-400 text-xs font-bold transition-all active:scale-95 shadow-sm shrink-0">
                     <i data-lucide="apple" class="w-3.5 h-3.5 text-lime-400 shrink-0"></i>
-                    <span class="text-[10px] sm:text-xs">Nutri</span>
+                    <span class="text-[11px] sm:text-xs">Nutri</span>
                 </a>
 
-                <!-- Perfil Profissional (Personal) -->
+                <!-- Perfil Profissional (Personal - Apenas Foto / Avatar) -->
                 <button type="button" onclick="abrirModalPerfilProfissional()" id="btn-perfil-personal-header" title="Meu Perfil Profissional & CREF"
-                    class="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-amber-500/30 hover:border-amber-400/60 text-slate-200 transition-all cursor-pointer group active:scale-95 shadow-sm shrink-0">
-                    <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden bg-slate-800 border border-amber-500/50 shrink-0 flex items-center justify-center">
+                    class="flex items-center justify-center p-0.5 sm:p-1 rounded-full bg-slate-900/90 hover:bg-slate-800 border border-amber-500/40 hover:border-amber-400 text-slate-200 transition-all cursor-pointer group active:scale-95 shadow-sm shrink-0">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden bg-slate-800 border border-amber-500/50 shrink-0 flex items-center justify-center shadow-inner">
                         <img id="header-personal-avatar-img" src="" alt="Foto" class="w-full h-full object-cover hidden">
-                        <span id="header-personal-avatar-initials" class="text-[10px] sm:text-[11px] font-black text-amber-400">P</span>
+                        <span id="header-personal-avatar-initials" class="text-xs sm:text-sm font-black text-amber-400">P</span>
                     </div>
-                    <span id="header-personal-nome" class="text-[10px] sm:text-xs font-bold text-amber-300 group-hover:text-amber-200 transition-colors whitespace-nowrap">
-                        Personal
-                    </span>
+                    <span id="header-personal-nome" class="hidden">Personal</span>
                 </button>
 
                 <!-- Divisória sutil vertical -->
