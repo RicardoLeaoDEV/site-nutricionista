@@ -93,15 +93,23 @@
             -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 30%, #000 20%, transparent 85%);
         }
 
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
         /* Abas Horizontais do Painel */
         .tab-horizontal-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            padding: 7px 5px;
-            border-radius: 11px;
-            font-size: 10.5px;
+            gap: 6px;
+            padding: 8px 10px;
+            border-radius: 12px;
+            font-size: 12px;
             font-weight: 700;
             color: #94a3b8;
             background: transparent;
@@ -110,19 +118,17 @@
             white-space: nowrap;
             cursor: pointer;
             user-select: none;
-            flex: 1 1 0%;
+            width: 100%;
             min-width: 0;
             text-align: center;
         }
 
-        @media (min-width: 640px) {
+        @media (min-width: 1280px) {
             .tab-horizontal-btn {
                 gap: 8px;
-                padding: 9px 16px;
+                padding: 10px 14px;
                 border-radius: 14px;
                 font-size: 13px;
-                flex: initial;
-                min-width: auto;
             }
         }
 
@@ -305,38 +311,66 @@
 
     <!-- Conteúdo Principal -->
     <main class="max-w-6xl xl:max-w-7xl mx-auto p-3.5 sm:p-5 lg:p-6 space-y-6 flex-1 w-full pb-32 sm:pb-36 lg:pb-12">
-        <div class="bg-gradient-to-r from-[#0a0f1d]/90 via-[#0a0f1d]/75 to-lime-950/30 p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border border-white/10 backdrop-blur-md shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all">
-            <h1 class="text-lg sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                Painel do Nutricionista 📋
-            </h1>
-            <p class="text-[11px] sm:text-sm text-slate-400 mt-0.5 sm:mt-1">
-                Gerencie seus alunos, prescreva dietas e acompanhe a evolução clínica em um só lugar.
-            </p>
+        <!-- Banner Executivo do Nutricionista -->
+        <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-gradient-to-br from-[#0d1527] via-[#0a0f1d] to-[#0c1f14] p-4 sm:p-6 shadow-2xl backdrop-blur-md group hover:border-lime-500/30 transition-all">
+            <!-- Glows decorativos de fundo -->
+            <div class="absolute -top-12 -right-12 w-52 h-52 bg-lime-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-12 -left-12 w-52 h-52 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-lime-500/10 border border-lime-500/25 text-lime-400 text-[10px] sm:text-[11px] font-bold tracking-wider uppercase mb-2">
+                        <span class="w-2 h-2 rounded-full bg-lime-400 animate-pulse"></span>
+                        Central de Prescrição & Nutrição Clínica
+                    </div>
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight flex items-center gap-2.5">
+                        <span>Painel do Nutricionista</span>
+                        <span class="text-2xl sm:text-3xl">📋</span>
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
+                        Gerencie seus alunos, prescreva dietas e acompanhe a evolução clínica em um só lugar.
+                    </p>
+                </div>
+
+                <!-- Ações rápidas do Header -->
+                <div class="flex items-center gap-2.5 shrink-0 self-start md:self-center">
+                    <button type="button" onclick="alternarAbaNutri('montar')"
+                        class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-lime-500/15 hover:bg-lime-500/25 text-lime-300 hover:text-white border border-lime-500/30 hover:border-lime-400 text-xs font-bold transition-all active:scale-95 shadow-md shadow-lime-500/10 cursor-pointer">
+                        <i data-lucide="utensils" class="w-4 h-4 text-lime-400"></i>
+                        <span>Montar Dieta</span>
+                    </button>
+                    <button type="button" onclick="navegarParaSecao('secao-cadastrar-aluno')"
+                        class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs transition-all active:scale-95 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 cursor-pointer">
+                        <i data-lucide="user-plus" class="w-4 h-4"></i>
+                        <span>Convidar Aluno</span>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- ------------------------------------------------------------------ -->
-        <!-- BARRA HORIZONTAL COM AS OPÇÕES DO NUTRICIONISTA                    -->
+        <!-- BARRA HORIZONTAL COM AS OPÇÕES DO NUTRICIONISTA (GRID 5 ABAS)      -->
         <!-- ------------------------------------------------------------------ -->
-        <div class="glass-panel bg-[#0a0f1d]/80 border border-white/10 p-1.5 sm:p-2 rounded-2xl hidden lg:flex items-center gap-2 overflow-x-auto shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] select-none" id="barra-horizontal-opcoes-nutri">
+        <div class="glass-panel bg-[#0a0f1d]/80 border border-white/10 p-1.5 sm:p-2 rounded-2xl hidden lg:grid lg:grid-cols-5 gap-1.5 sm:gap-2 shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] select-none no-scrollbar overflow-x-auto" id="barra-horizontal-opcoes-nutri">
             <button type="button" onclick="alternarAbaNutri('painel')" id="tab-btn-nutri-painel" class="tab-horizontal-btn ativa">
-                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                <span>Painel do Nutricionista</span>
+                <i data-lucide="layout-dashboard" class="w-4 h-4 shrink-0"></i>
+                <span class="truncate">Painel do Nutricionista</span>
             </button>
             <button type="button" onclick="alternarAbaNutri('montar')" id="tab-btn-nutri-montar" class="tab-horizontal-btn">
-                <i data-lucide="utensils" class="w-4 h-4"></i>
-                <span>Montar & Gerenciar Dieta</span>
+                <i data-lucide="utensils" class="w-4 h-4 shrink-0"></i>
+                <span class="truncate">Montar & Gerenciar Dieta</span>
             </button>
             <button type="button" onclick="alternarAbaNutri('evolucao')" id="tab-btn-nutri-evolucao" class="tab-horizontal-btn">
-                <i data-lucide="camera" class="w-4 h-4"></i>
-                <span>Evolução & Check-ins</span>
+                <i data-lucide="camera" class="w-4 h-4 shrink-0"></i>
+                <span class="truncate">Evolução & Check-ins</span>
             </button>
             <button type="button" onclick="alternarAbaNutri('medidas')" id="tab-btn-nutri-medidas" class="tab-horizontal-btn">
-                <i data-lucide="ruler" class="w-4 h-4"></i>
-                <span>Medidas & Antropometria</span>
+                <i data-lucide="ruler" class="w-4 h-4 shrink-0"></i>
+                <span class="truncate">Medidas & Antropometria</span>
             </button>
             <button type="button" onclick="alternarAbaNutri('gestao')" id="tab-btn-nutri-gestao" class="tab-horizontal-btn">
-                <i data-lucide="badge-dollar-sign" class="w-4 h-4"></i>
-                <span>Financeiro & Agenda</span>
+                <i data-lucide="badge-dollar-sign" class="w-4 h-4 shrink-0"></i>
+                <span class="truncate">Financeiro & Agenda</span>
             </button>
         </div>
 
