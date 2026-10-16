@@ -26,6 +26,7 @@
     <script src="js/grocery-foods.js"></script>
     <!-- Scripts da Suíte Profissional & Engine ApexFit -->
     <script src="js/apexfit-core.js"></script>
+    <script src="js/exercise-3d-visualizer.js"></script>
     <script src="js/checkin-system.js"></script>
     <script src="js/evolution-tracker.js"></script>
     <script src="js/professional-suite.js"></script>
@@ -499,390 +500,480 @@
         <!-- ============================================================== -->
         <div id="conteudo-tab-nutri-montar" class="hidden space-y-6">
 
-        <!-- SEÇÃO: CALCULADORA AUTOMÁTICA DE MACROS (Accordion) -->
-        <section id="secao-calculadora-macros"
-            class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
-            <!-- Cabeçalho do Accordion -->
-            <div onclick="toggleSecaoDashboard(this)"
-                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3.5 min-w-0 pr-2">
-                    <div
-                        class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center shrink-0">
-                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                    </div>
-                    <div class="min-w-0 flex-1">
-                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
-                            Calculadora de Macronutrientes & Gasto Energético
-                            <span
-                                class="text-[10px] bg-lime-500/10 text-lime-400 px-2.5 py-0.5 rounded-full border border-lime-500/30 font-semibold">Mifflin-St
-                                Jeor</span>
-                        </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Prescrição e sincronização
-                            instantânea das refeições com o app do aluno</p>
-                    </div>
-                </div>
-                <div
-                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
-                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                </div>
-            </div>
+            <section id="secao-calculadora-macros"
+                class="rounded-2xl border border-[#2D3748] bg-[#0B0F17]/95 backdrop-blur-xl shadow-2xl shadow-black/80 hover:border-emerald-500/30 transition-all overflow-hidden scroll-mt-24">
 
-            <!-- Conteúdo Expansível da Calculadora -->
-            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
-                <div
-                    class="flex flex-col sm:flex-row sm:items-center justify-between pt-2 pb-4 border-b border-slate-800/80 mb-6 gap-3">
-                    <p class="text-xs text-slate-400">
-                        Configure as variáveis clínicas e biométricas do aluno para o cálculo automático e
-                        individualizado.
-                    </p>
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <span id="calc-modo-badge"
-                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-brand-500/10 text-brand-400 border border-brand-500/30">
-                            <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>
-                            <span>⚡ Cálculo Automático</span>
-                        </span>
-                        <button type="button" onclick="restaurarCalculoAutomatico()" id="btn-calc-reverter"
-                            class="hidden text-[11px] font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded-lg border border-slate-700 transition-all cursor-pointer">
-                            <i data-lucide="rotate-ccw" class="w-3 h-3 inline mr-1"></i>Restaurar Fórmula
+                <!-- Cabeçalho Ultra-Compacto do Accordion -->
+                <div onclick="toggleSecaoDashboard(this)"
+                    class="collapse-header p-3 sm:p-3.5 flex items-center justify-between cursor-pointer select-none hover:bg-[#181F2C]/60 transition-colors border-b border-[#2D3748]/60">
+                    <div class="flex items-center gap-2.5 min-w-0 pr-2">
+                        <div
+                            class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0 shadow-md shadow-emerald-500/10">
+                            <i data-lucide="calculator" class="w-4 h-4"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h2 class="text-xs sm:text-sm font-extrabold text-white tracking-tight">
+                                    Calculadora de Macronutrientes & Gasto Energético
+                                </h2>
+                                <span id="calc-formula-header-badge"
+                                    class="text-[9.5px] sm:text-[10px] bg-[#181F2C] text-slate-200 px-2 py-0.5 rounded-full border border-[#2D3748] font-bold flex items-center gap-1.5 transition-all">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                                    <span id="calc-formula-header-text">Mifflin-St Jeor</span>
+                                </span>
+                                <span id="calc-modo-badge"
+                                    class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    <span>⚡ Auto</span>
+                                </span>
+                            </div>
+                            <p class="text-[10.5px] sm:text-[11px] text-slate-400 mt-0.5 line-clamp-1">
+                                Prescrição esportiva precisa com equações dinâmicas (Katch-McArdle / Mifflin) e travas automáticas
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" onclick="event.stopPropagation(); restaurarCalculoAutomatico()" id="btn-calc-reverter"
+                            class="hidden text-[10.5px] font-semibold text-slate-300 hover:text-white bg-[#181F2C] hover:bg-[#1E2430] px-2.5 py-1 rounded-lg border border-[#2D3748] transition-all cursor-pointer">
+                            <i data-lucide="rotate-ccw" class="w-3 h-3 inline mr-1 text-emerald-400"></i>Restaurar
                         </button>
+                        <div class="w-7 h-7 rounded-lg bg-[#181F2C] border border-[#2D3748] flex items-center justify-center text-slate-400 collapse-arrow pointer-events-none">
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Seletor do Aluno Vinculado na Calculadora -->
-                <div class="mb-6 p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div class="w-full sm:max-w-md">
-                            <label
-                                class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5 flex items-center gap-1.5">
-                                <i data-lucide="user-check" class="w-3.5 h-3.5 text-brand-400"></i>
-                                Aluno para Prescrição das Metas
+                <!-- Conteúdo Expansível Ultra-Compacto -->
+                <div class="collapse-content px-3 sm:px-4 pb-4 pt-3 bg-[#0B0F17]/50 space-y-2.5">
+                    
+                    <!-- LINHA 1: DECK DE CONTROLE UNIFICADO (Aluno, Objetivo e Fator PAL em 1 única linha) -->
+                    <div class="p-2 sm:p-2.5 rounded-xl bg-[#181F2C] border border-[#2D3748] grid grid-cols-1 md:grid-cols-12 gap-2 items-center">
+                        <!-- Aluno (5 colunas) -->
+                        <div class="md:col-span-5 flex items-center gap-2 min-w-0">
+                            <label for="calc-aluno-select" class="text-[11px] font-bold uppercase tracking-wider text-slate-300 shrink-0 flex items-center gap-1">
+                                <i data-lucide="user-check" class="w-3 h-3 text-emerald-400"></i>
+                                <span>Aluno:</span>
                             </label>
-                            <div class="relative">
-                                <div
-                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
-                                    <i data-lucide="users" class="w-4 h-4"></i>
-                                </div>
-                                <select id="calc-aluno-select"
-                                    class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition-all">
-                                    <option value="">A carregar lista de alunos...</option>
+                            <div class="relative flex-1 min-w-0">
+                                <select id="calc-aluno-select" onchange="sincronizarSelecaoAluno(this.value, 'calc')"
+                                    class="w-full bg-[#0B0F17] border border-[#2D3748] rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-medium focus:outline-none focus:border-emerald-500 transition-all truncate">
+                                    <option value="">A carregar alunos...</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div id="calc-aluno-status-box" class="text-xs text-slate-400 flex items-center gap-2 shrink-0">
-                            <span id="calc-aluno-dados-info" class="italic">Selecione um aluno para importar
-                                biometria</span>
+                        <!-- Objetivo Nutricional (4 colunas) -->
+                        <div class="md:col-span-4 flex items-center gap-2 min-w-0">
+                            <label for="calc-objetivo" class="text-[11px] font-bold uppercase tracking-wider text-slate-300 shrink-0 flex items-center gap-1">
+                                <i data-lucide="target" class="w-3 h-3 text-amber-400"></i>
+                                <span>Objetivo:</span>
+                            </label>
+                            <div class="relative flex-1 min-w-0">
+                                <select id="calc-objetivo" onchange="onObjetivoNutricionalChange()"
+                                    class="w-full bg-[#0B0F17] border border-[#2D3748] rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-semibold focus:outline-none focus:border-emerald-500 transition-all truncate">
+                                    <option value="deficit_moderado" selected>📉 Emagrecimento (-20%)</option>
+                                    <option value="deficit_agressivo">⚡ Cutting Agressivo (-25%)</option>
+                                    <option value="manutencao">⚖️ Manutenção (0%)</option>
+                                    <option value="superavit_moderado">💪 Hipertrofia (+12%)</option>
+                                    <option value="superavit_agressivo">🚀 Bulking Intenso (+20%)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Fator PAL (3 colunas) -->
+                        <div class="md:col-span-3 flex items-center gap-2 min-w-0">
+                            <label for="calc-atividade" class="text-[11px] font-bold uppercase tracking-wider text-slate-300 shrink-0 flex items-center gap-1">
+                                <i data-lucide="zap" class="w-3 h-3 text-sky-400"></i>
+                                <span>PAL:</span>
+                            </label>
+                            <div class="relative flex-1 min-w-0">
+                                <select id="calc-atividade" onchange="onParametroClinicoChange()"
+                                    class="w-full bg-[#0B0F17] border border-[#2D3748] rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-semibold focus:outline-none focus:border-emerald-500 transition-all truncate">
+                                    <option value="sedentario">🛋️ Sedentário (× 1.20)</option>
+                                    <option value="leve">🚶 Leve (× 1.375)</option>
+                                    <option value="moderado" selected>🏋️ Moderado (× 1.55)</option>
+                                    <option value="intenso">⚡ Intenso (× 1.725)</option>
+                                    <option value="extremo">🏆 Atleta (× 1.90)</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Formulário de Parâmetros Clínicos -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
-                    <!-- Idade -->
-                    <div class="lg:col-span-1">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                            Idade (anos)
-                        </label>
-                        <input type="number" id="calc-idade" min="10" max="100" value="25" placeholder="Ex: 28"
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 font-bold focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
+                    <!-- LINHA 2: BIOMETRIA (ESQUERDA) + DIAGNÓSTICO METABÓLICO (DIREITA) INTEGRADOS -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-2">
+                        <!-- Esquerda: Parâmetros Biométricos (5 colunas compactas) -->
+                        <div class="lg:col-span-6 bg-[#181F2C] border border-[#2D3748] rounded-xl p-2 sm:p-2.5 flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1">
+                                    <i data-lucide="user" class="w-3 h-3 text-emerald-400"></i>
+                                    Biometria do Aluno
+                                </span>
+                                <span id="calc-aluno-dados-info" class="text-[10px] text-slate-400 italic truncate max-w-[180px]">
+                                    Pronto para cálculo
+                                </span>
+                            </div>
+                            <div class="grid grid-cols-5 gap-1.5">
+                                <!-- Idade -->
+                                <div class="bg-[#0B0F17] border border-[#2D3748] rounded-lg p-1.5 text-center">
+                                    <label class="block text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Idade</label>
+                                    <input type="number" id="calc-idade" min="10" max="100" value="25"
+                                        oninput="onParametroClinicoChange()"
+                                        class="w-full bg-transparent text-xs sm:text-sm text-slate-100 font-bold focus:outline-none text-center p-0">
+                                    <span class="text-[9px] text-slate-500">anos</span>
+                                </div>
+                                <!-- Sexo -->
+                                <div class="bg-[#0B0F17] border border-[#2D3748] rounded-lg p-1 text-center flex flex-col justify-between">
+                                    <label class="block text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Sexo</label>
+                                    <div class="grid grid-cols-2 gap-0.5">
+                                        <button type="button" id="calc-sexo-m" onclick="selecionarSexo('masculino')"
+                                            class="py-0.5 text-[10px] font-bold rounded transition-all text-center bg-emerald-500 text-slate-950 cursor-pointer">M</button>
+                                        <button type="button" id="calc-sexo-f" onclick="selecionarSexo('feminino')"
+                                            class="py-0.5 text-[10px] font-bold rounded transition-all text-center text-slate-400 hover:text-white cursor-pointer">F</button>
+                                    </div>
+                                    <span class="text-[9px] text-slate-500 mt-0.5">biol.</span>
+                                </div>
+                                <!-- Peso -->
+                                <div class="bg-[#0B0F17] border border-[#2D3748] rounded-lg p-1.5 text-center">
+                                    <label class="block text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Peso</label>
+                                    <input type="text" id="calc-peso" value="75,0"
+                                        oninput="onParametroClinicoChange()"
+                                        class="w-full bg-transparent text-xs sm:text-sm text-slate-100 font-bold focus:outline-none text-center p-0">
+                                    <span class="text-[9px] text-slate-500">kg</span>
+                                </div>
+                                <!-- Altura -->
+                                <div class="bg-[#0B0F17] border border-[#2D3748] rounded-lg p-1.5 text-center">
+                                    <label class="block text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Altura</label>
+                                    <input type="text" id="calc-altura" value="175"
+                                        oninput="onParametroClinicoChange()"
+                                        class="w-full bg-transparent text-xs sm:text-sm text-slate-100 font-bold focus:outline-none text-center p-0">
+                                    <span class="text-[9px] text-slate-500">cm</span>
+                                </div>
+                                <!-- BF% -->
+                                <div class="bg-[#0B0F17] border border-[#2D3748] rounded-lg p-1.5 text-center relative">
+                                    <label class="block text-[9px] font-bold uppercase tracking-wider text-amber-400 mb-0.5">% BF</label>
+                                    <input type="text" id="calc-bf" placeholder="Ex: 14"
+                                        oninput="onParametroClinicoChange()"
+                                        class="w-full bg-transparent text-xs sm:text-sm text-slate-100 font-bold focus:outline-none text-center p-0">
+                                    <span id="calc-lbm-badge" class="hidden text-[8.5px] font-extrabold text-emerald-400 block truncate">LBM: --</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Direita: Diagnóstico Metabólico Instantâneo (5 colunas compactas) -->
+                        <div class="lg:col-span-6 bg-[#181F2C] border border-[#2D3748] rounded-xl p-2 sm:p-2.5 flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1">
+                                    <i data-lucide="activity" class="w-3 h-3 text-sky-400"></i>
+                                    Diagnóstico Clínico
+                                </span>
+                                <span class="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    Tempo Real
+                                </span>
+                            </div>
+                            <div class="grid grid-cols-5 gap-1.5">
+                                <!-- TMB -->
+                                <div class="bg-[#0B0F17] border border-[#2D3748] rounded-lg p-1.5 text-center">
+                                    <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">TMB Basal</span>
+                                    <div class="text-xs sm:text-sm font-black text-white" id="calc-diag-tmb">-- kcal</div>
+                                    <span class="text-[8.5px] font-semibold text-emerald-400 truncate block mt-0.5" id="calc-diag-formula-nome">Mifflin</span>
+                                </div>
+                                <!-- GET -->
+                                <div class="bg-[#0B0F17] border border-[#2D3748] rounded-lg p-1.5 text-center">
+                                    <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">GET / TDEE</span>
+                                    <div class="text-xs sm:text-sm font-black text-sky-400" id="calc-diag-tdee">-- kcal</div>
+                                    <span class="text-[8.5px] text-slate-400 block mt-0.5">TMB × PAL</span>
+                                </div>
+                                <!-- Balanço -->
+                                <div class="bg-[#0B0F17] border border-[#2D3748] rounded-lg p-1.5 text-center">
+                                    <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Balanço</span>
+                                    <div class="text-xs sm:text-sm font-black text-amber-400" id="calc-diag-delta">-- kcal</div>
+                                    <span class="text-[8.5px] text-slate-400 block truncate mt-0.5" id="calc-diag-delta-desc">Déficit</span>
+                                </div>
+                                <!-- Água -->
+                                <div class="bg-[#0B0F17] border border-[#2D3748] rounded-lg p-1.5 text-center">
+                                    <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">💧 Água</span>
+                                    <div class="text-xs sm:text-sm font-black text-cyan-400" id="calc-diag-agua">-- L</div>
+                                    <span class="text-[8.5px] text-slate-400 block mt-0.5">35ml/kg+T</span>
+                                </div>
+                                <!-- Fibras -->
+                                <div class="bg-[#0B0F17] border border-[#2D3748] rounded-lg p-1.5 text-center">
+                                    <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">🌾 Fibras</span>
+                                    <div class="text-xs sm:text-sm font-black text-amber-400" id="calc-diag-fibras">-- g/d</div>
+                                    <span class="text-[8.5px] text-slate-400 block mt-0.5">~14g/1k</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Sexo Biológico -->
-                    <div class="lg:col-span-1">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                            Sexo Biológico
-                        </label>
-                        <div class="grid grid-cols-2 gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-700">
-                            <button type="button" id="calc-sexo-m" onclick="selecionarSexo('masculino')"
-                                class="py-1.5 text-xs font-bold rounded-lg transition-all text-center bg-brand-500 text-slate-950 shadow-sm">
-                                👨 Masc
+                    <!-- LINHA 3: PRESETS ESPORTIVOS EM 1 CLIQUE (SLEEK HORIZONTAL PILLS) -->
+                    <div class="p-1.5 sm:p-2 rounded-xl bg-[#181F2C]/70 border border-[#2D3748]">
+                        <div class="flex items-center justify-between px-1 mb-1">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1">
+                                <span class="text-amber-400">⚡</span> Presets Rápidos Esportivos (1 Clique)
+                            </span>
+                            <span class="text-[9.5px] text-slate-400">Aplica g/kg e gerencia travas 🔒</span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                            <button type="button" onclick="aplicarPresetMacros('cutting_agressivo')" id="preset-btn-cutting"
+                                class="p-1.5 sm:p-2 rounded-lg bg-[#0B0F17] hover:bg-slate-900 border border-[#2D3748] hover:border-orange-500/50 text-left transition-all cursor-pointer active:scale-95">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10.5px] font-extrabold text-orange-400">🔥 Cutting</span>
+                                    <span class="text-[8.5px] px-1 py-0.2 rounded bg-orange-500/15 text-orange-400 font-bold">-25%</span>
+                                </div>
+                                <div class="text-[9.5px] text-slate-300 mt-0.5 font-medium">2.3P • 0.7G • RestoC</div>
                             </button>
-                            <button type="button" id="calc-sexo-f" onclick="selecionarSexo('feminino')"
-                                class="py-1.5 text-xs font-bold rounded-lg transition-all text-center text-slate-400 hover:text-white">
-                                👩 Fem
+
+                            <button type="button" onclick="aplicarPresetMacros('emagrecimento_saudavel')" id="preset-btn-emagrecimento"
+                                class="p-1.5 sm:p-2 rounded-lg bg-[#0B0F17] hover:bg-slate-900 border border-[#2D3748] hover:border-emerald-500/50 text-left transition-all cursor-pointer active:scale-95">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10.5px] font-extrabold text-emerald-400">⚖️ Emagrecer</span>
+                                    <span class="text-[8.5px] px-1 py-0.2 rounded bg-emerald-500/15 text-emerald-400 font-bold">-20%</span>
+                                </div>
+                                <div class="text-[9.5px] text-slate-300 mt-0.5 font-medium">2.0P • 0.8G • RestoC</div>
+                            </button>
+
+                            <button type="button" onclick="aplicarPresetMacros('bulking_hipertrofia')" id="preset-btn-bulking"
+                                class="p-1.5 sm:p-2 rounded-lg bg-[#0B0F17] hover:bg-slate-900 border border-[#2D3748] hover:border-sky-500/50 text-left transition-all cursor-pointer active:scale-95">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10.5px] font-extrabold text-sky-400">💪 Hipertrofia</span>
+                                    <span class="text-[8.5px] px-1 py-0.2 rounded bg-sky-500/15 text-sky-400 font-bold">+12%</span>
+                                </div>
+                                <div class="text-[9.5px] text-slate-300 mt-0.5 font-medium">1.8P • 1.0G • RestoC</div>
+                            </button>
+
+                            <button type="button" onclick="aplicarPresetMacros('manutencao')" id="preset-btn-manutencao"
+                                class="p-1.5 sm:p-2 rounded-lg bg-[#0B0F17] hover:bg-slate-900 border border-[#2D3748] hover:border-purple-500/50 text-left transition-all cursor-pointer active:scale-95">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10.5px] font-extrabold text-purple-400">⚡ Manutenção</span>
+                                    <span class="text-[8.5px] px-1 py-0.2 rounded bg-purple-500/15 text-purple-400 font-bold">0%</span>
+                                </div>
+                                <div class="text-[9.5px] text-slate-300 mt-0.5 font-medium">1.6P • 0.9G • RestoC</div>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Peso Atual -->
-                    <div class="lg:col-span-1">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                            Peso (kg)
-                        </label>
-                        <input type="number" id="calc-peso" step="0.1" min="30" max="300" value="75.0"
-                            placeholder="Ex: 78.5"
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 font-bold focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
-                    </div>
-
-                    <!-- Altura -->
-                    <div class="lg:col-span-1">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                            Altura (cm ou m)
-                        </label>
-                        <input type="text" id="calc-altura" value="175" placeholder="175 ou 1.75"
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 font-bold focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
-                    </div>
-
-                    <!-- Objetivo -->
-                    <div class="sm:col-span-2 lg:col-span-2">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                            Objetivo Nutricional
-                        </label>
-                        <select id="calc-objetivo"
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition-all">
-                            <option value="deficit_moderado" selected>📉 Emagrecimento Saudável (Déficit -20%)</option>
-                            <option value="deficit_agressivo">⚡ Cutting Agressivo / Secar (-25%)</option>
-                            <option value="manutencao">⚖️ Manutenção & Recomposição (Equilíbrio 0%)</option>
-                            <option value="superavit_moderado">💪 Hipertrofia Limpa (Superávit +12%)</option>
-                            <option value="superavit_agressivo">🚀 Bulking Intenso (Superávit +20%)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Nível de Atividade Física (Linha com seletor detalhado) -->
-                <div class="mb-6">
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                        Nível de Atividade Física (Fator de Atividade - PAL)
-                    </label>
-                    <select id="calc-atividade"
-                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition-all">
-                        <option value="sedentario">🛋️ Sedentário (Trabalho sentado, pouco ou nenhum exercício) — Fator
-                            × 1.20</option>
-                        <option value="leve">🚶 Levemente Ativo (Exercícios leves ou caminhadas 1 a 3 dias/semana) —
-                            Fator × 1.375</option>
-                        <option value="moderado" selected>🏋️ Moderadamente Ativo (Treinos regulares 3 a 5 dias/semana)
-                            — Fator × 1.55</option>
-                        <option value="intenso">⚡ Muito Ativo (Treinos pesados ou intensos 6 a 7 dias/semana) — Fator ×
-                            1.725</option>
-                        <option value="extremo">🏆 Extremamente Ativo (Atleta de elite / 2 treinos ao dia / trabalho
-                            braçal) — Fator × 1.90</option>
-                    </select>
-                </div>
-
-                <!-- Painel Diagnóstico: TMB, TDEE, Balanço, Água -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-                    <div class="bg-slate-950/70 border border-slate-800 p-3 rounded-2xl text-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">TMB
-                            (Basal)</span>
-                        <div class="text-base font-extrabold text-slate-200" id="calc-diag-tmb">-- kcal</div>
-                        <span class="text-[10px] text-slate-500">Mifflin-St Jeor</span>
-                    </div>
-                    <div class="bg-slate-950/70 border border-slate-800 p-3 rounded-2xl text-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">GET /
-                            TDEE (Gasto Total)</span>
-                        <div class="text-base font-extrabold text-blue-400" id="calc-diag-tdee">-- kcal</div>
-                        <span class="text-[10px] text-slate-500">Basal × Atividade</span>
-                    </div>
-                    <div class="bg-slate-950/70 border border-slate-800 p-3 rounded-2xl text-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Balanço
-                            Energético</span>
-                        <div class="text-base font-extrabold text-brand-400" id="calc-diag-delta">-- kcal</div>
-                        <span class="text-[10px] text-slate-500" id="calc-diag-delta-desc">Déficit planejado</span>
-                    </div>
-                    <div class="bg-slate-950/70 border border-slate-800 p-3 rounded-2xl text-center">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Meta
-                            Hídrica Mínima</span>
-                        <div class="text-base font-extrabold text-cyan-400" id="calc-diag-agua">-- L</div>
-                        <span class="text-[10px] text-slate-500">35ml por kg</span>
-                    </div>
-                </div>
-
-                <!-- CARDS DOS 4 MACRONUTRIENTES COM AJUSTE MANUAL DIRETO -->
-                <div class="mb-4">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                            <i data-lucide="sliders" class="w-4 h-4 text-brand-400"></i>
-                            Distribuição das Metas (Resultado Final Editável)
-                        </h3>
-                        <span class="text-[11px] text-slate-400">
-                            Edite diretamente qualquer valor abaixo para ajuste manual fino
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- LINHA 4: OS 4 CARDS DOS MACRONUTRIENTES (COMPACTOS COM STEPRUNNER E TRAVAS) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                         <!-- CARD 1: CALORIAS TOTAIS (VET) -->
-                        <div
-                            class="p-4 rounded-2xl bg-gradient-to-b from-brand-950/30 to-slate-900 border border-brand-500/40 relative">
-                            <div class="flex items-center justify-between mb-2">
-                                <span
-                                    class="text-xs font-bold uppercase tracking-wider text-brand-400 flex items-center gap-1.5">
-                                    <i data-lucide="flame" class="w-3.5 h-3.5"></i>
-                                    Calorias Diárias
-                                </span>
-                                <span
-                                    class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/30">
-                                    Meta VET
-                                </span>
+                        <div class="p-2.5 rounded-xl bg-gradient-to-b from-[#181F2C] to-[#111827] border border-emerald-500/40 relative shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10.5px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                                        <i data-lucide="flame" class="w-3 h-3"></i>
+                                        Calorias (VET)
+                                    </span>
+                                    <span class="text-[8.5px] font-extrabold px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Meta</span>
+                                </div>
+                                <div class="flex items-baseline gap-1 my-1">
+                                    <input type="number" id="calc-res-calorias" step="10"
+                                        oninput="onManualMacroChange('calorias')"
+                                        class="w-full text-lg sm:text-xl font-black text-white bg-[#0B0F17] border border-[#2D3748] rounded-lg px-2 py-1 focus:outline-none focus:border-emerald-500 text-center shadow-inner">
+                                    <span class="text-xs font-bold text-slate-400">kcal</span>
+                                </div>
                             </div>
-                            <div class="flex items-baseline gap-1.5 my-1">
-                                <input type="number" id="calc-res-calorias" step="10"
-                                    class="w-full text-2xl font-black text-white bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-1.5 focus:outline-none focus:border-brand-500 text-center">
-                                <span class="text-xs font-bold text-slate-400">kcal</span>
-                            </div>
-                            <div class="text-[11px] text-slate-400 mt-2 text-center" id="calc-res-calorias-soma">
-                                Soma P+C+G: <strong class="text-slate-200" id="calc-res-soma-valor">--</strong> kcal
+
+                            <div class="mt-1 pt-1 border-t border-[#2D3748]/70">
+                                <div class="flex items-center justify-between text-[9.5px] text-slate-400 mb-0.5">
+                                    <span>Soma P+C+G:</span>
+                                    <span class="font-extrabold text-slate-200"><strong id="calc-res-soma-valor">--</strong> kcal</span>
+                                </div>
+                                <div id="calc-balanco-container" class="flex flex-col items-center gap-0.5 text-center">
+                                    <div id="calc-balanco-badge"
+                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9.5px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                                        <i data-lucide="check-circle-2" class="w-3 h-3"></i>
+                                        <span>Balanço Fechado 100%</span>
+                                    </div>
+                                    <button type="button" id="btn-calc-ajustar-carbo" onclick="ajustarDiferencaNoCarboidrato()"
+                                        class="hidden text-[9px] font-bold bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 px-2 py-0.5 rounded transition-all cursor-pointer active:scale-95">
+                                        <i data-lucide="sparkles" class="w-2.5 h-2.5 inline mr-1"></i>Ajustar no Carboidrato
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
                         <!-- CARD 2: PROTEÍNAS -->
-                        <div
-                            class="p-4 rounded-2xl bg-gradient-to-b from-emerald-950/30 to-slate-900 border border-emerald-500/30">
-                            <div class="flex items-center justify-between mb-2">
-                                <span
-                                    class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                                    <i data-lucide="beef" class="w-3.5 h-3.5"></i>
-                                    Proteínas
-                                </span>
-                                <span
-                                    class="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                                    id="calc-res-prot-pct">
-                                    --%
-                                </span>
-                            </div>
-                            <div class="flex items-center gap-1.5 my-1">
-                                <button type="button" onclick="alterarMacroStep('calc-res-proteinas', -5)"
-                                    class="w-7 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-black text-sm flex items-center justify-center transition-colors active:scale-95 cursor-pointer">−</button>
-                                <div
-                                    class="flex-1 flex items-baseline justify-center bg-slate-950/80 border border-slate-700 rounded-xl px-2 py-1.5">
-                                    <input type="number" id="calc-res-proteinas" step="1"
-                                        class="w-16 text-2xl font-black text-emerald-400 bg-transparent focus:outline-none text-center">
-                                    <span class="text-xs font-bold text-slate-400 ml-0.5">g</span>
+                        <div class="p-2.5 rounded-xl bg-gradient-to-b from-[#181F2C] to-[#111827] border border-[#2D3748] hover:border-emerald-500/40 transition-all shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10.5px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                                        <i data-lucide="beef" class="w-3 h-3"></i>
+                                        Proteínas
+                                    </span>
+                                    <div class="flex items-center gap-1">
+                                        <button type="button" id="btn-lock-p" onclick="toggleTravaMacro('p')"
+                                            class="p-0.5 px-1 rounded border text-[8.5px] font-bold transition-all flex items-center gap-0.5 cursor-pointer bg-emerald-500/15 text-emerald-400 border-emerald-500/40"
+                                            title="Travar / Destravar proteína">
+                                            <i data-lucide="lock" class="w-2.5 h-2.5" id="icon-lock-p"></i>
+                                            <span id="label-lock-p">Trava</span>
+                                        </button>
+                                        <span class="text-[8.5px] font-extrabold px-1 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" id="calc-res-prot-pct">--%</span>
+                                    </div>
                                 </div>
-                                <button type="button" onclick="alterarMacroStep('calc-res-proteinas', 5)"
-                                    class="w-7 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-black text-sm flex items-center justify-center transition-colors active:scale-95 cursor-pointer">+</button>
+
+                                <div class="flex items-center gap-1 my-1">
+                                    <button type="button" onclick="alterarMacroStep('calc-res-proteinas', -5)"
+                                        class="w-7 h-7 rounded bg-[#0B0F17] hover:bg-slate-800 text-slate-300 font-black text-xs flex items-center justify-center transition-colors active:scale-95 cursor-pointer border border-[#2D3748]">−5</button>
+                                    <div class="flex-1 flex items-baseline justify-center bg-[#0B0F17] border border-[#2D3748] rounded-lg px-1.5 py-0.5">
+                                        <input type="number" id="calc-res-proteinas" step="1"
+                                            oninput="onManualMacroChange('proteinas')"
+                                            class="w-12 text-lg sm:text-xl font-black text-emerald-400 bg-transparent focus:outline-none text-center">
+                                        <span class="text-[10px] font-bold text-slate-400 ml-0.5">g</span>
+                                    </div>
+                                    <button type="button" onclick="alterarMacroStep('calc-res-proteinas', 5)"
+                                        class="w-7 h-7 rounded bg-[#0B0F17] hover:bg-slate-800 text-slate-300 font-black text-xs flex items-center justify-center transition-colors active:scale-95 cursor-pointer border border-[#2D3748]">+5</button>
+                                </div>
                             </div>
-                            <div class="flex items-center justify-between text-[11px] text-slate-400 mt-2 px-1">
-                                <span id="calc-res-prot-kg">-- g/kg</span>
-                                <span id="calc-res-prot-kcal">-- kcal</span>
+
+                            <div class="mt-1 pt-1 border-t border-[#2D3748]/70 flex items-center justify-between text-[9.5px] bg-[#0B0F17]/60 rounded-lg px-2 py-0.5 border border-[#2D3748]/60">
+                                <div class="flex items-center gap-1">
+                                    <span class="text-slate-400">Meta:</span>
+                                    <input type="number" id="calc-res-prot-kg-input" step="0.1" min="0.5" max="4.5"
+                                        oninput="onGKgChange('p', this.value)"
+                                        class="w-9 bg-[#181F2C] text-emerald-400 font-bold text-center rounded px-0.5 py-0.2 border border-[#2D3748] focus:outline-none focus:border-emerald-500 text-[9.5px]">
+                                    <span class="text-slate-400 font-semibold">g/kg</span>
+                                </div>
+                                <span class="text-slate-300 font-semibold" id="calc-res-prot-kcal">-- kcal</span>
                             </div>
                         </div>
 
                         <!-- CARD 3: CARBOIDRATOS -->
-                        <div
-                            class="p-4 rounded-2xl bg-gradient-to-b from-sky-950/30 to-slate-900 border border-sky-500/30">
-                            <div class="flex items-center justify-between mb-2">
-                                <span
-                                    class="text-xs font-bold uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
-                                    <i data-lucide="wheat" class="w-3.5 h-3.5"></i>
-                                    Carboidratos
-                                </span>
-                                <span
-                                    class="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-sky-500/10 text-sky-400 border border-sky-500/20"
-                                    id="calc-res-carb-pct">
-                                    --%
-                                </span>
-                            </div>
-                            <div class="flex items-center gap-1.5 my-1">
-                                <button type="button" onclick="alterarMacroStep('calc-res-carboidratos', -5)"
-                                    class="w-7 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-black text-sm flex items-center justify-center transition-colors active:scale-95 cursor-pointer">−</button>
-                                <div
-                                    class="flex-1 flex items-baseline justify-center bg-slate-950/80 border border-slate-700 rounded-xl px-2 py-1.5">
-                                    <input type="number" id="calc-res-carboidratos" step="1"
-                                        class="w-16 text-2xl font-black text-sky-400 bg-transparent focus:outline-none text-center">
-                                    <span class="text-xs font-bold text-slate-400 ml-0.5">g</span>
+                        <div class="p-2.5 rounded-xl bg-gradient-to-b from-[#181F2C] to-[#111827] border border-[#2D3748] hover:border-sky-500/40 transition-all shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10.5px] font-bold uppercase tracking-wider text-sky-400 flex items-center gap-1">
+                                        <i data-lucide="wheat" class="w-3 h-3"></i>
+                                        Carboidratos
+                                    </span>
+                                    <div class="flex items-center gap-1">
+                                        <button type="button" id="btn-lock-c" onclick="toggleTravaMacro('c')"
+                                            class="p-0.5 px-1 rounded border text-[8.5px] font-bold transition-all flex items-center gap-0.5 cursor-pointer bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200"
+                                            title="Travar / Destravar carboidrato">
+                                            <i data-lucide="unlock" class="w-2.5 h-2.5" id="icon-lock-c"></i>
+                                            <span id="label-lock-c">Livre</span>
+                                        </button>
+                                        <span class="text-[8.5px] font-extrabold px-1 py-0.2 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20" id="calc-res-carb-pct">--%</span>
+                                    </div>
                                 </div>
-                                <button type="button" onclick="alterarMacroStep('calc-res-carboidratos', 5)"
-                                    class="w-7 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-black text-sm flex items-center justify-center transition-colors active:scale-95 cursor-pointer">+</button>
+
+                                <div class="flex items-center gap-1 my-1">
+                                    <button type="button" onclick="alterarMacroStep('calc-res-carboidratos', -5)"
+                                        class="w-7 h-7 rounded bg-[#0B0F17] hover:bg-slate-800 text-slate-300 font-black text-xs flex items-center justify-center transition-colors active:scale-95 cursor-pointer border border-[#2D3748]">−5</button>
+                                    <div class="flex-1 flex items-baseline justify-center bg-[#0B0F17] border border-[#2D3748] rounded-lg px-1.5 py-0.5">
+                                        <input type="number" id="calc-res-carboidratos" step="1"
+                                            oninput="onManualMacroChange('carboidratos')"
+                                            class="w-12 text-lg sm:text-xl font-black text-sky-400 bg-transparent focus:outline-none text-center">
+                                        <span class="text-[10px] font-bold text-slate-400 ml-0.5">g</span>
+                                    </div>
+                                    <button type="button" onclick="alterarMacroStep('calc-res-carboidratos', 5)"
+                                        class="w-7 h-7 rounded bg-[#0B0F17] hover:bg-slate-800 text-slate-300 font-black text-xs flex items-center justify-center transition-colors active:scale-95 cursor-pointer border border-[#2D3748]">+5</button>
+                                </div>
                             </div>
-                            <div class="flex items-center justify-between text-[11px] text-slate-400 mt-2 px-1">
-                                <span id="calc-res-carb-kg">-- g/kg</span>
-                                <span id="calc-res-carb-kcal">-- kcal</span>
+
+                            <div class="mt-1 pt-1 border-t border-[#2D3748]/70 flex items-center justify-between text-[9.5px] bg-[#0B0F17]/60 rounded-lg px-2 py-0.5 border border-[#2D3748]/60">
+                                <div class="flex items-center gap-1">
+                                    <span class="text-slate-400">Meta:</span>
+                                    <input type="number" id="calc-res-carb-kg-input" step="0.1" min="0.1" max="10.0"
+                                        oninput="onGKgChange('c', this.value)"
+                                        class="w-9 bg-[#181F2C] text-sky-400 font-bold text-center rounded px-0.5 py-0.2 border border-[#2D3748] focus:outline-none focus:border-sky-500 text-[9.5px]">
+                                    <span class="text-slate-400 font-semibold">g/kg</span>
+                                </div>
+                                <span class="text-slate-300 font-semibold" id="calc-res-carb-kcal">-- kcal</span>
                             </div>
                         </div>
 
                         <!-- CARD 4: GORDURAS -->
-                        <div
-                            class="p-4 rounded-2xl bg-gradient-to-b from-amber-950/30 to-slate-900 border border-amber-500/30">
-                            <div class="flex items-center justify-between mb-2">
-                                <span
-                                    class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-                                    <i data-lucide="droplet" class="w-3.5 h-3.5"></i>
-                                    Gorduras
-                                </span>
-                                <span
-                                    class="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                                    id="calc-res-gord-pct">
-                                    --%
-                                </span>
-                            </div>
-                            <div class="flex items-center gap-1.5 my-1">
-                                <button type="button" onclick="alterarMacroStep('calc-res-gorduras', -2)"
-                                    class="w-7 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-black text-sm flex items-center justify-center transition-colors active:scale-95 cursor-pointer">−</button>
-                                <div
-                                    class="flex-1 flex items-baseline justify-center bg-slate-950/80 border border-slate-700 rounded-xl px-2 py-1.5">
-                                    <input type="number" id="calc-res-gorduras" step="1"
-                                        class="w-16 text-2xl font-black text-amber-400 bg-transparent focus:outline-none text-center">
-                                    <span class="text-xs font-bold text-slate-400 ml-0.5">g</span>
+                        <div class="p-2.5 rounded-xl bg-gradient-to-b from-[#181F2C] to-[#111827] border border-[#2D3748] hover:border-amber-500/40 transition-all shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10.5px] font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1">
+                                        <i data-lucide="droplet" class="w-3 h-3"></i>
+                                        Gorduras
+                                    </span>
+                                    <div class="flex items-center gap-1">
+                                        <button type="button" id="btn-lock-g" onclick="toggleTravaMacro('g')"
+                                            class="p-0.5 px-1 rounded border text-[8.5px] font-bold transition-all flex items-center gap-0.5 cursor-pointer bg-amber-500/15 text-amber-400 border-amber-500/40"
+                                            title="Travar / Destravar gordura">
+                                            <i data-lucide="lock" class="w-2.5 h-2.5" id="icon-lock-g"></i>
+                                            <span id="label-lock-g">Trava</span>
+                                        </button>
+                                        <span class="text-[8.5px] font-extrabold px-1 py-0.2 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20" id="calc-res-gord-pct">--%</span>
+                                    </div>
                                 </div>
-                                <button type="button" onclick="alterarMacroStep('calc-res-gorduras', 2)"
-                                    class="w-7 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-black text-sm flex items-center justify-center transition-colors active:scale-95 cursor-pointer">+</button>
+
+                                <div class="flex items-center gap-1 my-1">
+                                    <button type="button" onclick="alterarMacroStep('calc-res-gorduras', -2)"
+                                        class="w-7 h-7 rounded bg-[#0B0F17] hover:bg-slate-800 text-slate-300 font-black text-xs flex items-center justify-center transition-colors active:scale-95 cursor-pointer border border-[#2D3748]">−2</button>
+                                    <div class="flex-1 flex items-baseline justify-center bg-[#0B0F17] border border-[#2D3748] rounded-lg px-1.5 py-0.5">
+                                        <input type="number" id="calc-res-gorduras" step="1"
+                                            oninput="onManualMacroChange('gorduras')"
+                                            class="w-12 text-lg sm:text-xl font-black text-amber-400 bg-transparent focus:outline-none text-center">
+                                        <span class="text-[10px] font-bold text-slate-400 ml-0.5">g</span>
+                                    </div>
+                                    <button type="button" onclick="alterarMacroStep('calc-res-gorduras', 2)"
+                                        class="w-7 h-7 rounded bg-[#0B0F17] hover:bg-slate-800 text-slate-300 font-black text-xs flex items-center justify-center transition-colors active:scale-95 cursor-pointer border border-[#2D3748]">+2</button>
+                                </div>
                             </div>
-                            <div class="flex items-center justify-between text-[11px] text-slate-400 mt-2 px-1">
-                                <span id="calc-res-gord-kg">-- g/kg</span>
-                                <span id="calc-res-gord-kcal">-- kcal</span>
+
+                            <div class="mt-1 pt-1 border-t border-[#2D3748]/70 flex items-center justify-between text-[9.5px] bg-[#0B0F17]/60 rounded-lg px-2 py-0.5 border border-[#2D3748]/60">
+                                <div class="flex items-center gap-1">
+                                    <span class="text-slate-400">Meta:</span>
+                                    <input type="number" id="calc-res-gord-kg-input" step="0.05" min="0.2" max="3.0"
+                                        oninput="onGKgChange('g', this.value)"
+                                        class="w-9 bg-[#181F2C] text-amber-400 font-bold text-center rounded px-0.5 py-0.2 border border-[#2D3748] focus:outline-none focus:border-amber-500 text-[9.5px]">
+                                    <span class="text-slate-400 font-semibold">g/kg</span>
+                                </div>
+                                <span class="text-slate-300 font-semibold" id="calc-res-gord-kcal">-- kcal</span>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Barra de Distribuição Visual Proporcional dos Macronutrientes -->
-                <div class="mb-6 p-4 rounded-2xl bg-slate-950/70 border border-slate-800">
-                    <div class="flex items-center justify-between text-xs font-semibold mb-2">
-                        <span class="text-slate-300">Proporção Calórica dos Macronutrientes</span>
-                        <span class="text-[11px] text-slate-400" id="calc-distribuicao-texto">P 30% • C 45% • G
-                            25%</span>
+                    <!-- LINHA 5: PROPORÇÃO & AÇÕES (COMPACTO) -->
+                    <div class="p-2 sm:p-2.5 rounded-xl bg-[#181F2C] border border-[#2D3748] space-y-2">
+                        <!-- Barra de Proporção Ultra-Slim -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs">
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <i data-lucide="pie-chart" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                <span class="font-bold text-slate-200 text-[10.5px]">Distribuição:</span>
+                                <span class="text-[10.5px] text-slate-300 font-semibold" id="calc-distribuicao-texto">P 30% • C 45% • G 25%</span>
+                            </div>
+                            <div class="flex-1 max-w-sm mx-auto sm:mx-0 w-full h-2 rounded-full bg-[#0B0F17] flex overflow-hidden p-0.5 gap-0.5 border border-[#2D3748]">
+                                <div id="bar-progresso-prot" class="h-full rounded-l-full bg-emerald-500 transition-all duration-300" style="width: 30%"></div>
+                                <div id="bar-progresso-carb" class="h-full bg-sky-500 transition-all duration-300" style="width: 45%"></div>
+                                <div id="bar-progresso-gord" class="h-full rounded-r-full bg-amber-500 transition-all duration-300" style="width: 25%"></div>
+                            </div>
+                            <div class="flex items-center gap-2.5 text-[9.5px] text-slate-400 font-medium shrink-0">
+                                <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Prot</span>
+                                <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>Carb</span>
+                                <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Gord</span>
+                            </div>
+                        </div>
+
+                        <!-- Botões de Ação -->
+                        <div class="flex flex-col sm:flex-row items-center gap-2 pt-1 border-t border-[#2D3748]/60">
+                            <button type="button" id="btn-calc-salvar" onclick="salvarMetasMacrosAdmin()"
+                                class="w-full sm:flex-1 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 active:scale-[0.99] text-white font-extrabold py-2 px-4 rounded-xl transition-all duration-200 shadow-md shadow-emerald-500/20 flex items-center justify-center gap-2 cursor-pointer text-xs">
+                                <i data-lucide="save" class="w-3.5 h-3.5" id="btn-calc-salvar-icon"></i>
+                                <span id="btn-calc-salvar-text">Salvar Metas no Portal do Aluno</span>
+                                <div id="btn-calc-salvar-spinner" class="hidden w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            </button>
+
+                            <button type="button" onclick="copiarResumoMacrosWhatsApp()"
+                                class="w-full sm:w-auto bg-[#0B0F17] hover:bg-[#1E2430] text-slate-200 hover:text-white font-bold py-2 px-3 rounded-xl transition-all border border-[#2D3748] hover:border-emerald-500/40 flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 shadow-xs text-xs">
+                                <i data-lucide="copy" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                <span>Copiar Resumo (WhatsApp)</span>
+                            </button>
+
+                            <button type="button" onclick="navegarParaSecao('secao-cadastrar-refeicao')"
+                                class="w-full sm:w-auto bg-[#0B0F17] hover:bg-[#1E2430] text-slate-300 hover:text-white font-semibold py-2 px-3 rounded-xl transition-all border border-[#2D3748] flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 text-xs">
+                                <i data-lucide="utensils" class="w-3.5 h-3.5 text-sky-400"></i>
+                                <span>Ir para Refeições</span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="h-3 rounded-full bg-slate-800 flex overflow-hidden p-0.5 gap-0.5">
-                        <div id="bar-progresso-prot"
-                            class="h-full rounded-l-full bg-emerald-500 transition-all duration-300" style="width: 30%"
-                            title="Proteína"></div>
-                        <div id="bar-progresso-carb" class="h-full bg-sky-500 transition-all duration-300"
-                            style="width: 45%" title="Carboidrato"></div>
-                        <div id="bar-progresso-gord"
-                            class="h-full rounded-r-full bg-amber-500 transition-all duration-300" style="width: 25%"
-                            title="Gordura"></div>
-                    </div>
-                    <div class="flex items-center justify-center gap-6 mt-3 text-[11px] flex-wrap font-medium">
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                            <span class="text-slate-300">Proteínas (4 kcal/g)</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span>
-                            <span class="text-slate-300">Carboidratos (4 kcal/g)</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                            <span class="text-slate-300">Gorduras (9 kcal/g)</span>
-                        </div>
-                    </div>
+
                 </div>
-
-                <!-- Barra de Ações: Salvar, Copiar e Navegar -->
-                <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
-                    <button type="button" id="btn-calc-salvar" onclick="salvarMetasMacrosAdmin()"
-                        class="w-full sm:flex-1 bg-brand-600 hover:bg-brand-500 active:scale-[0.99] text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2 cursor-pointer">
-                        <i data-lucide="save" class="w-4 h-4" id="btn-calc-salvar-icon"></i>
-                        <span id="btn-calc-salvar-text">Salvar Metas no Portal do Aluno</span>
-                        <div id="btn-calc-salvar-spinner"
-                            class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin">
-                        </div>
-                    </button>
-
-                    <button type="button" onclick="copiarResumoMacrosWhatsApp()"
-                        class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold py-3.5 px-4 rounded-xl transition-all border border-slate-700 flex items-center justify-center gap-2 cursor-pointer active:scale-95">
-                        <i data-lucide="copy" class="w-4 h-4 text-emerald-400"></i>
-                        <span>Copiar Resumo (WhatsApp)</span>
-                    </button>
-
-                    <button type="button" onclick="navegarParaSecao('secao-cadastrar-refeicao')"
-                        class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold py-3.5 px-4 rounded-xl transition-all border border-slate-800 flex items-center justify-center gap-2 cursor-pointer active:scale-95">
-                        <i data-lucide="utensils" class="w-4 h-4 text-brand-400"></i>
-                        <span>Ir para Refeições</span>
-                    </button>
-                </div>
-            </div>
-        </section>
+            </section>
 
         <!-- SEÇÃO: Cadastrar Refeição no Plano do Aluno (Accordion) -->
         <section id="secao-cadastrar-refeicao"
@@ -3519,8 +3610,39 @@
         }
 
         // ==============================================================
-        // MOTOR CLÍNICO DA CALCULADORA DE MACRONUTRIENTES (SENIOR ARCHITECTURE)
+        // MOTOR CLÍNICO DA CALCULADORA DE MACRONUTRIENTES (SENIOR SPORTS NUTRITION ARCHITECTURE)
         // ==============================================================
+        const PRESETS_MACROS = {
+            cutting_agressivo: {
+                nome: '🔥 Cutting Agressivo',
+                p_gkg: 2.3,
+                g_gkg: 0.7,
+                objetivo: 'deficit_agressivo',
+                btnId: 'preset-btn-cutting'
+            },
+            emagrecimento_saudavel: {
+                nome: '⚖️ Emagrecimento Saudável',
+                p_gkg: 2.0,
+                g_gkg: 0.8,
+                objetivo: 'deficit_moderado',
+                btnId: 'preset-btn-emagrecimento'
+            },
+            bulking_hipertrofia: {
+                nome: '💪 Bulking / Hipertrofia',
+                p_gkg: 1.8,
+                g_gkg: 1.0,
+                objetivo: 'superavit_moderado',
+                btnId: 'preset-btn-bulking'
+            },
+            manutencao: {
+                nome: '⚡ Manutenção',
+                p_gkg: 1.6,
+                g_gkg: 0.9,
+                objetivo: 'manutencao',
+                btnId: 'preset-btn-manutencao'
+            }
+        };
+
         let estadoCalculadora = {
             alunoId: null,
             alunoNome: '',
@@ -3528,16 +3650,28 @@
             idade: 25,
             peso: 75.0,
             alturaCm: 175,
+            bf: null,
+            formulaUsada: 'mifflin',
+            lbm: null,
             objetivo: 'deficit_moderado',
             atividade: 'moderado',
             modoManual: false,
+            presetAtivo: null,
+            travas: {
+                p: true,  // Travado por padrão: Proteína é definida por meta fixa de g/kg
+                c: false, // Livre por padrão: Carboidrato absorve e fecha as calorias
+                g: true   // Travado por padrão: Gordura é piso fisiológico essencial
+            },
             tmb: 0,
             tdee: 0,
             calorias: 0,
             proteinas: 0,
             carboidratos: 0,
             gorduras: 0,
-            aguaLitros: '2.6',
+            fibras: 28,
+            aguaLitros: '3.1 L – 3.6 L/dia',
+            aguaMin: '3.1',
+            aguaMax: '3.6',
             pctProt: 30,
             pctCarb: 45,
             pctGord: 25
@@ -3548,41 +3682,57 @@
             const btnM = document.getElementById('calc-sexo-m');
             const btnF = document.getElementById('calc-sexo-f');
             if (sexo === 'masculino') {
-                btnM.className = 'py-1.5 text-xs font-bold rounded-lg transition-all text-center bg-brand-500 text-slate-950 shadow-sm';
-                btnF.className = 'py-1.5 text-xs font-bold rounded-lg transition-all text-center text-slate-400 hover:text-white';
+                if (btnM) btnM.className = 'py-1 text-[11px] font-bold rounded transition-all text-center bg-emerald-500 text-slate-950 shadow-sm cursor-pointer';
+                if (btnF) btnF.className = 'py-1 text-[11px] font-bold rounded transition-all text-center text-slate-400 hover:text-white cursor-pointer';
             } else {
-                btnF.className = 'py-1.5 text-xs font-bold rounded-lg transition-all text-center bg-brand-500 text-slate-950 shadow-sm';
-                btnM.className = 'py-1.5 text-xs font-bold rounded-lg transition-all text-center text-slate-400 hover:text-white';
+                if (btnF) btnF.className = 'py-1 text-[11px] font-bold rounded transition-all text-center bg-emerald-500 text-slate-950 shadow-sm cursor-pointer';
+                if (btnM) btnM.className = 'py-1 text-[11px] font-bold rounded transition-all text-center text-slate-400 hover:text-white cursor-pointer';
             }
-            if (!estadoCalculadora.modoManual) {
-                recalcularMacros();
-            } else {
-                atualizarMetabolismoDiagnostico();
-            }
+            onParametroClinicoChange();
+        }
+
+        function extrairNumero(val, padrao = 0) {
+            if (val === null || val === undefined || val === '') return padrao;
+            const str = String(val).replace(',', '.').trim();
+            const num = parseFloat(str);
+            return isNaN(num) ? padrao : num;
         }
 
         function extrairAlturaCm(val) {
             if (!val) return 175;
-            const str = String(val).replace(',', '.').trim();
-            const num = parseFloat(str);
-            if (isNaN(num) || num <= 0) return 175;
+            const num = extrairNumero(val, 175);
+            if (num <= 0) return 175;
             return num > 3 ? Math.round(num) : Math.round(num * 100);
         }
 
         function atualizarMetabolismoDiagnostico() {
-            const peso = parseFloat(document.getElementById('calc-peso')?.value) || 75;
-            const idade = parseInt(document.getElementById('calc-idade')?.value, 10) || 25;
+            const peso = extrairNumero(document.getElementById('calc-peso')?.value, 75);
+            const idade = Math.round(extrairNumero(document.getElementById('calc-idade')?.value, 25));
             const alturaCm = extrairAlturaCm(document.getElementById('calc-altura')?.value);
-            const sexo = estadoCalculadora.sexo;
+            const sexo = estadoCalculadora.sexo || 'masculino';
             const atividade = document.getElementById('calc-atividade')?.value || 'moderado';
             const objetivo = document.getElementById('calc-objetivo')?.value || 'deficit_moderado';
+            const bfRaw = document.getElementById('calc-bf')?.value;
+            const bfInputVal = (bfRaw !== undefined && bfRaw !== null && String(bfRaw).trim() !== '') ? extrairNumero(bfRaw, null) : null;
 
-            // Equação Mifflin-St Jeor
+            const temBf = bfInputVal !== null && bfInputVal >= 3 && bfInputVal <= 60;
             let tmb = 0;
-            if (sexo === 'masculino') {
-                tmb = Math.round((10 * peso) + (6.25 * alturaCm) - (5 * idade) + 5);
+            let formulaUsada = 'mifflin';
+            let lbmKg = null;
+
+            if (temBf) {
+                // Equação Katch-McArdle (baseada na Massa Livre de Gordura - LBM)
+                lbmKg = peso * (1 - (bfInputVal / 100));
+                tmb = Math.round(370 + (21.6 * lbmKg));
+                formulaUsada = 'katch_mcardle';
             } else {
-                tmb = Math.round((10 * peso) + (6.25 * alturaCm) - (5 * idade) - 161);
+                // Equação Mifflin-St Jeor
+                if (sexo === 'masculino') {
+                    tmb = Math.round((10 * peso) + (6.25 * alturaCm) - (5 * idade) + 5);
+                } else {
+                    tmb = Math.round((10 * peso) + (6.25 * alturaCm) - (5 * idade) - 161);
+                }
+                formulaUsada = 'mifflin';
             }
 
             // Fator PAL de Atividade Física
@@ -3598,26 +3748,68 @@
 
             // Delta calórico pelo objetivo
             const deltas = {
-                deficit_moderado: { mult: 0.80, desc: 'Déficit -20%' },
-                deficit_agressivo: { mult: 0.75, desc: 'Déficit -25%' },
-                manutencao: { mult: 1.00, desc: 'Equilíbrio 0%' },
-                superavit_moderado: { mult: 1.12, desc: 'Superávit +12%' },
-                superavit_agressivo: { mult: 1.20, desc: 'Superávit +20%' }
+                deficit_moderado: { mult: 0.80, desc: 'Déficit planejado (-20%)', presetKey: 'emagrecimento_saudavel' },
+                deficit_agressivo: { mult: 0.75, desc: 'Cutting agressivo (-25%)', presetKey: 'cutting_agressivo' },
+                manutencao: { mult: 1.00, desc: 'Manutenção (0%)', presetKey: 'manutencao' },
+                superavit_moderado: { mult: 1.12, desc: 'Hipertrofia (+12%)', presetKey: 'bulking_hipertrofia' },
+                superavit_agressivo: { mult: 1.20, desc: 'Bulking (+20%)', presetKey: null }
             };
-            const objInfo = deltas[objetivo] || { mult: 0.80, desc: 'Déficit -20%' };
+            const objInfo = deltas[objetivo] || { mult: 0.80, desc: 'Déficit planejado (-20%)', presetKey: null };
             const vetAlvo = Math.round(tdee * objInfo.mult);
             const deltaKcal = vetAlvo - tdee;
 
-            const aguaLitros = ((peso * 35) / 1000).toFixed(1);
+            // Meta Hídrica Inteligente (35 ml/kg + 500 a 1000 ml adicional de treino)
+            const aguaBaseL = (peso * 35) / 1000;
+            const aguaMin = (aguaBaseL + 0.5).toFixed(1);
+            const aguaMax = (aguaBaseL + 1.0).toFixed(1);
+            const aguaFaixa = `${aguaMin.replace('.', ',')} L – ${aguaMax.replace('.', ',')} L/dia`;
+
+            // Fibras Mínimas Dinâmicas (~14g / 1.000 kcal, piso de 25g)
+            const metaFibras = Math.max(25, Math.round((vetAlvo / 1000) * 14));
 
             estadoCalculadora.tmb = tmb;
             estadoCalculadora.tdee = tdee;
             estadoCalculadora.peso = peso;
             estadoCalculadora.idade = idade;
             estadoCalculadora.alturaCm = alturaCm;
+            estadoCalculadora.bf = temBf ? bfInputVal : null;
+            estadoCalculadora.lbm = lbmKg ? parseFloat(lbmKg.toFixed(1)) : null;
+            estadoCalculadora.formulaUsada = formulaUsada;
             estadoCalculadora.objetivo = objetivo;
             estadoCalculadora.atividade = atividade;
-            estadoCalculadora.aguaLitros = aguaLitros;
+            estadoCalculadora.aguaMin = aguaMin;
+            estadoCalculadora.aguaMax = aguaMax;
+            estadoCalculadora.aguaLitros = aguaFaixa;
+            estadoCalculadora.fibras = metaFibras;
+
+            // Atualiza os badges e indicadores de fórmula
+            const headerBadge = document.getElementById('calc-formula-header-badge');
+            const headerText = document.getElementById('calc-formula-header-text');
+            const diagFormulaNome = document.getElementById('calc-diag-formula-nome');
+            const lbmBadge = document.getElementById('calc-lbm-badge');
+
+            if (formulaUsada === 'katch_mcardle') {
+                if (headerBadge) {
+                    headerBadge.className = 'text-[9.5px] sm:text-[10px] bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/40 font-bold flex items-center gap-1.5 transition-all';
+                    headerBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span><span>Katch-McArdle (LBM)</span>`;
+                }
+                if (headerText) headerText.textContent = 'Katch-McArdle (LBM)';
+                if (diagFormulaNome) diagFormulaNome.textContent = `Katch (${lbmKg.toFixed(1)}kg)`;
+                if (lbmBadge) {
+                    lbmBadge.textContent = `LBM: ${lbmKg.toFixed(1)}kg`;
+                    lbmBadge.classList.remove('hidden');
+                }
+            } else {
+                if (headerBadge) {
+                    headerBadge.className = 'text-[9.5px] sm:text-[10px] bg-[#181F2C] text-slate-200 px-2 py-0.5 rounded-full border border-[#2D3748] font-bold flex items-center gap-1.5 transition-all';
+                    headerBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span><span>Mifflin-St Jeor</span>`;
+                }
+                if (headerText) headerText.textContent = 'Mifflin-St Jeor';
+                if (diagFormulaNome) diagFormulaNome.textContent = 'Mifflin';
+                if (lbmBadge) {
+                    lbmBadge.classList.add('hidden');
+                }
+            }
 
             // Atualiza os badges diagnósticos
             const tmbEl = document.getElementById('calc-diag-tmb');
@@ -3625,20 +3817,242 @@
             const deltaEl = document.getElementById('calc-diag-delta');
             const deltaDescEl = document.getElementById('calc-diag-delta-desc');
             const aguaEl = document.getElementById('calc-diag-agua');
+            const fibrasEl = document.getElementById('calc-diag-fibras');
 
             if (tmbEl) tmbEl.textContent = `${tmb.toLocaleString('pt-BR')} kcal`;
             if (tdeeEl) tdeeEl.textContent = `${tdee.toLocaleString('pt-BR')} kcal`;
             if (deltaEl) {
                 deltaEl.textContent = `${deltaKcal > 0 ? '+' : ''}${deltaKcal} kcal`;
-                deltaEl.className = deltaKcal < 0 ? 'text-base font-extrabold text-amber-400' : (deltaKcal > 0 ? 'text-base font-extrabold text-brand-400' : 'text-base font-extrabold text-cyan-400');
+                deltaEl.className = deltaKcal < 0
+                    ? 'text-xs sm:text-sm font-black text-amber-400'
+                    : (deltaKcal > 0 ? 'text-xs sm:text-sm font-black text-emerald-400' : 'text-xs sm:text-sm font-black text-sky-400');
             }
             if (deltaDescEl) deltaDescEl.textContent = objInfo.desc;
-            if (aguaEl) aguaEl.textContent = `${aguaLitros} L`;
+            if (aguaEl) aguaEl.textContent = `${aguaMin}–${aguaMax}L`;
+            if (fibrasEl) fibrasEl.textContent = `~${metaFibras}g/d`;
 
-            return { tmb, tdee, vetAlvo, peso, aguaLitros };
+            return { tmb, tdee, vetAlvo, peso, aguaLitros: aguaFaixa, metaFibras, objDesc: objInfo.desc };
         }
 
-        // Cálculo Automático de Macros
+        // Reação Imediata ao alterar Parâmetros Biométricos (Peso, Idade, Altura, BF%, PAL)
+        function onParametroClinicoChange() {
+            const diag = atualizarMetabolismoDiagnostico();
+            const peso = diag.peso || 75;
+            const vet = diag.vetAlvo || 2000;
+
+            if (!estadoCalculadora.modoManual) {
+                recalcularMacros();
+            } else {
+                if (estadoCalculadora.presetAtivo && PRESETS_MACROS[estadoCalculadora.presetAtivo]) {
+                    const preset = PRESETS_MACROS[estadoCalculadora.presetAtivo];
+                    const P = Math.round(peso * preset.p_gkg);
+                    const G = Math.max(25, Math.round(peso * preset.g_gkg));
+                    const kcalRest = vet - ((P * 4) + (G * 9));
+                    const C = Math.max(0, Math.round(kcalRest / 4));
+                    const calConsolidada = (P * 4) + (C * 4) + (G * 9);
+
+                    const inputCal = document.getElementById('calc-res-calorias');
+                    const inputProt = document.getElementById('calc-res-proteinas');
+                    const inputCarb = document.getElementById('calc-res-carboidratos');
+                    const inputGord = document.getElementById('calc-res-gorduras');
+
+                    if (inputCal) inputCal.value = calConsolidada;
+                    if (inputProt) inputProt.value = P;
+                    if (inputCarb) inputCarb.value = C;
+                    if (inputGord) inputGord.value = G;
+
+                    estadoCalculadora.calorias = calConsolidada;
+                    estadoCalculadora.proteinas = P;
+                    estadoCalculadora.carboidratos = C;
+                    estadoCalculadora.gorduras = G;
+                } else {
+                    const travas = estadoCalculadora.travas || { p: true, c: false, g: true };
+                    let P = parseInt(document.getElementById('calc-res-proteinas')?.value, 10) || Math.round(peso * 2.0);
+                    let G = parseInt(document.getElementById('calc-res-gorduras')?.value, 10) || Math.round(peso * 0.85);
+                    let C = parseInt(document.getElementById('calc-res-carboidratos')?.value, 10) || 0;
+
+                    if (!travas.c) {
+                        C = Math.max(0, Math.round((vet - (P * 4 + G * 9)) / 4));
+                        const inputCarb = document.getElementById('calc-res-carboidratos');
+                        if (inputCarb) inputCarb.value = C;
+                    }
+                    const calConsolidada = (P * 4) + (C * 4) + (G * 9);
+                    const inputCal = document.getElementById('calc-res-calorias');
+                    if (inputCal) inputCal.value = calConsolidada;
+
+                    estadoCalculadora.calorias = calConsolidada;
+                    estadoCalculadora.proteinas = P;
+                    estadoCalculadora.carboidratos = C;
+                    estadoCalculadora.gorduras = G;
+                }
+                atualizarUIProporcoesMacros();
+            }
+        }
+
+        // Reação Imediata ao Selecionar Objetivo Nutricional
+        function onObjetivoNutricionalChange() {
+            const diag = atualizarMetabolismoDiagnostico();
+            const objetivo = document.getElementById('calc-objetivo')?.value || 'deficit_moderado';
+
+            // Sincroniza destaque dos presets rápidos se corresponder
+            const presetMap = {
+                deficit_moderado: 'emagrecimento_saudavel',
+                deficit_agressivo: 'cutting_agressivo',
+                manutencao: 'manutencao',
+                superavit_moderado: 'bulking_hipertrofia'
+            };
+            const presetCorrespondente = presetMap[objetivo] || null;
+            estadoCalculadora.presetAtivo = presetCorrespondente;
+
+            Object.keys(PRESETS_MACROS).forEach(k => {
+                const btn = document.getElementById(PRESETS_MACROS[k].btnId);
+                if (btn) {
+                    if (k === presetCorrespondente) {
+                        btn.classList.add('ring-2', 'ring-emerald-500', 'bg-slate-900');
+                    } else {
+                        btn.classList.remove('ring-2', 'ring-emerald-500', 'bg-slate-900');
+                    }
+                }
+            });
+
+            if (presetCorrespondente && PRESETS_MACROS[presetCorrespondente]) {
+                const preset = PRESETS_MACROS[presetCorrespondente];
+                const peso = diag.peso || 75;
+                const vet = diag.vetAlvo || 2000;
+                const P = Math.round(peso * preset.p_gkg);
+                const G = Math.max(25, Math.round(peso * preset.g_gkg));
+                const kcalRest = vet - ((P * 4) + (G * 9));
+                const C = Math.max(0, Math.round(kcalRest / 4));
+                const calConsolidada = (P * 4) + (C * 4) + (G * 9);
+
+                estadoCalculadora.calorias = calConsolidada;
+                estadoCalculadora.proteinas = P;
+                estadoCalculadora.carboidratos = C;
+                estadoCalculadora.gorduras = G;
+                estadoCalculadora.modoManual = true;
+
+                const inputCal = document.getElementById('calc-res-calorias');
+                const inputProt = document.getElementById('calc-res-proteinas');
+                const inputCarb = document.getElementById('calc-res-carboidratos');
+                const inputGord = document.getElementById('calc-res-gorduras');
+
+                if (inputCal) inputCal.value = calConsolidada;
+                if (inputProt) inputProt.value = P;
+                if (inputCarb) inputCarb.value = C;
+                if (inputGord) inputGord.value = G;
+
+                atualizarUIProporcoesMacros();
+                atualizarBadgeModo(true);
+            } else {
+                // Para objetivos personalizados (ex: Bulking Intenso +20%): calcula macros limpos
+                recalcularMacros();
+            }
+            showToast('Objetivo Atualizado! 🎯', `${diag.objDesc}: ${diag.vetAlvo} kcal/dia calculadas.`, 'info');
+        }
+
+        // Alternância de Trava 🔒 do Macronutriente (Sistema Lock & Fill)
+        function toggleTravaMacro(macro) {
+            if (!estadoCalculadora.travas) {
+                estadoCalculadora.travas = { p: true, c: false, g: true };
+            }
+            estadoCalculadora.travas[macro] = !estadoCalculadora.travas[macro];
+            atualizarBotoesTravaUI();
+            const travado = estadoCalculadora.travas[macro];
+            const nomeMacro = macro === 'p' ? 'Proteína' : (macro === 'c' ? 'Carboidrato' : 'Gordura');
+            showToast(travado ? 'Macro Bloqueado 🔒' : 'Macro Desbloqueado 🔓', `${nomeMacro} está ${travado ? 'travado (mantém valor nas alterações calóricas)' : 'livre (absorve a diferença calórica)'}.`, 'info');
+        }
+
+        function atualizarBotoesTravaUI() {
+            const travas = estadoCalculadora.travas || { p: true, c: false, g: true };
+            ['p', 'c', 'g'].forEach(m => {
+                const btn = document.getElementById(`btn-lock-${m}`);
+                const icon = document.getElementById(`icon-lock-${m}`);
+                const label = document.getElementById(`label-lock-${m}`);
+                const isLocked = !!travas[m];
+
+                if (btn) {
+                    if (isLocked) {
+                        btn.className = 'p-0.5 px-1 rounded border text-[9px] font-bold transition-all flex items-center gap-0.5 cursor-pointer bg-emerald-500/15 text-emerald-400 border-emerald-500/40 shadow-xs';
+                    } else {
+                        btn.className = 'p-0.5 px-1 rounded border text-[9px] font-bold transition-all flex items-center gap-0.5 cursor-pointer bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200';
+                    }
+                }
+                if (icon) {
+                    icon.setAttribute('data-lucide', isLocked ? 'lock' : 'unlock');
+                }
+                if (label) {
+                    label.textContent = isLocked ? 'Trava' : 'Livre';
+                }
+            });
+            if (window.lucide) lucide.createIcons();
+        }
+
+        // Aplicação de Presets Rápidos de Distribuição (1 Clique)
+        function aplicarPresetMacros(tipo) {
+            const preset = PRESETS_MACROS[tipo];
+            if (!preset) return;
+
+            estadoCalculadora.presetAtivo = tipo;
+            estadoCalculadora.modoManual = true;
+
+            // Sincroniza objetivo no select
+            const selObj = document.getElementById('calc-objetivo');
+            if (selObj && preset.objetivo) {
+                selObj.value = preset.objetivo;
+            }
+
+            // Atualiza diagnóstico metabólico
+            const diag = atualizarMetabolismoDiagnostico();
+            const peso = diag.peso || 75;
+            const vet = diag.vetAlvo || 2000;
+
+            // 1. Proteínas pelo preset
+            const P = Math.round(peso * preset.p_gkg);
+            // 2. Gorduras pelo preset (mínimo 25g)
+            const G = Math.max(25, Math.round(peso * preset.g_gkg));
+            // 3. Carboidratos absorvem o restante calórico
+            const kcalRest = vet - ((P * 4) + (G * 9));
+            const C = Math.max(0, Math.round(kcalRest / 4));
+            const calConsolidada = (P * 4) + (C * 4) + (G * 9);
+
+            // Trava padrão esportivo: P e G travados, C livre para preenchimento
+            estadoCalculadora.travas = { p: true, c: false, g: true };
+            atualizarBotoesTravaUI();
+
+            // Atualiza inputs numéricos
+            const inputCal = document.getElementById('calc-res-calorias');
+            const inputProt = document.getElementById('calc-res-proteinas');
+            const inputCarb = document.getElementById('calc-res-carboidratos');
+            const inputGord = document.getElementById('calc-res-gorduras');
+
+            if (inputCal) inputCal.value = calConsolidada;
+            if (inputProt) inputProt.value = P;
+            if (inputCarb) inputCarb.value = C;
+            if (inputGord) inputGord.value = G;
+
+            estadoCalculadora.calorias = calConsolidada;
+            estadoCalculadora.proteinas = P;
+            estadoCalculadora.carboidratos = C;
+            estadoCalculadora.gorduras = G;
+
+            // Destaca visualmente o botão do preset ativo
+            Object.keys(PRESETS_MACROS).forEach(k => {
+                const btn = document.getElementById(PRESETS_MACROS[k].btnId);
+                if (btn) {
+                    if (k === tipo) {
+                        btn.classList.add('ring-2', 'ring-emerald-500', 'bg-slate-900');
+                    } else {
+                        btn.classList.remove('ring-2', 'ring-emerald-500', 'bg-slate-900');
+                    }
+                }
+            });
+
+            atualizarUIProporcoesMacros();
+            atualizarBadgeModo(true);
+            showToast('Preset Aplicado! ⚡', `${preset.nome}: ${preset.p_gkg} g/kg P • ${preset.g_gkg} g/kg G • Resto C.`, 'success');
+        }
+
+        // Cálculo Automático de Macros Padrão
         function recalcularMacros() {
             const diag = atualizarMetabolismoDiagnostico();
             const peso = diag.peso || 75;
@@ -3650,14 +4064,13 @@
             let proteinasG = Math.round(peso * protFator);
             let proteinasKcal = proteinasG * 4;
 
-            // 2. Gorduras: ~0.9 g/kg (mínimo 30g)
-            let gordurasG = Math.max(30, Math.round(peso * 0.9));
+            // 2. Gorduras: ~0.8 a 0.9 g/kg (mínimo 30g)
+            let gordurasG = Math.max(30, Math.round(peso * 0.85));
             let gordurasKcal = gordurasG * 9;
 
             // 3. Carboidratos: preenche o restante calórico
             let kcalRestantes = vet - proteinasKcal - gordurasKcal;
             if (kcalRestantes < 120) {
-                // Ajusta gordura para o piso saudável de 0.7g/kg caso as calorias sejam muito restritas
                 gordurasG = Math.max(25, Math.round(peso * 0.7));
                 gordurasKcal = gordurasG * 9;
                 kcalRestantes = vet - proteinasKcal - gordurasKcal;
@@ -3673,6 +4086,7 @@
             estadoCalculadora.carboidratos = carboidratosG;
             estadoCalculadora.gorduras = gordurasG;
             estadoCalculadora.modoManual = false;
+            estadoCalculadora.presetAtivo = null;
 
             // Atualiza inputs dos macros
             const inputCal = document.getElementById('calc-res-calorias');
@@ -3685,13 +4099,40 @@
             if (inputCarb) inputCarb.value = carboidratosG;
             if (inputGord) inputGord.value = gordurasG;
 
-            atualizarUIProporcoesMacros();
+            // Remove destaque dos presets
+            Object.keys(PRESETS_MACROS).forEach(k => {
+                const btn = document.getElementById(PRESETS_MACROS[k].btnId);
+                if (btn) btn.classList.remove('ring-2', 'ring-emerald-500', 'bg-slate-900');
+            });
 
-            // Atualiza badge de status
+            atualizarBotoesTravaUI();
+            atualizarUIProporcoesMacros();
             atualizarBadgeModo(false);
         }
 
-        // Manipulador do Ajuste Manual pelo Nutricionista
+        // Edição Direta via g/kg
+        function onGKgChange(macro, valor) {
+            const gkg = parseFloat(valor);
+            if (isNaN(gkg) || gkg < 0) return;
+            const peso = estadoCalculadora.peso || 75;
+            const gramas = Math.round(gkg * peso);
+
+            if (macro === 'p') {
+                const el = document.getElementById('calc-res-proteinas');
+                if (el) el.value = gramas;
+                onManualMacroChange('proteinas');
+            } else if (macro === 'c') {
+                const el = document.getElementById('calc-res-carboidratos');
+                if (el) el.value = gramas;
+                onManualMacroChange('carboidratos');
+            } else if (macro === 'g') {
+                const el = document.getElementById('calc-res-gorduras');
+                if (el) el.value = gramas;
+                onManualMacroChange('gorduras');
+            }
+        }
+
+        // Manipulador do Ajuste Manual (Suporta Sistema Lock & Fill)
         function onManualMacroChange(campo) {
             estadoCalculadora.modoManual = true;
             atualizarMetabolismoDiagnostico();
@@ -3702,27 +4143,71 @@
             let G = parseInt(document.getElementById('calc-res-gorduras')?.value, 10) || 0;
             let totalCal = parseInt(document.getElementById('calc-res-calorias')?.value, 10) || 0;
 
+            const travas = estadoCalculadora.travas || { p: true, c: false, g: true };
+
             if (campo === 'calorias') {
-                // Nutricionista alterou o total calórico: recalcula carboidratos para fechar a conta
-                const kcalSemCarbo = (P * 4) + (G * 9);
-                const sobraParaCarbo = totalCal - kcalSemCarbo;
-                C = Math.max(0, Math.round(sobraParaCarbo / 4));
-                const inputCarb = document.getElementById('calc-res-carboidratos');
-                if (inputCarb) inputCarb.value = C;
+                // Alteração nas calorias totais: o macro livre (destravado) absorve a diferença calórica
+                if (!travas.c) {
+                    const sobraKcal = totalCal - ((P * 4) + (G * 9));
+                    C = Math.max(0, Math.round(sobraKcal / 4));
+                    const inputCarb = document.getElementById('calc-res-carboidratos');
+                    if (inputCarb) inputCarb.value = C;
+                } else if (!travas.p) {
+                    const sobraKcal = totalCal - ((C * 4) + (G * 9));
+                    P = Math.max(0, Math.round(sobraKcal / 4));
+                    const inputProt = document.getElementById('calc-res-proteinas');
+                    if (inputProt) inputProt.value = P;
+                } else if (!travas.g) {
+                    const sobraKcal = totalCal - ((P * 4) + (C * 4));
+                    G = Math.max(0, Math.round(sobraKcal / 9));
+                    const inputGord = document.getElementById('calc-res-gorduras');
+                    if (inputGord) inputGord.value = G;
+                }
+            } else {
+                // Alteração em macro específico (P, C ou G)
+                if ((campo === 'proteinas' || campo === 'gorduras') && !travas.c) {
+                    // Se carboidrato estiver livre, ele absorve a diferença para manter a meta calórica
+                    const sobraKcal = totalCal - ((P * 4) + (G * 9));
+                    C = Math.max(0, Math.round(sobraKcal / 4));
+                    const inputCarb = document.getElementById('calc-res-carboidratos');
+                    if (inputCarb) inputCarb.value = C;
+                } else {
+                    // Sincroniza as calorias totais com a nova soma real
+                    totalCal = (P * 4) + (C * 4) + (G * 9);
+                    const inputCal = document.getElementById('calc-res-calorias');
+                    if (inputCal) inputCal.value = totalCal;
+                }
             }
 
-            // Consolida calorias reais
-            const caloriasConsolidadas = (P * 4) + (C * 4) + (G * 9);
-            const inputCal = document.getElementById('calc-res-calorias');
-            if (inputCal) inputCal.value = caloriasConsolidadas;
-
-            estadoCalculadora.calorias = caloriasConsolidadas;
+            estadoCalculadora.calorias = totalCal;
             estadoCalculadora.proteinas = P;
             estadoCalculadora.carboidratos = C;
             estadoCalculadora.gorduras = G;
 
             atualizarUIProporcoesMacros();
             atualizarBadgeModo(true);
+        }
+
+        // Ajustar Diferença Calórica Instantaneamente no Carboidrato
+        function ajustarDiferencaNoCarboidrato() {
+            const totalCal = parseInt(document.getElementById('calc-res-calorias')?.value, 10) || 0;
+            const P = parseInt(document.getElementById('calc-res-proteinas')?.value, 10) || 0;
+            const C = parseInt(document.getElementById('calc-res-carboidratos')?.value, 10) || 0;
+            const G = parseInt(document.getElementById('calc-res-gorduras')?.value, 10) || 0;
+
+            const diff = totalCal - ((P * 4) + (C * 4) + (G * 9));
+            const novoC = Math.max(0, C + Math.round(diff / 4));
+
+            const inputCarb = document.getElementById('calc-res-carboidratos');
+            if (inputCarb) inputCarb.value = novoC;
+
+            // Sincroniza calorias exatamente para evitar qualquer desvio de arredondamento
+            const inputCal = document.getElementById('calc-res-calorias');
+            const calFechadas = (P * 4) + (novoC * 4) + (G * 9);
+            if (inputCal) inputCal.value = calFechadas;
+
+            onManualMacroChange('carboidratos');
+            showToast('Balanço Fechado! 🎯', `Carboidratos ajustados para ${novoC}g. Balanço 100% alinhado (${calFechadas} kcal).`, 'success');
         }
 
         // Alterar Macro via botões [+] e [-]
@@ -3732,7 +4217,7 @@
             let val = parseInt(input.value, 10) || 0;
             val = Math.max(5, val + delta);
             input.value = val;
-            onManualMacroChange(inputId);
+            onManualMacroChange(inputId.replace('calc-res-', ''));
         }
 
         // Atualiza percentuais, g/kg e barra de proporção
@@ -3740,47 +4225,51 @@
             const P = estadoCalculadora.proteinas || 0;
             const C = estadoCalculadora.carboidratos || 0;
             const G = estadoCalculadora.gorduras || 0;
-            const Cal = estadoCalculadora.calorias || ((P * 4) + (C * 4) + (G * 9)) || 1;
+            const somaReal = (P * 4) + (C * 4) + (G * 9);
+            const Cal = estadoCalculadora.calorias || somaReal || 1;
             const peso = estadoCalculadora.peso || 75;
 
             const kcalP = P * 4;
             const kcalC = C * 4;
             const kcalG = G * 9;
 
-            const pctP = Math.max(0, Math.round((kcalP / Cal) * 100));
-            const pctC = Math.max(0, Math.round((kcalC / Cal) * 100));
+            const basePct = somaReal > 0 ? somaReal : Cal;
+            const pctP = Math.max(0, Math.round((kcalP / basePct) * 100));
+            const pctC = Math.max(0, Math.round((kcalC / basePct) * 100));
             const pctG = Math.max(0, 100 - pctP - pctC);
 
             estadoCalculadora.pctProt = pctP;
             estadoCalculadora.pctCarb = pctC;
             estadoCalculadora.pctGord = pctG;
 
-            // Rótulos de calorias e percentuais
-            const somaValEl = document.getElementById('calc-res-soma-valor');
-            if (somaValEl) somaValEl.textContent = Cal.toLocaleString('pt-BR');
-
             // Proteínas
             const protPctEl = document.getElementById('calc-res-prot-pct');
-            const protKgEl = document.getElementById('calc-res-prot-kg');
+            const protKgInput = document.getElementById('calc-res-prot-kg-input');
             const protKcalEl = document.getElementById('calc-res-prot-kcal');
             if (protPctEl) protPctEl.textContent = `${pctP}%`;
-            if (protKgEl) protKgEl.textContent = `${(P / peso).toFixed(1)} g/kg`;
+            if (protKgInput && document.activeElement !== protKgInput) {
+                protKgInput.value = (P / peso).toFixed(1);
+            }
             if (protKcalEl) protKcalEl.textContent = `${kcalP} kcal`;
 
             // Carboidratos
             const carbPctEl = document.getElementById('calc-res-carb-pct');
-            const carbKgEl = document.getElementById('calc-res-carb-kg');
+            const carbKgInput = document.getElementById('calc-res-carb-kg-input');
             const carbKcalEl = document.getElementById('calc-res-carb-kcal');
             if (carbPctEl) carbPctEl.textContent = `${pctC}%`;
-            if (carbKgEl) carbKgEl.textContent = `${(C / peso).toFixed(1)} g/kg`;
+            if (carbKgInput && document.activeElement !== carbKgInput) {
+                carbKgInput.value = (C / peso).toFixed(1);
+            }
             if (carbKcalEl) carbKcalEl.textContent = `${kcalC} kcal`;
 
             // Gorduras
             const gordPctEl = document.getElementById('calc-res-gord-pct');
-            const gordKgEl = document.getElementById('calc-res-gord-kg');
+            const gordKgInput = document.getElementById('calc-res-gord-kg-input');
             const gordKcalEl = document.getElementById('calc-res-gord-kcal');
             if (gordPctEl) gordPctEl.textContent = `${pctG}%`;
-            if (gordKgEl) gordKgEl.textContent = `${(G / peso).toFixed(1)} g/kg`;
+            if (gordKgInput && document.activeElement !== gordKgInput) {
+                gordKgInput.value = (G / peso).toFixed(2);
+            }
             if (gordKcalEl) gordKcalEl.textContent = `${kcalG} kcal`;
 
             // Barra de Proporção
@@ -3793,6 +4282,44 @@
             if (barC) barC.style.width = `${pctC}%`;
             if (barG) barG.style.width = `${pctG}%`;
             if (txtDist) txtDist.textContent = `P ${pctP}% (${P}g) • C ${pctC}% (${C}g) • G ${pctG}% (${G}g)`;
+
+            // Atualiza alerta de balanço calórico em tempo real
+            atualizarAlertaBalancoCalorico(Cal, P, C, G);
+        }
+
+        // Validação e Alerta de Balanço Calórico em Tempo Real
+        function atualizarAlertaBalancoCalorico(totalCal, P, C, G) {
+            const somaReal = (P * 4) + (C * 4) + (G * 9);
+            const diff = totalCal - somaReal;
+            const somaEl = document.getElementById('calc-res-soma-valor');
+            const badgeEl = document.getElementById('calc-balanco-badge');
+            const btnAjustar = document.getElementById('btn-calc-ajustar-carbo');
+
+            if (somaEl) somaEl.textContent = somaReal.toLocaleString('pt-BR');
+
+            if (!badgeEl) return;
+
+            if (diff === 0) {
+                badgeEl.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30';
+                badgeEl.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i><span>Balanço Fechado 100%</span>`;
+                if (btnAjustar) btnAjustar.classList.add('hidden');
+            } else if (diff > 0) {
+                badgeEl.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30';
+                badgeEl.innerHTML = `<i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i><span>⚠️ -${diff} kcal não alocadas</span>`;
+                if (btnAjustar) {
+                    btnAjustar.classList.remove('hidden');
+                    btnAjustar.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3 inline mr-1"></i>Ajustar no Carboidrato (+${Math.round(diff / 4)}g)`;
+                }
+            } else {
+                const excesso = Math.abs(diff);
+                badgeEl.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30';
+                badgeEl.innerHTML = `<i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i><span>⚠️ +${excesso} kcal acima da meta</span>`;
+                if (btnAjustar) {
+                    btnAjustar.classList.remove('hidden');
+                    btnAjustar.innerHTML = `<i data-lucide="sparkles" class="w-3 h-3 inline mr-1"></i>Ajustar no Carboidrato (-${Math.round(excesso / 4)}g)`;
+                }
+            }
+            if (window.lucide) lucide.createIcons();
         }
 
         function atualizarBadgeModo(ehManual) {
@@ -3805,17 +4332,18 @@
                 badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span><span>✏️ Ajustado Manualmente</span>`;
                 if (btnReverter) btnReverter.classList.remove('hidden');
             } else {
-                badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-brand-500/10 text-brand-400 border border-brand-500/30';
-                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span><span>⚡ Cálculo Automático</span>`;
+                badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30';
+                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span><span>⚡ Cálculo Automático</span>`;
                 if (btnReverter) btnReverter.classList.add('hidden');
             }
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
         }
 
         function restaurarCalculoAutomatico() {
             estadoCalculadora.modoManual = false;
+            estadoCalculadora.presetAtivo = null;
             recalcularMacros();
-            showToast('Fórmula Restaurada', 'Os macronutrientes foram recalculados pelo protocolo científico Mifflin-St Jeor.', 'info');
+            showToast('Fórmula Restaurada', `Os macronutrientes foram recalculados pelo protocolo científico ${estadoCalculadora.formulaUsada === 'katch_mcardle' ? 'Katch-McArdle' : 'Mifflin-St Jeor'}.`, 'info');
         }
 
         // Sincronização Bidirecional do Aluno Selecionado (Resiliente & Paralela)
@@ -3931,23 +4459,25 @@
                     if (macrosSalvos.idade) document.getElementById('calc-idade').value = macrosSalvos.idade;
                     if (macrosSalvos.peso) document.getElementById('calc-peso').value = macrosSalvos.peso;
                     if (macrosSalvos.altura) document.getElementById('calc-altura').value = macrosSalvos.altura;
+                    document.getElementById('calc-bf').value = (macrosSalvos.bf !== undefined && macrosSalvos.bf !== null) ? macrosSalvos.bf : '';
                     if (macrosSalvos.objetivo) document.getElementById('calc-objetivo').value = macrosSalvos.objetivo;
                     if (macrosSalvos.atividade) document.getElementById('calc-atividade').value = macrosSalvos.atividade;
 
                     estadoCalculadora = { ...estadoCalculadora, ...macrosSalvos };
+                    if (macrosSalvos.travas) {
+                        estadoCalculadora.travas = macrosSalvos.travas;
+                    }
 
                     if (macrosSalvos.sexo) {
                         estadoCalculadora.sexo = macrosSalvos.sexo;
                         const btnM = document.getElementById('calc-sexo-m');
                         const btnF = document.getElementById('calc-sexo-f');
-                        if (btnM && btnF) {
-                            if (macrosSalvos.sexo === 'masculino') {
-                                btnM.className = 'py-1.5 text-xs font-bold rounded-lg transition-all text-center bg-brand-500 text-slate-950 shadow-sm';
-                                btnF.className = 'py-1.5 text-xs font-bold rounded-lg transition-all text-center text-slate-400 hover:text-white';
-                            } else {
-                                btnF.className = 'py-1.5 text-xs font-bold rounded-lg transition-all text-center bg-brand-500 text-slate-950 shadow-sm';
-                                btnM.className = 'py-1.5 text-xs font-bold rounded-lg transition-all text-center text-slate-400 hover:text-white';
-                            }
+                        if (macrosSalvos.sexo === 'masculino') {
+                            if (btnM) btnM.className = 'py-1 text-[11px] font-bold rounded transition-all text-center bg-emerald-500 text-slate-950 shadow-sm cursor-pointer';
+                            if (btnF) btnF.className = 'py-1 text-[11px] font-bold rounded transition-all text-center text-slate-400 hover:text-white cursor-pointer';
+                        } else {
+                            if (btnF) btnF.className = 'py-1 text-[11px] font-bold rounded transition-all text-center bg-emerald-500 text-slate-950 shadow-sm cursor-pointer';
+                            if (btnM) btnM.className = 'py-1 text-[11px] font-bold rounded transition-all text-center text-slate-400 hover:text-white cursor-pointer';
                         }
                     }
 
@@ -3956,11 +4486,24 @@
                     document.getElementById('calc-res-carboidratos').value = macrosSalvos.carboidratos;
                     document.getElementById('calc-res-gorduras').value = macrosSalvos.gorduras;
 
+                    // Atualiza destaque de preset se houver
+                    Object.keys(PRESETS_MACROS).forEach(k => {
+                        const btn = document.getElementById(PRESETS_MACROS[k].btnId);
+                        if (btn) {
+                            if (macrosSalvos.preset_ativo === k) {
+                                btn.classList.add('ring-2', 'ring-emerald-500', 'bg-slate-900');
+                            } else {
+                                btn.classList.remove('ring-2', 'ring-emerald-500', 'bg-slate-900');
+                            }
+                        }
+                    });
+
+                    atualizarBotoesTravaUI();
                     atualizarMetabolismoDiagnostico();
                     atualizarUIProporcoesMacros();
                     atualizarBadgeModo(!!macrosSalvos.modo_manual);
 
-                    if (infoEl) infoEl.innerHTML = `<span class="text-lime-400 font-semibold">✓ Metas carregadas (${macrosSalvos.calorias} kcal)</span>`;
+                    if (infoEl) infoEl.innerHTML = `<span class="text-emerald-400 font-bold">✓ Metas salvas carregadas (${macrosSalvos.calorias} kcal)</span>`;
                 } else {
                     // Aluno novo: busca biometria registrada no perfil e faz cálculo inicial
                     let perfil = {};
@@ -3979,6 +4522,12 @@
                         const altNum = parseFloat(perfil.altura);
                         document.getElementById('calc-altura').value = altNum > 3 ? Math.round(altNum) : Math.round(altNum * 100);
                     }
+                    document.getElementById('calc-bf').value = '';
+
+                    Object.keys(PRESETS_MACROS).forEach(k => {
+                        const btn = document.getElementById(PRESETS_MACROS[k].btnId);
+                        if (btn) btn.classList.remove('ring-2', 'ring-emerald-500', 'bg-slate-900');
+                    });
 
                     recalcularMacros();
                     if (infoEl) infoEl.innerHTML = `<span class="text-slate-300">Biometria importada • Cálculo pronto para salvar</span>`;
@@ -4017,15 +4566,15 @@
 
             if (macros && macros.calorias) {
                 resumoEl.innerHTML = `
-                    <span class="text-brand-400 font-black">${macros.calorias} kcal</span>
+                    <span class="text-emerald-400 font-black">${macros.calorias} kcal</span>
                     <span class="text-slate-500">•</span>
-                    <span class="text-emerald-400 font-bold">P: ${macros.proteinas}g</span>
+                    <span class="text-emerald-300 font-bold">P: ${macros.proteinas}g</span>
                     <span class="text-slate-500">•</span>
                     <span class="text-sky-400 font-bold">C: ${macros.carboidratos}g</span>
                     <span class="text-slate-500">•</span>
                     <span class="text-amber-400 font-bold">G: ${macros.gorduras}g</span>
                     <span class="text-slate-500">•</span>
-                    <span class="text-cyan-400 font-semibold">💧 ${macros.agua_litros || '2.8'}L</span>
+                    <span class="text-cyan-400 font-semibold">💧 ${macros.agua_litros || '3.1 – 3.6 L'}</span>
                 `;
             } else {
                 resumoEl.innerHTML = `<span class="text-slate-500 italic">Nenhuma meta prescrita ainda. Clique em "Abrir na Calculadora"</span>`;
@@ -4059,9 +4608,17 @@
                 proteinas: estadoCalculadora.proteinas,
                 carboidratos: estadoCalculadora.carboidratos,
                 gorduras: estadoCalculadora.gorduras,
+                fibras_minimas: estadoCalculadora.fibras,
                 agua_litros: estadoCalculadora.aguaLitros,
+                agua_min: estadoCalculadora.aguaMin,
+                agua_max: estadoCalculadora.aguaMax,
                 tmb: estadoCalculadora.tmb,
                 tdee: estadoCalculadora.tdee,
+                bf: estadoCalculadora.bf,
+                lbm: estadoCalculadora.lbm,
+                formula_usada: estadoCalculadora.formulaUsada,
+                travas: estadoCalculadora.travas,
+                preset_ativo: estadoCalculadora.presetAtivo,
                 objetivo: estadoCalculadora.objetivo,
                 atividade: estadoCalculadora.atividade,
                 idade: estadoCalculadora.idade,
@@ -4095,14 +4652,14 @@
             if (btnText) btnText.textContent = 'Salvar Metas no Portal do Aluno';
             if (btnIcon) btnIcon.classList.remove('hidden');
             if (btnSpinner) btnSpinner.classList.add('hidden');
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
 
             if (erroGravacao) {
                 showToast('Salvo Localmente', 'As metas foram salvas no dispositivo, mas houve aviso na nuvem: ' + erroGravacao.message, 'info');
             } else {
                 const alunoObj = listaAlunosCache.find(a => a.id === alunoId);
                 const nomeAluno = alunoObj ? (alunoObj.nome || 'Aluno') : 'Aluno';
-                showToast('Metas Sincronizadas! 🎯', `Metas (${payload.calorias} kcal) salvas no portal do aluno ${nomeAluno}.`, 'success');
+                showToast('Metas Sincronizadas! 🎯', `Metas esportivas (${payload.calorias} kcal) salvas no portal de ${nomeAluno}.`, 'success');
             }
 
             // Atualiza resumo no Card Clínico
@@ -4112,45 +4669,41 @@
         // Copiar Resumo dos Macros para envio no WhatsApp
         function copiarResumoMacrosWhatsApp() {
             const alunoId = estadoCalculadora.alunoId;
-            const alunoObj = listaAlunosCache.find(a => a.id === alunoId);
-            const nomeAluno = alunoObj ? (alunoObj.nome || 'Aluno') : 'Aluno';
+            const alunoObj = (typeof listaAlunosCache !== 'undefined' && Array.isArray(listaAlunosCache))
+                ? listaAlunosCache.find(a => a.id === alunoId)
+                : null;
+            const nomeAluno = alunoObj ? (alunoObj.nome || 'Aluno') : (estadoCalculadora.alunoNome || 'Aluno');
 
             const objetivosNomes = {
                 deficit_moderado: 'Emagrecimento Saudável (-20%)',
-                deficit_agressivo: 'Definição / Cutting Acelerado (-25%)',
-                manutencao: 'Manutenção & Recomposição Corporal',
+                deficit_agressivo: 'Cutting Agressivo / Secar (-25%)',
+                manutencao: 'Manutenção & Recomposição (Equilíbrio 0%)',
                 superavit_moderado: 'Hipertrofia Limpa (+12%)',
                 superavit_agressivo: 'Bulking Intenso (+20%)'
             };
-            const nomeObj = objetivosNomes[estadoCalculadora.objetivo] || 'Planejamento Nutricional';
+            const nomeObj = objetivosNomes[estadoCalculadora.objetivo] || 'Planejamento Nutricional Personalizado';
 
-            // URL oficial da aplicação: usa o domínio onde o painel está publicado (sem link legado hardcoded).
-            const urlPortalAluno = /^https?:$/.test(window.location.protocol)
-                ? `${window.location.origin}/nutricao.html`
-                : '';
-            const linhaPortal = urlPortalAluno
-                ? `Consulte suas refeições detalhadas no seu Portal Real Fit Hub:\n${urlPortalAluno}`
-                : 'Consulte suas refeições detalhadas no seu Portal Real Fit Hub.';
+            const peso = estadoCalculadora.peso || 75;
+            const gKgP = (estadoCalculadora.proteinas / peso).toFixed(1);
+            const gKgC = (estadoCalculadora.carboidratos / peso).toFixed(1);
+            const gKgG = (estadoCalculadora.gorduras / peso).toFixed(1);
 
-            const texto = `🥗 *PLANEJAMENTO NUTRICIONAL - REAL FIT HUB*
-👤 *Aluno(a):* ${nomeAluno}
-🎯 *Objetivo:* ${nomeObj}
-⚖️ *Peso Base:* ${estadoCalculadora.peso} kg
+            const texto = `📋 METAS NUTRICIONAIS PERSONALIZADAS
+👤 Aluno: ${nomeAluno}
+🎯 Objetivo: ${nomeObj}
 
-🔥 *METAS DIÁRIAS PRESCRITAS:*
-• *Calorias:* ${estadoCalculadora.calorias} kcal
-• *Proteínas:* ${estadoCalculadora.proteinas}g (${(estadoCalculadora.proteinas / estadoCalculadora.peso).toFixed(1)} g/kg) • ${estadoCalculadora.pctProt}%
-• *Carboidratos:* ${estadoCalculadora.carboidratos}g (${(estadoCalculadora.carboidratos / estadoCalculadora.peso).toFixed(1)} g/kg) • ${estadoCalculadora.pctCarb}%
-• *Gorduras:* ${estadoCalculadora.gorduras}g (${(estadoCalculadora.gorduras / estadoCalculadora.peso).toFixed(1)} g/kg) • ${estadoCalculadora.pctGord}%
-💧 *Meta de Água:* ${estadoCalculadora.aguaLitros} Litros / dia
+🔥 Gasto Diário Estimado (GET): ${estadoCalculadora.tdee} kcal
+🎯 Meta Calórica: ${estadoCalculadora.calorias} kcal/dia
 
-${linhaPortal}
-
-_Prescrição elaborada pelo seu nutricionista._`;
+🥩 Proteínas: ${estadoCalculadora.proteinas}g (${gKgP} g/kg) — ${estadoCalculadora.pctProt}%
+🥔 Carboidratos: ${estadoCalculadora.carboidratos}g (${gKgC} g/kg) — ${estadoCalculadora.pctCarb}%
+🥑 Gorduras: ${estadoCalculadora.gorduras}g (${gKgG} g/kg) — ${estadoCalculadora.pctGord}%
+🌾 Fibras Mínimas: ${estadoCalculadora.fibras}g/dia
+💧 Ingestão Hídrica: ${estadoCalculadora.aguaLitros}`;
 
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(texto).then(() => {
-                    showToast('Copiado! 📋', 'Resumo de macros copiado para a área de transferência.', 'success');
+                    showToast('WhatsApp 📋', 'Resumo copiado para o WhatsApp com sucesso!', 'success');
                 }).catch(() => fallbackCopiar(texto));
             } else {
                 fallbackCopiar(texto);
@@ -4164,7 +4717,7 @@ _Prescrição elaborada pelo seu nutricionista._`;
             ta.select();
             document.execCommand('copy');
             document.body.removeChild(ta);
-            showToast('Copiado! 📋', 'Resumo de macros copiado.', 'success');
+            showToast('WhatsApp 📋', 'Resumo copiado para o WhatsApp com sucesso!', 'success');
         }
 
         function irParaCalculadoraComAlunoAtual() {
@@ -4178,43 +4731,58 @@ _Prescrição elaborada pelo seu nutricionista._`;
 
         // Setup dos Event Listeners dos Inputs da Calculadora
         function setupCalculadoraListeners() {
-            const idsAuto = ['calc-idade', 'calc-peso', 'calc-altura', 'calc-objetivo', 'calc-atividade'];
+            const idsAuto = ['calc-idade', 'calc-peso', 'calc-altura', 'calc-bf', 'calc-atividade'];
             idsAuto.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
-                    el.addEventListener('input', () => {
-                        if (!estadoCalculadora.modoManual) {
-                            recalcularMacros();
-                        } else {
-                            atualizarMetabolismoDiagnostico();
-                            atualizarUIProporcoesMacros();
-                        }
-                    });
-                    el.addEventListener('change', () => {
-                        if (!estadoCalculadora.modoManual) {
-                            recalcularMacros();
-                        } else {
-                            atualizarMetabolismoDiagnostico();
-                            atualizarUIProporcoesMacros();
-                        }
-                    });
+                    el.oninput = onParametroClinicoChange;
+                    el.onchange = onParametroClinicoChange;
                 }
             });
 
-            // Inputs de Ajuste Manual
+            const selObj = document.getElementById('calc-objetivo');
+            if (selObj) {
+                selObj.onchange = onObjetivoNutricionalChange;
+            }
+
+            // Inputs de Ajuste Manual Direto em Gramas e Calorias
             const idsManual = ['calc-res-calorias', 'calc-res-proteinas', 'calc-res-carboidratos', 'calc-res-gorduras'];
             idsManual.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
-                    el.addEventListener('input', () => onManualMacroChange(id.replace('calc-res-', '')));
+                    el.oninput = () => onManualMacroChange(id.replace('calc-res-', ''));
+                }
+            });
+
+            // Inputs de Ajuste Direto em g/kg
+            const gKgInputs = [
+                { id: 'calc-res-prot-kg-input', macro: 'p' },
+                { id: 'calc-res-carb-kg-input', macro: 'c' },
+                { id: 'calc-res-gord-kg-input', macro: 'g' }
+            ];
+            gKgInputs.forEach(item => {
+                const el = document.getElementById(item.id);
+                if (el) {
+                    el.oninput = (e) => onGKgChange(item.macro, e.target.value);
                 }
             });
 
             // Seletor de aluno da própria calculadora
             const selCalc = document.getElementById('calc-aluno-select');
             if (selCalc) {
-                selCalc.addEventListener('change', (e) => sincronizarSelecaoAluno(e.target.value, 'calc'));
+                selCalc.onchange = (e) => sincronizarSelecaoAluno(e.target.value, 'calc');
             }
+
+            // Inicializa visual das travas
+            atualizarBotoesTravaUI();
+        }
+
+        // Inicialização imediata resiliente dos listeners da calculadora
+        try {
+            setupCalculadoraListeners();
+            recalcularMacros();
+        } catch (e) {
+            console.warn('Init calculadora:', e);
         }
 
         async function carregarAlunosSelect() {
@@ -4233,6 +4801,7 @@ _Prescrição elaborada pelo seu nutricionista._`;
                 if (selectFotosEl) selectFotosEl.innerHTML = `<option value="" disabled>Erro ao carregar alunos: ${error.message}</option>`;
                 if (selectCalcEl) selectCalcEl.innerHTML = `<option value="" disabled>Erro ao carregar alunos: ${error.message}</option>`;
                 if (selectGerenciarEl) selectGerenciarEl.innerHTML = `<option value="" disabled>Erro ao carregar alunos: ${error.message}</option>`;
+                setupCalculadoraListeners();
                 return;
             }
 
@@ -4244,6 +4813,7 @@ _Prescrição elaborada pelo seu nutricionista._`;
                 if (selectCalcEl) selectCalcEl.innerHTML = `<option value="" disabled>Nenhum aluno cadastrado ainda.</option>`;
                 if (selectGerenciarEl) selectGerenciarEl.innerHTML = `<option value="" disabled>Nenhum aluno cadastrado ainda.</option>`;
                 if (typeof renderizarTabelaAlunosVinculadosNutri === 'function') renderizarTabelaAlunosVinculadosNutri();
+                setupCalculadoraListeners();
                 return;
             }
 

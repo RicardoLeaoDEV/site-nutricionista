@@ -24,6 +24,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- Scripts da Suíte Profissional & Engine ApexFit -->
     <script src="js/apexfit-core.js"></script>
+    <script src="js/exercise-3d-visualizer.js"></script>
     <script src="js/checkin-system.js"></script>
     <script src="js/professional-suite.js"></script>
     <script src="js/evolution-tracker.js"></script>
@@ -522,27 +523,32 @@
                     </div>
                 </div>
 
-                <div class="collapse-content expanded px-5 sm:px-6 pb-6 pt-0">
-                    <div class="flex flex-wrap items-center justify-end gap-2 pt-2 pb-4">
-                        <button type="button" onclick="document.getElementById('secao-treino-atual').scrollIntoView({ behavior: 'smooth', block: 'start' })"
-                            class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-white border border-slate-700 hover:border-amber-500/50 text-xs font-bold px-3.5 py-2 rounded-xl transition-all cursor-pointer shadow-sm active:scale-95">
-                            <i data-lucide="clipboard-list" class="w-4 h-4"></i>
-                            <span>Ver Fichas Deste Aluno</span>
-                        </button>
-                        <button type="button" onclick="gerarPdfAlunoAdmin()" id="btn-exportar-pdf-admin"
-                            class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-white border border-slate-700 hover:border-amber-500/50 text-xs font-bold px-3.5 py-2 rounded-xl transition-all cursor-pointer shadow-sm active:scale-95">
-                            <i data-lucide="file-down" class="w-4 h-4" id="btn-admin-pdf-icon"></i>
-                            <span id="btn-admin-pdf-text">Baixar Treino em PDF</span>
-                            <div id="btn-admin-pdf-spinner"
-                                class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin">
-                            </div>
-                        </button>
+                <div class="collapse-content expanded px-4 sm:px-6 pb-6 pt-0">
+                    <!-- Barra de Ações Rápidas do Topo -->
+                    <div class="flex flex-wrap items-center justify-between gap-2.5 pt-2 pb-4 border-b border-slate-800/80 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span class="text-xs font-bold text-slate-300">Prescrição & Sincronização em Tempo Real</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="document.getElementById('secao-treino-atual').scrollIntoView({ behavior: 'smooth', block: 'start' })"
+                                class="flex items-center gap-1.5 bg-[#181F2C] hover:bg-slate-800 text-amber-400 hover:text-white border border-[#2D3748] hover:border-amber-500/50 text-xs font-bold px-3 py-2 rounded-xl transition-all cursor-pointer shadow-sm active:scale-95">
+                                <i data-lucide="clipboard-list" class="w-3.5 h-3.5"></i>
+                                <span>Ver Fichas Deste Aluno</span>
+                            </button>
+                            <button type="button" onclick="gerarPdfAlunoAdmin()" id="btn-exportar-pdf-admin"
+                                class="flex items-center gap-1.5 bg-[#181F2C] hover:bg-slate-800 text-amber-400 hover:text-white border border-[#2D3748] hover:border-amber-500/50 text-xs font-bold px-3 py-2 rounded-xl transition-all cursor-pointer shadow-sm active:scale-95">
+                                <i data-lucide="file-down" class="w-3.5 h-3.5" id="btn-admin-pdf-icon"></i>
+                                <span id="btn-admin-pdf-text">Baixar PDF</span>
+                                <div id="btn-admin-pdf-spinner" class="hidden w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Banner de Identificação do Personal Prescritor [Foto, Nome e CREF (se houver)] -->
-                    <div id="banner-prescritor-personal" class="mb-4 p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-3 shadow-lg">
+                    <!-- Banner de Identificação do Personal Prescritor -->
+                    <div id="banner-prescritor-personal" class="mb-5 p-3.5 rounded-2xl bg-[#181F2C] border border-[#2D3748] flex items-center justify-between gap-3 shadow-lg">
                         <div class="flex items-center gap-3">
-                            <div class="relative w-10 h-10 rounded-full overflow-hidden bg-slate-800 border border-amber-500/30 shrink-0 flex items-center justify-center">
+                            <div class="relative w-10 h-10 rounded-full overflow-hidden bg-slate-900 border border-amber-500/30 shrink-0 flex items-center justify-center">
                                 <img id="prescritor-personal-foto" src="" alt="Foto" class="w-full h-full object-cover hidden">
                                 <span id="prescritor-personal-initials" class="text-sm font-black text-amber-400">P</span>
                             </div>
@@ -556,25 +562,189 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" onclick="abrirModalPerfilProfissional()" class="text-xs text-amber-400 hover:text-amber-300 font-semibold px-2.5 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors cursor-pointer shrink-0">
+                        <button type="button" onclick="abrirModalPerfilProfissional()" class="text-xs text-amber-400 hover:text-amber-300 font-semibold px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-[#2D3748] transition-colors cursor-pointer shrink-0">
                             Meu Perfil
                         </button>
                     </div>
 
-                    <form id="form-dieta" class="space-y-5">
+                    <!-- ============================================================== -->
+                    <!-- SELETOR DE ALUNO + HEADER BIOMÉTRICO COMPACTO (UI REFINADA)     -->
+                    <!-- ============================================================== -->
+                    <div class="space-y-4 mb-6">
+                        <!-- Seletor do Aluno -->
+                        <div class="bg-[#181F2C] border border-[#2D3748] p-4 rounded-2xl shadow-lg">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
+                                <label for="aluno-select" class="block text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                                    <i data-lucide="user-check" class="w-4 h-4 text-amber-400"></i>
+                                    <span>Aluno Selecionado para Prescrição</span>
+                                </label>
+                                <span class="text-[11px] text-slate-400">Selecione para sincronizar ficha e biometria</span>
+                            </div>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                    <i data-lucide="user" class="w-4 h-4"></i>
+                                </div>
+                                <select id="aluno-select" required onchange="if (typeof window.sincronizarSelecaoAluno === 'function') window.sincronizarSelecaoAluno(this.value, 'montar')"
+                                    class="w-full bg-[#0B0F17] border border-[#2D3748] rounded-xl pl-10 pr-4 py-3 text-sm text-slate-100 font-medium focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all cursor-pointer">
+                                    <option value="" disabled selected>A carregar lista de alunos...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Card de Informações Clínicas & Biométricas do Aluno -->
+                        <div id="card-aluno-clinico" class="hidden bg-[#181F2C] rounded-2xl border border-[#2D3748] p-4 sm:p-5 shadow-xl animate-in fade-in duration-200 space-y-4">
+                            <!-- Topo do Card Clínico: Aluno & Chips Biométricos Horizontais -->
+                            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <div id="clinico-avatar"
+                                        class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-bold text-sm overflow-hidden shrink-0 shadow-md">
+                                        A
+                                    </div>
+                                    <div class="min-w-0">
+                                        <div class="text-sm font-bold text-white flex items-center gap-2 flex-wrap">
+                                            <span id="clinico-nome" class="truncate">Aluno</span>
+                                            <span id="clinico-status-badge"
+                                                class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                                                Perfil Ativo
+                                            </span>
+                                        </div>
+                                        <div class="text-xs text-slate-400 truncate" id="clinico-email">aluno@email.com</div>
+                                    </div>
+                                </div>
+
+                                <!-- Métricas Biométricas em Chips Compactos de Alta Densidade -->
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 shrink-0">
+                                    <div class="bg-[#0B0F17] border border-[#2D3748] px-3 py-2 rounded-xl text-center min-w-[78px]">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Altura</span>
+                                        <span class="text-xs font-extrabold text-white" id="clinico-altura">-- m</span>
+                                    </div>
+                                    <div class="bg-[#0B0F17] border border-[#2D3748] px-3 py-2 rounded-xl text-center min-w-[78px]">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Peso Atual</span>
+                                        <span class="text-xs font-extrabold text-amber-400" id="clinico-peso">-- kg</span>
+                                    </div>
+                                    <div class="bg-[#0B0F17] border border-[#2D3748] px-3 py-2 rounded-xl text-center min-w-[78px]">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Idade</span>
+                                        <span class="text-xs font-extrabold text-white" id="clinico-idade">-- anos</span>
+                                    </div>
+                                    <div class="bg-[#0B0F17] border border-[#2D3748] px-3 py-2 rounded-xl text-center min-w-[85px]">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">IMC</span>
+                                        <span class="text-xs font-extrabold text-blue-400" id="clinico-imc">--</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Barra de Ações Clínicas: Medidas & Antropometria -->
+                            <div class="pt-3 border-t border-[#2D3748] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="ruler" class="w-3.5 h-3.5 text-blue-400"></i>
+                                    <span class="text-[11px] font-bold text-slate-300">Circunferências & Antropometria Recente</span>
+                                    <div id="personal-chips-antropometria" class="inline-flex flex-wrap items-center gap-1.5 ml-2"></div>
+                                </div>
+                                <button type="button" onclick="irParaAbaMedidasPersonal()"
+                                    class="px-3.5 py-1.5 rounded-xl bg-blue-600/90 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/20 transition-all cursor-pointer active:scale-95 shrink-0">
+                                    <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5"></i>
+                                    <span>Registrar / Atualizar Medidas</span>
+                                </button>
+                            </div>
+
+                            <!-- ============================================================== -->
+                            <!-- COCKPIT DO ASSISTENTE IA DE PRESCRIÇÃO                         -->
+                            <!-- ============================================================== -->
+                            <div id="barra-ia-prescricao-treino"
+                                class="mt-2 pt-4 border-t border-[#2D3748] bg-[#111827] rounded-2xl p-4 sm:p-5 border border-amber-500/20 shadow-2xl space-y-4">
+                                <!-- Cabeçalho do Assistente de IA -->
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-[#2D3748]">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-sm shadow-amber-500/10">
+                                            <i data-lucide="sparkles" class="w-4 h-4 text-amber-400 animate-pulse"></i>
+                                        </div>
+                                        <div>
+                                            <div class="flex items-center gap-2 flex-wrap">
+                                                <h3 class="text-xs sm:text-sm font-bold text-white tracking-tight">
+                                                    Assistente de Prescrição por Inteligência Artificial
+                                                </h3>
+                                                <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30">
+                                                    IA Biomecânica
+                                                </span>
+                                            </div>
+                                            <p class="text-[11px] text-slate-400 mt-0.5">
+                                                Prescrição adaptativa calibrada pelo peso, IMC e perfil do aluno
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 text-[11px] text-slate-400 self-start sm:self-auto">
+                                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                        <span class="font-medium text-emerald-400">Motor IA Calibrado</span>
+                                    </div>
+                                </div>
+
+                                <!-- Barra de Controle de Escopo + Foco de Intensidade + Botão Gerar -->
+                                <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 items-end">
+                                    <!-- 1. Seletor de Escopo -->
+                                    <div class="lg:col-span-5 space-y-1.5">
+                                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                                            <i data-lucide="layers" class="w-3.5 h-3.5 text-amber-400"></i>
+                                            Seletor de Escopo da IA
+                                        </label>
+                                        <div class="grid grid-cols-2 p-1 bg-[#0B0F17] border border-[#2D3748] rounded-xl gap-1">
+                                            <button type="button" onclick="setEscopoIATreino('exercicio')" id="btn-escopo-ia-exercicio"
+                                                class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm">
+                                                <span class="w-2 h-2 rounded-full bg-amber-400 shrink-0" id="dot-escopo-exercicio"></span>
+                                                <span class="truncate">Apenas Próximo Exercício</span>
+                                            </button>
+                                            <button type="button" onclick="setEscopoIATreino('treino')" id="btn-escopo-ia-treino"
+                                                class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition-all cursor-pointer border border-transparent">
+                                                <span class="w-2 h-2 rounded-full bg-slate-600 shrink-0" id="dot-escopo-treino"></span>
+                                                <span class="truncate">Treino Completo da Sessão</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- 2. Seletor de Intensidade/Foco -->
+                                    <div class="lg:col-span-4 space-y-1.5">
+                                        <label for="select-intensidade-foco-ia" class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                                            <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-400"></i>
+                                            Intensidade / Periodização
+                                        </label>
+                                        <select id="select-intensidade-foco-ia"
+                                            class="w-full bg-[#0B0F17] border border-[#2D3748] rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-100 focus:outline-none focus:border-amber-500 transition-all cursor-pointer">
+                                            <option value="Hipertrofia Padrão" selected>⚡ Hipertrofia Padrão (8-12 reps)</option>
+                                            <option value="Adaptação Articular">🛡️ Adaptação Articular (12-15 reps)</option>
+                                            <option value="Resistência & Queima">🔥 Resistência & Queima (15-20 reps)</option>
+                                            <option value="Força & Carga Progressiva">🏋️ Força & Carga Progressiva (5-8 reps)</option>
+                                            <option value="Hipertrofia Densa & Falha">💥 Hipertrofia Densa & Falha (Rest-pause)</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- 3. Botão de Ação: Gerar Sugestão -->
+                                    <div class="lg:col-span-3">
+                                        <button type="button" id="btn-gerar-sugestao-ia" onclick="gerarSugestaoIATreino()"
+                                            class="w-full h-[40px] inline-flex items-center justify-center gap-2 px-4 rounded-xl font-black text-xs bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/35 border border-amber-300/40 transition-all duration-200 cursor-pointer active:scale-95">
+                                            <i data-lucide="sparkles" class="w-4 h-4 text-slate-950 shrink-0" id="icone-gerar-ia"></i>
+                                            <span id="texto-gerar-ia" class="truncate">✨ Gerar Sugestão por IA</span>
+                                            <div id="spinner-gerar-ia" class="hidden w-4 h-4 border-2 border-slate-950/40 border-t-slate-950 rounded-full animate-spin"></div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ============================================================== -->
+                    <!-- WORKSPACE DE PRESCRIÇÃO: 2 COLUNAS (STUDIO + SESSÃO ATUAL)    -->
+                    <!-- ============================================================== -->
+                    <form id="form-dieta" class="space-y-6">
                         <!-- Banner de Notificação: Modo de Edição de Exercício -->
                         <div id="aviso-edicao-exercicio"
                             class="hidden p-4 rounded-2xl bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xl transition-all">
                             <div class="flex items-center gap-3">
-                                <div
-                                    class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 shadow-sm">
+                                <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 shadow-sm">
                                     <i data-lucide="pencil" class="w-4 h-4"></i>
                                 </div>
                                 <div>
                                     <div class="font-bold text-white text-xs sm:text-sm flex items-center gap-2">
                                         <span>Modo de Edição de Exercício</span>
-                                        <span
-                                            class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">Em Edição</span>
+                                        <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">Em Edição</span>
                                     </div>
                                     <p class="text-[11px] text-amber-200/90 mt-0.5" id="aviso-edicao-exercicio-nome">
                                         Atualizando dados do exercício prescrito
@@ -582,279 +752,333 @@
                                 </div>
                             </div>
                             <button type="button" onclick="cancelarEdicaoExercicio()"
-                                class="px-3.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 text-xs font-bold transition-all cursor-pointer self-start sm:self-auto active:scale-95 shadow-sm">
+                                class="px-3.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-[#2D3748] hover:border-slate-600 text-xs font-bold transition-all cursor-pointer self-start sm:self-auto active:scale-95 shadow-sm">
                                 Cancelar Edição
                             </button>
                         </div>
 
-                        <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                                Selecionar Aluno
-                            </label>
-                            <div class="relative">
-                                <div
-                                    class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                                    <i data-lucide="user" class="w-4 h-4"></i>
-                                </div>
-                                <select id="aluno-select" required
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
-                                    <option value="" disabled selected>A carregar lista de alunos...</option>
-                                </select>
-                            </div>
+                        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+                            <!-- ========================================== -->
+                            <!-- COLUNA ESQUERDA: CONSTRUTOR DO EXERCÍCIO   -->
+                            <!-- ========================================== -->
+                            <div class="xl:col-span-7 space-y-5">
+                                <!-- Card 1: Configuração da Sessão -->
+                                <div id="card-configuracao-sessao" class="bg-[#181F2C] border border-[#2D3748] p-4 sm:p-5 rounded-2xl shadow-lg space-y-4">
+                                    <div class="flex items-center justify-between pb-2.5 border-b border-[#2D3748]">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-6 h-6 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center text-xs font-black">1</span>
+                                            <h3 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Sessão & Divisão do Treino</h3>
+                                        </div>
+                                        <span class="text-[11px] text-slate-400">Rotina & Agrupamento</span>
+                                    </div>
 
-                            <!-- Card de Informações Clínicas & Biométricas do Aluno (Visualização do Admin) -->
-                            <div id="card-aluno-clinico"
-                                class="hidden mt-3 p-4 bg-slate-900/90 rounded-2xl border border-slate-700/80 shadow-lg animate-in fade-in duration-200">
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                    <div class="flex items-center gap-3">
-                                        <div id="clinico-avatar"
-                                            class="w-12 h-12 rounded-2xl bg-brand-500/20 text-brand-400 border border-brand-500/40 flex items-center justify-center font-bold text-sm overflow-hidden shrink-0 shadow-md">
-                                            A
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                                        <div>
+                                            <label for="treino-nome" class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                                                Nome do Treino
+                                            </label>
+                                            <input type="text" id="treino-nome" placeholder="Ex: Treino A – Peito e Tríceps" required
+                                                class="w-full bg-[#0B0F17] border border-[#2D3748] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-all font-medium">
                                         </div>
                                         <div>
-                                            <div class="text-sm font-bold text-white flex items-center gap-2">
-                                                <span id="clinico-nome">Aluno</span>
-                                                <span id="clinico-status-badge"
-                                                    class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30">
-                                                    Perfil Ativo
-                                                </span>
-                                            </div>
-                                            <div class="text-xs text-slate-400" id="clinico-email">aluno@email.com</div>
+                                            <label for="treino-dia" class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                                                Dia da Semana
+                                            </label>
+                                            <select id="treino-dia"
+                                                class="w-full bg-[#0B0F17] border border-[#2D3748] rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-100 focus:outline-none focus:border-amber-500 transition-all cursor-pointer font-medium">
+                                                <option>Segunda</option>
+                                                <option>Terça</option>
+                                                <option>Quarta</option>
+                                                <option>Quinta</option>
+                                                <option>Sexta</option>
+                                                <option>Sábado</option>
+                                                <option>Domingo</option>
+                                                <option>Flexível</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="treino-grupo" class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                                                Grupo Muscular
+                                            </label>
+                                            <select id="treino-grupo"
+                                                class="w-full bg-[#0B0F17] border border-[#2D3748] rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-100 focus:outline-none focus:border-amber-500 transition-all cursor-pointer font-medium">
+                                                <option>Peito</option>
+                                                <option>Costas</option>
+                                                <option>Ombros</option>
+                                                <option>Bíceps</option>
+                                                <option>Tríceps</option>
+                                                <option>Pernas</option>
+                                                <option>Glúteos</option>
+                                                <option>Abdômen</option>
+                                                <option>Full body</option>
+                                                <option>Cardio</option>
+                                                <option>Mobilidade</option>
+                                            </select>
                                         </div>
                                     </div>
 
-                                    <!-- Métricas: Altura, Peso, Idade, IMC -->
-                                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 shrink-0">
-                                        <div
-                                            class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
-                                            <span
-                                                class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Altura</span>
-                                            <span class="text-xs font-extrabold text-white" id="clinico-altura">-- m</span>
-                                        </div>
-                                        <div
-                                            class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
-                                            <span
-                                                class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Peso
-                                                Atual</span>
-                                            <span class="text-xs font-extrabold text-amber-400" id="clinico-peso">--
-                                                kg</span>
-                                        </div>
-                                        <div
-                                            class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[70px]">
-                                            <span
-                                                class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Idade</span>
-                                            <span class="text-xs font-extrabold text-white" id="clinico-idade">--
-                                                anos</span>
-                                        </div>
-                                        <div
-                                            class="bg-slate-950/70 border border-slate-800 p-2.5 rounded-xl text-center min-w-[75px]">
-                                            <span
-                                                class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">IMC</span>
-                                            <span class="text-xs font-extrabold text-blue-400" id="clinico-imc">--</span>
-                                        </div>
+                                    <!-- Presets rápidos de Nome de Treino -->
+                                    <div class="flex items-center gap-1.5 flex-wrap pt-1">
+                                        <span class="text-[10px] uppercase font-bold text-slate-400">Sugestões rápidas:</span>
+                                        <button type="button" onclick="definirPresetTreinoNome('Treino A – Peito e Tríceps', 'Segunda', 'Peito')"
+                                            class="text-[11px] px-2.5 py-1 rounded-lg bg-[#0B0F17] hover:bg-slate-800 text-slate-300 hover:text-amber-400 border border-[#2D3748] hover:border-amber-500/40 transition-all cursor-pointer">
+                                            Treino A (Peito/Tríceps)
+                                        </button>
+                                        <button type="button" onclick="definirPresetTreinoNome('Treino B – Dorsais e Bíceps', 'Terça', 'Costas')"
+                                            class="text-[11px] px-2.5 py-1 rounded-lg bg-[#0B0F17] hover:bg-slate-800 text-slate-300 hover:text-amber-400 border border-[#2D3748] hover:border-amber-500/40 transition-all cursor-pointer">
+                                            Treino B (Costas/Bíceps)
+                                        </button>
+                                        <button type="button" onclick="definirPresetTreinoNome('Treino C – Membros Inferiores', 'Quarta', 'Pernas')"
+                                            class="text-[11px] px-2.5 py-1 rounded-lg bg-[#0B0F17] hover:bg-slate-800 text-slate-300 hover:text-amber-400 border border-[#2D3748] hover:border-amber-500/40 transition-all cursor-pointer">
+                                            Treino C (Pernas)
+                                        </button>
+                                        <button type="button" onclick="definirPresetTreinoNome('Treino D – Ombros e Trapézio', 'Quinta', 'Ombros')"
+                                            class="text-[11px] px-2.5 py-1 rounded-lg bg-[#0B0F17] hover:bg-slate-800 text-slate-300 hover:text-amber-400 border border-[#2D3748] hover:border-amber-500/40 transition-all cursor-pointer">
+                                            Treino D (Ombros)
+                                        </button>
                                     </div>
                                 </div>
 
-                                <!-- ============================================================== -->
-                                <!-- COMPONENTE DE CONTROLE DE ESCOPO & ASSISTENTE DE IA (UI)       -->
-                                <!-- ============================================================== -->
-                                <div id="barra-ia-prescricao-treino"
-                                    class="mt-4 pt-4 border-t border-slate-800/90 bg-[#0d121f] rounded-2xl p-4 sm:p-5 border border-slate-800/90 shadow-2xl space-y-4">
-                                    <!-- Cabeçalho do Assistente de IA -->
-                                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-800/80">
-                                        <div class="flex items-center gap-2.5">
-                                            <div class="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-sm shadow-amber-500/10">
-                                                <i data-lucide="sparkles" class="w-4 h-4 text-amber-400 animate-pulse"></i>
-                                            </div>
-                                            <div>
-                                                <div class="flex items-center gap-2 flex-wrap">
-                                                    <h3 class="text-xs sm:text-sm font-bold text-white tracking-tight">
-                                                        Assistente de Prescrição por Inteligência Artificial
-                                                    </h3>
-                                                    <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30">
-                                                        IA Biomecânica
-                                                    </span>
-                                                </div>
-                                                <p class="text-[11px] text-slate-400 mt-0.5">
-                                                    Prescrição personalizada calibrada para altura, peso, IMC e grupo muscular do aluno
-                                                </p>
-                                            </div>
+                                <!-- Card 2: Construtor do Exercício & Periodização Dinâmica -->
+                                <div id="card-construtor-exercicio" class="bg-[#181F2C] border border-[#2D3748] p-4 sm:p-5 rounded-2xl shadow-lg space-y-4">
+                                    <div class="flex items-center justify-between pb-2.5 border-b border-[#2D3748]">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-6 h-6 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center text-xs font-black">2</span>
+                                            <h3 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Adicionar Exercício & Periodização</h3>
                                         </div>
-                                        <div class="flex items-center gap-1.5 text-[11px] text-slate-400 self-start sm:self-auto">
-                                            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                            <span class="font-medium text-emerald-400">Motor IA Calibrado</span>
-                                        </div>
+                                        <span class="text-[11px] text-amber-400/90 font-semibold flex items-center gap-1">
+                                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                                            Autocompletar 3D Ativo
+                                        </span>
                                     </div>
 
-                                    <!-- Barra de Controle de Escopo + Foco de Intensidade + Botão Gerar -->
-                                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 items-end">
-                                        <!-- 1. Seletor de Escopo: Toggle entre 'Apenas Próximo Exercício' e 'Treino Completo da Sessão' -->
-                                        <div class="lg:col-span-5 space-y-1.5">
-                                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                                                <i data-lucide="layers" class="w-3.5 h-3.5 text-amber-400"></i>
-                                                Seletor de Escopo
-                                            </label>
-                                            <div class="grid grid-cols-2 p-1 bg-slate-950/90 border border-slate-800 rounded-xl gap-1">
-                                                <button type="button" onclick="setEscopoIATreino('exercicio')" id="btn-escopo-ia-exercicio"
-                                                    class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm">
-                                                    <span class="w-2 h-2 rounded-full bg-amber-400 shrink-0" id="dot-escopo-exercicio"></span>
-                                                    <span class="truncate">Apenas Próximo Exercício</span>
-                                                </button>
-                                                <button type="button" onclick="setEscopoIATreino('treino')" id="btn-escopo-ia-treino"
-                                                    class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200 transition-all cursor-pointer border border-transparent">
-                                                    <span class="w-2 h-2 rounded-full bg-slate-600 shrink-0" id="dot-escopo-treino"></span>
-                                                    <span class="truncate">Treino Completo da Sessão</span>
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <!-- 2. Seletor de Intensidade/Foco -->
-                                        <div class="lg:col-span-4 space-y-1.5">
-                                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                                                <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-400"></i>
-                                                Intensidade / Foco
+                                    <!-- Campo de Exercício com Autocomplete Inteligente -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 relative">
+                                        <div class="relative">
+                                            <label for="exercicio-nome" class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5 flex items-center justify-between">
+                                                <span>Exercício</span>
+                                                <span class="text-[10px] text-amber-400/80 font-normal">Digite para buscar 3D</span>
                                             </label>
                                             <div class="relative">
-                                                <select id="select-intensidade-foco-ia"
-                                                    class="w-full bg-slate-950/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold text-slate-100 focus:outline-none focus:border-amber-500 transition-all cursor-pointer">
-                                                    <option value="Hipertrofia Padrão" selected>⚡ Hipertrofia Padrão (8-12 reps)</option>
-                                                    <option value="Adaptação Articular">🛡️ Adaptação Articular (12-15 reps)</option>
-                                                    <option value="Resistência & Queima">🔥 Resistência & Queima (15-20 reps)</option>
-                                                    <option value="Força & Carga Progressiva">🏋️ Força & Carga Progressiva (5-8 reps)</option>
-                                                    <option value="Hipertrofia Densa & Falha">💥 Hipertrofia Densa & Falha (Rest-pause)</option>
-                                                </select>
+                                                <input type="text" id="exercicio-nome" placeholder="Ex: Supino Reto com Barra" required autocomplete="off"
+                                                    class="w-full bg-[#0B0F17] border border-[#2D3748] rounded-xl pl-3.5 pr-8 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-all font-medium">
+                                                <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
+                                                    <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                                                </span>
+                                            </div>
+
+                                            <!-- Dropdown de Autocomplete Flutuante -->
+                                            <div id="exercicio-autocomplete-dropdown"
+                                                class="hidden absolute left-0 right-0 top-full mt-1.5 max-h-56 overflow-y-auto bg-[#111827] border border-amber-500/40 rounded-xl shadow-2xl z-30 divide-y divide-slate-800/80">
                                             </div>
                                         </div>
 
-                                        <!-- 3. Botão de Ação: [ ✨ Gerar Sugestão por IA ] -->
-                                        <div class="lg:col-span-3">
-                                            <button type="button" id="btn-gerar-sugestao-ia" onclick="gerarSugestaoIATreino()"
-                                                class="w-full h-[38px] inline-flex items-center justify-center gap-2 px-4 rounded-xl font-black text-xs bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/35 border border-amber-300/40 transition-all duration-200 cursor-pointer active:scale-95">
-                                                <i data-lucide="sparkles" class="w-4 h-4 text-slate-950 shrink-0" id="icone-gerar-ia"></i>
-                                                <span id="texto-gerar-ia" class="truncate">✨ Gerar Sugestão por IA</span>
-                                                <div id="spinner-gerar-ia" class="hidden w-4 h-4 border-2 border-slate-950/40 border-t-slate-950 rounded-full animate-spin"></div>
-                                            </button>
+                                        <div>
+                                            <label for="exercicio-grupo-especifico" class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                                                Porção / Grupo Específico
+                                            </label>
+                                            <input type="text" id="exercicio-grupo-especifico" placeholder="Ex: Peitoral Maior (Esternocostal)"
+                                                class="w-full bg-[#0B0F17] border border-[#2D3748] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-all font-medium">
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- Barra de Ações Clínicas: Medidas & Antropometria -->
-                                <div class="mt-3 pt-3 border-t border-slate-800/80 space-y-2.5">
-                                    <div class="flex flex-wrap items-center justify-between gap-3">
-                                        <div class="text-[11px] text-slate-300 font-bold flex items-center gap-1.5">
-                                            <i data-lucide="ruler" class="w-3.5 h-3.5 text-blue-400"></i>
-                                            <span>Avaliação Antropométrica & Circunferências Corporais</span>
+                                    <!-- Card Compacto de Prévia Anatômica 3D (48x48) -->
+                                    <div id="box-previa-3d-personal" class="bg-[#0B0F17] rounded-xl p-3 border border-amber-500/30 flex items-center justify-between gap-3 transition-all">
+                                        <div class="flex items-center gap-3 min-w-0">
+                                            <div class="relative w-12 h-12 rounded-lg bg-slate-900 border border-[#2D3748] shrink-0 overflow-hidden flex items-center justify-center shadow-md">
+                                                <img id="img-previa-3d-personal" src="assets/exercicios/rosca-direta-anatomia.gif" alt="Prévia Anatômica 3D" class="w-full h-full object-contain" />
+                                                <span class="absolute bottom-0 right-0 bg-red-600 text-white font-black text-[8px] px-1 py-0.2 rounded-tl">3D</span>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <div class="flex items-center gap-1.5">
+                                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                                    <p class="text-xs font-bold text-amber-300 truncate">Guia 3D Anatômico Vinculado</p>
+                                                </div>
+                                                <p id="txt-alvo-3d-personal" class="text-[11px] text-slate-300 truncate mt-0.5">Músculo Alvo: Bíceps Braquial</p>
+                                            </div>
                                         </div>
-                                        <button type="button" onclick="irParaAbaMedidasPersonal()"
-                                            class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-blue-500/20 transition-all cursor-pointer active:scale-95">
-                                            <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5"></i>
-                                            <span>Registrar / Atualizar Medidas</span>
+                                        <button type="button" onclick="testarPrevia3DModalPersonal()"
+                                            class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 hover:text-white border border-amber-500/30 hover:border-amber-400 text-xs font-bold transition-all shrink-0 active:scale-95 flex items-center gap-1.5 cursor-pointer shadow-sm">
+                                            <i data-lucide="play" class="w-3.5 h-3.5 fill-amber-400"></i>
+                                            <span>Ver 3D</span>
                                         </button>
                                     </div>
 
-                                    <!-- Chips / Pills de Resumo Antropométrico Imediato -->
-                                    <div id="personal-chips-antropometria" class="flex flex-wrap items-center gap-1.5 pt-0.5">
-                                        <!-- Renderizado dinamicamente via ApexEvolucao.renderChipsAntropometria -->
+                                    <!-- ============================================================== -->
+                                    <!-- TABELA DINÂMICA DE SÉRIES (PERIODIZAÇÃO FLEXÍVEL)              -->
+                                    <!-- ============================================================== -->
+                                    <div class="space-y-2.5 pt-1">
+                                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                                                <i data-lucide="table-properties" class="w-3.5 h-3.5 text-amber-400"></i>
+                                                <span>Periodização & Séries do Exercício</span>
+                                            </label>
+
+                                            <!-- Presets rápidos de 1 clique -->
+                                            <div class="flex items-center gap-1.5 flex-wrap">
+                                                <span class="text-[10px] uppercase font-bold text-slate-400">Presets:</span>
+                                                <button type="button" onclick="SeriesTableManager.aplicarPreset('4x 8-10')"
+                                                    class="text-[10px] px-2 py-0.5 rounded-md bg-[#0B0F17] hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border border-[#2D3748] transition-colors cursor-pointer">
+                                                    4x 8-10
+                                                </button>
+                                                <button type="button" onclick="SeriesTableManager.aplicarPreset('3x 12-15')"
+                                                    class="text-[10px] px-2 py-0.5 rounded-md bg-[#0B0F17] hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border border-[#2D3748] transition-colors cursor-pointer">
+                                                    3x 12-15
+                                                </button>
+                                                <button type="button" onclick="SeriesTableManager.aplicarPreset('5x 5')"
+                                                    class="text-[10px] px-2 py-0.5 rounded-md bg-[#0B0F17] hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border border-[#2D3748] transition-colors cursor-pointer">
+                                                    5x 5
+                                                </button>
+                                                <button type="button" onclick="SeriesTableManager.aplicarPreset('Pirâmide')"
+                                                    class="text-[10px] px-2 py-0.5 rounded-md bg-[#0B0F17] hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border border-[#2D3748] transition-colors cursor-pointer">
+                                                    Pirâmide
+                                                </button>
+                                                <button type="button" onclick="SeriesTableManager.aplicarPreset('Drop-set')"
+                                                    class="text-[10px] px-2 py-0.5 rounded-md bg-[#0B0F17] hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border border-[#2D3748] transition-colors cursor-pointer">
+                                                    Drop-set
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Container da Tabela Dinâmica -->
+                                        <div class="border border-[#2D3748] rounded-xl overflow-hidden bg-[#0B0F17]">
+                                            <div class="overflow-x-auto">
+                                                <table class="w-full text-left text-xs text-slate-300 border-collapse">
+                                                    <thead class="bg-[#111827] text-[10px] uppercase font-bold text-slate-400 border-b border-[#2D3748]">
+                                                        <tr>
+                                                            <th class="py-2 px-3 w-10 text-center">#</th>
+                                                            <th class="py-2 px-3 min-w-[110px]">Tipo de Série</th>
+                                                            <th class="py-2 px-3 min-w-[90px]">Carga</th>
+                                                            <th class="py-2 px-3 min-w-[85px]">Reps</th>
+                                                            <th class="py-2 px-3 min-w-[85px]">Descanso</th>
+                                                            <th class="py-2 px-2 w-10 text-center"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="corpo-tabela-series" class="divide-y divide-[#2D3748]/60">
+                                                        <!-- Renderizado dinamicamente por SeriesTableManager -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="p-2 bg-[#111827]/70 border-t border-[#2D3748] flex items-center justify-between">
+                                                <button type="button" onclick="SeriesTableManager.adicionarLinha()"
+                                                    class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 hover:text-amber-300 px-2.5 py-1.5 rounded-lg hover:bg-amber-500/10 transition-colors cursor-pointer active:scale-95">
+                                                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                                                    <span>Adicionar Série</span>
+                                                </button>
+                                                <span id="series-resumo-contador" class="text-[11px] text-slate-400 font-medium">4 séries configuradas</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Inputs Legados Ocultos para Garantir Compatibilidade Total com o Banco Supabase -->
+                                        <input type="hidden" id="exercicio-series" name="series" required value="4">
+                                        <input type="hidden" id="exercicio-reps" name="reps" required value="8-12">
+                                        <input type="hidden" id="exercicio-carga" name="carga" value="Progressiva">
+                                        <input type="hidden" id="exercicio-descanso" name="descanso" value="60s">
+                                    </div>
+
+                                    <!-- Observações e Link de Vídeo (Compacto / Expansível) -->
+                                    <div class="border border-[#2D3748] rounded-xl overflow-hidden bg-[#0B0F17]/60">
+                                        <button type="button" onclick="toggleDetalhesOpcionaisExercicio(this)"
+                                            class="w-full px-3.5 py-2.5 flex items-center justify-between text-xs font-bold text-slate-300 hover:text-white bg-[#111827] transition-colors cursor-pointer select-none">
+                                            <span class="flex items-center gap-2">
+                                                <i data-lucide="file-text" class="w-3.5 h-3.5 text-amber-400"></i>
+                                                <span>Instruções Técnicas, Cadência & Vídeo Demonstrativo (Opcional)</span>
+                                            </span>
+                                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" id="chevron-detalhes-exercicio"></i>
+                                        </button>
+                                        <div id="box-detalhes-opcionais-exercicio" class="hidden p-3.5 space-y-3 border-t border-[#2D3748]">
+                                            <div>
+                                                <label for="exercicio-obs" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                                                    Execução & Pontos de Atenção (Cadência, Isometria, etc.)
+                                                </label>
+                                                <textarea id="exercicio-obs" rows="2" placeholder="Ex: Cadência 3010, pausa isométrica de 1s na contração máxima..."
+                                                    class="w-full bg-[#0B0F17] border border-[#2D3748] rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-all font-medium"></textarea>
+                                            </div>
+                                            <div>
+                                                <label for="exercicio-video" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                                                    Link de Vídeo Externo (YouTube / Vimeo / Loom - opcional)
+                                                </label>
+                                                <input type="text" id="exercicio-video" placeholder="https://youtube.com/..."
+                                                    class="w-full bg-[#0B0F17] border border-[#2D3748] rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-all font-medium">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botão de Ação Primária Desktop (Também sincronizado com a Barra Fixa) -->
+                                    <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+                                        <button type="submit" id="btn-submit"
+                                            class="flex-1 w-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-black py-3 rounded-xl transition-all duration-200 shadow-lg shadow-amber-500/20 hover:shadow-amber-500/35 flex items-center justify-center gap-2 cursor-pointer active:scale-98">
+                                            <i data-lucide="plus-circle" class="w-4 h-4 text-slate-950" id="btn-icon"></i>
+                                            <span id="btn-text" class="text-xs sm:text-sm">Adicionar Exercício ao Treino</span>
+                                            <div id="btn-spinner" class="hidden w-4 h-4 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin"></div>
+                                        </button>
+                                        <button type="button" id="btn-cancelar-edicao" onclick="cancelarEdicaoExercicio()"
+                                            class="hidden w-full sm:w-auto px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-[#2D3748] hover:border-slate-600 text-xs font-bold transition-all cursor-pointer active:scale-95 shadow-sm">
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ========================================== -->
+                            <!-- COLUNA DIREITA: SESSÃO ATUAL EM TEMPO REAL -->
+                            <!-- ========================================== -->
+                            <div class="xl:col-span-5 space-y-5">
+                                <div id="painel-sessao-atual" class="bg-[#181F2C] border border-[#2D3748] p-4 sm:p-5 rounded-2xl shadow-lg space-y-4 sticky top-24">
+                                    <div class="flex items-center justify-between pb-2.5 border-b border-[#2D3748]">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-6 h-6 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center text-xs font-black">3</span>
+                                            <h3 class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Exercícios Desta Sessão</h3>
+                                        </div>
+                                        <span id="sessao-total-exercicios-badge" class="text-[11px] font-black px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                            0 Exercícios
+                                        </span>
+                                    </div>
+
+                                    <!-- Resumo de Métricas da Sessão Atual -->
+                                    <div class="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-[#0B0F17] border border-[#2D3748] text-center">
+                                        <div>
+                                            <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Séries Totais</span>
+                                            <span class="text-xs font-extrabold text-amber-400" id="sessao-total-series">0</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Tempo Estimado</span>
+                                            <span class="text-xs font-extrabold text-white" id="sessao-tempo-estimado">~0 min</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Músculo Alvo</span>
+                                            <span class="text-xs font-extrabold text-emerald-400 truncate block" id="sessao-grupos-tags">--</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Lista Reordenável de Exercícios da Sessão Atual -->
+                                    <div id="lista-exercicios-sessao-atual" class="space-y-2 max-h-[480px] overflow-y-auto pr-1">
+                                        <!-- Renderizado dinamicamente por SessionManager.render() -->
+                                        <div class="text-center py-8 text-slate-400 bg-[#0B0F17] rounded-xl border border-dashed border-[#2D3748]">
+                                            <i data-lucide="dumbbell" class="w-8 h-8 mx-auto mb-2 text-slate-500"></i>
+                                            <p class="text-xs font-semibold text-slate-300">Nenhum exercício adicionado a esta sessão ainda.</p>
+                                            <p class="text-[11px] text-slate-500 mt-1">Preencha o formulário ao lado ou use o assistente IA.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Rodapé do Card da Sessão -->
+                                    <div class="pt-3 border-t border-[#2D3748] flex items-center justify-between gap-2">
+                                        <button type="button" onclick="document.getElementById('secao-treino-atual').scrollIntoView({ behavior: 'smooth', block: 'start' })"
+                                            class="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer font-medium">
+                                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                            <span>Ver Todas as Fichas</span>
+                                        </button>
+                                        <button type="button" onclick="salvarTreinoSessaoCompleta()"
+                                            class="px-3.5 py-1.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-emerald-500/20 transition-all cursor-pointer active:scale-95">
+                                            <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
+                                            <span>Concluir Sessão</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                            <div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Nome do
-                                    treino</label><input type="text" id="treino-nome"
-                                    placeholder="Ex: Treino A – Peito e Tríceps" required
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
-                            </div>
-                            <div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Dia da
-                                    semana</label><select id="treino-dia"
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
-                                    <option>Segunda</option>
-                                    <option>Terça</option>
-                                    <option>Quarta</option>
-                                    <option>Quinta</option>
-                                    <option>Sexta</option>
-                                    <option>Sábado</option>
-                                    <option>Domingo</option>
-                                    <option>Flexível</option>
-                                </select></div>
-                            <div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Grupo
-                                    muscular</label><select id="treino-grupo"
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
-                                    <option>Peito</option>
-                                    <option>Costas</option>
-                                    <option>Ombros</option>
-                                    <option>Bíceps</option>
-                                    <option>Tríceps</option>
-                                    <option>Pernas</option>
-                                    <option>Glúteos</option>
-                                    <option>Abdômen</option>
-                                    <option>Full body</option>
-                                    <option>Cardio</option>
-                                    <option>Mobilidade</option>
-                                </select></div>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div><label
-                                    class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Exercício</label><input
-                                    type="text" id="exercicio-nome" placeholder="Ex: Supino reto com barra" required
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
-                            </div>
-                            <div><label
-                                    class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Grupo Muscular do Exercício</label><input
-                                    type="text" id="exercicio-grupo-especifico" placeholder="Ex: Peitoral Maior"
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                            <div><label
-                                    class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Séries</label><input
-                                    type="text" id="exercicio-series" placeholder="4" required
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
-                            </div>
-                            <div><label
-                                    class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Repetições</label><input
-                                    type="text" id="exercicio-reps" placeholder="8-10" required
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
-                            </div>
-                            <div><label
-                                    class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Carga</label><input
-                                    type="text" id="exercicio-carga" placeholder="Ex: 60 kg"
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
-                            </div>
-                            <div><label
-                                    class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Descanso</label><input
-                                    type="text" id="exercicio-descanso" placeholder="60s"
-                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
-                            </div>
-                        </div>
-                        <div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Execução e
-                                observações (opcional)</label><textarea id="exercicio-obs" rows="2"
-                                placeholder="Cadência, técnica, pontos de atenção..."
-                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"></textarea>
-                        </div>
-                        <div><label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Link de
-                                vídeo
-                                demonstrativo (opcional)</label><input type="text" id="exercicio-video"
-                                placeholder="https://youtube.com/..."
-                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500">
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row items-center gap-3 pt-1">
-                            <button type="submit" id="btn-submit"
-                                class="flex-1 w-full bg-brand-600 hover:bg-brand-500 active:scale-[0.99] text-slate-950 font-black py-3.5 rounded-xl transition-all duration-200 shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2 cursor-pointer">
-                                <i data-lucide="check" class="w-4 h-4" id="btn-icon"></i>
-                                <span id="btn-text">Adicionar Exercício ao Treino</span>
-                                <div id="btn-spinner"
-                                    class="hidden w-5 h-5 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin">
-                                </div>
-                            </button>
-                            <button type="button" id="btn-cancelar-edicao" onclick="cancelarEdicaoExercicio()"
-                                class="hidden w-full sm:w-auto px-5 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 hover:border-slate-600 text-sm font-bold transition-all cursor-pointer active:scale-95 shadow-sm">
-                                Cancelar Edição
-                            </button>
-                        </div>
                     </form>
+                </div>
             </section>
 
             <!-- SEÇÃO 2: Gerenciar Treinos do Aluno (Fichas Prescritas & Revisão) -->
@@ -905,7 +1129,7 @@
                             <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                                 <i data-lucide="user" class="w-4 h-4"></i>
                             </div>
-                            <select id="gerenciar-aluno-select"
+                            <select id="gerenciar-aluno-select" onchange="if (typeof window.sincronizarSelecaoAluno === 'function') window.sincronizarSelecaoAluno(this.value, 'gerenciar')"
                                 class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-amber-500 transition-all">
                                 <option value="" disabled selected>A carregar lista de alunos...</option>
                             </select>
@@ -1575,9 +1799,14 @@
                 const idAtivo = selAluno?.value || selGerenciar?.value;
                 if (idAtivo) {
                     if (typeof atualizarCardAlunoClinico === 'function') atualizarCardAlunoClinico(idAtivo);
-                    if (typeof carregarTreinoAdmin === 'function') carregarTreinoAdmin();
+                    if (typeof carregarTreinoAdmin === 'function') carregarTreinoAdmin(idAtivo);
                 }
+                if (typeof SeriesTableManager !== 'undefined') SeriesTableManager.render();
+                if (typeof SessionManager !== 'undefined') SessionManager.render();
+                if (typeof inicializarAutocompleteExercicios === 'function') inicializarAutocompleteExercicios();
+                if (typeof atualizarStickyFooterPersonal === 'function') atualizarStickyFooterPersonal();
             } else if (aba === 'evolucao') {
+                if (typeof atualizarStickyFooterPersonal === 'function') atualizarStickyFooterPersonal();
                 ['secao-fotos-alunos', 'secao-checkins'].forEach(id => {
                     const sec = document.getElementById(id);
                     if (sec) {
@@ -2266,6 +2495,11 @@
 
             // Inicializar Suíte de Gestão e Check-ins no Painel do Personal
             inicializarTodasSecoesProfissionais();
+
+            // Inicializar Módulos de Montagem de Treino (Tabela de Séries, Autocomplete e Prévia 3D)
+            if (typeof SeriesTableManager !== 'undefined') SeriesTableManager.render();
+            if (typeof inicializarAutocompleteExercicios === 'function') inicializarAutocompleteExercicios();
+            if (typeof atualizarPrevia3DFormPersonal === 'function') atualizarPrevia3DFormPersonal();
         }
 
         // Função para o Personal Trainer registrar avaliação antropométrica do aluno
@@ -2355,7 +2589,7 @@
                 return;
             }
 
-            let aluno = listaAlunosCache.find(a => a.id === alunoId);
+            let aluno = (listaAlunosCache || []).find(a => String(a.id) === String(alunoId));
             let perfil = {};
 
             if (alunoId && alunoId.startsWith('mock-')) {
@@ -2368,7 +2602,25 @@
                 perfil = { ...aluno };
             }
 
+            if (!aluno) {
+                try {
+                    const { data: alunoDb } = await supabaseClient
+                        .from('alunos')
+                        .select('id, nome, email, foto_perfil, altura, peso, idade')
+                        .eq('id', alunoId)
+                        .maybeSingle();
+                    if (alunoDb) {
+                        aluno = alunoDb;
+                        if (!listaAlunosCache) listaAlunosCache = [];
+                        if (!listaAlunosCache.some(a => String(a.id) === String(aluno.id))) {
+                            listaAlunosCache.push(aluno);
+                        }
+                    }
+                } catch (e) { }
+            }
+
             if (!aluno) return;
+            perfil = { ...aluno, ...perfil };
 
             // 1. Busca os dados cadastrados diretamente na tabela alunos
             try {
@@ -2513,27 +2765,33 @@
             preencherSelect(selectFotosEl, 'Selecione um aluno para carregar suas fotos...');
             preencherSelect(selectGerenciarEl, 'Selecione um aluno para gerenciar fichas...');
 
-            // Sincronização mútua entre os seletores de alunos nas abas
-            const sincronizarSelecaoAluno = (alunoId, origem) => {
+            // Sincronização mútua entre os seletores de alunos nas abas (Exportada globalmente)
+            window.sincronizarSelecaoAluno = function (alunoId, origem) {
                 if (!alunoId) return;
-                [
-                    { el: selectEl, name: 'montar' },
-                    { el: selectFotosEl, name: 'evolucao' },
-                    { el: selectGerenciarEl, name: 'gerenciar' }
-                ].forEach(({ el }) => {
+                const selectEl = document.getElementById('aluno-select');
+                const selectFotosEl = document.getElementById('fotos-aluno-select');
+                const selectGerenciarEl = document.getElementById('gerenciar-aluno-select');
+
+                [selectEl, selectFotosEl, selectGerenciarEl].forEach(el => {
                     if (el && el.value !== alunoId) {
                         el.value = alunoId;
                     }
                 });
 
-                atualizarCardAlunoClinico(alunoId);
+                if (typeof atualizarCardAlunoClinico === 'function') {
+                    atualizarCardAlunoClinico(alunoId);
+                }
 
                 const opt = (selectEl && selectEl.selectedOptions && selectEl.selectedOptions[0]) 
                     || (selectGerenciarEl && selectGerenciarEl.selectedOptions && selectGerenciarEl.selectedOptions[0]);
                 const nome = opt ? opt.textContent.split('(')[0].trim() : 'Aluno';
 
-                renderizarSecaoCheckinsPersonal(alunoId);
-                renderizarSecaoIAPersonal(nome);
+                if (typeof renderizarSecaoCheckinsPersonal === 'function') {
+                    renderizarSecaoCheckinsPersonal(alunoId);
+                }
+                if (typeof renderizarSecaoIAPersonal === 'function') {
+                    renderizarSecaoIAPersonal(nome);
+                }
 
                 if (origem === 'evolucao' || document.getElementById('conteudo-tab-personal-evolucao')?.classList.contains('hidden') === false) {
                     if (typeof carregarFotosAlunoSelecionado === 'function') carregarFotosAlunoSelecionado();
@@ -2548,17 +2806,20 @@
                     }
                 }
 
-                carregarTreinoAdmin();
+                carregarTreinoAdmin(alunoId);
+                if (typeof atualizarStickyFooterPersonal === 'function') {
+                    atualizarStickyFooterPersonal();
+                }
             };
 
             if (selectEl) {
-                selectEl.onchange = (e) => sincronizarSelecaoAluno(e.target.value, 'montar');
+                selectEl.onchange = (e) => window.sincronizarSelecaoAluno(e.target.value, 'montar');
             }
             if (selectGerenciarEl) {
-                selectGerenciarEl.onchange = (e) => sincronizarSelecaoAluno(e.target.value, 'gerenciar');
+                selectGerenciarEl.onchange = (e) => window.sincronizarSelecaoAluno(e.target.value, 'gerenciar');
             }
             if (selectFotosEl) {
-                selectFotosEl.onchange = (e) => sincronizarSelecaoAluno(e.target.value, 'evolucao');
+                selectFotosEl.onchange = (e) => window.sincronizarSelecaoAluno(e.target.value, 'evolucao');
             }
         }
 
@@ -2671,17 +2932,668 @@
             ]
         };
 
+        // ==============================================================
+        // GESTOR DE TABELA DINÂMICA DE SÉRIES & PERIODIZAÇÃO
+        // ==============================================================
+        const SeriesTableManager = {
+            series: [
+                { id: 1, tipo: 'Trabalho', carga: '60 kg', reps: '8-10', descanso: '60s' },
+                { id: 2, tipo: 'Trabalho', carga: '60 kg', reps: '8-10', descanso: '60s' },
+                { id: 3, tipo: 'Trabalho', carga: '60 kg', reps: '8-10', descanso: '60s' },
+                { id: 4, tipo: 'Trabalho', carga: '60 kg', reps: '8-10', descanso: '60s' }
+            ],
+            proximoId: 5,
+
+            render() {
+                const tbody = document.getElementById('corpo-tabela-series');
+                const contador = document.getElementById('series-resumo-contador');
+                if (!tbody) return;
+
+                if (!this.series || !this.series.length) {
+                    this.series = [{ id: 1, tipo: 'Trabalho', carga: '60 kg', reps: '8-10', descanso: '60s' }];
+                    this.proximoId = 2;
+                }
+
+                tbody.innerHTML = this.series.map((s, idx) => `
+                    <tr class="hover:bg-slate-900/60 transition-colors">
+                        <td class="py-2 px-3 text-center font-bold text-amber-400/90 text-xs">${idx + 1}</td>
+                        <td class="py-1.5 px-3">
+                            <select onchange="SeriesTableManager.atualizarCampo(${s.id}, 'tipo', this.value)"
+                                class="w-full bg-[#111827] border border-[#2D3748] rounded-lg px-2 py-1 text-xs text-slate-200 focus:outline-none focus:border-amber-500 cursor-pointer">
+                                <option value="Aquecimento" ${s.tipo === 'Aquecimento' ? 'selected' : ''}>🔥 Aquecimento</option>
+                                <option value="Feeder" ${s.tipo === 'Feeder' ? 'selected' : ''}>⚡ Feeder / Prep</option>
+                                <option value="Trabalho" ${s.tipo === 'Trabalho' ? 'selected' : ''}>🎯 Trabalho</option>
+                                <option value="Drop-set" ${s.tipo === 'Drop-set' ? 'selected' : ''}>💥 Drop-set</option>
+                                <option value="Falha" ${s.tipo === 'Falha' ? 'selected' : ''}>💀 Até a Falha</option>
+                            </select>
+                        </td>
+                        <td class="py-1.5 px-3">
+                            <input type="text" value="${esc(s.carga)}" placeholder="Ex: 60 kg"
+                                onchange="SeriesTableManager.atualizarCampo(${s.id}, 'carga', this.value)"
+                                class="w-full bg-[#111827] border border-[#2D3748] rounded-lg px-2 py-1 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500">
+                        </td>
+                        <td class="py-1.5 px-3">
+                            <input type="text" value="${esc(s.reps)}" placeholder="Ex: 8-10"
+                                onchange="SeriesTableManager.atualizarCampo(${s.id}, 'reps', this.value)"
+                                class="w-full bg-[#111827] border border-[#2D3748] rounded-lg px-2 py-1 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500">
+                        </td>
+                        <td class="py-1.5 px-3">
+                            <input type="text" value="${esc(s.descanso)}" placeholder="Ex: 60s"
+                                onchange="SeriesTableManager.atualizarCampo(${s.id}, 'descanso', this.value)"
+                                class="w-full bg-[#111827] border border-[#2D3748] rounded-lg px-2 py-1 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500">
+                        </td>
+                        <td class="py-1.5 px-2 text-center">
+                            <button type="button" onclick="SeriesTableManager.removerLinha(${s.id})"
+                                class="text-slate-500 hover:text-rose-400 p-1 rounded hover:bg-rose-500/10 transition-colors cursor-pointer" title="Remover série">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                if (contador) {
+                    contador.textContent = `${this.series.length} ${this.series.length === 1 ? 'série configurada' : 'séries configuradas'}`;
+                }
+
+                this.sincronizarCamposOcultos();
+                if (window.lucide) lucide.createIcons();
+            },
+
+            atualizarCampo(id, campo, valor) {
+                const item = this.series.find(s => s.id === id);
+                if (item) {
+                    item[campo] = valor;
+                    this.sincronizarCamposOcultos();
+                }
+            },
+
+            adicionarLinha(tipo = 'Trabalho', carga = '', reps = '8-12', descanso = '60s') {
+                const ultima = this.series[this.series.length - 1];
+                this.series.push({
+                    id: this.proximoId++,
+                    tipo: tipo || (ultima ? ultima.tipo : 'Trabalho'),
+                    carga: carga || (ultima ? ultima.carga : 'Peso Corporal'),
+                    reps: reps || (ultima ? ultima.reps : '8-12'),
+                    descanso: descanso || (ultima ? ultima.descanso : '60s')
+                });
+                this.render();
+            },
+
+            removerLinha(id) {
+                if (this.series.length <= 1) {
+                    showToast('Aviso', 'O exercício deve ter pelo menos 1 série configurada.', 'info');
+                    return;
+                }
+                this.series = this.series.filter(s => s.id !== id);
+                this.render();
+            },
+
+            aplicarPreset(presetNome, cargaDefault = '', silencioso = false) {
+                const carga = cargaDefault || (this.series[0] ? this.series[0].carga : '60 kg');
+                if (presetNome === '4x 8-10') {
+                    this.series = [
+                        { id: 1, tipo: 'Trabalho', carga, reps: '8-10', descanso: '60s' },
+                        { id: 2, tipo: 'Trabalho', carga, reps: '8-10', descanso: '60s' },
+                        { id: 3, tipo: 'Trabalho', carga, reps: '8-10', descanso: '60s' },
+                        { id: 4, tipo: 'Trabalho', carga, reps: '8-10', descanso: '60s' }
+                    ];
+                } else if (presetNome === '3x 12-15') {
+                    this.series = [
+                        { id: 1, tipo: 'Trabalho', carga, reps: '12-15', descanso: '45s' },
+                        { id: 2, tipo: 'Trabalho', carga, reps: '12-15', descanso: '45s' },
+                        { id: 3, tipo: 'Trabalho', carga, reps: '12-15', descanso: '45s' }
+                    ];
+                } else if (presetNome === '5x 5') {
+                    this.series = [
+                        { id: 1, tipo: 'Feeder', carga, reps: '5', descanso: '60s' },
+                        { id: 2, tipo: 'Trabalho', carga, reps: '5', descanso: '90s' },
+                        { id: 3, tipo: 'Trabalho', carga, reps: '5', descanso: '90s' },
+                        { id: 4, tipo: 'Trabalho', carga, reps: '5', descanso: '90s' },
+                        { id: 5, tipo: 'Trabalho', carga, reps: '5', descanso: '90s' }
+                    ];
+                } else if (presetNome === 'Pirâmide') {
+                    this.series = [
+                        { id: 1, tipo: 'Trabalho', carga, reps: '15', descanso: '60s' },
+                        { id: 2, tipo: 'Trabalho', carga, reps: '12', descanso: '60s' },
+                        { id: 3, tipo: 'Trabalho', carga, reps: '10', descanso: '75s' },
+                        { id: 4, tipo: 'Trabalho', carga, reps: '8', descanso: '90s' }
+                    ];
+                } else if (presetNome === 'Drop-set') {
+                    this.series = [
+                        { id: 1, tipo: 'Trabalho', carga, reps: '8-10', descanso: '60s' },
+                        { id: 2, tipo: 'Trabalho', carga, reps: '8-10', descanso: '60s' },
+                        { id: 3, tipo: 'Trabalho', carga, reps: '8-10', descanso: '60s' },
+                        { id: 4, tipo: 'Drop-set', carga, reps: '10 + Drop', descanso: '60s' }
+                    ];
+                }
+                this.proximoId = this.series.length + 1;
+                this.render();
+                if (!silencioso) {
+                    showToast('Preset Aplicado', `Periodização "${presetNome}" carregada.`, 'info');
+                }
+            },
+
+            sincronizarCamposOcultos() {
+                const elSeries = document.getElementById('exercicio-series');
+                const elReps = document.getElementById('exercicio-reps');
+                const elCarga = document.getElementById('exercicio-carga');
+                const elDescanso = document.getElementById('exercicio-descanso');
+
+                if (elSeries) elSeries.value = String(this.series.length || 4);
+
+                if (this.series && this.series.length) {
+                    const todosRepsIguais = this.series.every(s => s.reps === this.series[0].reps);
+                    if (elReps) elReps.value = todosRepsIguais ? this.series[0].reps : this.series.map(s => s.reps).join('/');
+
+                    const todosCargasIguais = this.series.every(s => s.carga === this.series[0].carga);
+                    if (elCarga) elCarga.value = todosCargasIguais ? this.series[0].carga : (this.series[0].carga || 'Progressiva');
+
+                    const todosDescansosIguais = this.series.every(s => s.descanso === this.series[0].descanso);
+                    if (elDescanso) elDescanso.value = todosDescansosIguais ? this.series[0].descanso : this.series[0].descanso;
+                }
+            },
+
+            carregarDeValores(seriesStr, repsStr, cargaStr, descansoStr) {
+                const qtd = parseInt(seriesStr) || 4;
+                const repsLista = (repsStr || '8-12').includes('/') ? repsStr.split('/') : [repsStr || '8-12'];
+                const cargaPadrao = cargaStr || '60 kg';
+                const descansoPadrao = descansoStr || '60s';
+
+                this.series = [];
+                for (let i = 0; i < qtd; i++) {
+                    const r = repsLista[i] || repsLista[repsLista.length - 1] || '8-12';
+                    const tipo = (r.toLowerCase().includes('drop')) ? 'Drop-set' : (i === 0 && qtd >= 5 ? 'Feeder' : 'Trabalho');
+                    this.series.push({
+                        id: i + 1,
+                        tipo,
+                        carga: cargaPadrao,
+                        reps: r,
+                        descanso: descansoPadrao
+                    });
+                }
+                this.proximoId = qtd + 1;
+                this.render();
+            }
+        };
+        window.SeriesTableManager = SeriesTableManager;
+
+        // ==============================================================
+        // GESTOR DE VISUALIZAÇÃO EM TEMPO REAL DA SESSÃO ATUAL
+        // ==============================================================
+        const SessionManager = {
+            obterTreinosSessaoAtual() {
+                const nomeTreino = (document.getElementById('treino-nome')?.value || '').trim().toLowerCase();
+                const diaSemana = (document.getElementById('treino-dia')?.value || '').trim();
+                const grupo = (document.getElementById('treino-grupo')?.value || '').trim();
+
+                if (!treinosAluno || !treinosAluno.length) return [];
+
+                if (nomeTreino) {
+                    const filtrados = treinosAluno.filter(t => (t.treino_nome || '').trim().toLowerCase() === nomeTreino);
+                    if (filtrados.length) return filtrados;
+                }
+
+                return treinosAluno.filter(t => (t.dia_semana === diaSemana || t.grupo_muscular === grupo));
+            },
+
+            render() {
+                const lista = document.getElementById('lista-exercicios-sessao-atual');
+                const badgeTotal = document.getElementById('sessao-total-exercicios-badge');
+                const spanSeries = document.getElementById('sessao-total-series');
+                const spanTempo = document.getElementById('sessao-tempo-estimado');
+                const spanGrupos = document.getElementById('sessao-grupos-tags');
+                const stickyResumo = document.getElementById('sticky-sessao-resumo');
+
+                if (!lista) return;
+
+                const exercicios = this.obterTreinosSessaoAtual();
+
+                let totalSeries = 0;
+                const gruposSet = new Set();
+
+                exercicios.forEach(ex => {
+                    const s = parseInt(ex.series) || 3;
+                    totalSeries += s;
+                    if (ex.grupo_muscular) gruposSet.add(ex.grupo_muscular);
+                });
+
+                const tempoEstimadoMin = totalSeries ? Math.round(totalSeries * 2.5) : 0;
+                const gruposTexto = gruposSet.size ? Array.from(gruposSet).slice(0, 2).join(' / ') : '--';
+
+                if (badgeTotal) badgeTotal.textContent = `${exercicios.length} ${exercicios.length === 1 ? 'Exercício' : 'Exercícios'}`;
+                if (spanSeries) spanSeries.textContent = totalSeries;
+                if (spanTempo) spanTempo.textContent = tempoEstimadoMin ? `~${tempoEstimadoMin} min` : '~0 min';
+                if (spanGrupos) spanGrupos.textContent = gruposTexto;
+
+                if (stickyResumo) {
+                    const nomeT = document.getElementById('treino-nome')?.value || 'Sessão';
+                    stickyResumo.textContent = `${nomeT} • ${exercicios.length} ${exercicios.length === 1 ? 'exercício' : 'exercícios'} (${totalSeries} séries)`;
+                }
+
+                if (!exercicios.length) {
+                    lista.innerHTML = `
+                        <div class="text-center py-7 text-slate-400 bg-[#0B0F17] rounded-xl border border-dashed border-[#2D3748]">
+                            <i data-lucide="dumbbell" class="w-7 h-7 mx-auto mb-2 text-slate-500"></i>
+                            <p class="text-xs font-semibold text-slate-300">Nenhum exercício nesta sessão ainda.</p>
+                            <p class="text-[11px] text-slate-500 mt-0.5">Use o assistente IA ou preencha o formulário ao lado.</p>
+                        </div>
+                    `;
+                    if (window.lucide) lucide.createIcons();
+                    return;
+                }
+
+                lista.innerHTML = exercicios.map((e, idx) => `
+                    <div class="p-3 bg-[#0B0F17] hover:bg-[#0d1320] border border-[#2D3748] rounded-xl transition-all shadow-sm flex items-center justify-between gap-2.5 group">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <span class="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-black flex items-center justify-center shrink-0">
+                                ${idx + 1}
+                            </span>
+                            <div class="min-w-0">
+                                <p class="text-xs font-bold text-slate-100 truncate flex items-center gap-1.5">
+                                    <span>${esc(e.exercicio)}</span>
+                                </p>
+                                <p class="text-[11px] text-slate-400 mt-0.5 truncate">
+                                    <strong class="text-amber-400">${esc(e.series)}x ${esc(e.repeticoes)}</strong>
+                                    ${e.carga ? ' · ' + esc(e.carga) : ''}
+                                    ${e.descanso ? ' · desc. ' + esc(e.descanso) : ''}
+                                </p>
+                                ${window.PeriodizacaoManager ? window.PeriodizacaoManager.renderizarChipsPeriodizacao(e) : ''}
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-1 shrink-0">
+                            <div class="flex flex-col gap-0.5">
+                                <button type="button" onclick="SessionManager.mover(${idx}, -1)" ${idx === 0 ? 'disabled' : ''}
+                                    class="w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 disabled:opacity-30 disabled:pointer-events-none text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer" title="Mover para cima">
+                                    <i data-lucide="chevron-up" class="w-3 h-3"></i>
+                                </button>
+                                <button type="button" onclick="SessionManager.mover(${idx}, 1)" ${idx === exercicios.length - 1 ? 'disabled' : ''}
+                                    class="w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 disabled:opacity-30 disabled:pointer-events-none text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer" title="Mover para baixo">
+                                    <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                                </button>
+                            </div>
+
+                            <button type="button" onclick="Exercise3D.abrirModal('${esc(e.exercicio)}', '${esc(e.grupo_muscular || '')}', '${esc(e.video_url || '')}')"
+                                class="p-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 transition-all cursor-pointer" title="Ver Animação 3D">
+                                <i data-lucide="play" class="w-3.5 h-3.5 fill-amber-400"></i>
+                            </button>
+
+                            <button type="button" onclick="editarExercicioTreino('${esc(e.id)}')"
+                                class="p-1.5 rounded-lg text-slate-400 hover:text-amber-400 hover:bg-slate-800 transition-colors cursor-pointer" title="Editar exercício">
+                                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                            </button>
+
+                            <button type="button" onclick="removerExercicio('${esc(e.id)}')"
+                                class="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer" title="Remover exercício">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                if (window.lucide) lucide.createIcons();
+            },
+
+            async mover(index, direcao) {
+                const exercicios = this.obterTreinosSessaoAtual();
+                const novoIdx = index + direcao;
+                if (novoIdx < 0 || novoIdx >= exercicios.length) return;
+
+                const exA = exercicios[index];
+                const exB = exercicios[novoIdx];
+
+                const idxRealA = treinosAluno.findIndex(t => t.id === exA.id);
+                const idxRealB = treinosAluno.findIndex(t => t.id === exB.id);
+
+                if (idxRealA !== -1 && idxRealB !== -1) {
+                    const temp = treinosAluno[idxRealA];
+                    treinosAluno[idxRealA] = treinosAluno[idxRealB];
+                    treinosAluno[idxRealB] = temp;
+                }
+
+                this.render();
+                renderizarTreinosAlunoLocal();
+                showToast('Ordem Atualizada', `Exercício reordenado para a posição #${novoIdx + 1}.`, 'info');
+            }
+        };
+        window.SessionManager = SessionManager;
+
+        // ==============================================================
+        // AUTOCOMPLETE DE EXERCÍCIOS 3D E BANCO BIOMECÂNICO
+        // ==============================================================
+        window.inicializarAutocompleteExercicios = function () {
+            const input = document.getElementById('exercicio-nome');
+            const dropdown = document.getElementById('exercicio-autocomplete-dropdown');
+            if (!input || !dropdown) return;
+
+            const renderSugestoes = (termo) => {
+                const busca3D = (window.Exercise3D && typeof window.Exercise3D.buscarExercicios === 'function')
+                    ? window.Exercise3D.buscarExercicios(termo)
+                    : [];
+
+                const buscaIA = [];
+                const tLower = (termo || '').toLowerCase().trim();
+                for (const [grupo, lista] of Object.entries(BANCO_EXERCICIOS_IA)) {
+                    lista.forEach(item => {
+                        if (!tLower || item.nome.toLowerCase().includes(tLower) || grupo.toLowerCase().includes(tLower)) {
+                            buscaIA.push({
+                                nome: item.nome,
+                                categoria: grupo,
+                                musculoAlvo: item.grupo,
+                                tem3D: false
+                            });
+                        }
+                    });
+                }
+
+                const vistos = new Set();
+                const combinados = [];
+
+                busca3D.forEach(item => {
+                    const k = item.nome.toLowerCase();
+                    if (!vistos.has(k)) {
+                        vistos.add(k);
+                        combinados.push(item);
+                    }
+                });
+
+                buscaIA.forEach(item => {
+                    const k = item.nome.toLowerCase();
+                    if (!vistos.has(k)) {
+                        vistos.add(k);
+                        combinados.push(item);
+                    }
+                });
+
+                const listaFinal = combinados.slice(0, 8);
+
+                if (!listaFinal.length) {
+                    dropdown.innerHTML = '<div class="p-3 text-xs text-slate-500 text-center">Nenhum exercício encontrado. Continue digitando...</div>';
+                    dropdown.classList.remove('hidden');
+                    return;
+                }
+
+                dropdown.innerHTML = listaFinal.map(item => `
+                    <div onclick="selecionarExercicioAutocomplete('${esc(item.nome)}', '${esc(item.musculoAlvo || item.categoria || '')}')"
+                        class="p-2.5 hover:bg-slate-850 flex items-center justify-between gap-2.5 cursor-pointer transition-colors group">
+                        <div class="min-w-0 flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full ${item.tem3D ? 'bg-amber-400' : 'bg-slate-600'}"></span>
+                            <div>
+                                <p class="text-xs font-bold text-slate-100 group-hover:text-amber-300 transition-colors truncate">${esc(item.nome)}</p>
+                                <p class="text-[10px] text-slate-400 truncate">${esc(item.musculoAlvo || item.categoria || '')}</p>
+                            </div>
+                        </div>
+                        ${item.tem3D ? `
+                            <span class="text-[9px] font-black px-1.5 py-0.5 rounded bg-red-600/20 text-red-400 border border-red-500/30 shrink-0">
+                                3D
+                            </span>
+                        ` : ''}
+                    </div>
+                `).join('');
+
+                dropdown.classList.remove('hidden');
+                if (window.lucide) lucide.createIcons();
+            };
+
+            input.addEventListener('input', (e) => renderSugestoes(e.target.value));
+            input.addEventListener('focus', (e) => renderSugestoes(e.target.value));
+
+            document.addEventListener('click', (e) => {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+        };
+
+        window.selecionarExercicioAutocomplete = function (nome, grupoEspecifico) {
+            const inputNome = document.getElementById('exercicio-nome');
+            const inputGrupoEsp = document.getElementById('exercicio-grupo-especifico');
+            const dropdown = document.getElementById('exercicio-autocomplete-dropdown');
+
+            if (inputNome) inputNome.value = nome;
+            if (inputGrupoEsp && grupoEspecifico) inputGrupoEsp.value = grupoEspecifico;
+            if (dropdown) dropdown.classList.add('hidden');
+
+            window.atualizarPrevia3DFormPersonal();
+        };
+
+        window.toggleDetalhesOpcionaisExercicio = function (btn) {
+            const box = document.getElementById('box-detalhes-opcionais-exercicio');
+            const chevron = document.getElementById('chevron-detalhes-exercicio');
+            if (!box) return;
+
+            const isHidden = box.classList.contains('hidden');
+            if (isHidden) {
+                box.classList.remove('hidden');
+                if (chevron) chevron.classList.add('rotate-180');
+            } else {
+                box.classList.add('hidden');
+                if (chevron) chevron.classList.remove('rotate-180');
+            }
+        };
+
+        window.definirPresetTreinoNome = function (nome, dia, grupo) {
+            const elNome = document.getElementById('treino-nome');
+            const elDia = document.getElementById('treino-dia');
+            const elGrupo = document.getElementById('treino-grupo');
+
+            if (elNome) elNome.value = nome;
+            if (elDia && dia) elDia.value = dia;
+            if (elGrupo && grupo) elGrupo.value = grupo;
+
+            window.atualizarPrevia3DFormPersonal();
+            SessionManager.render();
+            showToast('Sessão Selecionada', `Configurado para "${nome}".`, 'info');
+        };
+
+        window.salvarTreinoSessaoCompleta = function () {
+            const exercicios = SessionManager.obterTreinosSessaoAtual();
+            if (!exercicios.length) {
+                showToast('Atenção', 'Adicione pelo menos 1 exercício à sessão antes de concluir.', 'warning');
+                return;
+            }
+            showToast('Sessão Concluída! 🏆', `${exercicios.length} exercícios sincronizados no portal do aluno.`, 'success');
+            const secTreino = document.getElementById('secao-treino-atual');
+            if (secTreino) {
+                secTreino.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        };
+
+        // ==============================================================
+        // REVISÃO DO TREINO COMPLETO POR IA (MODAL EM LOTE)
+        // ==============================================================
+        window.sugestoesIALote = [];
+
+        window.abrirModalPreviewIALote = function (exercicios) {
+            window.sugestoesIALote = exercicios || [];
+            const modal = document.getElementById('modal-preview-ia-lote');
+            const lista = document.getElementById('modal-ia-lote-lista');
+            const badge = document.getElementById('modal-ia-lote-qtd-badge');
+            const subtitulo = document.getElementById('modal-ia-lote-subtitulo');
+
+            if (!modal || !lista) return;
+
+            const nomeAluno = document.getElementById('clinico-nome')?.textContent || 'Aluno';
+            const foco = document.getElementById('select-intensidade-foco-ia')?.value || 'Hipertrofia';
+
+            if (badge) badge.textContent = `${window.sugestoesIALote.length} Exercícios Sugeridos`;
+            if (subtitulo) subtitulo.textContent = `Rotina equilibrada calibrada para ${nomeAluno} • Foco: ${foco}`;
+
+            renderizarItensModalIALote();
+            modal.classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
+        };
+
+        window.fecharModalPreviewIALote = function () {
+            const modal = document.getElementById('modal-preview-ia-lote');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        function renderizarItensModalIALote() {
+            const lista = document.getElementById('modal-ia-lote-lista');
+            if (!lista) return;
+
+            if (!window.sugestoesIALote.length) {
+                lista.innerHTML = `
+                    <div class="text-center py-8 text-slate-400 bg-[#0B0F17] rounded-2xl border border-slate-800">
+                        <i data-lucide="info" class="w-8 h-8 mx-auto mb-2 text-amber-400"></i>
+                        <p class="text-sm font-semibold">Nenhum exercício restante na sugestão.</p>
+                        <p class="text-xs text-slate-500 mt-1">Clique em "Regenerar Sugestões" para criar uma nova rotina.</p>
+                    </div>
+                `;
+                if (window.lucide) lucide.createIcons();
+                return;
+            }
+
+            lista.innerHTML = window.sugestoesIALote.map((item, idx) => `
+                <div class="p-3.5 bg-[#0B0F17] border border-[#2D3748] rounded-2xl shadow-sm space-y-3">
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <span class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-black flex items-center justify-center shrink-0">
+                                ${idx + 1}
+                            </span>
+                            <div class="min-w-0">
+                                <h4 class="text-xs sm:text-sm font-bold text-white truncate">${esc(item.exercicio)}</h4>
+                                <p class="text-[10px] text-slate-400 truncate">${esc(item.grupo_muscular || '')}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="Exercise3D.abrirModal('${esc(item.exercicio)}', '${esc(item.grupo_muscular || '')}')"
+                                class="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold transition-all flex items-center gap-1 cursor-pointer">
+                                <i data-lucide="play" class="w-3 h-3 fill-amber-400"></i>
+                                <span>3D</span>
+                            </button>
+                            <button type="button" onclick="removerItemModalIALote(${idx})"
+                                class="p-1 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer" title="Remover este exercício">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t border-[#2D3748]/60 text-xs">
+                        <div>
+                            <span class="text-[9px] uppercase font-bold text-slate-400 block mb-0.5">Séries</span>
+                            <input type="text" value="${esc(item.series)}" onchange="window.sugestoesIALote[${idx}].series = this.value"
+                                class="w-full bg-[#111827] border border-[#2D3748] rounded-lg px-2 py-1 text-xs text-slate-100 font-semibold focus:outline-none focus:border-amber-500">
+                        </div>
+                        <div>
+                            <span class="text-[9px] uppercase font-bold text-slate-400 block mb-0.5">Reps</span>
+                            <input type="text" value="${esc(item.repeticoes)}" onchange="window.sugestoesIALote[${idx}].repeticoes = this.value"
+                                class="w-full bg-[#111827] border border-[#2D3748] rounded-lg px-2 py-1 text-xs text-slate-100 font-semibold focus:outline-none focus:border-amber-500">
+                        </div>
+                        <div>
+                            <span class="text-[9px] uppercase font-bold text-slate-400 block mb-0.5">Carga Estimada</span>
+                            <input type="text" value="${esc(item.carga)}" onchange="window.sugestoesIALote[${idx}].carga = this.value"
+                                class="w-full bg-[#111827] border border-[#2D3748] rounded-lg px-2 py-1 text-xs text-amber-400 font-semibold focus:outline-none focus:border-amber-500">
+                        </div>
+                        <div>
+                            <span class="text-[9px] uppercase font-bold text-slate-400 block mb-0.5">Descanso</span>
+                            <input type="text" value="${esc(item.descanso)}" onchange="window.sugestoesIALote[${idx}].descanso = this.value"
+                                class="w-full bg-[#111827] border border-[#2D3748] rounded-lg px-2 py-1 text-xs text-slate-100 font-semibold focus:outline-none focus:border-amber-500">
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        window.removerItemModalIALote = function (idx) {
+            window.sugestoesIALote.splice(idx, 1);
+            const badge = document.getElementById('modal-ia-lote-qtd-badge');
+            if (badge) badge.textContent = `${window.sugestoesIALote.length} Exercícios Sugeridos`;
+            renderizarItensModalIALote();
+        };
+
+        window.confirmarTreinoIALote = async function () {
+            if (!window.sugestoesIALote.length) {
+                showToast('Atenção', 'Nenhum exercício selecionado na lista.', 'warning');
+                return;
+            }
+
+            const btnConfirmar = document.getElementById('btn-confirmar-ia-lote');
+            if (btnConfirmar) btnConfirmar.disabled = true;
+
+            try {
+                let inserido = false;
+                try {
+                    const { error } = await supabaseClient.from('treinos').insert(window.sugestoesIALote);
+                    if (!error) inserido = true;
+                } catch (e) {
+                    console.warn('Erro ao inserir lote no Supabase, usando lista local:', e);
+                }
+
+                if (!inserido) {
+                    window.sugestoesIALote.forEach((item, idx) => {
+                        item.id = 'local-ia-' + Date.now() + '-' + idx;
+                        treinosAluno.push(item);
+                    });
+                    renderizarTreinosAlunoLocal();
+                } else {
+                    await carregarTreinoAdmin();
+                }
+
+                fecharModalPreviewIALote();
+                showToast('Treino Prescrito com Sucesso! 🚀', `${window.sugestoesIALote.length} exercícios gravados na ficha do aluno.`, 'success');
+                SessionManager.render();
+            } catch (err) {
+                showToast('Erro ao confirmar', err.message, 'error');
+            } finally {
+                if (btnConfirmar) btnConfirmar.disabled = false;
+            }
+        };
+
+        // ==============================================================
+        // BARRA FIXA INFERIOR DE AÇÕES (STICKY FOOTER)
+        // ==============================================================
+        window.atualizarStickyFooterPersonal = function () {
+            const footer = document.getElementById('sticky-personal-actions');
+            const alunoNomeSpan = document.getElementById('sticky-aluno-nome');
+            const modoEdicaoBadge = document.getElementById('sticky-modo-edicao-badge');
+            const btnStickyCancel = document.getElementById('btn-sticky-cancelar-edicao');
+            const btnStickyText = document.getElementById('btn-sticky-text');
+
+            if (!footer) return;
+
+            const selAluno = document.getElementById('aluno-select');
+            const alunoId = selAluno ? selAluno.value : '';
+            const abaAtiva = document.getElementById('conteudo-tab-personal-montar');
+            const isTabMontar = abaAtiva && !abaAtiva.classList.contains('hidden');
+
+            if (!isTabMontar || !alunoId) {
+                footer.classList.add('hidden');
+                return;
+            }
+
+            footer.classList.remove('hidden');
+
+            const nomeAluno = document.getElementById('clinico-nome')?.textContent || 'Aluno';
+            if (alunoNomeSpan) alunoNomeSpan.textContent = nomeAluno;
+
+            if (exercicioEmEdicaoId) {
+                if (modoEdicaoBadge) modoEdicaoBadge.classList.remove('hidden');
+                if (btnStickyCancel) btnStickyCancel.classList.remove('hidden');
+                if (btnStickyText) btnStickyText.textContent = 'Salvar Alterações';
+            } else {
+                if (modoEdicaoBadge) modoEdicaoBadge.classList.add('hidden');
+                if (btnStickyCancel) btnStickyCancel.classList.add('hidden');
+                if (btnStickyText) btnStickyText.textContent = 'Adicionar ao Treino';
+            }
+        };
+
+        // ==============================================================
+        // ASSISTENTE DE IA PARA PRESCRIÇÃO
+        // ==============================================================
         window.gerarSugestaoIATreino = async function () {
             const btnGerar = document.getElementById('btn-gerar-sugestao-ia');
             const icone = document.getElementById('icone-gerar-ia');
             const texto = document.getElementById('texto-gerar-ia');
             const spinner = document.getElementById('spinner-gerar-ia');
 
-            // 1. Validação de seleção do aluno
             const selAluno = document.getElementById('aluno-select');
             let alunoId = selAluno ? selAluno.value : '';
 
-            // Se nenhum aluno selecionado mas houver alunos no select, seleciona o primeiro
             if (!alunoId && selAluno && selAluno.options.length > 1) {
                 for (let i = 0; i < selAluno.options.length; i++) {
                     if (selAluno.options[i].value && !selAluno.options[i].disabled) {
@@ -2699,7 +3611,6 @@
                 return;
             }
 
-            // Ativa estado de carregamento do botão
             if (btnGerar) btnGerar.disabled = true;
             if (spinner) spinner.classList.remove('hidden');
             if (icone) icone.classList.add('hidden');
@@ -2708,11 +3619,9 @@
             await new Promise(r => setTimeout(r, 350));
 
             try {
-                // 2. Coleta de dados biométricos do aluno
                 let pesoAluno = parseFloat(document.getElementById('clinico-peso')?.textContent) || 75;
                 let nomeAluno = document.getElementById('clinico-nome')?.textContent || 'Aluno';
 
-                // 3. Coleta de parâmetros de prescrição
                 const grupoMuscular = document.getElementById('treino-grupo')?.value || 'Peito';
                 const diaSemana = document.getElementById('treino-dia')?.value || 'Segunda';
                 const foco = document.getElementById('select-intensidade-foco-ia')?.value || 'Hipertrofia Padrão';
@@ -2720,7 +3629,6 @@
 
                 const listaExerciciosGrupo = BANCO_EXERCICIOS_IA[grupoMuscular] || BANCO_EXERCICIOS_IA['Peito'];
 
-                // Configurações de séries, reps e descanso com base no foco de intensidade
                 let configFoco = {
                     series: '4',
                     reps: '8-12',
@@ -2763,9 +3671,7 @@
                     };
                 }
 
-                // ==============================================================
                 // CASO A: "APENAS PRÓXIMO EXERCÍCIO"
-                // ==============================================================
                 if (escopoIATreinoAtivo === 'exercicio') {
                     const nomesJaPresentes = (treinosAluno || []).map(t => (t.exercicio || '').toLowerCase());
                     let exercicioEscolhido = listaExerciciosGrupo.find(ex => !nomesJaPresentes.includes(ex.nome.toLowerCase()));
@@ -2785,22 +3691,19 @@
 
                     const elNome = document.getElementById('exercicio-nome');
                     const elGrupoEsp = document.getElementById('exercicio-grupo-especifico');
-                    const elSeries = document.getElementById('exercicio-series');
-                    const elReps = document.getElementById('exercicio-reps');
-                    const elCarga = document.getElementById('exercicio-carga');
-                    const elDescanso = document.getElementById('exercicio-descanso');
                     const elObs = document.getElementById('exercicio-obs');
 
                     if (elNome) elNome.value = exercicioEscolhido.nome;
                     if (elGrupoEsp) elGrupoEsp.value = exercicioEscolhido.grupo;
-                    if (elSeries) elSeries.value = configFoco.series;
-                    if (elReps) elReps.value = configFoco.reps;
-                    if (elCarga) elCarga.value = cargaFinal;
-                    if (elDescanso) elDescanso.value = configFoco.descanso;
                     if (elObs) elObs.value = `${exercicioEscolhido.obs} [Foco: ${foco}. ${configFoco.sufixoObs}]`;
 
-                    // Destaque visual temporário nos inputs preenchidos pela IA
-                    [elNome, elGrupoEsp, elSeries, elReps, elCarga, elDescanso, elObs].forEach(input => {
+                    // Carrega a periodização inteligente na tabela dinâmica
+                    SeriesTableManager.carregarDeValores(configFoco.series, configFoco.reps, cargaFinal, configFoco.descanso);
+
+                    // Atualiza prévia 3D
+                    window.atualizarPrevia3DFormPersonal();
+
+                    [elNome, elGrupoEsp, elObs].forEach(input => {
                         if (input) {
                             input.classList.add('ring-2', 'ring-amber-400', 'bg-amber-500/10');
                             setTimeout(() => {
@@ -2818,12 +3721,9 @@
                         }, 120);
                     }
                 }
-
-                // ==============================================================
-                // CASO B: "TREINO COMPLETO DA SESSÃO" (4 A 6 EXERCÍCIOS)
-                // ==============================================================
+                // CASO B: "TREINO COMPLETO DA SESSÃO" -> ABRE MODAL DE REVISÃO EM LOTE
                 else {
-                    const gradeCompleta = listaExerciciosGrupo.slice(0, 5); // 5 exercícios equilibrados
+                    const gradeCompleta = listaExerciciosGrupo.slice(0, 5);
                     const nomeTreinoFinal = treinoNomeAtual || `Treino de ${grupoMuscular} – ${foco}`;
                     document.getElementById('treino-nome').value = nomeTreinoFinal;
 
@@ -2833,6 +3733,16 @@
                             const c = Math.round((pesoAluno * ex.percCarga * configFoco.fatorCarga) / 2) * 2;
                             cargaCalculada = `${Math.max(4, c)} kg`;
                         }
+
+                        const seriesArray = [
+                            { id: 1, tipo: 'Aquecimento', carga: '50% Carga', reps: '15', descanso: '45s' },
+                            { id: 2, tipo: 'Feeder', carga: '75% Carga', reps: '10', descanso: '60s' },
+                            { id: 3, tipo: 'Trabalho', carga: cargaCalculada, reps: configFoco.reps, descanso: configFoco.descanso },
+                            { id: 4, tipo: 'Trabalho', carga: cargaCalculada, reps: configFoco.reps, descanso: configFoco.descanso }
+                        ];
+                        const obsComPeriodizacao = (window.PeriodizacaoManager && window.PeriodizacaoManager.serializar)
+                            ? window.PeriodizacaoManager.serializar(seriesArray, `${ex.obs} [Exercício #${idx + 1} da rotina ${foco}]`)
+                            : `${ex.obs} [Exercício #${idx + 1} da rotina ${foco}]`;
 
                         return {
                             aluno_id: alunoId,
@@ -2844,48 +3754,12 @@
                             repeticoes: configFoco.reps,
                             carga: cargaCalculada,
                             descanso: configFoco.descanso,
-                            observacoes: `${ex.obs} [Exercício #${idx + 1} da rotina ${foco}]`,
+                            observacoes: obsComPeriodizacao,
                             video_url: ''
                         };
                     });
 
-                    let inseridoComSucesso = false;
-                    try {
-                        const { error } = await supabaseClient.from('treinos').insert(novosExercicios);
-                        if (!error) {
-                            inseridoComSucesso = true;
-                        }
-                    } catch (e) {
-                        console.warn('Inserção direta no Supabase falhou, usando lista local:', e);
-                    }
-
-                    if (!inseridoComSucesso) {
-                        novosExercicios.forEach((item, idx) => {
-                            item.id = 'local-ia-' + Date.now() + '-' + idx;
-                            treinosAluno.push(item);
-                        });
-                        renderizarTreinosAlunoLocal();
-                    } else {
-                        await carregarTreinoAdmin();
-                    }
-
-                    // Notificação amigável conforme requisito
-                    showToast('Treino Completo Gerado ✨', `Treino completo de ${grupoMuscular} gerado com sucesso! Revise os exercícios abaixo antes de salvar.`, 'success');
-
-                    const secTreino = document.getElementById('secao-treino-atual');
-                    if (secTreino) {
-                        const header = secTreino.querySelector('.collapse-header');
-                        const content = secTreino.querySelector('.collapse-content');
-                        if (header && content) {
-                            header.classList.add('active');
-                            content.classList.add('expanded');
-                        }
-                        setTimeout(() => {
-                            secTreino.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            secTreino.classList.add('secao-destaque');
-                            setTimeout(() => secTreino.classList.remove('secao-destaque'), 1800);
-                        }, 200);
-                    }
+                    abrirModalPreviewIALote(novosExercicios);
                 }
             } catch (err) {
                 console.error('Erro ao gerar sugestão IA:', err);
@@ -2901,98 +3775,99 @@
 
         window.renderizarTreinosAlunoLocal = function () {
             const box = document.getElementById('lista-treino-aluno');
-            if (!box) return;
+            if (box) {
+                if (!treinosAluno || !treinosAluno.length) {
+                    box.innerHTML = '<div class="text-center py-8 text-slate-400 bg-slate-900/40 rounded-2xl border border-slate-800/80"><i data-lucide="info" class="w-8 h-8 mx-auto mb-2 text-amber-400/80"></i><p class="text-sm font-semibold text-slate-200">Nenhum exercício prescrito para este aluno ainda.</p></div>';
+                } else {
+                    const grupos = {};
+                    treinosAluno.forEach(t => (grupos[t.treino_nome] = grupos[t.treino_nome] || []).push(t));
 
-            if (!treinosAluno || !treinosAluno.length) {
-                box.innerHTML = '<div class="text-center py-8 text-slate-400 bg-slate-900/40 rounded-2xl border border-slate-800/80"><i data-lucide="info" class="w-8 h-8 mx-auto mb-2 text-amber-400/80"></i><p class="text-sm font-semibold text-slate-200">Nenhum exercício prescrito para este aluno ainda.</p></div>';
-                if (window.lucide) lucide.createIcons();
-                return;
+                    box.innerHTML = Object.entries(grupos).map(([nome, ex]) => `
+                      <div class="rounded-2xl border border-[#2D3748] bg-[#181F2C] p-4 shadow-lg mb-3">
+                        <div class="flex items-center justify-between mb-3">
+                          <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                            <i data-lucide="dumbbell" class="w-4 h-4 text-amber-400"></i>
+                            <span>${esc(nome)}</span>
+                          </h3>
+                          <span class="text-[11px] text-amber-400/90 font-medium bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                            ${esc(ex[0].dia_semana || '')} · ${esc(ex[0].grupo_muscular || '')}
+                          </span>
+                        </div>
+                        <div class="space-y-2">
+                          ${ex.map(e => {
+                            const ext = window.PeriodizacaoManager ? window.PeriodizacaoManager.extrair(e) : { obsLimpa: e.observacoes || '', series: [] };
+                            return `
+                            <div class="flex items-center justify-between gap-3 text-xs bg-[#0B0F17] border border-[#2D3748] rounded-xl px-3.5 py-2.5 hover:bg-[#111827] transition-colors">
+                              <div class="min-w-0 flex-1">
+                                <p class="font-semibold text-slate-100 truncate">${esc(e.exercicio)}</p>
+                                <p class="text-slate-400 text-[11px] mt-0.5">
+                                  ${esc(e.series)} séries × ${esc(e.repeticoes)} reps
+                                  ${e.carga ? ' · ' + esc(e.carga) : ''}
+                                  ${e.descanso ? ' · desc. ' + esc(e.descanso) : ''}
+                                </p>
+                                ${window.PeriodizacaoManager ? window.PeriodizacaoManager.renderizarChipsPeriodizacao(e) : ''}
+                                ${ext.obsLimpa ? `<p class="text-[10px] text-slate-400 mt-1 italic line-clamp-2">${esc(ext.obsLimpa)}</p>` : ''}
+                              </div>
+                              <div class="flex items-center gap-1 shrink-0">
+                                <button type="button" onclick="Exercise3D.abrirModal('${esc(e.exercicio)}', '${esc(ex[0].grupo_muscular || '')}', '${esc(e.video_url || '')}')" class="text-amber-400 hover:text-amber-300 hover:bg-amber-500/15 border border-amber-500/20 hover:border-amber-500/40 p-1.5 rounded-lg transition-all cursor-pointer active:scale-95 flex items-center gap-1 text-[11px] font-bold" title="Visualizar execução do personagem 3D">
+                                  <i data-lucide="play" class="w-3.5 h-3.5 fill-amber-400"></i>
+                                  <span class="hidden md:inline text-[10px]">3D</span>
+                                </button>
+                                <button type="button" onclick="editarExercicioTreino('${esc(e.id)}')" class="text-slate-400 hover:text-amber-400 hover:bg-amber-500/10 border border-transparent hover:border-amber-500/30 p-1.5 rounded-lg transition-all cursor-pointer active:scale-95" title="Editar exercício">
+                                  <i data-lucide="pencil" class="w-4 h-4"></i>
+                                </button>
+                                <button type="button" onclick="removerExercicio('${esc(e.id)}')" class="text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/30 p-1.5 rounded-lg transition-all cursor-pointer active:scale-95" title="Remover exercício">
+                                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                              </div>
+                            </div>
+                            `;
+                          }).join('')}
+                        </div>
+                      </div>
+                    `).join('');
+                }
             }
 
-            const grupos = {};
-            treinosAluno.forEach(t => (grupos[t.treino_nome] = grupos[t.treino_nome] || []).push(t));
-
-            box.innerHTML = Object.entries(grupos).map(([nome, ex]) => `
-              <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 shadow-lg">
-                <div class="flex items-center justify-between mb-3">
-                  <h3 class="font-bold text-white text-sm flex items-center gap-2">
-                    <i data-lucide="dumbbell" class="w-4 h-4 text-amber-400"></i>
-                    <span>${esc(nome)}</span>
-                  </h3>
-                  <span class="text-[11px] text-amber-400/90 font-medium bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
-                    ${esc(ex[0].dia_semana || '')} · ${esc(ex[0].grupo_muscular || '')}
-                  </span>
-                </div>
-                <div class="space-y-2">
-                  ${ex.map(e => `
-                    <div class="flex items-center justify-between gap-3 text-xs bg-slate-950/70 border border-slate-800/80 rounded-xl px-3.5 py-2.5 hover:bg-slate-950 transition-colors">
-                      <div class="min-w-0 flex-1">
-                        <p class="font-semibold text-slate-100 truncate">${esc(e.exercicio)}</p>
-                        <p class="text-slate-400 text-[11px] mt-0.5">
-                          ${esc(e.series)} séries × ${esc(e.repeticoes)} reps
-                          ${e.carga ? ' · ' + esc(e.carga) : ''}
-                          ${e.descanso ? ' · desc. ' + esc(e.descanso) : ''}
-                        </p>
-                        ${e.observacoes ? `<p class="text-[10px] text-slate-500 mt-0.5 italic line-clamp-1">${esc(e.observacoes)}</p>` : ''}
-                      </div>
-                      <div class="flex items-center gap-1 shrink-0">
-                        <button type="button" onclick="editarExercicioTreino('${esc(e.id)}')" class="text-slate-400 hover:text-amber-400 hover:bg-amber-500/10 border border-transparent hover:border-amber-500/30 p-1.5 rounded-lg transition-all cursor-pointer active:scale-95" title="Editar exercício">
-                          <i data-lucide="pencil" class="w-4 h-4"></i>
-                        </button>
-                        <button type="button" onclick="removerExercicio('${esc(e.id)}')" class="text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/30 p-1.5 rounded-lg transition-all cursor-pointer active:scale-95" title="Remover exercício">
-                          <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                      </div>
-                    </div>
-                  `).join('')}
-                </div>
-              </div>
-            `).join('');
-
+            SessionManager.render();
+            atualizarStickyFooterPersonal();
             if (window.lucide) lucide.createIcons();
         };
 
-        async function carregarTreinoAdmin() {
+        async function carregarTreinoAdmin(alunoIdAlvo) {
             const selectEl = document.getElementById('aluno-select');
             const selectGerenciarEl = document.getElementById('gerenciar-aluno-select');
-            const id = (selectGerenciarEl && selectGerenciarEl.value) 
-                ? selectGerenciarEl.value 
-                : (selectEl ? selectEl.value : '');
+            
+            // Prioriza o parâmetro explícito passado, senão o aluno-select ativo, e por último o gerenciar-aluno-select
+            const id = alunoIdAlvo 
+                || (selectEl && selectEl.value ? selectEl.value : '') 
+                || (selectGerenciarEl && selectGerenciarEl.value ? selectGerenciarEl.value : '');
 
-            // Sincroniza ambos os selects se diferirem
             if (id) {
                 if (selectEl && selectEl.value !== id) selectEl.value = id;
                 if (selectGerenciarEl && selectGerenciarEl.value !== id) selectGerenciarEl.value = id;
             }
 
             const box = document.getElementById('lista-treino-aluno');
-            if (!box) return;
 
             if (!id) { 
-                box.innerHTML = '<div class="text-center py-8 text-slate-500 bg-slate-900/30 rounded-2xl border border-slate-800/80"><i data-lucide="dumbbell" class="w-8 h-8 mx-auto mb-2 text-slate-600 opacity-60"></i><p class="text-sm">Selecione um aluno acima para visualizar e gerenciar suas fichas de treino.</p></div>'; 
+                if (box) box.innerHTML = '<div class="text-center py-8 text-slate-500 bg-[#0B0F17] rounded-2xl border border-[#2D3748]"><i data-lucide="dumbbell" class="w-8 h-8 mx-auto mb-2 text-slate-600 opacity-60"></i><p class="text-sm">Selecione um aluno acima para visualizar e gerenciar suas fichas de treino.</p></div>'; 
                 treinosAluno = []; 
+                SessionManager.render();
+                atualizarStickyFooterPersonal();
                 if (window.lucide) lucide.createIcons();
                 return; 
             }
 
-            // Abre automaticamente a seção de Treino Atual para visualização imediata
-            const secTreino = document.getElementById('secao-treino-atual');
-            if (secTreino) {
-                const header = secTreino.querySelector('.collapse-header');
-                const content = secTreino.querySelector('.collapse-content');
-                if (header && content && !content.classList.contains('expanded')) {
-                    header.classList.add('active');
-                    content.classList.add('expanded');
-                }
-            }
-
             const { data, error } = await supabaseClient.from('treinos').select('*').eq('aluno_id', id).order('created_at');
             if (error) { 
-                box.innerHTML = `<p class="text-xs text-rose-400">Erro ao carregar treino: ${esc(error.message)}. Rode o script apexfit-setup.sql no Supabase.</p>`; 
+                if (box) box.innerHTML = `<p class="text-xs text-rose-400">Erro ao carregar treino: ${esc(error.message)}. Rode o script apexfit-setup.sql no Supabase.</p>`; 
                 return; 
             }
             treinosAluno = data || [];
             renderizarTreinosAlunoLocal();
+            SessionManager.render();
+            atualizarStickyFooterPersonal();
         }
 
         async function removerExercicio(id) {
@@ -3026,12 +3901,10 @@
 
             exercicioEmEdicaoId = ex.id;
 
-            // 1. Alterna para a aba 'montar' caso esteja em outra aba
             if (typeof alternarAbaPersonal === 'function') {
                 alternarAbaPersonal('montar');
             }
 
-            // 2. Garante que a seção de montar treino esteja expandida
             const secMontar = document.getElementById('secao-cadastrar-treino');
             if (secMontar) {
                 const header = secMontar.querySelector('.collapse-header');
@@ -3042,7 +3915,6 @@
                 }
             }
 
-            // 3. Sincroniza o aluno selecionado no formulário se houver aluno_id
             if (ex.aluno_id) {
                 const sel = document.getElementById('aluno-select');
                 if (sel && sel.value !== ex.aluno_id) {
@@ -3057,7 +3929,6 @@
                 }
             }
 
-            // 4. Preenche os campos do formulário com os dados do exercício
             const setVal = (inpId, val) => {
                 const el = document.getElementById(inpId);
                 if (el) el.value = (val !== undefined && val !== null) ? val : '';
@@ -3068,14 +3939,41 @@
             if (ex.grupo_muscular) setVal('treino-grupo', ex.grupo_muscular);
             setVal('exercicio-nome', ex.exercicio || '');
             setVal('exercicio-grupo-especifico', ex.grupo_especifico || ex.grupo_muscular || '');
-            setVal('exercicio-series', ex.series || '');
-            setVal('exercicio-reps', ex.repeticoes || '');
-            setVal('exercicio-carga', ex.carga || '');
-            setVal('exercicio-descanso', ex.descanso || '');
-            setVal('exercicio-obs', ex.observacoes || '');
+
+            // Extrai periodização estruturada e observações limpas
+            const { obsLimpa, series } = window.PeriodizacaoManager
+                ? window.PeriodizacaoManager.extrair(ex)
+                : { obsLimpa: ex.observacoes || '', series: [] };
+
+            setVal('exercicio-obs', obsLimpa);
             setVal('exercicio-video', ex.video_url || '');
 
-            // 5. Exibe o aviso/banner de modo de edição
+            // Se o exercício possuir vídeo ou observações técnicas, expande o acordeão opcional
+            if (obsLimpa || ex.video_url) {
+                const box = document.getElementById('box-detalhes-opcionais-exercicio');
+                const chevron = document.getElementById('chevron-detalhes-exercicio');
+                if (box) box.classList.remove('hidden');
+                if (chevron) chevron.classList.add('rotate-180');
+            }
+
+            // Carrega periodização estruturada na tabela dinâmica de séries
+            if (series && series.length && typeof SeriesTableManager !== 'undefined') {
+                SeriesTableManager.series = series.map((s, idx) => ({
+                    id: idx + 1,
+                    tipo: s.tipo || 'Trabalho',
+                    carga: s.carga || '60 kg',
+                    reps: String(s.reps || '8-10'),
+                    descanso: String(s.descanso || '60s')
+                }));
+                SeriesTableManager.proximoId = SeriesTableManager.series.length + 1;
+                SeriesTableManager.render();
+            } else if (typeof SeriesTableManager !== 'undefined') {
+                SeriesTableManager.carregarDeValores(ex.series, ex.repeticoes, ex.carga, ex.descanso);
+            }
+
+            // Atualiza prévia 3D
+            window.atualizarPrevia3DFormPersonal();
+
             const aviso = document.getElementById('aviso-edicao-exercicio');
             const avisoNome = document.getElementById('aviso-edicao-exercicio-nome');
             if (aviso) aviso.classList.remove('hidden');
@@ -3083,22 +3981,20 @@
                 avisoNome.innerHTML = `Editando exercício: <strong class="text-white font-bold">${esc(ex.exercicio || 'Exercício')}</strong> (${esc(ex.treino_nome || 'Treino')})`;
             }
 
-            // 6. Atualiza o texto do botão para "Salvar Alterações do Exercício" e exibe "Cancelar Edição"
             const btnText = document.getElementById('btn-text');
             if (btnText) btnText.textContent = 'Salvar Alterações do Exercício';
             const btnCancel = document.getElementById('btn-cancelar-edicao');
             if (btnCancel) btnCancel.classList.remove('hidden');
 
+            atualizarStickyFooterPersonal();
+            SessionManager.render();
+
             if (window.lucide) lucide.createIcons();
 
-            // 7. Rola suavemente até o formulário de montar treino com destaque visual
             if (secMontar) {
                 secMontar.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                secMontar.classList.add('secao-destaque');
-                setTimeout(() => secMontar.classList.remove('secao-destaque'), 1500);
             }
 
-            // Foco imediato no campo do nome do exercício
             setTimeout(() => {
                 const elNome = document.getElementById('exercicio-nome');
                 if (elNome) {
@@ -3110,36 +4006,143 @@
             showToast('Modo de Edição Ativado ✏️', 'Você retornou à montagem de treino. Altere os campos e clique em Salvar.', 'info');
         };
 
-        window.cancelarEdicaoExercicio = function () {
-            exercicioEmEdicaoId = null;
-            const aviso = document.getElementById('aviso-edicao-exercicio');
-            if (aviso) aviso.classList.add('hidden');
-
-            const btnText = document.getElementById('btn-text');
-            if (btnText) btnText.textContent = 'Adicionar Exercício ao Treino';
-
-            const btnCancel = document.getElementById('btn-cancelar-edicao');
-            if (btnCancel) btnCancel.classList.add('hidden');
-
-            ['exercicio-nome', 'exercicio-grupo-especifico', 'exercicio-carga', 'exercicio-obs', 'exercicio-video'].forEach(id => {
+        window.resetarFormularioExercicioPersonal = function () {
+            // 1. Limpar campos de texto e específicos do exercício
+            ['exercicio-nome', 'exercicio-grupo-especifico', 'exercicio-obs', 'exercicio-video'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.value = '';
             });
 
+            // 2. Fechar acordeão de detalhes opcionais se estiver aberto
+            const boxDetalhes = document.getElementById('box-detalhes-opcionais-exercicio');
+            const chevronDetalhes = document.getElementById('chevron-detalhes-exercicio');
+            if (boxDetalhes) boxDetalhes.classList.add('hidden');
+            if (chevronDetalhes) chevronDetalhes.classList.remove('rotate-180');
+
+            // 3. Fechar dropdown de autocomplete se estiver aberto
+            const dropdown = document.getElementById('exercicio-autocomplete-dropdown');
+            if (dropdown) dropdown.classList.add('hidden');
+
+            // 4. Resetar tabela dinâmica de séries e periodização para preset padrão
+            if (typeof SeriesTableManager !== 'undefined' && SeriesTableManager.aplicarPreset) {
+                SeriesTableManager.aplicarPreset('4x 8-10', '60 kg', true);
+            }
+
+            // 5. Resetar estado de edição
+            exercicioEmEdicaoId = null;
+            const aviso = document.getElementById('aviso-edicao-exercicio');
+            if (aviso) aviso.classList.add('hidden');
+            const btnText = document.getElementById('btn-text');
+            if (btnText) btnText.textContent = 'Adicionar Exercício ao Treino';
+            const btnCancel = document.getElementById('btn-cancelar-edicao');
+            if (btnCancel) btnCancel.classList.add('hidden');
+
+            // 6. Atualizar prévia 3D com os valores zerados
+            if (typeof window.atualizarPrevia3DFormPersonal === 'function') {
+                window.atualizarPrevia3DFormPersonal();
+            }
+
+            // 7. Atualizar barra de rodapé e resumo da sessão
+            if (typeof atualizarStickyFooterPersonal === 'function') {
+                atualizarStickyFooterPersonal();
+            }
+            if (typeof SessionManager !== 'undefined' && SessionManager.render) {
+                SessionManager.render();
+            }
+
             if (window.lucide) lucide.createIcons();
+
+            // 8. Focar no campo de nome do exercício para nova inserção rápida
+            const elNome = document.getElementById('exercicio-nome');
+            if (elNome) {
+                elNome.focus();
+            }
+        };
+
+        window.cancelarEdicaoExercicio = function () {
+            window.resetarFormularioExercicioPersonal();
             showToast('Edição Cancelada', 'O formulário retornou para o modo de prescrição padrão.', 'info');
         };
 
         const elAlunoSelect = document.getElementById('aluno-select');
-        if (elAlunoSelect) elAlunoSelect.addEventListener('change', carregarTreinoAdmin);
+        if (elAlunoSelect) elAlunoSelect.addEventListener('change', (e) => {
+            if (typeof window.sincronizarSelecaoAluno === 'function') {
+                window.sincronizarSelecaoAluno(e.target.value, 'montar');
+            } else {
+                carregarTreinoAdmin(e.target.value);
+                atualizarStickyFooterPersonal();
+            }
+        });
 
         const elGerenciarAlunoSelect = document.getElementById('gerenciar-aluno-select');
-        if (elGerenciarAlunoSelect) elGerenciarAlunoSelect.addEventListener('change', carregarTreinoAdmin);
+        if (elGerenciarAlunoSelect) elGerenciarAlunoSelect.addEventListener('change', (e) => {
+            if (typeof window.sincronizarSelecaoAluno === 'function') {
+                window.sincronizarSelecaoAluno(e.target.value, 'gerenciar');
+            } else {
+                carregarTreinoAdmin(e.target.value);
+            }
+        });
+
+        // ───────────────── PRÉVIA EM TEMPO REAL DO GUIA 3D (VISÃO DO ALUNO) ─────────────────
+        window.atualizarPrevia3DFormPersonal = function () {
+            const elNome = document.getElementById('exercicio-nome');
+            const elGrupo = document.getElementById('treino-grupo');
+            const elVideo = document.getElementById('exercicio-video');
+            const nome = (elNome ? elNome.value : '').trim();
+            const grupo = (elGrupo ? elGrupo.value : '').trim();
+            const video = (elVideo ? elVideo.value : '').trim();
+            if (!window.Exercise3D) return;
+            const dados = window.Exercise3D.getAnimation(nome, grupo, video);
+            const img = document.getElementById('img-previa-3d-personal');
+            const txt = document.getElementById('txt-alvo-3d-personal');
+            if (img && dados) img.src = dados.gifUrl || dados.posterUrl;
+            if (txt && dados) txt.textContent = 'Músculo Alvo: ' + (dados.musculoAlvo || 'Grupo Muscular Principal');
+        };
+
+        window.testarPrevia3DModalPersonal = function () {
+            const elNome = document.getElementById('exercicio-nome');
+            const elGrupo = document.getElementById('treino-grupo');
+            const elVideo = document.getElementById('exercicio-video');
+            const nome = (elNome ? elNome.value : '').trim() || 'Rosca Direta com Barra';
+            const grupo = (elGrupo ? elGrupo.value : '').trim();
+            const video = (elVideo ? elVideo.value : '').trim();
+            if (window.Exercise3D) {
+                window.Exercise3D.abrirModal(nome, grupo, video);
+            }
+        };
+
+        const inNomeEx = document.getElementById('exercicio-nome');
+        if (inNomeEx) {
+            inNomeEx.addEventListener('input', window.atualizarPrevia3DFormPersonal);
+            inNomeEx.addEventListener('change', window.atualizarPrevia3DFormPersonal);
+        }
+        const inGrupoTr = document.getElementById('treino-grupo');
+        if (inGrupoTr) {
+            inGrupoTr.addEventListener('change', () => {
+                window.atualizarPrevia3DFormPersonal();
+                SessionManager.render();
+            });
+        }
+
+        const inNomeTr = document.getElementById('treino-nome');
+        if (inNomeTr) {
+            inNomeTr.addEventListener('input', () => SessionManager.render());
+            inNomeTr.addEventListener('change', () => SessionManager.render());
+        }
+
+        const inDiaTr = document.getElementById('treino-dia');
+        if (inDiaTr) {
+            inDiaTr.addEventListener('change', () => SessionManager.render());
+        }
 
         document.getElementById('form-dieta').addEventListener('submit', async (e) => {
             e.preventDefault();
             const alunoId = document.getElementById('aluno-select').value;
             if (!alunoId) return showToast('Atenção', 'Selecione um aluno da lista.', 'error');
+
+            // Garante que os campos ocultos de séries, reps, carga e descanso estejam 100% sincronizados
+            SeriesTableManager.sincronizarCamposOcultos();
+
             const v = id => {
                 const el = document.getElementById(id);
                 return el ? el.value.trim() : '';
@@ -3152,6 +4155,12 @@
             if (icon) icon.classList.add('hidden');
 
             try {
+                // Serialização estruturada da periodização de cada série
+                const obsPura = v('exercicio-obs');
+                const observacoesComPeriodizacao = (window.PeriodizacaoManager && SeriesTableManager.series && SeriesTableManager.series.length)
+                    ? window.PeriodizacaoManager.serializar(SeriesTableManager.series, obsPura)
+                    : obsPura;
+
                 if (exercicioEmEdicaoId) {
                     // MODO DE EDIÇÃO: Atualiza o exercício existente
                     if (String(exercicioEmEdicaoId).startsWith('local-ia-')) {
@@ -3167,7 +4176,7 @@
                                 repeticoes: v('exercicio-reps'),
                                 carga: v('exercicio-carga'),
                                 descanso: v('exercicio-descanso'),
-                                observacoes: v('exercicio-obs'),
+                                observacoes: observacoesComPeriodizacao,
                                 video_url: v('exercicio-video')
                             };
                         }
@@ -3183,7 +4192,7 @@
                             repeticoes: v('exercicio-reps'),
                             carga: v('exercicio-carga'),
                             descanso: v('exercicio-descanso'),
-                            observacoes: v('exercicio-obs'),
+                            observacoes: observacoesComPeriodizacao,
                             video_url: v('exercicio-video')
                         }).eq('id', exercicioEmEdicaoId);
 
@@ -3192,25 +4201,8 @@
                         await carregarTreinoAdmin();
                     }
 
-                    // Resetar modo de edição
-                    exercicioEmEdicaoId = null;
-                    const aviso = document.getElementById('aviso-edicao-exercicio');
-                    if (aviso) aviso.classList.add('hidden');
-                    const btnText = document.getElementById('btn-text');
-                    if (btnText) btnText.textContent = 'Adicionar Exercício ao Treino';
-                    const btnCancel = document.getElementById('btn-cancelar-edicao');
-                    if (btnCancel) btnCancel.classList.add('hidden');
-
-                    ['exercicio-nome', 'exercicio-grupo-especifico', 'exercicio-carga', 'exercicio-obs', 'exercicio-video'].forEach(id => {
-                        const el = document.getElementById(id);
-                        if (el) el.value = '';
-                    });
-
-                    // Retorna a visualização para a lista de treinos do aluno
-                    const secTreino = document.getElementById('secao-treino-atual');
-                    if (secTreino) {
-                        setTimeout(() => secTreino.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
-                    }
+                    // Reseta completamente a aba do formulário de exercício
+                    window.resetarFormularioExercicioPersonal();
                 } else {
                     // MODO DE CADASTRO NORMAL: Insere novo exercício
                     const { error } = await supabaseClient.from('treinos').insert([{
@@ -3223,18 +4215,16 @@
                         repeticoes: v('exercicio-reps'),
                         carga: v('exercicio-carga'),
                         descanso: v('exercicio-descanso'),
-                        observacoes: v('exercicio-obs'),
+                        observacoes: observacoesComPeriodizacao,
                         video_url: v('exercicio-video')
                     }]);
 
                     if (error) throw error;
                     showToast('Exercício adicionado! 💪', 'O treino já aparece no portal do aluno.', 'success');
-                    ['exercicio-nome', 'exercicio-grupo-especifico', 'exercicio-carga', 'exercicio-obs', 'exercicio-video'].forEach(id => {
-                        const el = document.getElementById(id);
-                        if (el) el.value = '';
-                    });
-                    document.getElementById('exercicio-nome').focus();
                     await carregarTreinoAdmin();
+
+                    // Reseta completamente a aba do formulário de exercício após adicionar
+                    window.resetarFormularioExercicioPersonal();
                 }
             } catch (err) {
                 showToast('Erro ao salvar', err.message, 'error');
@@ -4331,6 +5321,97 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- BARRA FIXA DE AÇÕES INFERIOR (STICKY ACTION FOOTER PARA MONTAGEM) -->
+    <!-- ============================================================== -->
+    <div id="sticky-personal-actions"
+        class="hidden fixed bottom-[72px] lg:bottom-4 inset-x-0 z-50 max-w-5xl mx-auto px-4 transition-all duration-300 pointer-events-none">
+        <div class="pointer-events-auto bg-[#181F2C]/95 backdrop-blur-xl border border-amber-500/30 rounded-2xl shadow-2xl p-3 sm:p-4 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0">
+                    <i data-lucide="dumbbell" class="w-4 h-4 text-amber-400"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="text-xs font-bold text-white flex items-center gap-2 truncate">
+                        <span id="sticky-aluno-nome">Selecione um Aluno</span>
+                        <span id="sticky-modo-edicao-badge" class="hidden text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">Em Edição</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 truncate mt-0.5" id="sticky-sessao-resumo">
+                        Sessão de treino • 0 exercícios prescritos
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <button type="button" id="btn-sticky-cancelar-edicao" onclick="cancelarEdicaoExercicio()"
+                    class="hidden px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-[#2D3748] text-xs font-bold transition-all cursor-pointer active:scale-95 shadow-sm">
+                    Cancelar
+                </button>
+                <button type="button" id="btn-sticky-submit" onclick="document.getElementById('btn-submit').click()"
+                    class="px-4 sm:px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-black text-xs transition-all shadow-lg shadow-amber-500/20 hover:shadow-amber-500/35 flex items-center gap-1.5 cursor-pointer active:scale-95">
+                    <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                    <span id="btn-sticky-text">Adicionar ao Treino</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL DE REVISÃO DO TREINO COMPLETO POR IA (EM LOTE)           -->
+    <!-- ============================================================== -->
+    <div id="modal-preview-ia-lote"
+        class="hidden fixed inset-0 z-[75] bg-black/85 flex items-center justify-center p-3 sm:p-4 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
+        <div class="relative w-full max-w-3xl my-8 bg-[#181F2C] border border-amber-500/40 rounded-3xl shadow-2xl shadow-amber-500/10 overflow-hidden flex flex-col max-h-[90vh]">
+            <!-- Header do Modal -->
+            <div class="p-5 border-b border-[#2D3748] bg-[#111827] flex items-center justify-between gap-3 shrink-0">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-2xl bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-amber-400 animate-pulse"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h3 class="text-sm sm:text-base font-bold text-white tracking-tight">Revisão do Treino Completo Gerado por IA</h3>
+                            <span id="modal-ia-lote-qtd-badge" class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                                5 Exercícios Sugeridos
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-0.5" id="modal-ia-lote-subtitulo">
+                            Rotina equilibrada calibrada para o peso e objetivo do aluno
+                        </p>
+                    </div>
+                </div>
+                <button type="button" onclick="fecharModalPreviewIALote()"
+                    class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-[#2D3748] flex items-center justify-center transition-colors cursor-pointer shrink-0">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Corpo da Lista de Exercícios para Revisão -->
+            <div class="p-5 overflow-y-auto space-y-3.5 flex-1" id="modal-ia-lote-lista">
+                <!-- Preenchido dinamicamente via JS -->
+            </div>
+
+            <!-- Rodapé de Ações do Modal -->
+            <div class="p-4 sm:p-5 border-t border-[#2D3748] bg-[#111827] flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+                <button type="button" onclick="gerarSugestaoIATreino()"
+                    class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 hover:text-white border border-amber-500/30 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                    <span>Regenerar Sugestões</span>
+                </button>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <button type="button" onclick="fecharModalPreviewIALote()"
+                        class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-[#2D3748] text-xs font-bold transition-all cursor-pointer active:scale-95">
+                        Cancelar
+                    </button>
+                    <button type="button" id="btn-confirmar-ia-lote" onclick="confirmarTreinoIALote()"
+                        class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-black text-xs transition-all shadow-lg shadow-amber-500/20 hover:shadow-amber-500/35 flex items-center justify-center gap-1.5 cursor-pointer active:scale-95">
+                        <i data-lucide="check" class="w-4 h-4 text-slate-950"></i>
+                        <span>Confirmar e Prescrever Rotina</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 

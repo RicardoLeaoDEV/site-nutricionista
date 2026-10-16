@@ -136,13 +136,19 @@
         },
 
         iniciar() {
-            if (this.rodando) return;
+            if (this.intervalId) {
+                clearInterval(this.intervalId);
+                this.intervalId = null;
+            }
             if (this.tempoRestante <= 0) this.tempoRestante = this.tempoInicial;
 
             this.rodando = true;
             this.atualizarBotao();
             const statusEl = document.getElementById('apex-timer-status');
-            if (statusEl) statusEl.textContent = 'Descansando...';
+            if (statusEl) {
+                statusEl.textContent = 'Descansando...';
+                statusEl.className = 'text-[10px] uppercase font-bold text-amber-400 tracking-wider';
+            }
 
             this.intervalId = setInterval(() => {
                 this.tempoRestante--;
@@ -155,12 +161,17 @@
         },
 
         pausar() {
-            if (!this.rodando) return;
             this.rodando = false;
-            clearInterval(this.intervalId);
+            if (this.intervalId) {
+                clearInterval(this.intervalId);
+                this.intervalId = null;
+            }
             this.atualizarBotao();
             const statusEl = document.getElementById('apex-timer-status');
-            if (statusEl) statusEl.textContent = 'Pausado';
+            if (statusEl) {
+                statusEl.textContent = 'Pausado';
+                statusEl.className = 'text-[10px] uppercase font-bold text-slate-400 tracking-wider';
+            }
         },
 
         reiniciar() {
@@ -225,14 +236,29 @@
             if (window.lucide) window.lucide.createIcons();
         },
 
-        // Chamado quando o aluno marca uma série no treino
+        // Chamado quando o aluno marca uma série ou clica no tempo de descanso
         acionarPorSerie(tempoSugerido = 60) {
-            this.mostrar(tempoSugerido);
+            let seg = 60;
+            if (typeof tempoSugerido === 'number') {
+                seg = tempoSugerido;
+            } else {
+                const match = String(tempoSugerido).match(/\d+/);
+                seg = match ? parseInt(match[0]) : 60;
+            }
+            this.mostrar(seg);
             this.iniciar();
+            if (window.showToast) {
+                window.showToast('Descanso Iniciado ⏱️', `Cronômetro de ${seg}s em andamento.`, 'info');
+            }
         }
     };
 
     window.ApexTimer = RestTimer;
+    window.iniciarCronometroDescanso = function (segundos) {
+        if (window.ApexTimer) {
+            window.ApexTimer.acionarPorSerie(segundos);
+        }
+    };
 
     // Inicializa ao carregar a página
     if (document.readyState === 'loading') {
