@@ -323,15 +323,16 @@
         },
 
         // ----------------------------------------------------------------------
-        // AGENDAMENTOS DE CONSULTAS & TREINOS
+        // AGENDAMENTOS DE CONSULTAS & TREINOS (Tabela appointments / agendamentos)
         // ----------------------------------------------------------------------
         async saveAgendamento(agendData, alunoId) {
             const record = {
                 aluno_id: alunoId,
                 aluno: agendData.aluno || agendData.aluno_nome || 'Aluno',
                 aluno_nome: agendData.aluno || agendData.aluno_nome || 'Aluno',
-                tipo: agendData.tipo || 'Consulta Nutricional',
+                tipo: agendData.tipo || 'Consulta Nutricional Inicial',
                 data: agendData.data || 'Hoje',
+                data_iso: agendData.data_iso || null,
                 hora: agendData.hora || '10:00',
                 descricao: agendData.descricao || agendData.observacoes || '',
                 video: agendData.video !== false,
@@ -342,11 +343,23 @@
                 created_at: new Date().toISOString()
             };
 
-            const result = await this.saveRecord('agendamentos', 'agendamento', record, alunoId);
+            // Tenta primeiro na tabela oficial 'appointments'
+            let result = await this.saveRecord('appointments', 'agendamento', record, alunoId);
+            if (!result || !result.success) {
+                // Fallback para 'agendamentos' caso a tabela appointments ainda não exista
+                result = await this.saveRecord('agendamentos', 'agendamento', record, alunoId);
+            }
             return result;
         },
 
         async getAgendamentos(alunoId = null, limit = 50) {
+            // Busca primeiramente na tabela 'appointments'
+            const hasAppointments = await this.isTableReady('appointments');
+            if (hasAppointments) {
+                const dados = await this.getRecords('appointments', null, alunoId, limit);
+                if (dados && dados.length > 0) return dados;
+            }
+            // Fallback para 'agendamentos' ou store resiliente
             return await this.getRecords('agendamentos', 'agendamento', alunoId, limit);
         },
 

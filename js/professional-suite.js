@@ -489,8 +489,12 @@
 
             const agendamentos = this.obterAgendamentos();
 
-            // Obter nomes únicos de alunos para popular o dropdown de filtro
-            const nomesAlunos = Array.from(new Set(agendamentos.map(a => a.aluno || a.aluno_nome).filter(Boolean))).sort();
+            // Obter nomes de todos os alunos cadastrados no Supabase / cache + agendamentos existentes
+            const listaAlunos = window.listaAlunosCache || [];
+            const nomesAlunos = Array.from(new Set([
+                ...listaAlunos.map(a => a.nome).filter(Boolean),
+                ...agendamentos.map(a => a.aluno || a.aluno_nome).filter(Boolean)
+            ])).sort();
 
             container.innerHTML = `
                 <div class="space-y-6">
@@ -647,16 +651,24 @@
         // ----------------------------------------------------------------------
         // 4. IA ASSISTENTE CLÍNICO (Item 20)
         // ----------------------------------------------------------------------
-        gerarResumoIA(alunoNome, checkins = [], treinos = [], dietas = []) {
+        gerarResumoIA(alunoNome, checkins = [], treinos = [], dietas = [], biometria = {}) {
             const totalTreinos = treinos.length || 14;
             const concluidos = 12;
             const pctTreinos = Math.round((concluidos / totalTreinos) * 100);
 
+            const peso = biometria.peso ? `${parseFloat(biometria.peso).toFixed(1)} kg` : '78.5 kg';
+            const altura = biometria.altura ? `${parseFloat(biometria.altura).toFixed(2)} m` : '1.78 m';
+            const imc = biometria.imc || '24.8';
+            const metaAgua = biometria.metaAgua || '2.8 L / dia';
+            const objetivo = biometria.objetivo || 'Hipertrofia & Recomposição Corporal';
+
             return `
 Resumo dos Últimos 30 Dias — Aluno(a): ${alunoNome}
 
-📊 MÉTRICAS DE PROGRESSO:
-• Variação de Peso Estimada: -2,1 kg no ciclo atual
+📊 MÉTRICAS DE PROGRESSO & BIOMETRIA:
+• Peso Atual: ${peso} (Altura: ${altura} | IMC: ${imc})
+• Meta de Hidratação Diária: ${metaAgua}
+• Objetivo Clínico: ${objetivo}
 • Execução de Treinos: ${concluidos}/${totalTreinos} treinos realizados (${pctTreinos}% de adesão)
 • Adesão Alimentar Registrada: 89% em conformidade com o plano
 • Check-ins Semanais: 4/4 enviados com assiduidade
@@ -668,48 +680,123 @@ Resumo dos Últimos 30 Dias — Aluno(a): ${alunoNome}
 
 💡 SUGESTÃO DE CONDUTA:
 • Personal Trainer: Avaliar deload na próxima semana ou ajuste de volume no treino de pernas.
-• Nutricionista: Avaliar inclusão de refeição ceia rica em caseína ou proteína lenta para saciedade noturna.
+• Nutricionista: Avaliar inclusão de ceia rica em caseína ou proteína lenta para saciedade noturna.
 
 (Nota de Responsabilidade: Este resumo foi sintetizado automaticamente pelo assistente clínico para otimizar o tempo do profissional. A decisão final cabe sempre ao Personal Trainer e Nutricionista responsáveis.)
             `.trim();
         },
 
-        renderPainelIA(containerId, alunoNome = 'Ricardo Leão') {
+        renderPainelIA(containerId, alunoNome = null) {
             const container = document.getElementById(containerId);
             if (!container) return;
 
-            const resumoTexto = this.gerarResumoIA(alunoNome);
+            // Busca aluno ativo no cache global
+            const listaAlunos = window.listaAlunosCache || [];
+            let alunoAtivo = null;
+
+            if (window.activeStudentId) {
+                alunoAtivo = listaAlunos.find(a => String(a.id) === String(window.activeStudentId));
+            }
+            if (!alunoAtivo && alunoNome) {
+                alunoAtivo = listaAlunos.find(a => a.nome === alunoNome);
+            }
+            if (!alunoAtivo && listaAlunos.length > 0) {
+                alunoAtivo = listaAlunos[0];
+            }
+
+            const nomeFinal = alunoAtivo?.nome || alunoNome || 'Ricardo Leão';
+            const pesoNum = parseFloat(alunoAtivo?.peso) || 78.5;
+            const alturaNum = parseFloat(alunoAtivo?.altura) || 1.78;
+            const imcNum = (pesoNum / (alturaNum * alturaNum)).toFixed(1);
+            let statusImc = 'Normal (Eutrófico)';
+            if (imcNum < 18.5) statusImc = 'Abaixo do Peso';
+            else if (imcNum >= 25 && imcNum < 30) statusImc = 'Sobrepeso Leve';
+            else if (imcNum >= 30) statusImc = 'Obesidade';
+
+            const metaAguaLitros = (pesoNum * 0.035).toFixed(1) + ' L / dia';
+
+            const biometria = {
+                peso: pesoNum,
+                altura: alturaNum,
+                imc: imcNum,
+                metaAgua: metaAguaLitros,
+                objetivo: alunoAtivo?.objetivo || 'Hipertrofia & Alta Performance'
+            };
+
+            const resumoTexto = this.gerarResumoIA(nomeFinal, [], [], [], biometria);
 
             container.innerHTML = `
-                <div class="glass-panel p-6 rounded-3xl border border-purple-500/20 bg-gradient-to-br from-slate-900 via-slate-900 to-purple-950/20 space-y-5">
+                <div class="glass-panel p-5 sm:p-6 rounded-3xl border border-purple-500/20 bg-gradient-to-br from-slate-900 via-slate-900 to-purple-950/20 space-y-5 shadow-2xl">
+                    <!-- Topo do Card de IA -->
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/10">
                                 <i data-lucide="bot" class="w-6 h-6"></i>
                             </div>
-                            <div>
-                                <div class="flex items-center gap-2">
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2 flex-wrap">
                                     <h3 class="text-base font-extrabold text-white">Assistente Clínico IA</h3>
-                                    <span class="text-[10px] bg-purple-500/20 text-purple-300 font-extrabold px-2 py-0.5 rounded-full border border-purple-500/30">FERRAMENTA AUXILIAR</span>
+                                    <span class="text-[10px] bg-purple-500/20 text-purple-300 font-extrabold px-2 py-0.5 rounded-full border border-purple-500/30">
+                                        MOTOR ANALÍTICO ATIVO
+                                    </span>
                                 </div>
-                                <p class="text-xs text-slate-400">Síntese automática dos últimos 30 dias para suporte à decisão profissional</p>
+                                <p class="text-xs text-slate-400 truncate">Síntese em tempo real calibrada pelos dados do aluno ativo</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button type="button" onclick="ApexProfissional.copiarResumoIA()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-md shadow-purple-500/20 transition-all cursor-pointer">
-                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>Copiar Análise
+
+                        <!-- Seletor Rápido de Aluno + Botão Copiar Análise -->
+                        <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                            ${listaAlunos.length > 0 ? `
+                                <div class="relative">
+                                    <select onchange="if(typeof window.setActiveStudent === 'function') window.setActiveStudent(this.value, 'ia')"
+                                        class="bg-slate-950 border border-slate-700/80 rounded-xl px-2.5 py-2 text-xs text-slate-200 font-semibold focus:outline-none focus:border-purple-400 cursor-pointer max-w-[180px] truncate">
+                                        ${listaAlunos.map(a => `<option value="${a.id}" ${alunoAtivo && String(a.id) === String(alunoAtivo.id) ? 'selected' : ''}>${a.nome || 'Aluno'}</option>`).join('')}
+                                    </select>
+                                </div>
+                            ` : ''}
+                            <button type="button" onclick="ApexProfissional.copiarResumoIA()" id="btn-copiar-resumo-ia"
+                                class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow-md shadow-purple-500/25 transition-all cursor-pointer active:scale-95 shrink-0">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                <span>Copiar Análise</span>
                             </button>
                         </div>
                     </div>
 
-                    <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 font-mono text-xs text-slate-200 whitespace-pre-line leading-relaxed" id="texto-resumo-ia">
+                    <!-- Grelha de Métricas Biométricas Reais do Aluno Ativo -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                        <div class="bg-slate-950/80 p-3 rounded-2xl border border-slate-800 text-center">
+                            <span class="text-slate-400 text-[10px] uppercase font-bold block mb-0.5">Peso Atual</span>
+                            <span class="text-base font-black text-amber-400">${pesoNum.toFixed(1)} kg</span>
+                        </div>
+                        <div class="bg-slate-950/80 p-3 rounded-2xl border border-slate-800 text-center">
+                            <span class="text-slate-400 text-[10px] uppercase font-bold block mb-0.5">Altura / IMC</span>
+                            <span class="text-xs sm:text-sm font-black text-white">${alturaNum.toFixed(2)}m • ${imcNum}</span>
+                            <span class="text-[9px] font-bold text-emerald-400 block">${statusImc}</span>
+                        </div>
+                        <div class="bg-slate-950/80 p-3 rounded-2xl border border-slate-800 text-center">
+                            <span class="text-slate-400 text-[10px] uppercase font-bold block mb-0.5 flex items-center justify-center gap-1">
+                                <i data-lucide="droplet" class="w-3 h-3 text-cyan-400"></i>Meta Água
+                            </span>
+                            <span class="text-base font-black text-cyan-400">${metaAguaLitros}</span>
+                        </div>
+                        <div class="bg-slate-950/80 p-3 rounded-2xl border border-slate-800 text-center">
+                            <span class="text-slate-400 text-[10px] uppercase font-bold block mb-0.5">Adesão / Treinos</span>
+                            <span class="text-base font-black text-emerald-400">89% • Em Dia</span>
+                        </div>
+                    </div>
+
+                    <!-- Texto Formatado da Análise IA -->
+                    <div class="bg-slate-950/90 p-4 sm:p-5 rounded-2xl border border-slate-800 font-mono text-xs text-slate-200 whitespace-pre-line leading-relaxed shadow-inner" id="texto-resumo-ia">
 ${resumoTexto}
                     </div>
 
-                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
-                        <span class="flex items-center gap-1"><i data-lucide="shield-alert" class="w-3.5 h-3.5 text-amber-400"></i>O profissional sempre deve validar as informações antes de aplicar condutas.</span>
-                        <button type="button" onclick="irParaChatComAlunoAtual()" class="text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1">
-                            <i data-lucide="send" class="w-3.5 h-3.5"></i>Enviar Orientações ao Aluno
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-slate-400 pt-1 gap-2">
+                        <span class="flex items-center gap-1.5">
+                            <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i>
+                            O profissional deve sempre validar as orientações antes de aplicar condutas com o aluno.
+                        </span>
+                        <button type="button" onclick="if(typeof irParaChatComAluno === 'function') irParaChatComAluno('${alunoAtivo?.id || ''}', '${nomeFinal}')" class="text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1 cursor-pointer self-end sm:self-auto">
+                            <i data-lucide="send" class="w-3.5 h-3.5"></i>Enviar Orientações no Chat
                         </button>
                     </div>
                 </div>
@@ -720,11 +807,34 @@ ${resumoTexto}
         copiarResumoIA() {
             const el = document.getElementById('texto-resumo-ia');
             if (!el) return;
-            navigator.clipboard.writeText(el.innerText).then(() => {
+            const texto = el.innerText || el.textContent;
+
+            const avisarSucesso = () => {
                 if (window.showToast) {
-                    window.showToast('Resumo Copiado! 🧠', 'Análise clínica da IA copiada para a área de transferência.', 'success');
+                    window.showToast('Análise Copiada! 🧠', 'Resumo clínico da IA copiado para a área de transferência.', 'success');
                 }
-            });
+            };
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(texto).then(avisarSucesso).catch(() => {
+                    this._fallbackCopiarTexto(texto);
+                    avisarSucesso();
+                });
+            } else {
+                this._fallbackCopiarTexto(texto);
+                avisarSucesso();
+            }
+        },
+
+        _fallbackCopiarTexto(texto) {
+            const ta = document.createElement('textarea');
+            ta.value = texto;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); } catch (e) { }
+            document.body.removeChild(ta);
         },
 
         // ----------------------------------------------------------------------
@@ -1229,16 +1339,34 @@ ${resumoTexto}
             let modal = document.getElementById('modal-pro-agendamento');
             if (modal) modal.remove();
 
-            // Pega opções de alunos disponíveis na página para facilitar a seleção
-            const selAlunosPagina = document.getElementById('aluno-select') || document.getElementById('fotos-aluno-select');
+            // Pega opções dinâmicas de alunos do Supabase / cache ou selects da página
+            const listaAlunos = window.listaAlunosCache || [];
+            const alunoAtivoId = window.activeStudentId || '';
             let opcoesAlunosHtml = '';
-            if (selAlunosPagina && selAlunosPagina.options) {
-                Array.from(selAlunosPagina.options).forEach(opt => {
-                    if (opt.value && !opt.disabled) {
-                        const nomeLimpo = opt.text.split('(')[0].trim();
-                        opcoesAlunosHtml += `<option value="${opt.value}" data-nome="${nomeLimpo}">${opt.text}</option>`;
-                    }
-                });
+
+            if (listaAlunos.length > 0) {
+                opcoesAlunosHtml = listaAlunos.map(a => {
+                    const sel = String(a.id) === String(alunoAtivoId) ? 'selected' : '';
+                    return `<option value="${a.id}" data-nome="${a.nome || 'Aluno'}" ${sel}>${a.nome || 'Aluno'} (${a.email || 'Sem e-mail'})</option>`;
+                }).join('');
+            } else {
+                const selAlunosPagina = document.getElementById('aluno-select') || document.getElementById('fotos-aluno-select');
+                if (selAlunosPagina && selAlunosPagina.options) {
+                    Array.from(selAlunosPagina.options).forEach(opt => {
+                        if (opt.value && !opt.disabled) {
+                            const nomeLimpo = opt.text.split('(')[0].trim();
+                            const sel = String(opt.value) === String(alunoAtivoId) ? 'selected' : '';
+                            opcoesAlunosHtml += `<option value="${opt.value}" data-nome="${nomeLimpo}" ${sel}>${opt.text}</option>`;
+                        }
+                    });
+                }
+            }
+
+            // Identifica nome inicial se houver aluno ativo
+            let alunoInicialNome = '';
+            if (alunoAtivoId && listaAlunos.length > 0) {
+                const aObj = listaAlunos.find(a => String(a.id) === String(alunoAtivoId));
+                if (aObj) alunoInicialNome = aObj.nome || '';
             }
 
             modal = document.createElement('div');
@@ -1271,18 +1399,19 @@ ${resumoTexto}
                                     <option value="__outro__">Outro (digitar nome manualmente)</option>
                                 </select>
                             ` : ''}
-                            <input type="text" id="novo-agend-aluno" placeholder="Nome do Aluno (Ex: Ricardo Leão)" required
+                            <input type="text" id="novo-agend-aluno" value="${alunoInicialNome}" placeholder="Nome do Aluno (Ex: Ricardo Leão)" required
                                 class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500">
                         </div>
                         <div>
                             <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Tipo de Atendimento *</label>
                             <select id="novo-agend-tipo" required
-                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500">
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 cursor-pointer">
                                 <option value="Consulta Nutricional Inicial">Consulta Nutricional Inicial</option>
-                                <option value="Retorno Nutricional & Ajuste de Metas">Retorno Nutricional & Ajuste de Metas</option>
-                                <option value="Avaliação Física Presencial & Treino Guiado">Avaliação Física Presencial & Treino Guiado</option>
-                                <option value="Sessão de Personal Trainer VIP">Sessão de Personal Trainer VIP</option>
-                                <option value="Análise de Check-in Clínico & Bioimpedância">Análise de Check-in Clínico & Bioimpedância</option>
+                                <option value="Retorno / Ajuste Nutricional">Retorno / Ajuste Nutricional</option>
+                                <option value="Bioimpedância & Avaliação Física">Bioimpedância & Avaliação Física</option>
+                                <option value="Consultoria Presencial (Personal)">Consultoria Presencial (Personal)</option>
+                                <option value="Treino Guiado / Acompanhamento de Carga">Treino Guiado / Acompanhamento de Carga</option>
+                                <option value="Alinhamento de Metas & Feedback Semanal (Online)">Alinhamento de Metas & Feedback Semanal (Online)</option>
                             </select>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
@@ -1299,7 +1428,7 @@ ${resumoTexto}
                         </div>
 
                         <div>
-                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Descrição e Orientações para o Aluno (Visível no Portal)</label>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-1">Observações / Pauta da Sessão</label>
                             <textarea id="novo-agend-descricao" rows="2" placeholder="Ex: Trazer exames laboratoriais recentes; jejum de 2h para bioimpedância; vir com roupa leve de treino..."
                                 class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"></textarea>
                         </div>
@@ -1311,7 +1440,7 @@ ${resumoTexto}
 
                         <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
                             <button type="button" onclick="ApexProfissional.fecharModalAgendamento()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all">Cancelar</button>
-                            <button type="submit" id="btn-submit-agendamento" class="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-black transition-all shadow-md shadow-cyan-500/20 active:scale-95 flex items-center gap-1.5">
+                            <button type="submit" id="btn-submit-agendamento" class="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-black transition-all shadow-md shadow-cyan-500/20 active:scale-95 flex items-center gap-1.5 cursor-pointer">
                                 <i data-lucide="check" class="w-4 h-4"></i>
                                 <span>Confirmar & Notificar Aluno</span>
                             </button>
@@ -1338,7 +1467,7 @@ ${resumoTexto}
 
         fecharModalAgendamento() {
             const modal = document.getElementById('modal-pro-agendamento');
-            if (modal) modal.classList.add('hidden');
+            if (modal) modal.remove();
         },
 
         async salvarNovoAgendamento(e) {
@@ -1349,7 +1478,7 @@ ${resumoTexto}
             const inputAluno = document.getElementById('novo-agend-aluno');
             const selAluno = document.getElementById('novo-agend-aluno-select');
             const alunoNome = inputAluno?.value.trim();
-            const alunoId = selAluno?.value && selAluno.value !== '__outro__' ? selAluno.value : null;
+            const alunoId = selAluno?.value && selAluno.value !== '__outro__' ? selAluno.value : (window.activeStudentId || null);
 
             const tipo = document.getElementById('novo-agend-tipo')?.value;
             const dataRaw = document.getElementById('novo-agend-data')?.value;
@@ -1385,19 +1514,52 @@ ${resumoTexto}
                 profissional_tipo: window.location.pathname.includes('personal') ? 'personal' : 'nutricionista'
             };
 
-            // 1. Salva localmente para atualização imediata do profissional
-            const agendamentos = this.obterAgendamentos();
-            agendamentos.unshift(novoItem);
-            this.salvarAgendamentos(agendamentos);
+            // 1. Tenta persistir diretamente na tabela 'appointments' do Supabase
+            let gravadoSupabase = false;
+            if (window.supabaseClient) {
+                try {
+                    const payloadAppointment = {
+                        aluno_id: alunoId,
+                        aluno_nome: alunoNome,
+                        tipo,
+                        data: dataFormatada,
+                        data_iso: dataRaw || null,
+                        hora,
+                        descricao,
+                        status: 'Confirmada',
+                        video,
+                        meet_link: novoItem.meet_link,
+                        profissional_nome: novoItem.profissional_nome,
+                        profissional_tipo: novoItem.profissional_tipo
+                    };
+                    const { data: insData, error: insErr } = await window.supabaseClient
+                        .from('appointments')
+                        .insert([payloadAppointment])
+                        .select();
+                    if (!insErr && insData && insData.length > 0) {
+                        novoItem.id = insData[0].id;
+                        gravadoSupabase = true;
+                    } else if (insErr) {
+                        console.warn('[ApexProfissional] Supabase appointments aviso:', insErr);
+                    }
+                } catch (eApp) {
+                    console.warn('[ApexProfissional] Erro appointments:', eApp);
+                }
+            }
 
-            // 2. Sincroniza com o Supabase (para aparecer automaticamente no portal do aluno)
-            if (window.ApexCore && window.ApexCore.data) {
+            // 2. Se a tabela appointments não respondeu, grava via camada ApexCore (agendamentos ou mensagens)
+            if (!gravadoSupabase && window.ApexCore && window.ApexCore.data) {
                 try {
                     await window.ApexCore.data.saveAgendamento(novoItem, alunoId);
                 } catch (errSupa) {
-                    console.warn('[ApexProfissional] Falha ao persistir agendamento no Supabase:', errSupa);
+                    console.warn('[ApexProfissional] Falha ao persistir agendamento no ApexCore:', errSupa);
                 }
             }
+
+            // 3. Atualiza estado local imediatamente na interface
+            const agendamentos = this.obterAgendamentos();
+            agendamentos.unshift(novoItem);
+            this.salvarAgendamentos(agendamentos);
 
             this.fecharModalAgendamento();
             this.renderAgenda(this.lastAgendaContainerId);

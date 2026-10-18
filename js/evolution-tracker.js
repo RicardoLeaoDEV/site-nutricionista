@@ -664,13 +664,26 @@
                 return;
             }
 
+            // Oculta estritamente a barra flutuante de ações de treino se estiver visível
+            const stickyActions = document.getElementById('sticky-personal-actions');
+            if (stickyActions) {
+                stickyActions.classList.add('hidden');
+                stickyActions.style.setProperty('display', 'none', 'important');
+            }
+
             // Busca histórico completo de medidas do aluno
             const medidas = await window.ApexCore.data.getMedidas(alunoId, 50);
             const ultimas = (medidas && medidas.length > 0) ? medidas[0] : {};
 
-            // Encontra dados do aluno no cache
+            // Encontra dados reais do aluno no cache ou lista global
             const listaAlunos = window.listaAlunosCache || [];
-            const aluno = listaAlunos.find(a => a.id === alunoId) || { id: alunoId, nome: 'Aluno Selecionado' };
+            let aluno = listaAlunos.find(a => String(a.id) === String(alunoId));
+            if (!aluno && window.perfisAlunosCache && window.perfisAlunosCache[alunoId]) {
+                aluno = { id: alunoId, ...window.perfisAlunosCache[alunoId] };
+            }
+            if (!aluno) {
+                aluno = { id: alunoId, nome: 'Aluno Selecionado' };
+            }
 
             const dataUltimaAfericao = ultimas.data_registro || ultimas.created_at;
             const tempoRelativo = this.formatarTempoRelativo(dataUltimaAfericao);
@@ -697,15 +710,27 @@
                                 </div>
                             </div>
 
-                            <!-- Aluno Ativo Badge -->
-                            <div class="flex items-center gap-3 p-2 bg-slate-950/60 rounded-2xl border border-slate-800">
-                                <div class="w-10 h-10 rounded-xl bg-${corTema}-500/20 text-${corTema}-300 flex items-center justify-center font-bold text-xs shrink-0">
-                                    ${(aluno.nome || 'A').charAt(0).toUpperCase()}
+                            <!-- Aluno Ativo: Seletor Rápido e Avatar Real -->
+                            <div class="flex items-center gap-3 p-2.5 bg-slate-950/80 rounded-2xl border border-slate-800 shadow-md min-w-[240px]">
+                                <div class="relative w-11 h-11 rounded-xl overflow-hidden bg-${corTema}-500/20 text-${corTema}-300 flex items-center justify-center font-black text-sm shrink-0 border border-${corTema}-500/30">
+                                    ${aluno.foto_perfil ? `
+                                        <img src="${aluno.foto_perfil}" alt="${aluno.nome || 'Aluno'}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                                        <span class="hidden w-full h-full items-center justify-center font-bold">${(aluno.nome || 'A').charAt(0).toUpperCase()}</span>
+                                    ` : `
+                                        <span class="w-full h-full flex items-center justify-center font-bold">${(aluno.nome || 'A').charAt(0).toUpperCase()}</span>
+                                    `}
                                 </div>
-                                <div class="leading-tight">
-                                    <span class="text-[10px] uppercase font-bold text-slate-500 block">Aluno Avaliado</span>
-                                    <strong class="text-xs text-white">${aluno.nome || 'Aluno'}</strong>
-                                    <span class="text-[10px] text-slate-400 block">${tempoRelativo}</span>
+                                <div class="leading-tight min-w-0 flex-1">
+                                    <span class="text-[10px] uppercase font-black tracking-wider text-${corTema}-400 block mb-1 flex items-center gap-1">
+                                        <i data-lucide="user-check" class="w-3 h-3"></i>Aluno Avaliado
+                                    </span>
+                                    <select id="filtro-medidas-aluno-select"
+                                        onchange="if(typeof window.setActiveStudent === 'function') { window.setActiveStudent(this.value, 'medidas'); } else if(window.ApexEvolucao) { ApexEvolucao.renderAbaMedidasProfissional('${containerId}', this.value, { tipo: '${options.tipo || 'personal'}', profissionalNome: '${nomeProf}' }); }"
+                                        class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2 py-1 text-xs text-white font-bold focus:outline-none focus:border-${corTema}-500 cursor-pointer truncate">
+                                        ${listaAlunos.map(a => `<option value="${a.id}" ${String(a.id) === String(alunoId) ? 'selected' : ''}>${a.nome || 'Aluno'} (${a.email || ''})</option>`).join('')}
+                                        ${!listaAlunos.some(a => String(a.id) === String(alunoId)) ? `<option value="${alunoId}" selected>${aluno.nome || 'Aluno Selecionado'}</option>` : ''}
+                                    </select>
+                                    <span class="text-[10px] text-slate-400 block mt-1">${tempoRelativo}</span>
                                 </div>
                             </div>
                         </div>

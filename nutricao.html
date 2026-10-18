@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Fit Hub - Plano Alimentar</title>
+    <title>Portal de Dieta | Real Fit Hub</title>
     <link rel="manifest" href="/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="RF Hub">
     <!-- Google Fonts: Plus Jakarta Sans -->
-    <meta name="description" content="Consulte seu plano alimentar prescrito pelo nutricionista no portal Real Fit Hub.">
+    <meta name="description" content="Consulte seu plano alimentar prescrito pelo nutricionista no Portal de Dieta do Real Fit Hub.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
@@ -43,6 +43,10 @@
         }
     </script>
     <style>
+        *, ::before, ::after {
+            box-sizing: border-box;
+        }
+
         /* Variáveis de layout e compensação dinâmica de cabeçalho */
         :root {
             --header-h-desktop: 4.25rem;
@@ -59,10 +63,15 @@
             }
         }
 
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
         html {
             scroll-padding-top: calc(var(--header-height) + 1.25rem);
             scroll-behavior: smooth;
-            overflow-x: hidden;
         }
 
         /* Efeito de Vidro Fosco de Alta Fidelidade (Profundidade Tridimensional) */
@@ -178,32 +187,28 @@
             body {
                 background: #ffffff !important;
                 color: #0f172a !important;
-                margin: 0;
-                padding: 0;
+                margin: 0 !important;
+                padding: 0 !important;
             }
 
-            header,
-            footer,
-            #toast,
-            .ambient-glow-1,
-            .ambient-glow-2,
-            #nav-actions,
-            .btn-acao,
-            #area-impressao-pdf~* {
+            body > *:not(#area-impressao-pdf):not(#area-impressao-pdf-compras) {
                 display: none !important;
             }
 
-            #area-impressao-pdf {
+            #area-impressao-pdf,
+            #area-impressao-pdf-compras {
                 display: block !important;
                 position: static !important;
                 width: 100% !important;
-                background: #fff !important;
+                background: #ffffff !important;
                 color: #0f172a !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
 
             @page {
                 size: A4 portrait;
-                margin: 12mm 15mm;
+                margin: 10mm 12mm;
             }
         }
     </style>
@@ -273,29 +278,40 @@
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 pb-32 sm:pb-36 lg:pb-16 space-y-6 flex-1 w-full relative z-10">
+    <main class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 pb-32 sm:pb-36 lg:pb-16 space-y-6 flex-1 w-full relative z-10 overflow-x-hidden">
 
         <!-- Cabeçalho da Página -->
         <div
-            class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-[#0a0f1d]/90 to-amber-950/20 p-6 rounded-3xl border border-white/10 backdrop-blur-md shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all">
+            class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-[#0a0f1d]/90 to-amber-950/20 p-5 sm:p-6 rounded-3xl border border-white/10 backdrop-blur-md shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden">
             <div>
                 <div class="flex items-center gap-2 mb-1">
                     <span class="text-xs font-bold uppercase tracking-wider text-brand-400 flex items-center gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>Plano Alimentar
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>Portal de Dieta
                     </span>
                 </div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Minha <span
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Portal de <span
                         class="text-brand-400">Dieta</span> 🥗</h1>
                 <p class="text-sm text-slate-400 mt-1">Refeições prescritas pelo nutricionista. Consulte e marque cada
                     refeição ao concluir.</p>
             </div>
 
-            <!-- Ações Rápidas (Sem opções de PDF) -->
+            <!-- Ações Rápidas: Lista de Compras, Exportar PDF, Imprimir e Painel -->
             <div class="flex items-center gap-2 flex-wrap">
                 <button type="button" onclick="abrirListaCompras()" id="btn-lista-compras"
-                    class="btn-acao flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-amber-400 border border-amber-500/30 hover:border-amber-500/60 font-bold text-xs px-3.5 sm:px-4 py-2.5 rounded-xl shadow-lg shadow-amber-500/10 transition-all active:scale-95 cursor-pointer">
+                    class="btn-acao flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-lime-400 border border-lime-500/30 hover:border-lime-500/60 font-bold text-xs px-3.5 sm:px-4 py-2.5 rounded-xl shadow-lg shadow-lime-500/10 transition-all active:scale-95 cursor-pointer">
                     <i data-lucide="shopping-cart" class="w-4 h-4 shrink-0"></i>
-                    <span class="truncate">Lista de Compras 🛒</span>
+                    <span>Lista de Compras 🛒</span>
+                </button>
+                <button type="button" onclick="gerarPdfPlanoAlimentar()" id="btn-exportar-pdf"
+                    class="btn-acao flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-amber-400 border border-amber-500/30 hover:border-amber-500/60 font-bold text-xs px-3.5 sm:px-4 py-2.5 rounded-xl shadow-lg shadow-amber-500/10 transition-all active:scale-95 cursor-pointer">
+                    <i data-lucide="file-text" id="btn-pdf-icon" class="w-4 h-4 shrink-0"></i>
+                    <span id="btn-pdf-spinner" class="hidden animate-spin">⏳</span>
+                    <span id="btn-pdf-text">Exportar Cardápio (PDF) 📄</span>
+                </button>
+                <button type="button" onclick="imprimirPlanoAlimentar()" id="btn-imprimir-pdf"
+                    class="btn-acao flex items-center justify-center gap-1.5 px-3 sm:px-3.5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer">
+                    <i data-lucide="printer" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">Imprimir</span>
                 </button>
                 <a href="dashboard.html"
                     class="btn-acao flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
@@ -311,7 +327,7 @@
                 <div class="flex items-center gap-4 min-w-0">
                     <div class="relative shrink-0">
                         <div class="w-14 h-14 rounded-2xl bg-slate-800 border-2 border-amber-500/60 overflow-hidden shadow-lg flex items-center justify-center font-bold text-amber-400">
-                            <img id="nutri-card-foto" src="https://images.unsplash.com/photo-1594824813626-d62f6b4d36ef?auto=format&fit=crop&w=200&h=200&q=80" alt="Nutricionista" class="w-full h-full object-cover">
+                            <img id="nutri-card-foto" src="https://images.unsplash.com/photo-1594824813626-d62f6b4d36ef?auto=format&fit=crop&w=200&h=200&q=80" alt="Nutricionista" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='assets/icon-192.png';">
                         </div>
                         <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center shadow" title="Nutricionista Ativo">
                             <i data-lucide="check" class="w-3 h-3 stroke-[3]"></i>
@@ -325,11 +341,11 @@
                             <span class="text-xs font-bold text-amber-400/90" id="nutri-card-registro">CRN-6 12345/PE</span>
                         </div>
                         <h3 class="text-lg font-extrabold text-white truncate" id="nutri-card-nome">Dra. Camila Siqueira</h3>
-                        <p class="text-xs text-slate-300 truncate" id="nutri-card-especialidade">Nutrição Clínica & Esportiva de Alta Performance</p>
+                        <p class="text-xs text-slate-300 leading-snug break-words" id="nutri-card-especialidade">Nutrição Clínica & Esportiva de Alta Performance</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2 self-start sm:self-center shrink-0">
-                    <a href="https://wa.me/5581997969058?text=Olá%20Dra.%20Camila,%20tenho%20uma%20dúvida%20sobre%20minha%20dieta!" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs transition-all shadow-lg shadow-amber-500/20 active:scale-95">
+                <div class="flex items-center gap-2 self-start sm:self-center shrink-0 w-full sm:w-auto">
+                    <a href="https://wa.me/5581997969058?text=Olá%20Dra.%20Camila,%20tenho%20uma%20dúvida%20sobre%20minha%20dieta!" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs transition-all shadow-lg shadow-amber-500/20 active:scale-95 w-full sm:w-auto">
                         <i data-lucide="message-circle" class="w-4 h-4"></i>
                         <span>Falar com a Nutricionista</span>
                     </a>
@@ -414,23 +430,22 @@
         </div>
 
         <!-- Cards de Stats Nutrição -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="stats-nutri" style="display:none">
-            <div class="glass-panel p-4 rounded-2xl border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all text-center">
-                <div class="text-2xl font-extrabold text-brand-400" id="stat-total-refeicoes">0</div>
-                <div class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Refeições</div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 overflow-hidden w-full" id="stats-nutri" style="display:none">
+            <div class="glass-panel p-3.5 sm:p-4 rounded-2xl border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all text-center overflow-hidden">
+                <div class="text-xl sm:text-2xl font-extrabold text-brand-400" id="stat-total-refeicoes">0</div>
+                <div class="text-[10px] sm:text-[11px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5 truncate">Refeições</div>
             </div>
-            <div class="glass-panel p-4 rounded-2xl border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all text-center">
-                <div class="text-2xl font-extrabold text-emerald-400" id="stat-refeicoes-concluidas">0</div>
-                <div class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Concluídas hoje
-                </div>
+            <div class="glass-panel p-3.5 sm:p-4 rounded-2xl border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all text-center overflow-hidden">
+                <div class="text-xl sm:text-2xl font-extrabold text-emerald-400" id="stat-refeicoes-concluidas">0</div>
+                <div class="text-[10px] sm:text-[11px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5 truncate">Concluídas hoje</div>
             </div>
-            <div class="glass-panel p-4 rounded-2xl border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all text-center">
-                <div class="text-2xl font-extrabold text-amber-400" id="stat-refeicoes-pct">0%</div>
-                <div class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Progresso</div>
+            <div class="glass-panel p-3.5 sm:p-4 rounded-2xl border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all text-center overflow-hidden">
+                <div class="text-xl sm:text-2xl font-extrabold text-amber-400" id="stat-refeicoes-pct">0%</div>
+                <div class="text-[10px] sm:text-[11px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5 truncate">Progresso</div>
             </div>
-            <div class="glass-panel p-4 rounded-2xl border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all text-center">
-                <div class="text-2xl font-extrabold text-cyan-400" id="stat-hidratacao">2.8L</div>
-                <div class="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">Meta de água</div>
+            <div class="glass-panel p-3.5 sm:p-4 rounded-2xl border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all text-center overflow-hidden">
+                <div class="text-xl sm:text-2xl font-extrabold text-cyan-400" id="stat-hidratacao">2.8L</div>
+                <div class="text-[10px] sm:text-[11px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5 truncate">Meta de água</div>
             </div>
         </div>
 
@@ -456,9 +471,6 @@
                 <div class="h-28 bg-slate-900 rounded-2xl border border-slate-800"></div>
             </div>
         </div>
-
-        <!-- Área de impressão PDF (oculta) -->
-        <div id="area-impressao-pdf" class="hidden"></div>
 
     </main>
 
@@ -538,6 +550,71 @@
             if (pctEl) pctEl.textContent = pct + '%';
             if (conclEl) conclEl.textContent = concluidasCount;
             document.getElementById('barra-nutri-container')?.classList.remove('hidden');
+        }
+
+        // ===== ESCAPE HTML & HELPERS =====
+        function esc(s) {
+            return s ? String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m])) : '';
+        }
+
+        // Helper para calcular ou extrair macros e água de cada refeição
+        function obterMacrosEAguaRefeicao(item, idx, total, macrosTotais) {
+            let cal = 0, p = 0, c = 0, g = 0;
+            const linhas = (item.alimentos || '').split('\n');
+            linhas.forEach(l => {
+                const mCal = l.match(/(\d+(?:\.\d+)?)\s*kcal/i);
+                if (mCal) cal += parseFloat(mCal[1]);
+                const mP = l.match(/P:\s*(\d+(?:\.\d+)?)\s*g/i);
+                if (mP) p += parseFloat(mP[1]);
+                const mC = l.match(/C:\s*(\d+(?:\.\d+)?)\s*g/i);
+                if (mC) c += parseFloat(mC[1]);
+                const mG = l.match(/G:\s*(\d+(?:\.\d+)?)\s*g/i);
+                if (mG) g += parseFloat(mG[1]);
+            });
+
+            if (cal === 0) {
+                if (macrosTotais && macrosTotais.calorias) {
+                    const nome = (item.refeicao || '').toLowerCase();
+                    let fat = 1 / Math.max(total, 1);
+                    if (nome.includes('almoço') || nome.includes('almoco')) fat = 0.32;
+                    else if (nome.includes('jantar') || nome.includes('janta')) fat = 0.26;
+                    else if (nome.includes('café') || nome.includes('desjejum') || nome.includes('manhã') || nome.includes('manha')) fat = 0.24;
+                    else if (nome.includes('ceia') || nome.includes('noite')) fat = 0.14;
+                    else fat = 0.18 / Math.max(1, total - 3);
+
+                    cal = Math.round(macrosTotais.calorias * fat);
+                    p = Math.round((macrosTotais.proteinas || 0) * fat);
+                    c = Math.round((macrosTotais.carboidratos || 0) * fat);
+                    g = Math.round((macrosTotais.gorduras || 0) * fat);
+                } else {
+                    // Fallback nutricional saudável caso macros globais ainda não tenham sido configurados no banco
+                    const nome = (item.refeicao || '').toLowerCase();
+                    if (nome.includes('café') || nome.includes('desjejum') || nome.includes('manhã') || nome.includes('manha')) {
+                        cal = 420; p = 28; c = 44; g = 14;
+                    } else if (nome.includes('almoço') || nome.includes('almoco')) {
+                        cal = 640; p = 48; c = 68; g = 18;
+                    } else if (nome.includes('lanche')) {
+                        cal = 340; p = 24; c = 34; g = 10;
+                    } else if (nome.includes('jantar') || nome.includes('janta')) {
+                        cal = 520; p = 42; c = 52; g = 15;
+                    } else if (nome.includes('ceia') || nome.includes('noite')) {
+                        cal = 240; p = 18; c = 16; g = 8;
+                    } else {
+                        cal = 390; p = 28; c = 38; g = 12;
+                    }
+                }
+            }
+
+            const totalAguaMl = Math.round(((macrosTotais && macrosTotais.agua_litros) ? macrosTotais.agua_litros : 2.8) * 1000);
+            const aguaMl = Math.round((totalAguaMl / Math.max(total, 1)) / 50) * 50;
+
+            return {
+                calorias: Math.round(cal),
+                proteinas: Math.round(p),
+                carboidratos: Math.round(c),
+                gorduras: Math.round(g),
+                agua: `${aguaMl} ml`
+            };
         }
 
         // ===== HELPERS DE FORMATAÇÃO DE ALIMENTOS E SUBSTITUIÇÕES =====
@@ -720,18 +797,29 @@
             // Carregar metas de macronutrientes prescritas pelo nutricionista
             await carregarMetasMacrosAluno(uid);
 
-            // Carregar dietas
-            const { data: dietas, error: erroDieta } = await supabaseClient
-                .from('dietas').select('*').eq('aluno_id', uid);
-
             const container = document.getElementById('container-dietas');
+
+            // Carregar dietas ordenadas por horário
+            let dietas = null;
+            let erroDieta = null;
+            try {
+                const res = await supabaseClient
+                    .from('dietas')
+                    .select('*')
+                    .eq('aluno_id', uid)
+                    .order('horario', { ascending: true });
+                dietas = res.data;
+                erroDieta = res.error;
+            } catch (err) {
+                erroDieta = err;
+            }
 
             if (erroDieta) {
                 container.innerHTML = `
                     <div class="glass-panel border border-rose-500/30 rounded-3xl p-10 text-center">
                         <i data-lucide="alert-triangle" class="w-10 h-10 text-rose-400 mx-auto mb-3"></i>
                         <p class="font-bold text-rose-300">Erro ao carregar plano alimentar.</p>
-                        <p class="text-xs text-rose-400/70 mt-1">${erroDieta.message}</p>
+                        <p class="text-xs text-rose-400/70 mt-1">${erroDieta.message || erroDieta}</p>
                     </div>`;
                 lucide.createIcons(); return;
             }
@@ -758,26 +846,31 @@
             dietasCarregadas = dietas;
             totalRefeicoesCount = dietas.length;
 
-            // Mostrar stats e ações
-            document.getElementById('acoes-pdf').style.removeProperty('display');
-            document.getElementById('stats-nutri').style.removeProperty('display');
-            document.getElementById('stat-total-refeicoes').textContent = dietas.length;
+            // Mostrar stats e ações com verificação segura de nulidade
+            try {
+                document.getElementById('acoes-pdf')?.style?.removeProperty('display');
+                document.getElementById('stats-nutri')?.style?.removeProperty('display');
+                const statTot = document.getElementById('stat-total-refeicoes');
+                if (statTot) statTot.textContent = dietas.length;
+            } catch (e) { }
 
             const hojeKey = 'nutrilife_meals_' + new Date().toISOString().slice(0, 10);
-            const concluidas = JSON.parse(localStorage.getItem(hojeKey) || '[]');
+            let concluidas = [];
+            try { concluidas = JSON.parse(localStorage.getItem(hojeKey) || '[]'); } catch (e) { }
             atualizarProgressoNutri(concluidas.length);
 
-            // Renderizar cards
+            // Renderizar cards com detalhes completos, macros e água de cada refeição
             container.innerHTML = '';
             dietas.forEach((item, index) => {
                 const id = item.id || `refeicao-${index}`;
                 const isConcluida = concluidas.includes(id);
                 const icone = obterIconeRefeicao(item.refeicao);
                 const msgWA = encodeURIComponent(`Olá Nutri, tenho uma dúvida sobre a refeição "${item.refeicao}" (${item.horario || ''}): `);
+                const macrosRef = obterMacrosEAguaRefeicao(item, index, dietas.length, window.macrosAlunoAtual);
 
                 const card = document.createElement('div');
                 card.id = `card-${id}`;
-                card.className = `refeicao-anim glass-panel border rounded-3xl p-5 sm:p-6 transition-all duration-300 ${isConcluida ? 'concluida' : 'border-slate-800 hover:border-slate-700'}`;
+                card.className = `refeicao-anim glass-panel border rounded-3xl p-5 sm:p-6 transition-all duration-300 overflow-hidden w-full max-w-full ${isConcluida ? 'concluida' : 'border-slate-800 hover:border-slate-700'}`;
                 card.style.animationDelay = (index * 0.06) + 's';
 
                 card.innerHTML = `
@@ -788,7 +881,7 @@
                             </div>
                             <div>
                                 <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                                    ${item.refeicao}
+                                    ${esc(item.refeicao)}
                                     <span class="badge-feito text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30" style="display:${isConcluida ? 'inline-flex' : 'none'}">Feito ✓</span>
                                 </h3>
                                 <span class="text-xs text-slate-300 flex items-center gap-1 mt-0.5">
@@ -808,14 +901,35 @@
                             </button>
                         </div>
                     </div>
-                    <div class="py-4">
+
+                    <!-- Resumo Nutricional e Hidratação da Refeição -->
+                    <div class="flex items-center gap-1.5 sm:gap-2 my-3 p-2.5 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex-wrap text-xs">
+                        <span class="px-2.5 py-1 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/25 font-bold">
+                            🔥 ${macrosRef.calorias} kcal
+                        </span>
+                        <span class="px-2.5 py-1 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/25 font-bold">
+                            🥩 P: ${macrosRef.proteinas}g
+                        </span>
+                        <span class="px-2.5 py-1 rounded-xl bg-sky-500/10 text-sky-300 border border-sky-500/25 font-bold">
+                            ⚡ C: ${macrosRef.carboidratos}g
+                        </span>
+                        <span class="px-2.5 py-1 rounded-xl bg-yellow-500/10 text-yellow-300 border border-yellow-500/25 font-bold">
+                            🥑 G: ${macrosRef.gorduras}g
+                        </span>
+                        <span class="px-2.5 py-1 rounded-xl bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-bold flex items-center gap-1.5">
+                            <i data-lucide="droplet" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            <span>Água sugerida: ${macrosRef.agua}</span>
+                        </span>
+                    </div>
+
+                    <div class="py-2">
                         <span class="text-[11px] font-bold uppercase tracking-wider text-slate-300 block mb-1.5 flex items-center gap-1.5">
-                            <i data-lucide="salad" class="w-3.5 h-3.5 text-amber-400"></i>Alimentos e Porções:
+                            <i data-lucide="salad" class="w-3.5 h-3.5 text-amber-400"></i>Alimentos e Porções Prescritas:
                         </span>
                         ${formatarAlimentosHtml(item.alimentos)}
                     </div>
                     ${item.substituicoes ? `
-                    <div class="mt-1 pt-3.5 border-t border-slate-800/80 bg-slate-950/60 -mx-5 sm:-mx-6 -mb-5 sm:-mb-6 p-4 sm:p-5 rounded-b-3xl">
+                    <div class="mt-2 pt-3.5 border-t border-slate-800/80 bg-slate-950/60 -mx-5 sm:-mx-6 -mb-5 sm:-mb-6 p-4 sm:p-5 rounded-b-3xl overflow-hidden">
                         <div class="flex items-center gap-2 text-xs font-extrabold text-amber-400 uppercase tracking-wider mb-2">
                             <i data-lucide="repeat" class="w-3.5 h-3.5 text-amber-400"></i>Opções de Substituição Prescritas:
                         </div>
@@ -918,9 +1032,12 @@
             }
         }
 
-        // ===== GERAR PDF =====
+        // ===== GERAR PDF & IMPRESSÃO PROFISSIONAL =====
         function montarHtmlPlanoPdf(dietas, nomeAluno) {
             const dataHoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+            const nomeNutri = window.nomeProfissionalVinculado || 'Dra. Camila Siqueira';
+            const crnNutri = window.registroProfissionalVinculado || 'CRN-6 12345/PE';
+            const espNutri = window.especialidadeProfissionalVinculado || 'Nutrição Clínica & Esportiva de Alta Performance';
 
             let blocoMacrosPdf = '';
             let metaHidratacaoStr = '💧 2.8 a 3.0 Litros / dia';
@@ -928,7 +1045,7 @@
                 const m = window.macrosAlunoAtual;
                 metaHidratacaoStr = `💧 ${m.agua_litros || '2.8'} Litros / dia`;
                 blocoMacrosPdf = `
-                    <div style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 1.5px solid #86efac; border-radius: 12px; padding: 12px 16px; margin-bottom: 18px;">
+                    <div style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 1.5px solid #86efac; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; page-break-inside: avoid; break-inside: avoid;">
                         <div style="font-size: 11px; font-weight: 800; color: #166534; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: flex; justify-content: space-between;">
                             <span>🎯 Metas Nutricionais & Macronutrientes Prescritos</span>
                             <span style="color: #059669; font-weight: 700;">Planejamento Individualizado</span>
@@ -958,67 +1075,154 @@
             let refeicoesCards = '';
             dietas.forEach((d, idx) => {
                 const horario = d.horario || 'Horário Flexível';
-                const alimentos = (d.alimentos || '').split('\n').map(l => l.trim()).filter(l => l).map(l => `<li style="margin-bottom:5px;color:#1e293b;font-size:13px;line-height:1.5;">${l}</li>`).join('');
-                const subs = d.substituicoes ? `<div style="margin-top:10px;padding:10px 14px;background:#f0fdf4;border-left:3px solid #10b981;border-radius:6px;"><div style="font-size:11px;font-weight:700;color:#047857;margin-bottom:4px;">🔄 Substituições:</div><div style="font-size:12px;color:#166534;white-space:pre-line;">${d.substituicoes}</div></div>` : '';
-                refeicoesCards += `<div style="margin-bottom:14px;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;break-inside:avoid;background:#fff;"><div style="background:#f8fafc;padding:9px 16px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;align-items:center;gap:8px;"><span style="background:#10b981;color:#fff;font-size:11px;font-weight:800;padding:2px 7px;border-radius:20px;">${idx + 1}</span><span style="font-size:13px;font-weight:800;color:#0f172a;text-transform:uppercase;">${d.refeicao}</span></div><span style="font-size:11px;font-weight:700;color:#059669;background:#ecfdf5;border:1px solid #a7f3d0;padding:2px 9px;border-radius:12px;">⏰ ${horario}</span></div><div style="padding:12px 16px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:6px;">Alimentos e Porções:</div><ul style="margin:0;padding-left:18px;">${alimentos}</ul>${subs}</div></div>`;
+                const alimentos = (d.alimentos || '').split('\n').map(l => l.trim()).filter(l => l).map(l => `<li style="margin-bottom:5px;color:#1e293b;font-size:12.5px;line-height:1.5;">${l}</li>`).join('');
+                const subs = d.substituicoes ? `<div style="margin-top:8px;padding:8px 12px;background:#f0fdf4;border-left:3px solid #10b981;border-radius:6px;"><div style="font-size:10.5px;font-weight:700;color:#047857;margin-bottom:3px;">🔄 Opções de Substituição:</div><div style="font-size:11.5px;color:#166534;white-space:pre-line;">${d.substituicoes}</div></div>` : '';
+                refeicoesCards += `
+                    <div style="margin-bottom:12px;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;page-break-inside:avoid;break-inside:avoid;background:#ffffff;">
+                        <div style="background:#f8fafc;padding:8px 14px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <span style="background:#10b981;color:#fff;font-size:11px;font-weight:800;padding:2px 7px;border-radius:20px;">${idx + 1}</span>
+                                <span style="font-size:13px;font-weight:800;color:#0f172a;text-transform:uppercase;">${d.refeicao}</span>
+                            </div>
+                            <span style="font-size:11px;font-weight:700;color:#059669;background:#ecfdf5;border:1px solid #a7f3d0;padding:2px 9px;border-radius:12px;">⏰ ${horario}</span>
+                        </div>
+                        <div style="padding:10px 14px;">
+                            <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:5px;">Alimentos Prescritos e Porções:</div>
+                            <ul style="margin:0;padding-left:16px;">${alimentos}</ul>
+                            ${subs}
+                        </div>
+                    </div>
+                `;
             });
-            return `<div style="font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#0f172a;max-width:800px;margin:0 auto;background:#fff;padding:24px;">
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #10b981;padding-bottom:14px;margin-bottom:18px;">
-                    <div><div style="font-size:24px;font-weight:500;color:#0f172a;"><strong style="font-weight:900;">R</strong>EAL <strong style="font-weight:900;">F</strong>IT<span style="color:#eab308;font-weight:900;"> HUB</span></div><div style="font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;margin-top:2px;">Nutrição Clínica & Alta Performance</div></div>
-                    <div style="text-align:right;"><div style="background:#ecfdf5;border:1px solid #a7f3d0;color:#047857;font-size:10px;font-weight:800;padding:3px 10px;border-radius:999px;display:inline-block;text-transform:uppercase;">Prescrição Nutricional</div><div style="font-size:11px;color:#64748b;margin-top:4px;">Emissão: <strong>${dataHoje}</strong></div></div>
+
+            return `
+                <div style="font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#0f172a;max-width:800px;margin:0 auto;background:#fff;padding:24px;box-sizing:border-box;">
+                    <!-- Cabeçalho Oficial com Logo e Identidade Visual -->
+                    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2.5px solid #10b981;padding-bottom:14px;margin-bottom:16px;">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <img src="assets/icon-192.png" alt="Real Fit Hub" style="width:52px;height:52px;border-radius:12px;object-fit:cover;">
+                            <div>
+                                <div style="font-size:22px;font-weight:900;color:#0f172a;letter-spacing:-0.03em;">
+                                    REAL FIT<span style="color:#eab308;"> HUB</span>
+                                </div>
+                                <div style="font-size:10px;font-weight:800;color:#059669;text-transform:uppercase;letter-spacing:0.05em;">
+                                    Nutrição Clínica & Alta Performance • Prescrição Nutricional
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="background:#ecfdf5;border:1px solid #a7f3d0;color:#047857;font-size:10px;font-weight:800;padding:3px 10px;border-radius:999px;display:inline-block;text-transform:uppercase;">
+                                Cardápio Individualizado
+                            </div>
+                            <div style="font-size:10px;color:#64748b;margin-top:4px;">Emissão: <strong>${dataHoje}</strong></div>
+                        </div>
+                    </div>
+
+                    <!-- Dados do Aluno e do Nutricionista Responsável -->
+                    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 14px;margin-bottom:16px;display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;">
+                        <div>
+                            <div style="font-size:9.5px;color:#64748b;text-transform:uppercase;font-weight:700;">Aluno(a) / Paciente:</div>
+                            <div style="font-size:13px;font-weight:800;color:#0f172a;margin-top:2px;">${nomeAluno}</div>
+                        </div>
+                        <div>
+                            <div style="font-size:9.5px;color:#64748b;text-transform:uppercase;font-weight:700;">Nutricionista Responsável:</div>
+                            <div style="font-size:12px;font-weight:800;color:#059669;margin-top:2px;">${nomeNutri}</div>
+                            <div style="font-size:9px;color:#64748b;">${crnNutri} • ${espNutri}</div>
+                        </div>
+                        <div>
+                            <div style="font-size:9.5px;color:#64748b;text-transform:uppercase;font-weight:700;">Meta de Hidratação Diária:</div>
+                            <div style="font-size:12px;font-weight:800;color:#0284c7;margin-top:2px;">${metaHidratacaoStr}</div>
+                        </div>
+                    </div>
+
+                    ${blocoMacrosPdf}
+
+                    <div style="margin-bottom:16px;">
+                        ${refeicoesCards}
+                    </div>
+
+                    <div style="background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:9.5px;color:#475569;line-height:1.4;page-break-inside:avoid;break-inside:avoid;">
+                        <strong style="color:#0f172a;">Orientações Nutricionais:</strong> Mastigue os alimentos calmamente. Mantenha a hidratação fracionada ao longo do dia e evite grandes volumes de líquidos durante as refeições principais para otimizar a digestão e absorção de nutrientes.
+                    </div>
+
+                    <div style="border-top:1.5px solid #e2e8f0;padding-top:10px;display:flex;justify-content:space-between;align-items:center;font-size:9px;color:#94a3b8;page-break-inside:avoid;break-inside:avoid;">
+                        <div><strong>Real Fit Hub Digital Platform</strong> • Documento emitido digitalmente para uso pessoal do paciente.</div>
+                        <div style="color:#059669;font-weight:700;">Prescrição: ${nomeNutri} (${crnNutri})</div>
+                    </div>
                 </div>
-                <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 16px;margin-bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
-                    <div><div style="font-size:10px;color:#64748b;text-transform:uppercase;font-weight:700;">Aluno / Paciente:</div><div style="font-size:13px;font-weight:800;color:#0f172a;margin-top:2px;">${nomeAluno}</div></div>
-                    <div><div style="font-size:10px;color:#64748b;text-transform:uppercase;font-weight:700;">Nutricionista:</div><div style="font-size:12px;font-weight:700;color:#059669;margin-top:2px;">${window.nomeProfissionalVinculado || 'Nutricionista Responsável'}${window.registroProfissionalVinculado ? ' - CRN: ' + window.registroProfissionalVinculado : ''}</div></div>
-                    <div><div style="font-size:10px;color:#64748b;text-transform:uppercase;font-weight:700;">Meta de Hidratação:</div><div style="font-size:12px;font-weight:700;color:#0284c7;margin-top:2px;">${metaHidratacaoStr}</div></div>
-                </div>
-                ${blocoMacrosPdf}
-                <div style="margin-bottom:16px;">${refeicoesCards}</div>
-                <div style="background:#f1f5f9;border:1px dashed #cbd5e1;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:10px;color:#475569;line-height:1.4;"><strong style="color:#0f172a;">Recomendações Real Fit Hub:</strong> Mastigue devagar e mantenha a consistência. Beba água ao longo do dia e evite grandes volumes de líquidos junto às refeições principais.</div>
-                <div style="border-top:1px solid #e2e8f0;padding-top:10px;display:flex;justify-content:space-between;font-size:9px;color:#94a3b8;"><span>Real Fit Hub Digital Platform</span><span>Documento emitido digitalmente para uso pessoal</span></div>
-            </div>`;
+            `;
         }
 
         async function gerarPdfPlanoAlimentar() {
-            if (!dietasCarregadas || !dietasCarregadas.length) { showToast('Aviso', 'Nenhuma refeição para gerar PDF.', 'info'); return; }
+            if (!dietasCarregadas || !dietasCarregadas.length) {
+                showToast('Aviso', 'Nenhuma refeição para gerar PDF.', 'info');
+                return;
+            }
             const btnText = document.getElementById('btn-pdf-text');
             const btnIcon = document.getElementById('btn-pdf-icon');
             const btnSpinner = document.getElementById('btn-pdf-spinner');
             const btn = document.getElementById('btn-exportar-pdf');
-            const btnMob = document.getElementById('btn-exportar-pdf-mob');
+
+            const textoOriginal = btnText ? btnText.textContent : 'Exportar Cardápio (PDF) 📄';
             if (btnText) btnText.textContent = 'Gerando PDF...';
             if (btnIcon) btnIcon.classList.add('hidden');
             if (btnSpinner) btnSpinner.classList.remove('hidden');
             if (btn) btn.disabled = true;
-            if (btnMob) btnMob.disabled = true;
-            const nomeArquivo = `Plano_Alimentar_${(window.nomeAlunoAtual || 'Aluno').replace(/[^a-zA-Z0-9]/g, '_')}_RealFitHub.pdf`;
+
+            const nomeAluno = (window.nomeAlunoAtual || 'Aluno').replace(/[^a-zA-Z0-9]/g, '_');
+            const nomeArquivo = `Plano_Alimentar_${nomeAluno}_RealFitHub.pdf`;
             const containerPdf = document.getElementById('area-impressao-pdf');
+
             containerPdf.innerHTML = montarHtmlPlanoPdf(dietasCarregadas, window.nomeAlunoAtual || 'Aluno');
-            containerPdf.style.cssText = 'display:block;position:fixed;left:-9999px;top:0;width:800px;';
+            containerPdf.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#ffffff;z-index:-999;display:block;';
             containerPdf.classList.remove('hidden');
+
             const restaurar = () => {
-                if (btnText) btnText.textContent = 'Baixar Cardápio em PDF';
+                if (btnText) btnText.textContent = textoOriginal;
                 if (btnIcon) btnIcon.classList.remove('hidden');
                 if (btnSpinner) btnSpinner.classList.add('hidden');
                 if (btn) btn.disabled = false;
-                if (btnMob) btnMob.disabled = false;
                 containerPdf.classList.add('hidden');
                 containerPdf.style.cssText = '';
             };
+
             if (typeof html2pdf !== 'undefined') {
                 try {
-                    await html2pdf().set({ margin: [8, 8, 8, 8], filename: nomeArquivo, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(containerPdf.firstElementChild).save();
-                    restaurar(); showToast('PDF Gerado! 📄', 'Cardápio salvo no seu dispositivo.', 'success');
-                } catch (e) { restaurar(); imprimirPlanoAlimentar(); }
-            } else { restaurar(); imprimirPlanoAlimentar(); }
+                    const opt = {
+                        margin: [6, 6, 6, 6],
+                        filename: nomeArquivo,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                    };
+
+                    await html2pdf().set(opt).from(containerPdf.firstElementChild).save();
+                    restaurar();
+                    showToast('PDF Gerado com Sucesso! 📄', 'Cardápio salvo no seu dispositivo.', 'success');
+                } catch (e) {
+                    console.error('Erro no html2pdf:', e);
+                    restaurar();
+                    imprimirPlanoAlimentar();
+                }
+            } else {
+                restaurar();
+                imprimirPlanoAlimentar();
+            }
         }
 
         function imprimirPlanoAlimentar() {
-            if (!dietasCarregadas || !dietasCarregadas.length) { showToast('Aviso', 'Nenhuma refeição cadastrada.', 'info'); return; }
+            if (!dietasCarregadas || !dietasCarregadas.length) {
+                showToast('Aviso', 'Nenhuma refeição cadastrada.', 'info');
+                return;
+            }
             const containerPdf = document.getElementById('area-impressao-pdf');
             containerPdf.innerHTML = montarHtmlPlanoPdf(dietasCarregadas, window.nomeAlunoAtual || 'Aluno');
             containerPdf.classList.remove('hidden');
-            setTimeout(() => { window.print(); containerPdf.classList.add('hidden'); }, 300);
+            setTimeout(() => {
+                window.print();
+                containerPdf.classList.add('hidden');
+            }, 300);
         }
 
         // ===== LISTA DE COMPRAS (Item 10) =====
@@ -1105,6 +1309,9 @@
             </a>
         </div>
     </nav>
+
+    <!-- Área de Impressão e PDF Isolada para o Plano Alimentar -->
+    <div id="area-impressao-pdf" class="hidden"></div>
 </body>
 
 </html>

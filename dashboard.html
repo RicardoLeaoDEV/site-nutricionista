@@ -68,6 +68,16 @@
         }
     </script>
     <style>
+        *, ::before, ::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
         /* Variáveis de layout e compensação dinâmica de cabeçalho */
         :root {
             --header-h-desktop: 4.25rem;
@@ -429,30 +439,13 @@
                 padding: 0 !important;
             }
 
-            /* Ocultar elementos da interface que não devem sair no PDF impresso */
-            header,
-            footer,
-            #toast,
-            .ambient-glow-1,
-            .ambient-glow-2,
-            .ambient-glow-3,
-            #tabs-navegacao,
-            #tab-conteudo-resumo,
-            #secao-chat-duvidas,
-            #drawer-chat,
-            #btn-exportar-pdf,
-            #btn-imprimir-pdf,
-            button,
-            input,
-            .galeria-dropzone,
-            #container-dietas .p-2\.5,
-            #container-dietas button,
-            .divSeta,
-            #galeria-lightbox {
+            body > *:not(#area-impressao-pdf):not(#area-impressao-pdf-treino):not(#area-impressao-pdf-compras) {
                 display: none !important;
             }
 
-            #area-impressao-pdf {
+            #area-impressao-pdf,
+            #area-impressao-pdf-treino,
+            #area-impressao-pdf-compras {
                 display: block !important;
                 position: static !important;
                 width: 100% !important;
@@ -460,6 +453,11 @@
                 color: #0f172a !important;
                 padding: 0 !important;
                 margin: 0 !important;
+            }
+
+            @page {
+                size: A4 portrait;
+                margin: 10mm 12mm;
             }
 
             .pdf-card-refeicao {
@@ -577,7 +575,7 @@
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-24 pb-32 sm:pb-36 lg:pb-12 space-y-4 sm:space-y-6 flex-1 w-full">
+    <main class="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-24 pb-32 sm:pb-36 lg:pb-12 space-y-4 sm:space-y-6 flex-1 w-full overflow-x-hidden">
 
         <!-- ------------------------------------------------------------------ -->
         <!-- BARRA HORIZONTAL COM AS OPÇÕES (APENAS DESKTOP - NO MOBILE UTILIZA A BARRA FIXA INFERIOR) -->
@@ -590,18 +588,18 @@
                     <span class="hidden sm:inline">Meu Painel</span>
                 </span>
             </button>
-            <button type="button" onclick="alternarAbaAluno('dieta')" id="tab-btn-dieta" class="tab-horizontal-btn" title="Plano Alimentar">
+            <button type="button" onclick="alternarAbaAluno('dieta')" id="tab-btn-dieta" class="tab-horizontal-btn" title="Portal de Dieta">
                 <i data-lucide="utensils" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"></i>
                 <span class="truncate">
                     <span class="inline sm:hidden">Dieta</span>
-                    <span class="hidden sm:inline">Plano Alimentar</span>
+                    <span class="hidden sm:inline">Portal de Dieta</span>
                 </span>
             </button>
-            <button type="button" onclick="alternarAbaAluno('treinos')" id="tab-btn-treinos" class="tab-horizontal-btn" title="Meus Treinos">
+            <button type="button" onclick="alternarAbaAluno('treinos')" id="tab-btn-treinos" class="tab-horizontal-btn" title="Portal de Treino">
                 <i data-lucide="dumbbell" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"></i>
                 <span class="truncate">
                     <span class="inline sm:hidden">Treinos</span>
-                    <span class="hidden sm:inline">Meus Treinos</span>
+                    <span class="hidden sm:inline">Portal de Treino</span>
                 </span>
             </button>
             <button type="button" onclick="alternarAbaAluno('medidas')" id="tab-btn-medidas" class="tab-horizontal-btn" title="Medidas Corporais">
@@ -988,7 +986,7 @@
                         </label>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <!-- Caixa Frente -->
-                            <label class="box-foto-checkin rounded-2xl p-5 flex flex-col items-center justify-center min-h-[200px] sm:min-h-[240px] cursor-pointer relative bg-slate-950/40" id="box-foto-frente">
+                            <label class="box-foto-checkin rounded-2xl p-5 flex flex-col items-center justify-center min-h-[200px] sm:min-h-[240px] cursor-pointer relative bg-slate-950/40 overflow-hidden w-full" id="box-foto-frente">
                                 <input type="file" accept="image/*" class="hidden" id="input-checkin-frente" onchange="handleFotoCheckinUpload(this, 'frente')">
                                 <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center mb-2">
                                     <i data-lucide="camera" class="w-6 h-6"></i>
@@ -998,7 +996,7 @@
                             </label>
 
                             <!-- Caixa Lado -->
-                            <label class="box-foto-checkin rounded-2xl p-5 flex flex-col items-center justify-center min-h-[200px] sm:min-h-[240px] cursor-pointer relative bg-slate-950/40" id="box-foto-lado">
+                            <label class="box-foto-checkin rounded-2xl p-5 flex flex-col items-center justify-center min-h-[200px] sm:min-h-[240px] cursor-pointer relative bg-slate-950/40 overflow-hidden w-full" id="box-foto-lado">
                                 <input type="file" accept="image/*" class="hidden" id="input-checkin-lado" onchange="handleFotoCheckinUpload(this, 'lado')">
                                 <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center mb-2">
                                     <i data-lucide="camera" class="w-6 h-6"></i>
@@ -1008,7 +1006,7 @@
                             </label>
 
                             <!-- Caixa Costas -->
-                            <label class="box-foto-checkin rounded-2xl p-5 flex flex-col items-center justify-center min-h-[200px] sm:min-h-[240px] cursor-pointer relative bg-slate-950/40" id="box-foto-costas">
+                            <label class="box-foto-checkin rounded-2xl p-5 flex flex-col items-center justify-center min-h-[200px] sm:min-h-[240px] cursor-pointer relative bg-slate-950/40 overflow-hidden w-full" id="box-foto-costas">
                                 <input type="file" accept="image/*" class="hidden" id="input-checkin-costas" onchange="handleFotoCheckinUpload(this, 'costas')">
                                 <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center mb-2">
                                     <i data-lucide="camera" class="w-6 h-6"></i>
@@ -1042,7 +1040,7 @@
             </div>
 
             <!-- COMPARADOR FOTOGRÁFICO DE EVOLUÇÃO (CONFORME IMAGEM 3) -->
-            <div class="glass-panel rounded-3xl border border-white/10 shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all p-5 sm:p-7 relative bg-[#0a0f1d]/80 backdrop-blur-md">
+            <div class="glass-panel rounded-3xl border border-white/10 shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all p-5 sm:p-7 relative bg-[#0a0f1d]/80 backdrop-blur-md overflow-hidden w-full">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800/80 gap-3 mb-6">
                     <div>
                         <div class="flex items-center gap-2">
@@ -1054,8 +1052,8 @@
                         <p class="text-xs text-slate-400 mt-1">Arraste a barra central para comparar antes e depois.</p>
                     </div>
 
-                    <div class="flex items-center gap-2">
-                        <span id="badge-delta-tempo" class="text-xs font-black px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                    <div class="flex flex-wrap items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
+                        <span id="badge-delta-tempo" class="text-[11px] sm:text-xs font-black px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                             -7.0 KG EM 60 DIAS
                         </span>
                         <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-bold">
@@ -1072,8 +1070,8 @@
                     <img id="comp-img-depois" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80" alt="Depois" class="absolute inset-0 w-full h-full object-cover">
                     
                     <!-- Tag Depois (Verde) -->
-                    <div class="absolute top-4 right-4 z-10 pointer-events-none">
-                        <span id="comp-tag-depois" class="text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-full bg-emerald-500 text-slate-950 shadow-lg">
+                    <div class="absolute top-3.5 right-3.5 z-10 pointer-events-none">
+                        <span id="comp-tag-depois" class="text-[10px] sm:text-xs font-black uppercase tracking-wider px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-emerald-500 text-slate-950 shadow-lg">
                             10/AGO (86KG)
                         </span>
                     </div>
@@ -1083,8 +1081,8 @@
                         <img id="comp-img-antes" src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=80" alt="Antes" class="absolute inset-0 w-full h-full object-cover">
                         
                         <!-- Tag Antes (Laranja/Amarelo) -->
-                        <div class="absolute top-4 left-4 z-10 pointer-events-none">
-                            <span id="comp-tag-antes" class="text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-full bg-amber-500 text-slate-950 shadow-lg">
+                        <div class="absolute top-3.5 left-3.5 z-10 pointer-events-none">
+                            <span id="comp-tag-antes" class="text-[10px] sm:text-xs font-black uppercase tracking-wider px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-amber-500 text-slate-950 shadow-lg">
                                 08/OUT (79KG)
                             </span>
                         </div>
@@ -1120,7 +1118,7 @@
                             <span>Nutricionista Responsável</span>
                         </div>
                         <div class="text-xs sm:text-sm font-bold text-white truncate" id="prescritor-nutri-aluno-nome">Nutricionista</div>
-                        <div class="text-[10px] sm:text-[11px] text-slate-400 truncate">Prescrição individualizada com pesagem calculada</div>
+                        <div class="text-[10px] sm:text-[11px] text-slate-400 leading-snug break-words">Prescrição individualizada com pesagem calculada</div>
                     </div>
                 </div>
                 <div id="prescritor-nutri-aluno-doc-badge" class="hidden shrink-0 text-[10px] sm:text-xs bg-lime-500/10 text-lime-400 border border-lime-500/30 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full font-bold">
@@ -1137,24 +1135,31 @@
                             Prescrição Nutricional Ativa
                         </div>
                         <h2 class="text-base sm:text-xl lg:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                            <span>SEU PLANO ALIMENTAR DE HOJE</span>
+                            <span>PORTAL DE DIETA</span>
                         </h2>
                         <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5 max-w-xl">
-                            Cardápio individualizado com horários sugeridos, pesagem calculada e opções de substituição.
+                            Resumo das metas de nutrientes e quantidade de água no geral e de cada refeição.
                         </p>
                     </div>
 
-                    <!-- Botão Acessar portal completo de nutrição -->
-                    <a href="nutricao.html" id="btn-portal-nutricao-topo"
-                        class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 hover:border-amber-400 text-amber-300 hover:text-white font-bold text-[11px] sm:text-xs transition-all shadow-lg shadow-amber-500/10 active:scale-95 shrink-0 self-start sm:self-center group">
-                        <i data-lucide="utensils" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 group-hover:scale-110 transition-transform"></i>
-                        <span>Acessar Portal de Nutrição</span>
-                        <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
-                    </a>
+                    <!-- Botões de Ação da Dieta: Lista de Compras Inteligente & Acessar Portal -->
+                    <div class="flex items-center gap-2 flex-wrap shrink-0 self-start sm:self-center">
+                        <button type="button" onclick="abrirListaCompras()" id="btn-portal-compras-topo"
+                            class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-lime-500/20 via-emerald-500/15 to-lime-500/20 hover:from-lime-500/30 hover:to-emerald-500/30 border border-lime-500/40 hover:border-lime-400 text-lime-300 hover:text-white font-bold text-[11px] sm:text-xs transition-all shadow-lg shadow-lime-500/10 active:scale-95 cursor-pointer">
+                            <i data-lucide="shopping-cart" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-lime-400"></i>
+                            <span>Lista de Compras 🛒</span>
+                        </button>
+                        <a href="nutricao.html" id="btn-portal-nutricao-topo"
+                            class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 hover:border-amber-400 text-amber-300 hover:text-white font-bold text-[11px] sm:text-xs transition-all shadow-lg shadow-amber-500/10 active:scale-95 shrink-0 group">
+                            <i data-lucide="utensils" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 group-hover:scale-110 transition-transform"></i>
+                            <span>Acessar Portal de Dieta</span>
+                            <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
+                        </a>
+                    </div>
                 </div>
 
-                <!-- Grid Compacto de Prescrição Calórica Diária e Macronutrientes -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 py-3 sm:py-3.5">
+                <!-- Grid Compacto de Prescrição Calórica Diária, Macronutrientes e Água Geral -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 py-3 sm:py-3.5">
                     <!-- Card 1: Meta Calórica -->
                     <div class="rounded-xl sm:rounded-2xl p-2.5 sm:p-3 bg-gradient-to-br from-amber-500/10 via-slate-900/70 to-[#0a0f1d] border border-amber-500/30 relative overflow-hidden group hover:border-amber-500/50 transition-all">
                         <div class="flex items-center justify-between mb-1">
@@ -1163,7 +1168,7 @@
                                 <i data-lucide="flame" class="w-3 h-3"></i>
                             </div>
                         </div>
-                        <div class="text-sm sm:text-lg font-black text-white tracking-tight truncate" id="tab-dieta-calorias-total">2.350 kcal / dia</div>
+                        <div class="text-sm sm:text-lg font-black text-white tracking-tight truncate" id="tab-dieta-calorias-total">2.149 kcal / dia</div>
                         <span class="text-[9px] sm:text-[10px] text-slate-400 font-medium block truncate mt-0.5">Prescrição calórica</span>
                     </div>
 
@@ -1175,7 +1180,7 @@
                                 <i data-lucide="shield" class="w-3 h-3"></i>
                             </div>
                         </div>
-                        <div class="text-sm sm:text-lg font-black text-cyan-300 tracking-tight truncate" id="tab-dieta-macro-prot">175g</div>
+                        <div class="text-sm sm:text-lg font-black text-cyan-300 tracking-tight truncate" id="tab-dieta-macro-prot">198g</div>
                         <span class="text-[9px] sm:text-[10px] text-slate-400 font-medium block truncate mt-0.5">Construção muscular</span>
                     </div>
 
@@ -1187,7 +1192,7 @@
                                 <i data-lucide="zap" class="w-3 h-3"></i>
                             </div>
                         </div>
-                        <div class="text-sm sm:text-lg font-black text-yellow-300 tracking-tight truncate" id="tab-dieta-macro-carb">265g</div>
+                        <div class="text-sm sm:text-lg font-black text-yellow-300 tracking-tight truncate" id="tab-dieta-macro-carb">157g</div>
                         <span class="text-[9px] sm:text-[10px] text-slate-400 font-medium block truncate mt-0.5">Energia & Rendimento</span>
                     </div>
 
@@ -1199,8 +1204,20 @@
                                 <i data-lucide="droplet" class="w-3 h-3"></i>
                             </div>
                         </div>
-                        <div class="text-sm sm:text-lg font-black text-emerald-300 tracking-tight truncate" id="tab-dieta-macro-gord">65g</div>
+                        <div class="text-sm sm:text-lg font-black text-emerald-300 tracking-tight truncate" id="tab-dieta-macro-gord">81g</div>
                         <span class="text-[9px] sm:text-[10px] text-slate-400 font-medium block truncate mt-0.5">Gorduras essenciais</span>
+                    </div>
+
+                    <!-- Card 5: Água no Geral -->
+                    <div class="col-span-2 sm:col-span-1 rounded-xl sm:rounded-2xl p-2.5 sm:p-3 bg-gradient-to-br from-sky-500/15 via-slate-900/70 to-[#0a0f1d] border border-sky-500/35 relative overflow-hidden group hover:border-sky-500/50 transition-all">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[9px] sm:text-[10px] uppercase font-black text-sky-400 tracking-wider">Água no Geral</span>
+                            <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400">
+                                <i data-lucide="droplets" class="w-3 h-3"></i>
+                            </div>
+                        </div>
+                        <div class="text-sm sm:text-lg font-black text-sky-300 tracking-tight truncate" id="tab-dieta-macro-agua">3.0 L / dia</div>
+                        <span class="text-[9px] sm:text-[10px] text-slate-400 font-medium block truncate mt-0.5" id="tab-dieta-agua-sub">Meta de hidratação</span>
                     </div>
                 </div>
 
@@ -1245,7 +1262,7 @@
                             <span>Personal Trainer Responsável</span>
                         </div>
                         <div class="text-sm font-bold text-white truncate" id="prescritor-personal-aluno-nome">Personal Trainer</div>
-                        <div class="text-[11px] text-slate-400 truncate">Ficha de exercícios, periodização e metodologia prescrita</div>
+                        <div class="text-[11px] text-slate-400 leading-snug break-words">Ficha de exercícios, periodização e metodologia prescrita</div>
                     </div>
                 </div>
                 <div id="prescritor-personal-aluno-doc-badge" class="hidden shrink-0 text-xs bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-full font-bold">
@@ -1253,7 +1270,7 @@
                 </div>
             </div>
 
-            <div class="glass-panel rounded-3xl border border-white/10 shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all p-4 sm:p-6 lg:p-7 relative bg-[#0a0f1d]/80 backdrop-blur-md">
+            <div class="glass-panel rounded-2xl sm:rounded-3xl border border-white/10 shadow-2xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all p-3.5 sm:p-6 lg:p-7 relative bg-[#0a0f1d]/80 backdrop-blur-md">
                 <!-- Cabeçalho de Treinos com CTA Dedicado -->
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 pb-4 sm:pb-5 border-b border-white/5">
                     <div>
@@ -1262,20 +1279,28 @@
                             Ficha de Treino Ativa
                         </div>
                         <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                            <span>MEUS TREINOS</span>
+                            <span>PORTAL DE TREINO</span>
                         </h2>
                         <p class="text-xs text-slate-400 mt-0.5 max-w-xl">
                             Resumo da ficha de treino, divisões musculares e execuções prescritas.
                         </p>
                     </div>
 
-                    <!-- Botão Acessar portal completo de treino -->
-                    <a href="treinos.html" id="btn-portal-treino-topo"
-                        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 hover:border-amber-400 text-amber-300 hover:text-white font-bold text-xs transition-all shadow-lg shadow-amber-500/10 active:scale-95 shrink-0 self-start sm:self-center group">
-                        <i data-lucide="dumbbell" class="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform"></i>
-                        <span>Acessar Portal Completo de Treino</span>
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
-                    </a>
+                    <!-- Botões de Ação do Treino: Exportar Treino (PDF) & Acessar Portal -->
+                    <div class="flex items-center gap-2 flex-wrap shrink-0 self-start sm:self-center">
+                        <button type="button" onclick="gerarPdfTreino()" id="btn-exportar-pdf-treino"
+                            class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-400/50 text-amber-300 hover:text-white font-bold text-[11px] sm:text-xs transition-all active:scale-95 cursor-pointer">
+                            <i data-lucide="file-down" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" id="btn-pdf-treino-icon"></i>
+                            <div class="w-3.5 h-3.5 border-2 border-amber-400/30 border-t-amber-400 rounded-full animate-spin hidden" id="btn-pdf-treino-spinner"></div>
+                            <span id="btn-pdf-treino-text">Exportar Treino (PDF) 📄</span>
+                        </button>
+                        <a href="treinos.html" id="btn-portal-treino-topo"
+                            class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 hover:border-amber-400 text-amber-300 hover:text-white font-bold text-[11px] sm:text-xs transition-all shadow-lg shadow-amber-500/10 active:scale-95 shrink-0 group">
+                            <i data-lucide="dumbbell" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 group-hover:scale-110 transition-transform"></i>
+                            <span>Acessar Portal de Treino</span>
+                            <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Seletor de Divisões de Treino e Status (Compacto & Otimizado para Mobile) -->
@@ -1285,7 +1310,7 @@
                             <i data-lucide="layers" class="w-3.5 h-3.5"></i>
                             <span>Divisão Prescrita:</span>
                         </label>
-                        <div id="tab-treinos-label-rotina-atual" class="text-xs text-slate-400 truncate">
+                        <div id="tab-treinos-label-rotina-atual" class="text-xs text-slate-400 break-words">
                             Carregando divisões...
                         </div>
                     </div>
@@ -1614,9 +1639,6 @@
                 </div>
             </section>
         </div>
-
-        <!-- Template Oculto para Geração de PDF e Impressão -->
-        <div id="area-impressao-pdf" class="hidden"></div>
 
     </main>
 
@@ -2905,126 +2927,9 @@
                     return 'utensils';
                 };
 
-                // Renderização aprimorada e compacta da lista de refeições na aba "Plano Alimentar"
-                if (listaTabDieta) {
-                    listaTabDieta.innerHTML = dietas.map((d, idx) => {
-                        const isFeita = concluidas.includes(d.id);
-                        const iconeRef = obterIconeRef(d.refeicao, idx, dietas.length);
-
-                        // Alimentos estruturados em pills compactas e legíveis
-                        const linhasAlimentos = (d.alimentos || '')
-                            .split('\n')
-                            .map(l => l.trim())
-                            .map(l => l.replace(/^[•\-\*\s]+/, ''))
-                            .filter(Boolean);
-
-                        const alimentosHtml = linhasAlimentos.length > 0 ? `
-                            <div class="mt-2.5 sm:mt-3">
-                                <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-wider text-slate-400 mb-1.5 flex items-center gap-1.5">
-                                    <i data-lucide="salad" class="w-3 h-3 text-amber-400"></i>
-                                    Itens e Porções Prescritas:
-                                </span>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
-                                    ${linhasAlimentos.map(item => `
-                                        <div class="flex items-start gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-slate-700 transition-all text-[11px] sm:text-xs text-slate-200">
-                                            <span class="w-1.5 h-1.5 rounded-full ${isFeita ? 'bg-emerald-400' : 'bg-amber-400'} mt-1.5 shrink-0"></span>
-                                            <span class="font-medium leading-snug">${escLocal(item)}</span>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        ` : '';
-
-                        // Substituições prescritas em formato organizado e compacto
-                        let substituicoesHtml = '';
-                        if (d.substituicoes && d.substituicoes.trim()) {
-                            const partes = d.substituicoes
-                                .split(/(?:->|=>|\n|;)+/)
-                                .map(p => p.trim())
-                                .map(p => p.replace(/^[•\-\*\s]+/, ''))
-                                .filter(Boolean);
-
-                            substituicoesHtml = `
-                                <div class="mt-2.5 sm:mt-3 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-slate-950/80 border border-emerald-500/25">
-                                    <div class="flex items-center gap-1.5 text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-emerald-400 mb-1.5">
-                                        <i data-lucide="refresh-cw" class="w-3 h-3 text-emerald-400 shrink-0"></i>
-                                        <span>Opções de Substituição Prescritas:</span>
-                                    </div>
-                                    ${partes.length > 1 ? `
-                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                                            ${partes.map((opt, i) => `
-                                                <div class="flex items-start gap-1.5 p-2 rounded-lg sm:rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] sm:text-xs text-slate-200">
-                                                    <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded bg-emerald-500/15 text-emerald-400 font-black text-[9px] shrink-0 border border-emerald-500/30">
-                                                        ${i + 1}
-                                                    </span>
-                                                    <span class="leading-snug font-medium">${escLocal(opt)}</span>
-                                                </div>
-                                            `).join('')}
-                                        </div>
-                                    ` : `
-                                        <div class="text-slate-300 text-[11px] sm:text-xs whitespace-pre-line leading-relaxed font-medium">
-                                            ${escLocal(d.substituicoes)}
-                                        </div>
-                                    `}
-                                </div>
-                            `;
-                        }
-
-                        return `
-                            <div class="glass-panel rounded-2xl sm:rounded-3xl border ${isFeita ? 'border-emerald-500/40 bg-gradient-to-br from-emerald-950/20 via-slate-900/85 to-[#0a0f1d] shadow-sm shadow-emerald-950/20' : 'border-slate-800/80 hover:border-slate-700/80 bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-[#0a0f1d]'} p-3 sm:p-4.5 transition-all duration-200">
-                                <!-- Topo do Card: Ícone, Info e Botão Tátil Lado a Lado -->
-                                <div class="flex items-center justify-between gap-2.5 pb-2.5 sm:pb-3 border-b border-white/5">
-                                    <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
-                                        <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl ${isFeita ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-sm shadow-emerald-500/20' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-sm shadow-amber-500/10'} flex items-center justify-center shrink-0">
-                                            <i data-lucide="${iconeRef}" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                                        </div>
-                                        <div class="min-w-0">
-                                            <div class="flex items-center gap-1.5 flex-wrap">
-                                                <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                                    Refeição ${idx + 1}
-                                                </span>
-                                                <h3 class="text-sm sm:text-base font-bold text-white tracking-tight truncate">${escLocal(d.refeicao)}</h3>
-                                                ${isFeita ? `
-                                                    <span class="inline-flex items-center gap-0.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                                                        <i data-lucide="check" class="w-2.5 h-2.5"></i> Feito
-                                                    </span>
-                                                ` : ''}
-                                            </div>
-                                            <div class="flex items-center gap-1.5 mt-0.5 flex-wrap text-xs">
-                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-950/80 border border-slate-800 text-[10px] sm:text-[11px] text-slate-300 font-medium">
-                                                    <i data-lucide="clock" class="w-3 h-3 text-amber-400"></i>
-                                                    ${escLocal(d.horario || 'Horário livre')}
-                                                </span>
-                                                ${d.calorias ? `
-                                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-[10px] sm:text-[11px] text-amber-300 font-semibold">
-                                                        <i data-lucide="flame" class="w-3 h-3 text-amber-400"></i>
-                                                        ${escLocal(d.calorias)} kcal
-                                                    </span>
-                                                ` : ''}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Botão de Ação / Conclusão -->
-                                    <button type="button" onclick="alternarConclusaoRefeicaoTab('${d.id}')"
-                                        title="${isFeita ? 'Desmarcar refeição' : 'Marcar refeição como concluída'}"
-                                        class="shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${isFeita ? 'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 shadow-sm' : 'bg-slate-800/80 hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-300 border border-slate-700/80'} active:scale-95 group">
-                                        <i data-lucide="${isFeita ? 'check-circle-2' : 'circle'}" class="w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFeita ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400'} transition-colors"></i>
-                                        <span>${isFeita ? 'Feito ✓' : 'Marcar'}</span>
-                                    </button>
-                                </div>
-
-                                <!-- Conteúdo: Alimentos e Substituições -->
-                                ${alimentosHtml}
-                                ${substituicoesHtml}
-                            </div>
-                        `;
-                    }).join('');
-                }
-
-                // Carregar metas de macros do aluno se existirem
+                // Carregar metas de macros do aluno se existirem (para o resumo geral e por refeição)
+                let macros = null;
                 try {
-                    let macros = null;
                     const cache = localStorage.getItem('nutrilife_macros_' + userId);
                     if (cache) macros = JSON.parse(cache);
                     if (!macros) {
@@ -3042,19 +2947,177 @@
                         const pEl = document.getElementById('tab-dieta-macro-prot');
                         const cEl = document.getElementById('tab-dieta-macro-carb');
                         const gEl = document.getElementById('tab-dieta-macro-gord');
+                        const aEl = document.getElementById('tab-dieta-macro-agua');
                         if (calEl) calEl.textContent = `${Number(macros.calorias).toLocaleString('pt-BR')} kcal / dia`;
                         if (pEl) pEl.textContent = `${macros.proteinas}g`;
                         if (cEl) cEl.textContent = `${macros.carboidratos}g`;
                         if (gEl) gEl.textContent = `${macros.gorduras}g`;
+                        if (aEl) aEl.textContent = `${macros.agua_litros || 3.0} L / dia`;
 
                         const strip = document.getElementById('dashboard-macros-strip');
                         const val = document.getElementById('dashboard-macros-valores');
                         if (strip && val) {
-                            val.innerHTML = `<span class="text-amber-400 font-extrabold">${macros.calorias} kcal</span> • <span class="text-emerald-400 font-bold">P ${macros.proteinas}g</span> • <span class="text-sky-400 font-bold">C ${macros.carboidratos}g</span> • <span class="text-amber-400 font-bold">G ${macros.gorduras}g</span>`;
+                            val.innerHTML = `<span class="text-amber-400 font-extrabold">${macros.calorias} kcal</span> • <span class="text-emerald-400 font-bold">P ${macros.proteinas}g</span> • <span class="text-sky-400 font-bold">C ${macros.carboidratos}g</span> • <span class="text-amber-400 font-bold">G ${macros.gorduras}g</span> • <span class="text-sky-300 font-bold">💧 ${macros.agua_litros || 3.0}L</span>`;
                             strip.classList.remove('hidden');
                         }
                     }
                 } catch (e) { }
+
+                // Helper para calcular ou extrair os nutrientes e a água de cada refeição (Apenas Resumo)
+                const calcularMacrosERefeicao = (d, idx, total) => {
+                    let cal = 0, p = 0, c = 0, g = 0;
+                    const linhas = (d.alimentos || '').split('\n');
+                    linhas.forEach(l => {
+                        const mCal = l.match(/(\d+(?:\.\d+)?)\s*kcal/i);
+                        if (mCal) cal += parseFloat(mCal[1]);
+                        const mP = l.match(/P:\s*(\d+(?:\.\d+)?)\s*g/i);
+                        if (mP) p += parseFloat(mP[1]);
+                        const mC = l.match(/C:\s*(\d+(?:\.\d+)?)\s*g/i);
+                        if (mC) c += parseFloat(mC[1]);
+                        const mG = l.match(/G:\s*(\d+(?:\.\d+)?)\s*g/i);
+                        if (mG) g += parseFloat(mG[1]);
+                    });
+
+                    if (cal === 0) {
+                        if (macros && macros.calorias) {
+                            const nome = (d.refeicao || '').toLowerCase();
+                            let fat = 1 / Math.max(total, 1);
+                            if (nome.includes('almoço') || nome.includes('almoco')) fat = 0.32;
+                            else if (nome.includes('jantar') || nome.includes('janta')) fat = 0.26;
+                            else if (nome.includes('café') || nome.includes('desjejum') || nome.includes('manhã') || nome.includes('manha')) fat = 0.24;
+                            else if (nome.includes('ceia') || nome.includes('noite')) fat = 0.14;
+                            else fat = 0.18 / Math.max(1, total - 3);
+
+                            cal = Math.round(macros.calorias * fat);
+                            p = Math.round((macros.proteinas || 0) * fat);
+                            c = Math.round((macros.carboidratos || 0) * fat);
+                            g = Math.round((macros.gorduras || 0) * fat);
+                        } else {
+                            // Fallback nutricional saudável caso macros globais ainda não tenham sido configurados no banco
+                            const nome = (d.refeicao || '').toLowerCase();
+                            if (nome.includes('café') || nome.includes('desjejum') || nome.includes('manhã') || nome.includes('manha')) {
+                                cal = 420; p = 28; c = 44; g = 14;
+                            } else if (nome.includes('almoço') || nome.includes('almoco')) {
+                                cal = 640; p = 48; c = 68; g = 18;
+                            } else if (nome.includes('lanche')) {
+                                cal = 340; p = 24; c = 34; g = 10;
+                            } else if (nome.includes('jantar') || nome.includes('janta')) {
+                                cal = 520; p = 42; c = 52; g = 15;
+                            } else if (nome.includes('ceia') || nome.includes('noite')) {
+                                cal = 240; p = 18; c = 16; g = 8;
+                            } else {
+                                cal = 390; p = 28; c = 38; g = 12;
+                            }
+                        }
+                    }
+
+                    const totalAguaMl = Math.round(((macros && macros.agua_litros) ? macros.agua_litros : 2.8) * 1000);
+                    const aguaMl = Math.round((totalAguaMl / Math.max(total, 1)) / 50) * 50;
+
+                    return {
+                        calorias: Math.round(cal),
+                        proteinas: Math.round(p),
+                        carboidratos: Math.round(c),
+                        gorduras: Math.round(g),
+                        agua: `${aguaMl} ml`
+                    };
+                };
+
+                // Renderização exclusiva de RESUMO do plano alimentar na aba Dieta do Dashboard
+                // Os itens e refeições detalhadas ficam disponíveis apenas no portal (nutricao.html)
+                if (listaTabDieta) {
+                    const cardsHtml = dietas.map((d, idx) => {
+                        const isFeita = concluidas.includes(d.id);
+                        const iconeRef = obterIconeRef(d.refeicao, idx, dietas.length);
+                        const res = calcularMacrosERefeicao(d, idx, dietas.length);
+
+                        return `
+                            <div class="glass-panel rounded-2xl sm:rounded-3xl border border-slate-800/80 hover:border-amber-500/40 bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-[#0a0f1d] p-3.5 sm:p-5 transition-all duration-200 overflow-hidden w-full max-w-full">
+                                <!-- Topo do Resumo da Refeição -->
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/5">
+                                    <div class="flex items-center gap-3 min-w-0">
+                                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl ${isFeita ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'} flex items-center justify-center shrink-0 shadow-sm">
+                                            <i data-lucide="${iconeRef}" class="w-5 h-5"></i>
+                                        </div>
+                                        <div class="min-w-0">
+                                            <div class="flex items-center gap-2 flex-wrap">
+                                                <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                                                    Refeição ${idx + 1}
+                                                </span>
+                                                <h3 class="text-sm sm:text-base font-bold text-white tracking-tight truncate">${escLocal(d.refeicao)}</h3>
+                                                ${isFeita ? `
+                                                    <span class="inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                                        <i data-lucide="check" class="w-3 h-3"></i> Concluída
+                                                    </span>
+                                                ` : ''}
+                                            </div>
+                                            <div class="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
+                                                <i data-lucide="clock" class="w-3 h-3 text-amber-400"></i>
+                                                <span>${escLocal(d.horario || 'Horário flexível')}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center gap-2 self-start sm:self-center flex-wrap w-full sm:w-auto justify-between sm:justify-end mt-1 sm:mt-0">
+                                        <!-- Quantidade de Água de Cada Refeição -->
+                                        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-300 text-xs font-bold" title="Quantidade sugerida de hidratação para esta refeição">
+                                            <i data-lucide="droplet" class="w-3.5 h-3.5 text-sky-400"></i>
+                                            <span>${res.agua} de água</span>
+                                        </div>
+
+                                        <!-- Botão Direto para o Portal -->
+                                        <a href="nutricao.html#card-${d.id}" title="Ver no Portal de Dieta"
+                                            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold transition-all">
+                                            <span>Ver no Portal</span>
+                                            <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-amber-400"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Resumo dos Nutrientes da Refeição (Kcal, Proteína, Carboidrato, Gordura) Adaptativo para Mobile -->
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-3">
+                                    <div class="p-2 sm:p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/90 text-center">
+                                        <span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider">Calorias</span>
+                                        <div class="text-xs sm:text-sm font-black text-white mt-0.5">${res.calorias} kcal</div>
+                                    </div>
+                                    <div class="p-2 sm:p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/90 text-center">
+                                        <span class="text-[9px] uppercase font-bold text-cyan-400 block tracking-wider">Proteína</span>
+                                        <div class="text-xs sm:text-sm font-black text-cyan-300 mt-0.5">${res.proteinas}g</div>
+                                    </div>
+                                    <div class="p-2 sm:p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/90 text-center">
+                                        <span class="text-[9px] uppercase font-bold text-yellow-400 block tracking-wider">Carboidrato</span>
+                                        <div class="text-xs sm:text-sm font-black text-yellow-300 mt-0.5">${res.carboidratos}g</div>
+                                    </div>
+                                    <div class="p-2 sm:p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/90 text-center">
+                                        <span class="text-[9px] uppercase font-bold text-emerald-400 block tracking-wider">Gordura</span>
+                                        <div class="text-xs sm:text-sm font-black text-emerald-300 mt-0.5">${res.gorduras}g</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    // Card explicativo convidando para ver os alimentos completos no Portal
+                    const footerPortalHtml = `
+                        <div class="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-amber-500/10 via-slate-900/80 to-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left mt-2 shadow-lg">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0">
+                                    <i data-lucide="salad" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs sm:text-sm font-bold text-white">Refeições e Alimentos Detalhados</h4>
+                                    <p class="text-[11px] text-slate-400">Consulte os ingredientes, porções exatas, substituições e marque suas refeições no Portal.</p>
+                                </div>
+                            </div>
+                            <a href="nutricao.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-xs hover:from-amber-400 hover:to-yellow-300 transition-all shadow-md active:scale-95 shrink-0">
+                                <span>Acessar Portal Completo</span>
+                                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                            </a>
+                        </div>
+                    `;
+
+                    listaTabDieta.innerHTML = cardsHtml + footerPortalHtml;
+                }
 
                 if (window.lucide) lucide.createIcons();
 
@@ -3157,6 +3220,7 @@
                     grupos[nome].push(t);
                 });
 
+                window.treinosCarregados = treinos;
                 window.treinosAlunoAgrupados = grupos;
                 const nomesTreinos = Object.keys(grupos);
                 const totalExercicios = treinos.length;
@@ -3322,7 +3386,7 @@
                                 ${p.obsLimpa ? `
                                     <div class="mt-2 text-[11px] text-slate-400 italic bg-white/[0.02] px-2.5 py-1.5 rounded-xl border border-white/5 flex items-start gap-1.5 leading-relaxed">
                                         <i data-lucide="info" class="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5"></i>
-                                        <span class="line-clamp-2">${escTreinoLocal(p.obsLimpa)}</span>
+                                        <span class="break-words leading-relaxed">${escTreinoLocal(p.obsLimpa)}</span>
                                     </div>
                                 ` : ''}
                             </div>
@@ -3537,12 +3601,43 @@
 
         // ───────────────── GERAÇÃO AUTOMÁTICA DE PDF DO PLANO ALIMENTAR ─────────────────
         function montarHtmlPlanoPdf(dietas, nomeAluno) {
+            const dataHoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+            const nomeNutri = window.nomeProfissionalVinculado || document.getElementById('prescritor-nutri-aluno-nome')?.textContent || 'Dra. Camila Siqueira';
+            const crnNutri = window.registroProfissionalVinculado || 'CRN-6 12345/PE';
+            const espNutri = window.especialidadeProfissionalVinculado || 'Nutrição Clínica & Esportiva de Alta Performance';
 
-            const dataHojeFormatada = new Date().toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric'
-            });
+            let blocoMacrosPdf = '';
+            let metaHidratacaoStr = '💧 2.8 a 3.0 Litros / dia';
+            if (window.macrosAlunoAtual && window.macrosAlunoAtual.calorias) {
+                const m = window.macrosAlunoAtual;
+                metaHidratacaoStr = `💧 ${m.agua_litros || '2.8'} Litros / dia`;
+                blocoMacrosPdf = `
+                    <div style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 1.5px solid #86efac; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; page-break-inside: avoid; break-inside: avoid;">
+                        <div style="font-size: 11px; font-weight: 800; color: #166534; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: flex; justify-content: space-between;">
+                            <span>🎯 Metas Nutricionais & Macronutrientes Prescritos</span>
+                            <span style="color: #059669; font-weight: 700;">Planejamento Individualizado</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center;">
+                            <div style="background: #ffffff; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px;">
+                                <div style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase;">Calorias (VET)</div>
+                                <div style="font-size: 15px; font-weight: 900; color: #15803d; margin-top: 2px;">${m.calorias} <span style="font-size: 10px;">kcal</span></div>
+                            </div>
+                            <div style="background: #ffffff; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px;">
+                                <div style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase;">Proteínas</div>
+                                <div style="font-size: 15px; font-weight: 900; color: #047857; margin-top: 2px;">${m.proteinas}g <span style="font-size: 10px; color: #64748b;">(${m.pctProt || Math.round(m.proteinas * 4 / m.calorias * 100)}%)</span></div>
+                            </div>
+                            <div style="background: #ffffff; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px;">
+                                <div style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase;">Carboidratos</div>
+                                <div style="font-size: 15px; font-weight: 900; color: #0284c7; margin-top: 2px;">${m.carboidratos}g <span style="font-size: 10px; color: #64748b;">(${m.pctCarb || Math.round(m.carboidratos * 4 / m.calorias * 100)}%)</span></div>
+                            </div>
+                            <div style="background: #ffffff; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px;">
+                                <div style="font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase;">Gorduras</div>
+                                <div style="font-size: 15px; font-weight: 900; color: #d97706; margin-top: 2px;">${m.gorduras}g <span style="font-size: 10px; color: #64748b;">(${m.pctGord || Math.round(m.gorduras * 9 / m.calorias * 100)}%)</span></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
 
             let refeicoesCards = '';
             dietas.forEach((d, idx) => {
@@ -3551,17 +3646,17 @@
                     .split('\n')
                     .map(linha => linha.trim())
                     .filter(linha => linha.length > 0)
-                    .map(linha => `<li style="margin-bottom: 5px; color: #1e293b; font-size: 13px; line-height: 1.5;">${linha}</li>`)
+                    .map(linha => `<li style="margin-bottom: 5px; color: #1e293b; font-size: 12.5px; line-height: 1.5;">${linha}</li>`)
                     .join('');
 
                 let blocoSubstituicoes = '';
                 if (d.substituicoes && d.substituicoes.trim().length > 0) {
                     blocoSubstituicoes = `
-                        <div style="margin-top: 10px; padding: 10px 14px; background-color: #f0fdf4; border-left: 3px solid #10b981; border-radius: 6px;">
-                            <div style="font-size: 11px; font-weight: 700; color: #047857; text-transform: uppercase; margin-bottom: 4px; display: flex; align-items: center; gap: 4px;">
+                        <div style="margin-top: 8px; padding: 8px 12px; background-color: #f0fdf4; border-left: 3px solid #10b981; border-radius: 6px;">
+                            <div style="font-size: 10.5px; font-weight: 700; color: #047857; text-transform: uppercase; margin-bottom: 3px;">
                                 🔄 Opções de Substituição Equivalentes:
                             </div>
-                            <div style="font-size: 12px; color: #166534; line-height: 1.4; white-space: pre-line;">
+                            <div style="font-size: 11.5px; color: #166534; line-height: 1.4; white-space: pre-line;">
                                 ${d.substituicoes}
                             </div>
                         </div>
@@ -3569,8 +3664,8 @@
                 }
 
                 refeicoesCards += `
-                    <div class="pdf-card-refeicao" style="margin-bottom: 14px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; page-break-inside: avoid; break-inside: avoid; background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                        <div style="background-color: #f8fafc; padding: 9px 16px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                    <div class="pdf-card-refeicao" style="margin-bottom: 12px; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; page-break-inside: avoid; break-inside: avoid; background-color: #ffffff;">
+                        <div style="background-color: #f8fafc; padding: 8px 14px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <span style="background-color: #10b981; color: #ffffff; font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 20px;">
                                     ${idx + 1}
@@ -3583,11 +3678,11 @@
                                 ⏰ ${horarioStr}
                             </span>
                         </div>
-                        <div style="padding: 12px 16px;">
-                            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em; margin-bottom: 6px;">
-                                Alimentos e Porções Prescritas:
+                        <div style="padding: 10px 14px;">
+                            <div style="font-size: 9.5px; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.05em; margin-bottom: 5px;">
+                                Alimentos Prescritos e Porções:
                             </div>
-                            <ul style="margin: 0; padding-left: 18px;">
+                            <ul style="margin: 0; padding-left: 16px;">
                                 ${alimentosFormatados}
                             </ul>
                             ${blocoSubstituicoes}
@@ -3597,42 +3692,48 @@
             });
 
             return `
-                <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; color: #0f172a; max-width: 800px; margin: 0 auto; background: #ffffff; padding: 24px;">
-                    <!-- Cabeçalho Oficial Clínico -->
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #10b981; padding-bottom: 14px; margin-bottom: 18px;">
-                        <div>
-                            <div style="font-size: 24px; font-weight: 500; letter-spacing: -0.02em; color: #0f172a;">
-                                <strong style="font-weight: 900;">R</strong>EAL <strong style="font-weight: 900;">F</strong>IT<span style="color: #eab308; font-weight: 900;"> HUB</span>
-                            </div>
-                            <div style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px;">
-                                Nutrição Clínica & Alta Performance
+                <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; color: #0f172a; max-width: 800px; margin: 0 auto; background: #ffffff; padding: 24px; box-sizing: border-box;">
+                    <!-- Cabeçalho Oficial Clínico com Logo Oficial -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2.5px solid #10b981; padding-bottom: 14px; margin-bottom: 16px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <img src="assets/icon-192.png" alt="Real Fit Hub" style="width: 52px; height: 52px; border-radius: 12px; object-fit: cover;">
+                            <div>
+                                <div style="font-size: 22px; font-weight: 900; letter-spacing: -0.03em; color: #0f172a;">
+                                    REAL FIT<span style="color: #eab308;"> HUB</span>
+                                </div>
+                                <div style="font-size: 10px; color: #059669; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">
+                                    Nutrição Clínica & Alta Performance • Prescrição Nutricional
+                                </div>
                             </div>
                         </div>
                         <div style="text-align: right;">
                             <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 999px; display: inline-block; text-transform: uppercase;">
-                                Prescrição Nutricional Individualizada
+                                Cardápio Individualizado
                             </div>
-                            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">
-                                Emissão: <strong>${dataHojeFormatada}</strong>
+                            <div style="font-size: 10px; color: #64748b; margin-top: 4px;">
+                                Emissão: <strong>${dataHoje}</strong>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Ficha do Aluno -->
-                    <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                    <!-- Ficha do Aluno e do Nutricionista Responsável -->
+                    <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
                         <div>
-                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 700;">Aluno / Paciente:</div>
+                            <div style="font-size: 9.5px; color: #64748b; text-transform: uppercase; font-weight: 700;">Aluno(a) / Paciente:</div>
                             <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-top: 2px;">${nomeAluno || 'Aluno Real Fit Hub'}</div>
                         </div>
                         <div>
-                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 700;">Nutricionista Responsável:</div>
-                            <div style="font-size: 12px; font-weight: 700; color: #059669; margin-top: 2px;">Ricardo Leão (Nutri)</div>
+                            <div style="font-size: 9.5px; color: #64748b; text-transform: uppercase; font-weight: 700;">Nutricionista Responsável:</div>
+                            <div style="font-size: 12px; font-weight: 800; color: #059669; margin-top: 2px;">${nomeNutri}</div>
+                            <div style="font-size: 9px; color: #64748b;">${crnNutri} • ${espNutri}</div>
                         </div>
                         <div>
-                            <div style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 700;">Meta de Hidratação Diária:</div>
-                            <div style="font-size: 12px; font-weight: 700; color: #0284c7; margin-top: 2px;">💧 2.8 a 3.0 Litros / dia</div>
+                            <div style="font-size: 9.5px; color: #64748b; text-transform: uppercase; font-weight: 700;">Meta de Hidratação Diária:</div>
+                            <div style="font-size: 12px; font-weight: 800; color: #0284c7; margin-top: 2px;">${metaHidratacaoStr}</div>
                         </div>
                     </div>
+
+                    ${blocoMacrosPdf}
 
                     <!-- Refeições -->
                     <div style="margin-bottom: 16px;">
@@ -3640,14 +3741,13 @@
                     </div>
 
                     <!-- Recomendações Gerais no Rodapé -->
-                    <div style="background-color: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 10px; color: #475569; line-height: 1.4;">
-                        <strong style="color: #0f172a;">Recomendações Real Fit Hub:</strong>
-                        Mastigue devagar e mantenha a consistência. Beba água ao longo do dia e evite grandes volumes de líquidos junto às refeições principais. Em caso de dúvidas, utilize o chat com o profissional no portal.
+                    <div style="background-color: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 9.5px; color: #475569; line-height: 1.4; page-break-inside: avoid; break-inside: avoid;">
+                        <strong style="color: #0f172a;">Orientações Nutricionais:</strong> Mastigue os alimentos calmamente. Mantenha a hidratação fracionada ao longo do dia e evite grandes volumes de líquidos durante as refeições principais para otimizar a digestão e absorção de nutrientes.
                     </div>
 
-                    <div style="border-top: 1px solid #e2e8f0; padding-top: 10px; display: flex; justify-content: space-between; font-size: 9px; color: #94a3b8;">
-                        <span>Real Fit Hub Digital Platform • Transformando rotinas através da nutrição consciente</span>
-                        <span>Documento emitido digitalmente para uso pessoal</span>
+                    <div style="border-top: 1.5px solid #e2e8f0; padding-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 9px; color: #94a3b8; page-break-inside: avoid; break-inside: avoid;">
+                        <div><strong>Real Fit Hub Digital Platform</strong> • Documento emitido digitalmente para uso pessoal do paciente.</div>
+                        <div style="color: #059669; font-weight: 700;">Prescrição: ${nomeNutri} (${crnNutri})</div>
                     </div>
                 </div>
             `;
@@ -3673,15 +3773,14 @@
             const nomeAluno = window.nomeAlunoAtual || 'Aluno';
             const nomeArquivo = `Plano_Alimentar_${nomeAluno.replace(/[^a-zA-Z0-9]/g, '_')}_RealFitHub.pdf`;
 
-            const containerPdf = document.getElementById('area-impressao-pdf');
+            let containerPdf = document.getElementById('area-impressao-pdf');
+            if (!containerPdf) {
+                containerPdf = document.createElement('div');
+                containerPdf.id = 'area-impressao-pdf';
+                document.body.appendChild(containerPdf);
+            }
             containerPdf.innerHTML = montarHtmlPlanoPdf(window.dietasCarregadas, nomeAluno);
-
-            // Garante visibilidade fora de tela para renderização do html2canvas
-            containerPdf.style.display = 'block';
-            containerPdf.style.position = 'fixed';
-            containerPdf.style.left = '-9999px';
-            containerPdf.style.top = '0';
-            containerPdf.style.width = '800px';
+            containerPdf.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#ffffff;z-index:-999;display:block;';
             containerPdf.classList.remove('hidden');
 
             const restaurarBtn = () => {
@@ -3690,17 +3789,13 @@
                 if (btnSpinner) btnSpinner.classList.add('hidden');
                 if (btn) btn.disabled = false;
                 containerPdf.classList.add('hidden');
-                containerPdf.style.display = '';
-                containerPdf.style.position = '';
-                containerPdf.style.left = '';
-                containerPdf.style.top = '';
-                containerPdf.style.width = '';
+                containerPdf.style.cssText = '';
             };
 
             if (typeof html2pdf !== 'undefined') {
                 try {
                     const opt = {
-                        margin: [8, 8, 8, 8],
+                        margin: [6, 6, 6, 6],
                         filename: nomeArquivo,
                         image: { type: 'jpeg', quality: 0.98 },
                         html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
@@ -3729,7 +3824,12 @@
             }
 
             const nomeAluno = window.nomeAlunoAtual || 'Aluno';
-            const containerPdf = document.getElementById('area-impressao-pdf');
+            let containerPdf = document.getElementById('area-impressao-pdf');
+            if (!containerPdf) {
+                containerPdf = document.createElement('div');
+                containerPdf.id = 'area-impressao-pdf';
+                document.body.appendChild(containerPdf);
+            }
             containerPdf.innerHTML = montarHtmlPlanoPdf(window.dietasCarregadas, nomeAluno);
             containerPdf.classList.remove('hidden');
 
@@ -3738,6 +3838,284 @@
                 containerPdf.classList.add('hidden');
             }, 300);
         }
+
+        // ===== EXPORTAÇÃO DE PDF & IMPRESSÃO DE TREINO (DASHBOARD) =====
+        function montarHtmlTreinoPdf(treinos, nomeAluno) {
+            const dataHoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+            const nomePersonal = window.nomePersonalVinculado || document.getElementById('prescritor-personal-aluno-nome')?.textContent || 'Prof. Lucas Silveira';
+            const crefPersonal = window.registroPersonalVinculado || 'CREF 09876-G/PE';
+            const espPersonal = window.especialidadePersonalVinculado || 'Biomecânica, Hipertrofia & Periodização de Força';
+
+            const grupos = {};
+            (treinos || []).forEach(t => {
+                const rotina = t.treino_nome || 'Treino A';
+                grupos[rotina] = grupos[rotina] || [];
+                grupos[rotina].push(t);
+            });
+
+            let blocosDivisoesHtml = '';
+            for (const rotina in grupos) {
+                const exList = grupos[rotina];
+                const diaSemana = exList[0]?.dia_semana || 'Conforme Periodização';
+                const grupoMuscular = exList[0]?.grupo_muscular || 'Geral';
+
+                let linhasExHtml = '';
+                exList.forEach((e, idx) => {
+                    let obsLimpa = e.observacoes || '';
+                    if (obsLimpa.includes('__PERIODIZACAO__')) {
+                        try {
+                            const pJson = obsLimpa.match(/__PERIODIZACAO__(.*?)__FIM_PERIODIZACAO__/);
+                            if (pJson && pJson[1]) {
+                                const seriesObj = JSON.parse(pJson[1]);
+                                const detalhe = seriesObj.map(s => `S${s.id}: ${s.tipo || 'Trabalho'} (${s.carga || 'Carga livre'})`).join(' • ');
+                                obsLimpa = obsLimpa.replace(/__PERIODIZACAO__.*?__FIM_PERIODIZACAO__/, '').trim();
+                                if (detalhe) obsLimpa = (obsLimpa ? obsLimpa + ' | ' : '') + detalhe;
+                            }
+                        } catch (err) { }
+                    }
+
+                    linhasExHtml += `
+                        <tr style="border-bottom: 1px solid #e2e8f0; font-size: 10.5px;">
+                            <td style="padding: 7px 10px; font-weight: 700; color: #0f172a;">
+                                <span style="background: #eab308; color: #0f172a; font-size: 9.5px; font-weight: 900; padding: 2px 6px; border-radius: 4px; margin-right: 6px;">${idx + 1}</span>
+                                ${e.exercicio}
+                                ${obsLimpa ? `<div style="font-size: 9px; color: #64748b; font-weight: 400; margin-top: 2px;">💡 ${obsLimpa}</div>` : ''}
+                            </td>
+                            <td style="padding: 7px 10px; text-align: center; font-weight: 800; color: #0f172a; white-space: nowrap;">
+                                ${e.series || '4'} séries × ${e.repeticoes || '10'} reps
+                            </td>
+                            <td style="padding: 7px 10px; text-align: center; color: #b45309; font-weight: 700; white-space: nowrap;">
+                                ${e.carga ? `${e.carga}` : 'Carga progressiva'}<br>
+                                <span style="font-size: 9px; color: #64748b;">Descanso: ${e.descanso || '60s'}</span>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                blocosDivisoesHtml += `
+                    <div style="margin-bottom: 14px; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; page-break-inside: avoid; break-inside: avoid; background: #ffffff;">
+                        <div style="background: #f8fafc; padding: 9px 14px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 13px; font-weight: 900; color: #0f172a; text-transform: uppercase;">${rotina}</span>
+                                <span style="background: #fef3c7; border: 1px solid #fde68a; color: #92400e; font-size: 9.5px; font-weight: 800; padding: 2px 8px; border-radius: 12px;">${grupoMuscular}</span>
+                            </div>
+                            <span style="font-size: 10.5px; font-weight: 700; color: #64748b;">📅 ${diaSemana} • ${exList.length} exercícios</span>
+                        </div>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #f1f5f9; color: #475569; font-size: 9px; text-transform: uppercase; border-bottom: 1px solid #cbd5e1;">
+                                    <th style="padding: 6px 10px; text-align: left;">Exercício Prescrito</th>
+                                    <th style="padding: 6px 10px; text-align: center;">Volume Prescrito</th>
+                                    <th style="padding: 6px 10px; text-align: center;">Carga & Intervalo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${linhasExHtml}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            return `
+                <div style="font-family: 'Plus Jakarta Sans', Arial, sans-serif; color: #0f172a; max-width: 800px; margin: 0 auto; background: #ffffff; padding: 24px; box-sizing: border-box;">
+                    <!-- Cabeçalho Oficial com Logo Oficial -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2.5px solid #eab308; padding-bottom: 14px; margin-bottom: 16px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <img src="assets/icon-192.png" alt="Real Fit Hub" style="width: 52px; height: 52px; border-radius: 12px; object-fit: cover;">
+                            <div>
+                                <div style="font-size: 22px; font-weight: 900; color: #0f172a; letter-spacing: -0.03em;">
+                                    REAL FIT<span style="color: #eab308;"> HUB</span>
+                                </div>
+                                <div style="font-size: 10px; font-weight: 800; color: #ca8a04; text-transform: uppercase; letter-spacing: 0.05em;">
+                                    Performance & Periodização Científica • Ficha Oficial de Treino
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="background: #fefce8; border: 1px solid #fde047; color: #854d0e; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 999px; display: inline-block; text-transform: uppercase;">
+                                Prescrição de Treinamento
+                            </div>
+                            <div style="font-size: 10px; color: #64748b; margin-top: 4px;">Emissão: <strong>${dataHoje}</strong></div>
+                        </div>
+                    </div>
+
+                    <!-- Dados do Aluno e do Personal Trainer Responsável -->
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <div>
+                            <div style="font-size: 9.5px; color: #64748b; text-transform: uppercase; font-weight: 700;">Aluno(a) / Atleta:</div>
+                            <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-top: 2px;">${nomeAluno}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 9.5px; color: #64748b; text-transform: uppercase; font-weight: 700;">Personal Trainer Responsável:</div>
+                            <div style="font-size: 12px; font-weight: 800; color: #ca8a04; margin-top: 2px;">${nomePersonal}</div>
+                            <div style="font-size: 9px; color: #64748b;">${crefPersonal} • ${espPersonal}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 9.5px; color: #64748b; text-transform: uppercase; font-weight: 700;">Metodologia:</div>
+                            <div style="font-size: 11px; font-weight: 700; color: #0f172a; margin-top: 2px;">Periodização Personalizada de Alta Intensidade</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        ${blocosDivisoesHtml}
+                    </div>
+
+                    <div style="background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 9.5px; color: #475569; line-height: 1.4; page-break-inside: avoid; break-inside: avoid;">
+                        <strong style="color: #0f172a;">Recomendações Técnicas do Treinador:</strong> Execute cada repetição com cadência controlada e amplitude completa de movimento. Respeite os intervalos de descanso entre as séries para maximizar a recuperação neuromusculoesquelética. Hidrate-se durante toda a sessão.
+                    </div>
+
+                    <div style="border-top: 1.5px solid #e2e8f0; padding-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 9px; color: #94a3b8; page-break-inside: avoid; break-inside: avoid;">
+                        <div><strong>Real Fit Hub Digital Platform</strong> • Documento emitido digitalmente para prescrição de exercícios.</div>
+                        <div style="color: #ca8a04; font-weight: 700;">Treinador: ${nomePersonal} (${crefPersonal})</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function obterTreinosAtuaisParaPdf() {
+            if (window.treinosCarregados && window.treinosCarregados.length) {
+                return window.treinosCarregados;
+            }
+            if (window.treinosAlunoAgrupados) {
+                const list = Object.values(window.treinosAlunoAgrupados).flat();
+                if (list.length) return list;
+            }
+            const uid = window.ApexFit?.Auth?.obterSessao()?.id || window.alunoIdAtual;
+            if (uid && typeof supabaseClient !== 'undefined') {
+                const { data } = await supabaseClient.from('treinos').select('*').eq('aluno_id', uid).order('ordem', { ascending: true });
+                if (data && data.length) {
+                    window.treinosCarregados = data;
+                    return data;
+                }
+            }
+            return [];
+        }
+
+        async function gerarPdfTreino() {
+            const btnText = document.getElementById('btn-pdf-treino-text');
+            const btnIcon = document.getElementById('btn-pdf-treino-icon');
+            const btnSpinner = document.getElementById('btn-pdf-treino-spinner');
+            const btn = document.getElementById('btn-exportar-pdf-treino');
+
+            const textoOriginal = btnText ? btnText.textContent : 'Exportar Treino (PDF) 📄';
+            if (btnText) btnText.textContent = 'Gerando PDF...';
+            if (btnIcon) btnIcon.classList.add('hidden');
+            if (btnSpinner) btnSpinner.classList.remove('hidden');
+            if (btn) btn.disabled = true;
+
+            const treinos = await obterTreinosAtuaisParaPdf();
+            if (!treinos || !treinos.length) {
+                if (btnText) btnText.textContent = textoOriginal;
+                if (btnIcon) btnIcon.classList.remove('hidden');
+                if (btnSpinner) btnSpinner.classList.add('hidden');
+                if (btn) btn.disabled = false;
+                showToast('Aviso', 'Nenhum exercício cadastrado para gerar PDF do treino.', 'info');
+                return;
+            }
+
+            const nomeAluno = (window.nomeAlunoAtual || 'Aluno').replace(/[^a-zA-Z0-9]/g, '_');
+            const nomeArquivo = `Ficha_Treino_${nomeAluno}_RealFitHub.pdf`;
+            let containerPdf = document.getElementById('area-impressao-pdf-treino');
+            if (!containerPdf) {
+                containerPdf = document.createElement('div');
+                containerPdf.id = 'area-impressao-pdf-treino';
+                document.body.appendChild(containerPdf);
+            }
+
+            containerPdf.innerHTML = montarHtmlTreinoPdf(treinos, window.nomeAlunoAtual || 'Aluno');
+            containerPdf.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#ffffff;z-index:-999;display:block;';
+            containerPdf.classList.remove('hidden');
+
+            const restaurar = () => {
+                if (btnText) btnText.textContent = textoOriginal;
+                if (btnIcon) btnIcon.classList.remove('hidden');
+                if (btnSpinner) btnSpinner.classList.add('hidden');
+                if (btn) btn.disabled = false;
+                containerPdf.classList.add('hidden');
+                containerPdf.style.cssText = '';
+            };
+
+            if (typeof html2pdf !== 'undefined') {
+                try {
+                    const opt = {
+                        margin: [6, 6, 6, 6],
+                        filename: nomeArquivo,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                    };
+
+                    await html2pdf().set(opt).from(containerPdf.firstElementChild).save();
+                    restaurar();
+                    showToast('PDF Gerado com Sucesso! 📄', 'Ficha de treino salva no seu dispositivo.', 'success');
+                } catch (e) {
+                    console.error('Erro no html2pdf treino:', e);
+                    restaurar();
+                    imprimirTreino();
+                }
+            } else {
+                restaurar();
+                imprimirTreino();
+            }
+        }
+
+        async function imprimirTreino() {
+            const treinos = await obterTreinosAtuaisParaPdf();
+            if (!treinos || !treinos.length) {
+                showToast('Aviso', 'Nenhum exercício cadastrado para imprimir.', 'info');
+                return;
+            }
+            let containerPdf = document.getElementById('area-impressao-pdf-treino');
+            if (!containerPdf) {
+                containerPdf = document.createElement('div');
+                containerPdf.id = 'area-impressao-pdf-treino';
+                document.body.appendChild(containerPdf);
+            }
+            containerPdf.innerHTML = montarHtmlTreinoPdf(treinos, window.nomeAlunoAtual || 'Aluno');
+            containerPdf.classList.remove('hidden');
+            setTimeout(() => {
+                window.print();
+                containerPdf.classList.add('hidden');
+            }, 300);
+        }
+
+        // ===== MODAL E GESTÃO DA LISTA DE COMPRAS INTELIGENTE =====
+        function abrirListaCompras() {
+            const dietas = window.dietasCarregadas || [];
+            if (!dietas || !dietas.length) {
+                showToast('Aviso', 'Nenhum plano alimentar carregado para gerar a lista de compras.', 'info');
+                return;
+            }
+            if (window.ApexAlimentos) {
+                ApexAlimentos.gerarListaAPartirDaDieta(dietas);
+                ApexAlimentos.renderModalListaCompras('modal-lista-compras-conteudo');
+                const modal = document.getElementById('modal-lista-compras');
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    modal.scrollTop = 0;
+                    document.body.classList.add('overflow-hidden');
+                }
+            }
+        }
+
+        function fecharListaCompras() {
+            const modal = document.getElementById('modal-lista-compras');
+            if (modal) modal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        window.abrirListaCompras = abrirListaCompras;
+        window.fecharListaCompras = fecharListaCompras;
+        window.gerarPdfTreino = gerarPdfTreino;
+        window.imprimirTreino = imprimirTreino;
+        window.gerarPdfPlanoAlimentar = gerarPdfPlanoAlimentar;
+        window.imprimirPlanoAlimentar = imprimirPlanoAlimentar;
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') fecharListaCompras();
+        });
 
         // Sparkline & Mini-Tendência no Card do Topo
         function atualizarSparklinePeso(historico) {
@@ -5253,6 +5631,7 @@
     <script src="js/checkin-system.js"></script>
     <script src="js/evolution-tracker.js"></script>
     <script src="js/habits-hydration-gamification.js"></script>
+    <script src="js/grocery-foods.js"></script>
 
     <!-- Barra de Navegação Inferior Fixa para Mobile e Tablet -->
         <!-- ============================================================== -->
@@ -5370,6 +5749,22 @@
             </button>
         </div>
     </nav>
+
+    <!-- Modal da Lista de Compras Inteligente -->
+    <div id="modal-lista-compras"
+        class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md hidden overflow-y-auto overscroll-contain"
+        onclick="if(event.target === this) fecharListaCompras()">
+        <div class="min-h-full flex items-start sm:items-center justify-center p-3 sm:p-5 md:p-8 pointer-events-none">
+            <div class="w-full max-w-2xl my-auto py-4 sm:py-6 relative min-h-0 pointer-events-auto">
+                <div id="modal-lista-compras-conteudo"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Áreas Dedicadas de Impressão e PDF Isoladas -->
+    <div id="area-impressao-pdf" class="hidden"></div>
+    <div id="area-impressao-pdf-treino" class="hidden"></div>
+    <div id="area-impressao-pdf-compras" class="hidden"></div>
 </body>
 
 </html>

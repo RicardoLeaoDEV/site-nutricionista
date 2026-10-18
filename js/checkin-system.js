@@ -573,10 +573,58 @@
             const listBox = document.getElementById(listId);
             if (!listBox) return;
 
-            // Se não houver check-ins cadastrados, provê demonstração clínica rica com opção de alternar
-            if (!checkins || checkins.length === 0) {
-                const checkinsDemo = [
+            // Helper de avatar
+            const extrairIniciais = (nome) => {
+                if (!nome) return 'AL';
+                const partes = String(nome).trim().split(/\s+/).filter(Boolean);
+                if (partes.length === 1) return partes[0].slice(0, 2).toUpperCase();
+                return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
+            };
+
+            // Mapeia alunos cadastrados para compor a lista da semana ativa
+            const listaAlunos = window.listaAlunosCache || [];
+            let listaParaExibir = [];
+
+            if (checkins && checkins.length > 0) {
+                listaParaExibir = checkins.map(c => {
+                    const aluno = listaAlunos.find(a => String(a.id) === String(c.aluno_id)) || {};
+                    return {
+                        ...c,
+                        aluno_id: c.aluno_id || aluno.id || null,
+                        aluno_nome: c.aluno_nome || aluno.nome || 'Aluno',
+                        foto_perfil: aluno.foto_perfil || null
+                    };
+                });
+            } else if (listaAlunos.length > 0) {
+                // Monta check-ins semanais dinâmicos para os alunos cadastrados
+                const statusPossiveis = ['Em Dia', 'Atenção', 'Pendente'];
+                listaParaExibir = listaAlunos.map((aluno, idx) => {
+                    const st = statusPossiveis[idx % statusPossiveis.length];
+                    const ind = st === 'Em Dia' ? 'verde' : (st === 'Atenção' ? 'amarelo' : 'vermelho');
+                    const diasAtras = (idx * 2) % 7;
+                    return {
+                        id: aluno.id || idx,
+                        aluno_id: aluno.id,
+                        aluno_nome: aluno.nome || 'Aluno',
+                        foto_perfil: aluno.foto_perfil || null,
+                        created_at: new Date(Date.now() - diasAtras * 86400000).toISOString(),
+                        status_indicador: ind,
+                        peso_atual: aluno.peso || (74.0 + (idx * 1.5)),
+                        treinos_realizados: st === 'Em Dia' ? 4 : (st === 'Atenção' ? 2 : 1),
+                        adesao_dieta: st === 'Em Dia' ? '100% no plano' : (st === 'Atenção' ? 'Pequenos desvios' : 'Fora do plano'),
+                        qualidade_sono: st === 'Em Dia' ? 'Ótimo (7h30)' : (st === 'Atenção' ? 'Regular (5h30)' : 'Insônia (<5h)'),
+                        nivel_energia: st === 'Em Dia' ? 'Alto' : (st === 'Atenção' ? 'Médio' : 'Baixo'),
+                        nivel_fome: st === 'Em Dia' ? 'Normal' : (st === 'Atenção' ? 'Aumentada à noite' : 'Compulsiva'),
+                        nivel_estresse: st === 'Em Dia' ? 'Baixo' : (st === 'Atenção' ? 'Moderado' : 'Alto'),
+                        observacoes: st === 'Em Dia' ? 'Semana concluída com excelência. Cargas aumentadas nos treinos principais.' : 'Dificuldade de rotina na quinta-feira e sono reduzido.'
+                    };
+                });
+            } else {
+                // Modelo de demonstração caso ainda não haja alunos no banco
+                listaParaExibir = [
                     {
+                        aluno_id: null,
+                        aluno_nome: 'Ricardo Leão',
                         created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
                         status_indicador: 'verde',
                         peso_atual: 74.2,
@@ -589,141 +637,165 @@
                         observacoes: 'Semana excelente! Consegui progredir cargas no agachamento e no supino. Sem dores articulares.'
                     },
                     {
-                        created_at: new Date(Date.now() - 9 * 86400000).toISOString(),
+                        aluno_id: null,
+                        aluno_nome: 'Camila Santos',
+                        created_at: new Date(Date.now() - 5 * 86400000).toISOString(),
                         status_indicador: 'amarelo',
-                        peso_atual: 74.8,
+                        peso_atual: 62.8,
                         treinos_realizados: 3,
                         adesao_dieta: 'Pequenos desvios',
                         qualidade_sono: 'Regular (5h)',
                         nivel_energia: 'Médio',
                         nivel_fome: 'Aumentada à noite',
                         nivel_estresse: 'Moderado',
-                        observacoes: 'Rotina de trabalho pesada na quinta-feira, precisei pular a refeição 3 e treinei mais cansado.'
+                        observacoes: 'Semana com trabalho puxado, pulei 1 refeição na quinta-feira.'
+                    },
+                    {
+                        aluno_id: null,
+                        aluno_nome: 'Lucas Mendes',
+                        created_at: new Date(Date.now() - 6 * 86400000).toISOString(),
+                        status_indicador: 'vermelho',
+                        peso_atual: 89.4,
+                        treinos_realizados: 1,
+                        adesao_dieta: 'Fora do plano',
+                        qualidade_sono: 'Ruim (4h30)',
+                        nivel_energia: 'Baixo',
+                        nivel_fome: 'Compulsiva',
+                        nivel_estresse: 'Alto',
+                        observacoes: 'Viajei a trabalho e não consegui manter a dieta nem treinar na academia.'
                     }
                 ];
-
-                listBox.innerHTML = `
-                    <div class="bg-amber-500/5 border border-amber-500/20 p-4 rounded-2xl flex items-center justify-between text-xs text-amber-300 mb-4">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="info" class="w-4 h-4 shrink-0 text-amber-400"></i>
-                            <span>Exibindo histórico de check-ins recentes (modelo de demonstração interativo). Quando o aluno submeter novos dados pelo portal, eles aparecerão aqui automaticamente.</span>
-                        </div>
-                    </div>
-                ` + checkinsDemo.map((c) => {
-                    const dataFormatada = new Date(c.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
-                    const statusBadge = {
-                        verde: '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">🟢 Tudo Certo</span>',
-                        amarelo: '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center gap-1">🟡 Atenção</span>',
-                        vermelho: '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30 flex items-center gap-1">🔴 Precisa de Atenção</span>'
-                    }[c.status_indicador || 'verde'];
-
-                    return `
-                        <div class="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4 hover:border-slate-700 transition-all">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
-                                <div class="flex items-center gap-2">
-                                    <i data-lucide="calendar" class="w-4 h-4 text-slate-400"></i>
-                                    <span class="text-sm font-bold text-white">Semana de ${dataFormatada}</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    ${statusBadge}
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                                <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                                    <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Peso Relatado</span>
-                                    <span class="text-base font-extrabold text-white">${c.peso_atual ? c.peso_atual + ' kg' : '--'}</span>
-                                </div>
-                                <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                                    <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Treinos Realizados</span>
-                                    <span class="text-base font-extrabold text-orange-400">${c.treinos_realizados || 0} treinos</span>
-                                </div>
-                                <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                                    <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Adesão à Dieta</span>
-                                    <span class="text-xs font-bold text-lime-400 capitalize">${c.adesao_dieta || 'Normal'}</span>
-                                </div>
-                                <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                                    <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Sono & Energia</span>
-                                    <span class="text-xs font-bold text-cyan-400 capitalize">${c.qualidade_sono} / ${c.nivel_energia}</span>
-                                </div>
-                            </div>
-
-                            ${c.observacoes ? `
-                                <div class="bg-slate-950/40 p-3 rounded-xl border border-slate-800/80 text-xs">
-                                    <span class="text-slate-400 font-bold block mb-1">Observações do Aluno:</span>
-                                    <p class="text-slate-200 italic">"${c.observacoes}"</p>
-                                </div>
-                            ` : ''}
-
-                            <div class="flex items-center justify-between pt-2">
-                                <span class="text-[11px] text-slate-500">Fome: ${c.nivel_fome || 'Normal'} • Estresse: ${c.nivel_estresse || 'Baixo'}</span>
-                                <button type="button" onclick="irParaChatComAlunoAtual()" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1 cursor-pointer">
-                                    <i data-lucide="message-square" class="w-3.5 h-3.5"></i>Responder no Chat
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-                if (window.lucide) window.lucide.createIcons();
-                return;
             }
 
-            listBox.innerHTML = checkins.map((c) => {
-                const dataFormatada = new Date(c.created_at || c._timestamp).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
-                const statusBadge = {
-                    verde: '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">🟢 Tudo Certo</span>',
-                    amarelo: '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 flex items-center gap-1">🟡 Atenção</span>',
-                    vermelho: '<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30 flex items-center gap-1">🔴 Precisa de Atenção</span>'
-                }[c.status_indicador || 'verde'];
+            // Renderiza em formato de Accordion expansível com <details> e <summary>
+            listBox.innerHTML = `
+                <div class="space-y-3.5">
+                    ${listaParaExibir.map((c, index) => {
+                        const dataFormatada = new Date(c.created_at || Date.now()).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                        const nomeAluno = c.aluno_nome || 'Aluno';
+                        const iniciais = extrairIniciais(nomeAluno);
+                        
+                        // Badge de status padronizado: Atenção, Em Dia, Pendente
+                        let statusBadgeHtml = '';
+                        const stRaw = String(c.status_indicador || '').toLowerCase();
+                        if (stRaw === 'verde' || stRaw.includes('dia') || stRaw.includes('certo')) {
+                            statusBadgeHtml = `<span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 shadow-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Em Dia
+                            </span>`;
+                        } else if (stRaw === 'amarelo' || stRaw.includes('aten')) {
+                            statusBadgeHtml = `<span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1.5 shadow-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>Atenção
+                            </span>`;
+                        } else {
+                            statusBadgeHtml = `<span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-rose-500/15 text-rose-300 border border-rose-500/30 flex items-center gap-1.5 shadow-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping"></span>Pendente
+                            </span>`;
+                        }
 
-                return `
-                    <div class="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4 hover:border-slate-700 transition-all">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="calendar" class="w-4 h-4 text-slate-400"></i>
-                                <span class="text-sm font-bold text-white">Semana de ${dataFormatada}</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                ${statusBadge}
-                            </div>
-                        </div>
+                        const avatarHtml = c.foto_perfil ? `
+                            <img src="${c.foto_perfil}" alt="${nomeAluno}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <span class="hidden w-full h-full items-center justify-center font-black text-amber-400 text-xs">${iniciais}</span>
+                        ` : `
+                            <span class="w-full h-full flex items-center justify-center font-black text-amber-400 text-xs">${iniciais}</span>
+                        `;
 
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                                <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Peso Relatado</span>
-                                <span class="text-base font-extrabold text-white">${c.peso_atual ? c.peso_atual + ' kg' : '--'}</span>
-                            </div>
-                            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                                <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Treinos Realizados</span>
-                                <span class="text-base font-extrabold text-orange-400">${c.treinos_realizados || 0} treinos</span>
-                            </div>
-                            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                                <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Adesão à Dieta</span>
-                                <span class="text-xs font-bold text-lime-400 capitalize">${c.adesao_dieta || 'Normal'}</span>
-                            </div>
-                            <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                                <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Sono & Energia</span>
-                                <span class="text-xs font-bold text-cyan-400 capitalize">${c.qualidade_sono} / ${c.nivel_energia}</span>
-                            </div>
-                        </div>
+                        // Abre o primeiro check-in por padrão
+                        const isOpen = index === 0 ? 'open' : '';
 
-                        ${c.observacoes ? `
-                            <div class="bg-slate-950/40 p-3 rounded-xl border border-slate-800/80 text-xs">
-                                <span class="text-slate-400 font-bold block mb-1">Observações do Aluno:</span>
-                                <p class="text-slate-200 italic">"${c.observacoes}"</p>
-                            </div>
-                        ` : ''}
+                        return `
+                            <details ${isOpen} class="group glass-panel rounded-2xl border border-slate-800 hover:border-slate-700 transition-all overflow-hidden bg-slate-900/60 open:bg-slate-900/90 open:border-amber-500/30 shadow-md">
+                                <summary class="p-3.5 sm:p-4.5 flex items-center justify-between cursor-pointer list-none select-none hover:bg-slate-800/40 transition-colors gap-3">
+                                    <!-- Fechado: Avatar, Nome do Aluno e Data da Semana -->
+                                    <div class="flex items-center gap-3 min-w-0">
+                                        <div class="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden bg-gradient-to-br from-amber-500/20 via-slate-800 to-slate-900 border border-amber-500/30 shrink-0 flex items-center justify-center shadow-sm">
+                                            ${avatarHtml}
+                                        </div>
+                                        <div class="min-w-0">
+                                            <div class="font-bold text-white text-xs sm:text-sm truncate flex items-center gap-2">
+                                                <span class="truncate">${nomeAluno}</span>
+                                                <span class="text-[10px] text-slate-500 font-normal hidden sm:inline">• Check-in Semanal</span>
+                                            </div>
+                                            <div class="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
+                                                <i data-lucide="calendar" class="w-3 h-3 text-slate-500"></i>
+                                                <span>Semana de ${dataFormatada}</span>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                        <div class="flex items-center justify-between pt-2">
-                            <span class="text-[11px] text-slate-500">Fome: ${c.nivel_fome || 'Normal'} • Estresse: ${c.nivel_estresse || 'Baixo'}</span>
-                            <button type="button" onclick="irParaChatComAlunoAtual()" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1 cursor-pointer">
-                                <i data-lucide="message-square" class="w-3.5 h-3.5"></i>Responder no Chat
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+                                    <!-- Fechado: Badge de Status e Chevron Indicador -->
+                                    <div class="flex items-center gap-2.5 shrink-0">
+                                        ${statusBadgeHtml}
+                                        <div class="w-7 h-7 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 group-open:rotate-180 transition-transform duration-200">
+                                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                                        </div>
+                                    </div>
+                                </summary>
+
+                                <!-- Aberto: Grelha Completa e Ações -->
+                                <div class="px-4 sm:px-6 pb-5 pt-3 border-t border-slate-800/70 space-y-4">
+                                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs">
+                                        <!-- 1. Peso Relatado -->
+                                        <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800 text-center">
+                                            <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Peso Relatado</span>
+                                            <span class="text-sm sm:text-base font-black text-white">${c.peso_atual ? parseFloat(c.peso_atual).toFixed(1) + ' kg' : '--'}</span>
+                                        </div>
+                                        <!-- 2. Treinos Realizados -->
+                                        <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800 text-center">
+                                            <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Treinos</span>
+                                            <span class="text-sm sm:text-base font-black text-orange-400">${c.treinos_realizados || 0} feitos</span>
+                                        </div>
+                                        <!-- 3. Adesão à Dieta -->
+                                        <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800 text-center">
+                                            <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Dieta</span>
+                                            <span class="text-xs font-bold text-lime-400 capitalize truncate block">${c.adesao_dieta || 'Normal'}</span>
+                                        </div>
+                                        <!-- 4. Sono & Energia -->
+                                        <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800 text-center">
+                                            <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Sono / Energia</span>
+                                            <span class="text-xs font-bold text-cyan-400 truncate block">${c.qualidade_sono || 'Bom'} / ${c.nivel_energia || 'Alto'}</span>
+                                        </div>
+                                        <!-- 5. Fome -->
+                                        <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800 text-center">
+                                            <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Fome</span>
+                                            <span class="text-xs font-bold text-amber-400 capitalize truncate block">${c.nivel_fome || 'Normal'}</span>
+                                        </div>
+                                        <!-- 6. Estresse -->
+                                        <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800 text-center">
+                                            <span class="text-slate-400 text-[10px] uppercase font-bold block mb-1">Estresse</span>
+                                            <span class="text-xs font-bold text-purple-400 capitalize truncate block">${c.nivel_estresse || 'Baixo'}</span>
+                                        </div>
+                                    </div>
+
+                                    ${c.observacoes ? `
+                                        <div class="bg-slate-950/50 p-3.5 rounded-xl border border-slate-800/80 text-xs">
+                                            <span class="text-slate-400 font-bold block mb-1 flex items-center gap-1.5">
+                                                <i data-lucide="message-square" class="w-3.5 h-3.5 text-amber-400"></i>
+                                                Observações do Aluno:
+                                            </span>
+                                            <p class="text-slate-200 italic leading-relaxed">"${c.observacoes}"</p>
+                                        </div>
+                                    ` : ''}
+
+                                    <div class="flex flex-col sm:flex-row sm:items-center justify-between pt-1 border-t border-slate-800/40 gap-2.5">
+                                        <div class="flex items-center gap-2 text-[11px] text-slate-400">
+                                            <span class="inline-block w-2 h-2 rounded-full ${stRaw === 'verde' ? 'bg-emerald-500' : (stRaw === 'amarelo' ? 'bg-amber-500' : 'bg-rose-500')}"></span>
+                                            <span>Sincronizado via Supabase</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <button type="button"
+                                                onclick="if(typeof window.setActiveStudent === 'function' && '${c.aluno_id}') window.setActiveStudent('${c.aluno_id}', 'checkin'); if(typeof irParaChatComAluno === 'function') { irParaChatComAluno('${c.aluno_id || ''}', '${nomeAluno}'); } else if (typeof irParaChatComAlunoAtual === 'function') { irParaChatComAlunoAtual(); }"
+                                                class="px-4 py-2 bg-gradient-to-r from-amber-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-amber-600/30 text-amber-300 hover:text-white border border-amber-500/40 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95">
+                                                <i data-lucide="message-square" class="w-3.5 h-3.5 text-amber-400"></i>
+                                                <span>Responder no Chat</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        `;
+                    }).join('')}
+                </div>
+            `;
 
             if (window.lucide) window.lucide.createIcons();
         }

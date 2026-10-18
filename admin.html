@@ -1567,6 +1567,34 @@
         <!-- ============================================================== -->
         <div id="conteudo-tab-nutri-evolucao" class="hidden space-y-6">
 
+        <!-- SEÇÃO: Check-ins dos Alunos (Accordion) -->
+        <section id="secao-checkins-nutri"
+            class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
+            <div onclick="toggleSecaoDashboard(this)"
+                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                <div class="flex items-center gap-3.5 min-w-0 pr-2">
+                    <div
+                        class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center shrink-0">
+                        <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                            Central de Check-ins Semanais
+                        </h2>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Acompanhamento e respostas
+                            das avaliações e formulários periódicos</p>
+                    </div>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </div>
+            </div>
+            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
+                <div id="conteudo-checkins-nutri"></div>
+            </div>
+        </section>
+
         <!-- SEÇÃO: Fotos de Evolução Corporal dos Alunos (Accordion) -->
         <section id="secao-fotos-alunos"
             class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
@@ -1684,34 +1712,6 @@
                         </p>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- SEÇÃO: Check-ins dos Alunos (Accordion) -->
-        <section id="secao-checkins-nutri"
-            class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
-            <div onclick="toggleSecaoDashboard(this)"
-                class="collapse-header p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3.5 min-w-0 pr-2">
-                    <div
-                        class="w-10 h-10 rounded-2xl bg-lime-500/10 text-lime-400 border border-lime-500/25 flex items-center justify-center shrink-0">
-                        <i data-lucide="clipboard-check" class="w-5 h-5"></i>
-                    </div>
-                    <div class="min-w-0 flex-1">
-                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
-                            Central de Check-ins Semanais
-                        </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Acompanhamento e respostas
-                            das avaliações e formulários periódicos</p>
-                    </div>
-                </div>
-                <div
-                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
-                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                </div>
-            </div>
-            <div class="collapse-content px-5 sm:px-6 pb-6 pt-0">
-                <div id="conteudo-checkins-nutri"></div>
             </div>
         </section>
         </div>
@@ -2231,7 +2231,7 @@
                     if (typeof carregarRefeicoesAlunoAdmin === 'function') carregarRefeicoesAlunoAdmin(idAtivo);
                 }
             } else if (aba === 'evolucao') {
-                ['secao-fotos-alunos', 'secao-checkins-nutri'].forEach(id => {
+                ['secao-checkins-nutri', 'secao-fotos-alunos'].forEach(id => {
                     const sec = document.getElementById(id);
                     if (sec) {
                         const h = sec.querySelector('.collapse-header');
@@ -4346,9 +4346,29 @@
             showToast('Fórmula Restaurada', `Os macronutrientes foram recalculados pelo protocolo científico ${estadoCalculadora.formulaUsada === 'katch_mcardle' ? 'Katch-McArdle' : 'Mifflin-St Jeor'}.`, 'info');
         }
 
+        // ==============================================================
+        // ESTADO GLOBAL DO ALUNO ATIVO & REATIVIDADE (ADMIN NUTRI)
+        // ==============================================================
+        window.activeStudentId = window.activeStudentId || null;
+        window.setActiveStudent = function (alunoId, origem = '') {
+            return sincronizarSelecaoAluno(alunoId, origem);
+        };
+        window.irParaChatComAluno = function (alunoId, alunoNome) {
+            if (alunoId && typeof selecionarAlunoChat === 'function') {
+                selecionarAlunoChat(alunoId, alunoNome || 'Aluno');
+            }
+            if (typeof toggleChatFlutuante === 'function') {
+                const win = document.getElementById('chat-window');
+                if (win && win.classList.contains('hidden')) {
+                    toggleChatFlutuante();
+                }
+            }
+        };
+
         // Sincronização Bidirecional do Aluno Selecionado (Resiliente & Paralela)
         async function sincronizarSelecaoAluno(alunoId, origem = '') {
             if (!alunoId) {
+                window.activeStudentId = null;
                 estadoCalculadora.alunoId = null;
                 estadoCalculadora.alunoNome = '';
                 const cardEl = document.getElementById('card-aluno-clinico');
@@ -4357,6 +4377,7 @@
                 return;
             }
 
+            window.activeStudentId = String(alunoId);
             estadoCalculadora.alunoId = alunoId;
             let alunoObj = (typeof listaAlunosCache !== 'undefined' && Array.isArray(listaAlunosCache))
                 ? listaAlunosCache.find(a => a.id === alunoId)

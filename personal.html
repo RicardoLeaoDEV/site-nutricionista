@@ -145,6 +145,14 @@
             box-shadow: 0 4px 18px -2px rgba(234, 179, 8, 0.22);
         }
 
+        /* Regra estrita: Barra flutuante de treino restrita exclusivamente à aba de montagem de treino */
+        #sticky-personal-actions {
+            display: none !important;
+        }
+        body.tab-montar-ativa #sticky-personal-actions:not(.hidden) {
+            display: block !important;
+        }
+
         /* Estilos para Blocos Colapsáveis (Accordions) */
         .collapse-content {
             max-height: 0;
@@ -377,6 +385,34 @@
         <!-- ABA 1: PAINEL GERAL (RESUMO + TABELA DE ALUNOS + CONVITE)     -->
         <!-- ============================================================== -->
         <div id="conteudo-tab-personal-painel" class="space-y-6">
+            <!-- SEÇÃO: Assistente Clínico IA (Primeiro Bloco do Painel) -->
+            <section id="secao-ia"
+                class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
+                <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
+                    class="collapse-header active p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                    <div class="flex items-center gap-3.5 min-w-0 pr-2">
+                        <div
+                            class="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/25 flex items-center justify-center shrink-0">
+                            <i data-lucide="bot" class="w-5 h-5"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                                Assistente Clínico IA
+                            </h2>
+                            <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Inteligência artificial
+                                para suporte na prescrição e análise de performance</p>
+                        </div>
+                    </div>
+                    <div
+                        class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </div>
+                </div>
+                <div class="collapse-content expanded px-5 sm:px-6 pb-6 pt-0">
+                    <div id="conteudo-ia-personal"></div>
+                </div>
+            </section>
+
             <!-- RESUMO DO PROFISSIONAL (Item 22) -->
             <div id="container-resumo-personal"></div>
 
@@ -1146,6 +1182,34 @@
         <!-- ABA 4: EVOLUÇÃO & CHECK-INS (FOTOS CORPORAIS + CHECK-INS)      -->
         <!-- ============================================================== -->
         <div id="conteudo-tab-personal-evolucao" class="hidden space-y-6">
+            <!-- SEÇÃO: Central de Check-ins Semanais (Accordion) -->
+            <section id="secao-checkins"
+                class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
+                <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
+                    class="collapse-header active p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
+                    <div class="flex items-center gap-3.5 min-w-0 pr-2">
+                        <div
+                            class="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/25 flex items-center justify-center shrink-0">
+                            <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                                Central de Check-ins Semanais
+                            </h2>
+                            <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Acompanhamento e respostas
+                                das avaliações e formulários periódicos</p>
+                        </div>
+                    </div>
+                    <div
+                        class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </div>
+                </div>
+                <div class="collapse-content expanded px-5 sm:px-6 pb-6 pt-0">
+                    <div id="conteudo-checkins-personal"></div>
+                </div>
+            </section>
+
             <!-- SEÇÃO: Fotos de Evolução Corporal dos Alunos (Accordion) -->
             <section id="secao-fotos-alunos"
                 class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
@@ -1266,34 +1330,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- SEÇÃO: Central de Check-ins Semanais (Accordion) -->
-        <section id="secao-checkins"
-            class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
-            <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
-                class="collapse-header active p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                <div class="flex items-center gap-3.5 min-w-0 pr-2">
-                    <div
-                        class="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/25 flex items-center justify-center shrink-0">
-                        <i data-lucide="clipboard-check" class="w-5 h-5"></i>
-                    </div>
-                    <div class="min-w-0 flex-1">
-                        <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
-                            Central de Check-ins Semanais
-                        </h2>
-                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Acompanhamento e respostas
-                            das avaliações e formulários periódicos</p>
-                    </div>
-                </div>
-                <div
-                    class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
-                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                </div>
-            </div>
-            <div class="collapse-content expanded px-5 sm:px-6 pb-6 pt-0">
-                <div id="conteudo-checkins-personal"></div>
-            </div>
-        </section>
     </div>
 
         <!-- ============================================================== -->
@@ -1358,34 +1394,6 @@
                 </div>
                 <div class="collapse-content expanded px-5 sm:px-6 pb-6 pt-0">
                     <div id="conteudo-financeiro-personal"></div>
-                </div>
-            </section>
-
-            <!-- SEÇÃO: Assistente Clínico IA (Accordion) -->
-            <section id="secao-ia"
-                class="glass-panel rounded-3xl border border-white/10 shadow-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] hover:border-amber-500/30 transition-all overflow-hidden scroll-mt-24">
-                <div onclick="toggleSecaoDashboard(this)" role="button" tabindex="0"
-                    class="collapse-header active p-5 sm:p-6 flex items-center justify-between cursor-pointer select-none hover:bg-slate-900/40 transition-colors">
-                    <div class="flex items-center gap-3.5 min-w-0 pr-2">
-                        <div
-                            class="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/25 flex items-center justify-center shrink-0">
-                            <i data-lucide="bot" class="w-5 h-5"></i>
-                        </div>
-                        <div class="min-w-0 flex-1">
-                            <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
-                                Assistente Clínico IA
-                            </h2>
-                            <p class="text-xs text-slate-400 mt-0.5 line-clamp-2 sm:line-clamp-1">Inteligência artificial
-                                para suporte na prescrição e análise de performance</p>
-                        </div>
-                    </div>
-                    <div
-                        class="w-8 h-8 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 collapse-arrow shrink-0 pointer-events-none">
-                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                    </div>
-                </div>
-                <div class="collapse-content expanded px-5 sm:px-6 pb-6 pt-0">
-                    <div id="conteudo-ia-personal"></div>
                 </div>
             </section>
         </div>
@@ -1714,6 +1722,127 @@
         };
 
         // ==============================================================
+        // ESTADO GLOBAL DO ALUNO ATIVO & REATIVIDADE MULTI-ABAS
+        // ==============================================================
+        window.activeStudentId = window.activeStudentId || null;
+
+        window.setActiveStudent = function (alunoId, origem = null) {
+            if (!alunoId) return;
+            window.activeStudentId = String(alunoId);
+
+            // Sincroniza todos os seletores de alunos no DOM
+            const selects = [
+                document.getElementById('aluno-select'),
+                document.getElementById('gerenciar-aluno-select'),
+                document.getElementById('fotos-aluno-select'),
+                document.getElementById('filtro-busca-agenda-aluno'),
+                document.getElementById('filtro-medidas-aluno-select')
+            ];
+            selects.forEach(el => {
+                if (el && el.value !== String(alunoId)) {
+                    el.value = String(alunoId);
+                }
+            });
+
+            // Recupera nome do aluno ativo do cache ou select
+            let nome = 'Aluno';
+            if (window.listaAlunosCache && window.listaAlunosCache.length > 0) {
+                const found = window.listaAlunosCache.find(a => String(a.id) === String(alunoId));
+                if (found && found.nome) nome = found.nome;
+            }
+            if (nome === 'Aluno') {
+                const sel = document.getElementById('aluno-select') || document.getElementById('gerenciar-aluno-select') || document.getElementById('fotos-aluno-select');
+                if (sel && sel.selectedOptions && sel.selectedOptions[0]) {
+                    nome = sel.selectedOptions[0].textContent.split('(')[0].trim();
+                }
+            }
+
+            // Atualiza Card Clínico
+            if (typeof atualizarCardAlunoClinico === 'function') {
+                atualizarCardAlunoClinico(alunoId);
+            }
+
+            // Atualiza Assistente Clínico IA com biometria do aluno ativo
+            if (typeof renderizarSecaoIAPersonal === 'function') {
+                renderizarSecaoIAPersonal(nome);
+            }
+
+            // Atualiza Check-ins do aluno
+            if (typeof renderizarSecaoCheckinsPersonal === 'function') {
+                renderizarSecaoCheckinsPersonal(alunoId);
+            }
+
+            // Se a aba de medidas estiver aberta ou a chamada veio de medidas, atualiza biometria/antropometria
+            const abaMedidasAberta = !document.getElementById('conteudo-tab-personal-medidas')?.classList.contains('hidden');
+            if (abaMedidasAberta || origem === 'medidas') {
+                if (window.ApexEvolucao) {
+                    ApexEvolucao.renderAbaMedidasProfissional('conteudo-tab-personal-medidas', alunoId, {
+                        tipo: 'personal',
+                        profissionalNome: window.nomeProfissionalLogado || 'Personal Trainer'
+                    });
+                }
+            }
+
+            // Se fotos de evolução estiver aberta
+            const abaEvolucaoAberta = !document.getElementById('conteudo-tab-personal-evolucao')?.classList.contains('hidden');
+            if (abaEvolucaoAberta || origem === 'evolucao') {
+                if (typeof carregarFotosAlunoSelecionado === 'function') {
+                    carregarFotosAlunoSelecionado();
+                }
+            }
+
+            // Atualiza treino se estiver na aba de montagem
+            const abaMontarAberta = !document.getElementById('conteudo-tab-personal-montar')?.classList.contains('hidden');
+            if (abaMontarAberta || origem === 'montar' || origem === 'gerenciar') {
+                if (typeof carregarTreinoAdmin === 'function') {
+                    carregarTreinoAdmin(alunoId);
+                }
+                if (typeof atualizarStickyFooterPersonal === 'function') {
+                    atualizarStickyFooterPersonal();
+                }
+            }
+
+            // Atualiza métricas do Painel do Personal se a aba estiver aberta
+            const abaPainelAberta = !document.getElementById('conteudo-tab-personal-painel')?.classList.contains('hidden');
+            if (abaPainelAberta && window.ApexProfissional && document.getElementById('container-resumo-personal')) {
+                const totalAlunos = (window.listaAlunosCache && window.listaAlunosCache.length) ? window.listaAlunosCache.length : 3;
+                ApexProfissional.renderDashboardResumo('container-resumo-personal', {
+                    alunos: totalAlunos,
+                    checkinsPendentes: 1,
+                    consultasHoje: 2,
+                    pagamentosPendentes: 0
+                });
+            }
+        };
+
+        window.sincronizarSelecaoAluno = function (alunoId, origem) {
+            window.setActiveStudent(alunoId, origem);
+        };
+
+        window.selecionarAlunoTabela = function (alunoId) {
+            if (!alunoId) return;
+            window.setActiveStudent(alunoId);
+            const destino = document.getElementById('secao-ia') || document.getElementById('container-resumo-personal');
+            if (destino) {
+                destino.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        };
+
+        window.irParaChatComAluno = function (alunoId, alunoNome) {
+            if (alunoId) {
+                window.setActiveStudent(alunoId);
+            }
+            if (typeof window.abrirChatFlutuante === 'function') {
+                window.abrirChatFlutuante();
+            }
+            const input = document.getElementById('chat-input') || document.querySelector('#chat-window input');
+            if (input) {
+                if (alunoNome) input.placeholder = `Mensagem para ${alunoNome}...`;
+                input.focus();
+            }
+        };
+
+        // ==============================================================
         // ALTERNÂNCIA DE ABAS HORIZONTAIS DO PERSONAL TRAINER
         // (5 abas: Painel, Montar Treino, Evolução, Medidas & Antropometria, Gestão)
         // ==============================================================
@@ -1721,6 +1850,14 @@
             if (aba === 'gerenciar') aba = 'montar';
             const abas = ['painel', 'montar', 'evolucao', 'medidas', 'gestao'];
             if (!abas.includes(aba)) aba = 'painel';
+
+            // Regra estrita: body ganha classe tab-montar-ativa apenas e exclusivamente na aba montar
+            document.body.classList.toggle('tab-montar-ativa', aba === 'montar');
+            const stickyActions = document.getElementById('sticky-personal-actions');
+            if (stickyActions && aba !== 'montar') {
+                stickyActions.classList.add('hidden');
+                stickyActions.style.setProperty('display', 'none', 'important');
+            }
 
             abas.forEach(nome => {
                 const btn = document.getElementById('tab-btn-personal-' + nome);
@@ -1769,6 +1906,9 @@
                         pagamentosPendentes: 0
                     });
                 }
+                if (typeof renderizarSecaoIAPersonal === 'function') {
+                    renderizarSecaoIAPersonal();
+                }
                 if (typeof renderizarTabelaAlunosVinculados === 'function') {
                     renderizarTabelaAlunosVinculados();
                 }
@@ -1796,7 +1936,7 @@
                 if (selGerenciar && selAluno && selAluno.value && selGerenciar.value !== selAluno.value) {
                     selGerenciar.value = selAluno.value;
                 }
-                const idAtivo = selAluno?.value || selGerenciar?.value;
+                const idAtivo = selAluno?.value || selGerenciar?.value || window.activeStudentId;
                 if (idAtivo) {
                     if (typeof atualizarCardAlunoClinico === 'function') atualizarCardAlunoClinico(idAtivo);
                     if (typeof carregarTreinoAdmin === 'function') carregarTreinoAdmin(idAtivo);
@@ -1806,8 +1946,8 @@
                 if (typeof inicializarAutocompleteExercicios === 'function') inicializarAutocompleteExercicios();
                 if (typeof atualizarStickyFooterPersonal === 'function') atualizarStickyFooterPersonal();
             } else if (aba === 'evolucao') {
-                if (typeof atualizarStickyFooterPersonal === 'function') atualizarStickyFooterPersonal();
-                ['secao-fotos-alunos', 'secao-checkins'].forEach(id => {
+                // Barra flutuante de treino nunca deve aparecer aqui
+                ['secao-checkins', 'secao-fotos-alunos'].forEach(id => {
                     const sec = document.getElementById(id);
                     if (sec) {
                         const h = sec.querySelector('.collapse-header');
@@ -1821,7 +1961,7 @@
                 if (selFotos && selAluno && selAluno.value && !selFotos.value) {
                     selFotos.value = selAluno.value;
                 }
-                const alunoId = (selFotos && selFotos.value) ? selFotos.value : (selAluno ? selAluno.value : null);
+                const alunoId = (selFotos && selFotos.value) ? selFotos.value : (selAluno ? selAluno.value : (window.activeStudentId || null));
                 if (typeof renderizarSecaoCheckinsPersonal === 'function') {
                     renderizarSecaoCheckinsPersonal(alunoId);
                 }
@@ -1830,7 +1970,7 @@
                 }
             } else if (aba === 'medidas') {
                 const selAluno = document.getElementById('aluno-select') || document.getElementById('gerenciar-aluno-select') || document.getElementById('fotos-aluno-select');
-                let idAtivo = selAluno?.value;
+                let idAtivo = selAluno?.value || window.activeStudentId;
                 if (!idAtivo && window.listaAlunosCache && window.listaAlunosCache.length > 0) {
                     idAtivo = window.listaAlunosCache[0].id;
                     if (selAluno) selAluno.value = idAtivo;
@@ -1842,7 +1982,7 @@
                     });
                 }
             } else if (aba === 'gestao') {
-                ['secao-agenda', 'secao-financeiro', 'secao-ia'].forEach(id => {
+                ['secao-agenda', 'secao-financeiro'].forEach(id => {
                     const sec = document.getElementById(id);
                     if (sec) {
                         const h = sec.querySelector('.collapse-header');
@@ -1853,7 +1993,6 @@
                 });
                 if (typeof renderizarSecaoAgendaPersonal === 'function') renderizarSecaoAgendaPersonal();
                 if (typeof renderizarSecaoFinanceiroPersonal === 'function') renderizarSecaoFinanceiroPersonal();
-                if (typeof renderizarSecaoIAPersonal === 'function') renderizarSecaoIAPersonal();
             }
         };
 
@@ -2014,7 +2153,7 @@
                 const planoLimpo = String(aluno.plano || '').replace(/^PLANO\s+/i, '').trim();
 
                 return `
-                    <tr class="hover:bg-slate-900/80 transition-all duration-150 group cursor-pointer border-b border-slate-800/60" onclick="if(!event.target.closest('button')) irParaMontarTreinoAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')">
+                    <tr class="hover:bg-slate-900/80 transition-all duration-150 group cursor-pointer border-b border-slate-800/60" onclick="if(!event.target.closest('button')) window.selecionarAlunoTabela('${esc(aluno.id)}')">
                         <td class="py-3 px-3 sm:px-4">
                             <div class="flex items-center gap-2.5 min-w-0">
                                 ${avatarHtml}
@@ -2055,17 +2194,20 @@
                                 <button type="button"
                                     onclick="event.stopPropagation(); irParaMontarTreinoAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')"
                                     title="Montar ou ajustar treino do aluno"
-                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white border border-amber-500/35 hover:border-amber-400 transition-all cursor-pointer shadow-sm active:scale-95 group">
-                                    <i data-lucide="dumbbell" class="w-3 h-3 text-amber-400 group-hover:scale-110 transition-transform"></i>
+                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white border border-amber-500/35 hover:border-amber-400 transition-all cursor-pointer shadow-sm active:scale-95 group/btn">
+                                    <i data-lucide="dumbbell" class="w-3 h-3 text-amber-400 group-hover/btn:scale-110 transition-transform"></i>
                                     <span>Treino</span>
                                 </button>
                                 <button type="button"
                                     onclick="event.stopPropagation(); irParaMontarDietaAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')"
                                     title="Ajustar plano nutricional do aluno"
-                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 hover:text-white border border-emerald-500/35 hover:border-emerald-400 transition-all cursor-pointer shadow-sm active:scale-95 group">
-                                    <i data-lucide="utensils" class="w-3 h-3 text-emerald-400 group-hover:scale-110 transition-transform"></i>
+                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 hover:text-white border border-emerald-500/35 hover:border-emerald-400 transition-all cursor-pointer shadow-sm active:scale-95 group/btn">
+                                    <i data-lucide="utensils" class="w-3 h-3 text-emerald-400 group-hover/btn:scale-110 transition-transform"></i>
                                     <span>Dieta</span>
                                 </button>
+                                <div class="w-7 h-7 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-slate-400 group-hover:text-amber-400 group-hover:border-amber-500/40 group-hover:translate-x-1 transition-all ml-0.5 shrink-0" title="Ver Prontuário / Selecionar Aluno">
+                                    <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -2097,16 +2239,22 @@
                     `;
 
                     return `
-                        <div class="glass-panel p-3.5 rounded-2xl border border-slate-800/90 bg-gradient-to-br from-slate-900/90 to-[#0a0f1d] hover:border-amber-500/30 transition-all flex flex-col gap-3 shadow-md active:scale-[0.99] cursor-pointer" onclick="if(!event.target.closest('button')) irParaMontarTreinoAluno('${esc(aluno.id)}', '${esc(aluno.nome)}')">
+                        <div class="glass-panel p-3.5 rounded-2xl border border-slate-800/90 bg-gradient-to-br from-slate-900/90 to-[#0a0f1d] hover:border-amber-500/30 transition-all flex flex-col gap-3 shadow-md active:scale-[0.99] cursor-pointer group" onclick="if(!event.target.closest('button')) window.selecionarAlunoTabela('${esc(aluno.id)}')">
                             <div class="flex items-center justify-between gap-2.5">
                                 <div class="flex items-center gap-2.5 min-w-0">
                                     ${avatarMob}
                                     <div class="min-w-0">
-                                        <div class="font-bold text-slate-100 text-sm truncate">${esc(aluno.nome)}</div>
+                                        <div class="font-bold text-slate-100 text-sm truncate flex items-center gap-1.5">
+                                            <span class="truncate">${esc(aluno.nome)}</span>
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+                                        </div>
                                         <div class="text-[11px] text-slate-400 truncate">${esc(aluno.email)}</div>
                                     </div>
                                 </div>
-                                ${checkinMob}
+                                <div class="flex items-center gap-2">
+                                    ${checkinMob}
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"></i>
+                                </div>
                             </div>
                             <div class="flex items-center justify-between gap-2 py-2 border-y border-white/5 text-xs">
                                 <div class="flex items-center gap-1.5 text-slate-300 truncate">
@@ -2243,7 +2391,7 @@
                 'secao-checkins': 'evolucao',
                 'secao-agenda': 'gestao',
                 'secao-financeiro': 'gestao',
-                'secao-ia': 'gestao'
+                'secao-ia': 'painel'
             };
 
             if (mapaSecoesParaAba[id] && window.alternarAbaPersonal) {
@@ -2767,59 +2915,25 @@
 
             // Sincronização mútua entre os seletores de alunos nas abas (Exportada globalmente)
             window.sincronizarSelecaoAluno = function (alunoId, origem) {
-                if (!alunoId) return;
-                const selectEl = document.getElementById('aluno-select');
-                const selectFotosEl = document.getElementById('fotos-aluno-select');
-                const selectGerenciarEl = document.getElementById('gerenciar-aluno-select');
-
-                [selectEl, selectFotosEl, selectGerenciarEl].forEach(el => {
-                    if (el && el.value !== alunoId) {
-                        el.value = alunoId;
-                    }
-                });
-
-                if (typeof atualizarCardAlunoClinico === 'function') {
-                    atualizarCardAlunoClinico(alunoId);
-                }
-
-                const opt = (selectEl && selectEl.selectedOptions && selectEl.selectedOptions[0]) 
-                    || (selectGerenciarEl && selectGerenciarEl.selectedOptions && selectGerenciarEl.selectedOptions[0]);
-                const nome = opt ? opt.textContent.split('(')[0].trim() : 'Aluno';
-
-                if (typeof renderizarSecaoCheckinsPersonal === 'function') {
-                    renderizarSecaoCheckinsPersonal(alunoId);
-                }
-                if (typeof renderizarSecaoIAPersonal === 'function') {
-                    renderizarSecaoIAPersonal(nome);
-                }
-
-                if (origem === 'evolucao' || document.getElementById('conteudo-tab-personal-evolucao')?.classList.contains('hidden') === false) {
-                    if (typeof carregarFotosAlunoSelecionado === 'function') carregarFotosAlunoSelecionado();
-                }
-
-                if (document.getElementById('conteudo-tab-personal-medidas')?.classList.contains('hidden') === false) {
-                    if (window.ApexEvolucao) {
-                        ApexEvolucao.renderAbaMedidasProfissional('conteudo-tab-personal-medidas', alunoId, {
-                            tipo: 'personal',
-                            profissionalNome: window.nomeProfissionalLogado || 'Personal Trainer'
-                        });
-                    }
-                }
-
-                carregarTreinoAdmin(alunoId);
-                if (typeof atualizarStickyFooterPersonal === 'function') {
-                    atualizarStickyFooterPersonal();
-                }
+                window.setActiveStudent(alunoId, origem);
             };
 
             if (selectEl) {
-                selectEl.onchange = (e) => window.sincronizarSelecaoAluno(e.target.value, 'montar');
+                selectEl.onchange = (e) => window.setActiveStudent(e.target.value, 'montar');
             }
             if (selectGerenciarEl) {
-                selectGerenciarEl.onchange = (e) => window.sincronizarSelecaoAluno(e.target.value, 'gerenciar');
+                selectGerenciarEl.onchange = (e) => window.setActiveStudent(e.target.value, 'gerenciar');
             }
             if (selectFotosEl) {
-                selectFotosEl.onchange = (e) => window.sincronizarSelecaoAluno(e.target.value, 'evolucao');
+                selectFotosEl.onchange = (e) => window.setActiveStudent(e.target.value, 'evolucao');
+            }
+
+            // Inicializa seleção do aluno ativo
+            if (!window.activeStudentId && alunos && alunos.length > 0) {
+                window.activeStudentId = String(alunos[0].id);
+            }
+            if (window.activeStudentId) {
+                window.setActiveStudent(window.activeStudentId);
             }
         }
 
@@ -3557,16 +3671,18 @@
             if (!footer) return;
 
             const selAluno = document.getElementById('aluno-select');
-            const alunoId = selAluno ? selAluno.value : '';
+            const alunoId = selAluno ? selAluno.value : (window.activeStudentId || '');
             const abaAtiva = document.getElementById('conteudo-tab-personal-montar');
-            const isTabMontar = abaAtiva && !abaAtiva.classList.contains('hidden');
+            const isTabMontar = abaAtiva && !abaAtiva.classList.contains('hidden') && document.body.classList.contains('tab-montar-ativa');
 
             if (!isTabMontar || !alunoId) {
                 footer.classList.add('hidden');
+                footer.style.setProperty('display', 'none', 'important');
                 return;
             }
 
             footer.classList.remove('hidden');
+            footer.style.removeProperty('display');
 
             const nomeAluno = document.getElementById('clinico-nome')?.textContent || 'Aluno';
             if (alunoNomeSpan) alunoNomeSpan.textContent = nomeAluno;
